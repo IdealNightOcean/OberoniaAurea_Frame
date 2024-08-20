@@ -21,9 +21,13 @@ public class QuestNode_GetFaction : QuestNode
 
     public SlateRef<bool> allowAlly = true;
 
-    public SlateRef<bool> allowAskerFaction = true;
-
     public SlateRef<bool> allowPermanentEnemy;
+
+    public SlateRef<bool> allowHiddenFactions;
+
+    public SlateRef<bool> allowDefeatedFactions;
+
+    public SlateRef<bool> allowNonHumanlikeFactions;
 
     public SlateRef<bool> mustBePermanentEnemy;
 
@@ -35,11 +39,9 @@ public class QuestNode_GetFaction : QuestNode
 
     public SlateRef<Pawn> ofPawn;
 
-    public SlateRef<Thing> mustBeHostileToFactionOf;
+    public SlateRef<Faction> mustBeHostileToFaction;
 
     public SlateRef<IEnumerable<Faction>> exclude;
-
-    public SlateRef<IEnumerable<Faction>> allowedHiddenFactions;
 
     protected override bool TestRunInt(Slate slate)
     {
@@ -89,18 +91,13 @@ public class QuestNode_GetFaction : QuestNode
 
     protected bool TryFindFaction(out Faction faction, Slate slate)
     {
-        bool allowHidden = allowedHiddenFactions.GetValue(slate) != null;
-        return (from x in Find.FactionManager.GetFactions(allowHidden)
+        return (from x in Find.FactionManager.GetFactions(allowHiddenFactions.GetValue(slate), allowDefeatedFactions.GetValue(slate), allowNonHumanlikeFactions.GetValue(slate))
                 where x != null && IsGoodFaction(x, slate)
                 select x).TryRandomElement(out faction);
     }
 
     protected virtual bool IsGoodFaction(Faction faction, Slate slate)
     {
-        if (faction.Hidden && !allowedHiddenFactions.GetValue(slate).Contains(faction))
-        {
-            return false;
-        }
         if (ofPawn.GetValue(slate) != null && faction != ofPawn.GetValue(slate).Faction)
         {
             return false;
@@ -120,15 +117,16 @@ public class QuestNode_GetFaction : QuestNode
         {
             return false;
         }
-        if (!allowEnemy.GetValue(slate) && faction.HostileTo(Faction.OfPlayer))
+        FactionRelationKind playerRelationKind = faction.PlayerRelationKind;
+        if (!allowEnemy.GetValue(slate) && playerRelationKind == FactionRelationKind.Hostile)
         {
             return false;
         }
-        if (!allowNeutral.GetValue(slate) && faction.PlayerRelationKind == FactionRelationKind.Neutral)
+        if (!allowNeutral.GetValue(slate) && playerRelationKind == FactionRelationKind.Neutral)
         {
             return false;
         }
-        if (!allowAlly.GetValue(slate) && faction.PlayerRelationKind == FactionRelationKind.Ally)
+        if (!allowAlly.GetValue(slate) && playerRelationKind == FactionRelationKind.Ally)
         {
             return false;
         }
@@ -141,12 +139,21 @@ public class QuestNode_GetFaction : QuestNode
         {
             return false;
         }
-        if (leaderMustBeSafe.GetValue(slate) && (faction.leader == null || faction.leader.Spawned || faction.leader.IsPrisoner))
+        if (leaderMustBeSafe.GetValue(slate) && !IsLeaderSafe(faction.leader))
         {
             return false;
         }
-        Thing value = mustBeHostileToFactionOf.GetValue(slate);
-        if (value != null && value.Faction != null && (value.Faction == faction || !faction.HostileTo(value.Faction)))
+        Faction faction2 = mustBeHostileToFaction.GetValue(slate);
+        if (faction2 == null || !faction.HostileTo(faction2))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private static bool IsLeaderSafe(Pawn leader)
+    {
+        if (leader == null || leader.Spawned || leader.IsPrisoner)
         {
             return false;
         }
