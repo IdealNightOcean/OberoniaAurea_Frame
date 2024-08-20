@@ -4,6 +4,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+//初始化给予玩家型交易（有QuestPart）
 public class QuestNode_InitiateSaleRequest : QuestNode
 {
     public SlateRef<ThingDef> requestedThingDef;

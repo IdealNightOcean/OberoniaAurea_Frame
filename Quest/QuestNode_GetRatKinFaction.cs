@@ -1,5 +1,5 @@
-﻿using RimWorld.QuestGen;
-using RimWorld;
+﻿using RimWorld;
+using RimWorld.QuestGen;
 
 namespace OberoniaAurea_Frame;
 public class QuestNode_GetRatKinFaction : QuestNode_GetFactionBase

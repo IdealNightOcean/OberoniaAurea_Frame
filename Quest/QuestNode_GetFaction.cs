@@ -8,7 +8,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 //用于获取派系
-public class QuestNode_GetFactionBase : QuestNode
+public class QuestNode_GetFaction : QuestNode
 {
     [NoTranslate]
     public SlateRef<string> storeAs;
@@ -19,9 +19,9 @@ public class QuestNode_GetFactionBase : QuestNode
 
     public SlateRef<bool> allowNeutral = true;
 
-    public SlateRef<bool> allowAlly;
+    public SlateRef<bool> allowAlly = true;
 
-    public SlateRef<bool> allowAskerFaction;
+    public SlateRef<bool> allowAskerFaction = true;
 
     public SlateRef<bool> allowPermanentEnemy;
 
@@ -43,13 +43,18 @@ public class QuestNode_GetFactionBase : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        if (slate.TryGet<Faction>(storeAs.GetValue(slate), out var var) && IsGoodFaction(var, slate))
+        if (slate.TryGet<Faction>(storeAs.GetValue(slate), out var faction) && IsGoodFaction(faction, slate))
         {
             return true;
         }
-        if (TryFindFaction(out var, slate))
+        if (factionDef != null && SetFaction(out faction, slate))
         {
-            slate.Set(storeAs.GetValue(slate), var);
+            slate.Set(storeAs.GetValue(slate), faction);
+            return true;
+        }
+        if (TryFindFaction(out faction, slate))
+        {
+            slate.Set(storeAs.GetValue(slate), faction);
             return true;
         }
         return false;
@@ -104,14 +109,14 @@ public class QuestNode_GetFactionBase : QuestNode
         {
             return false;
         }
-        if(faction.def.permanentEnemy)
+        if (faction.def.permanentEnemy)
         {
-            if(!allowPermanentEnemy.GetValue(slate))
+            if (!allowPermanentEnemy.GetValue(slate))
             {
                 return false;
             }
         }
-        else if(mustBePermanentEnemy.GetValue(slate))
+        else if (mustBePermanentEnemy.GetValue(slate))
         {
             return false;
         }

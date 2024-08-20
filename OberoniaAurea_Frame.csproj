@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="Quest\QueseNode_GetExpectedThingMarketValue.cs" />
     <Compile Include="Quest\QuestNode_AllFactionsGoodwillChange.cs" />
+    <Compile Include="Quest\QuestNode_GetMapParent.cs" />
+    <Compile Include="Quest\QuestNode_GetNearTile.cs" />
     <Compile Include="Quest\QuestNode_InitiateCategoryTradeRequest.cs" />
     <Compile Include="Quest\QuestNode_InitiateSaleRequest.cs" />
     <Compile Include="Quest\QuestNode_RequestThingCount.cs" />
@@ -74,7 +76,7 @@
     <Compile Include="Quest\QuestNode_GetFactionLeader.cs" />
     <Compile Include="Quest\QuestNode_GetRatKinFaction.cs" />
     <Compile Include="Quest\QuestNode_GetNearbySettlementOfFaction.cs" />
-    <Compile Include="Quest\QuestNode_GetFactionBase.cs" />
+    <Compile Include="Quest\QuestNode_GetFaction.cs" />
     <Compile Include="WorldObject\CategoryTradeRequestComp.cs" />
     <Compile Include="WorldObject\WorldObject_InteractiveBase.cs" />
     <Compile Include="Utility\OberoniaAureaFrameUtility.cs" />

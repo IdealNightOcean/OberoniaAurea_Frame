@@ -4,7 +4,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//统一影响全部派系关系
+//统一影响全部派系关系（有QuestPart）
 public class QuestNode_AllFactionsGoodwillChange : QuestNode
 {
     [NoTranslate]

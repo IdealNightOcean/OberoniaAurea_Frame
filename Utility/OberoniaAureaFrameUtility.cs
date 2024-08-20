@@ -13,7 +13,7 @@ namespace OberoniaAurea_Frame;
 public static class OberoniaAureaFrameUtility
 {
     //是否为鼠族派系
-    public static bool IsRatkinFaction(this Faction faction) 
+    public static bool IsRatkinFaction(this Faction faction)
     {
         if (faction == null || faction.def == null)
         {

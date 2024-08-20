@@ -6,6 +6,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+//初始化给予玩家型交易comp
 public class QuestPart_InitiateSaleRequest : QuestPart
 {
     public string inSignal;

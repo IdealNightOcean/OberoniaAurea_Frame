@@ -30,7 +30,7 @@ public class QueseNode_GetExpectedThingMarketValue : QuestNode
     {
         float expectedMarketValue = expectedThingDef.GetValue(slate).GetStatValueAbstract(StatDefOf.MarketValue) * expectedThingCount.GetValue(slate);
         slate.Set(storeMarketValueAs.GetValue(slate), expectedMarketValue);
-        if(storeThing.GetValue(slate))
+        if (storeThing.GetValue(slate))
         {
             slate.Set(storeMarketValueAs.GetValue(slate), expectedThingDef.GetValue(slate));
         }

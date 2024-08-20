@@ -5,7 +5,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//派系基地给予远行队物品
+//给予玩家型交易
 public class WorldObjectCompProperties_SaleRequestComp : WorldObjectCompProperties
 {
     public WorldObjectCompProperties_SaleRequestComp()
