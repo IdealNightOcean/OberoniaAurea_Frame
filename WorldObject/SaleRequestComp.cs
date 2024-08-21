@@ -70,7 +70,7 @@ public class SaleRequestComp : WorldObjectComp
                 }
                 else
                 {
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("CommandFulfillTradeOfferConfirm".Translate(GenLabel.ThingLabel(saleRQ_ThingDef, null, saleRQ_Count)), delegate
+                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillSaleRQConfirm".Translate(GenLabel.ThingLabel(saleRQ_ThingDef, null, saleRQ_Count)), delegate
                     {
                         Fulfill(caravan);
                     }));
