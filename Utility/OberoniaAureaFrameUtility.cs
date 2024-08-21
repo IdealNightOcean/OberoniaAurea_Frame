@@ -38,6 +38,20 @@ public static class OberoniaAureaFrameUtility
         return list;
     }
 
+    public static List<List<Thing>> TryGengrateThingGroup(ThingDef def, int count)
+    {
+        List<List<Thing>> lists = [];
+        int perPodCount = Mathf.Max(1, Mathf.FloorToInt(150 / def.GetStatValueAbstract(StatDefOf.Mass)));
+        int remaining = count;
+        while (remaining > 0)
+        {
+            lists.Add(TryGenerateThing(def, Mathf.Min(remaining, perPodCount)));
+            remaining -= perPodCount;
+        }
+        return lists;
+    }
+
+
     //添加健康状态
     public static void AdjustOrAddHediff(Pawn pawn, HediffDef hediffDef, float severity = -1, int overrideDisappearTicks = -1, BodyPartRecord part = null, DamageInfo? dinfo = null, DamageWorker.DamageResult result = null)
     {
@@ -107,7 +121,37 @@ public static class OberoniaAureaFrameUtility
         }
     }
 
-    public static bool HasAnyThings(Caravan caravan, ThingCategoryDef thingCategoryDef, Func<Thing, bool> validator = null)
+    public static bool GetAvailableNeighborTile(int rootTile, out int tile, bool exclusion = true)
+    {
+        List<int> allNeighborTiles = [];
+        tile = -1;
+        Find.WorldGrid.GetTileNeighbors(rootTile, allNeighborTiles);
+        var neighborTiles = allNeighborTiles.Where(t => !Find.World.Impassable(t));
+        if (neighborTiles.Any())
+        {
+            if (exclusion)
+            {
+                WorldObjectsHolder worldObjects = Find.WorldObjects;
+                foreach (int item in neighborTiles)
+                {
+                    if (!worldObjects.AnyWorldObjectAt(item))
+                    {
+                        tile = item;
+                        return true;
+                    }
+                }
+                return false;
+            }
+            else
+            {
+                tile = neighborTiles.RandomElement();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static bool CaravanHasAnyThingsOf(Caravan caravan, ThingCategoryDef thingCategoryDef, Func<Thing, bool> validator = null)
     {
         List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravan);
         for (int i = 0; i < list.Count; i++)
@@ -120,7 +164,7 @@ public static class OberoniaAureaFrameUtility
         }
         return false;
     }
-    public static bool HasEnoughThings(Caravan caravan, ThingCategoryDef thingCategoryDef, int count, Func<Thing, bool> validator = null)
+    public static bool CaravanHasEnoughThingsOf(Caravan caravan, ThingCategoryDef thingCategoryDef, int count, Func<Thing, bool> validator = null)
     {
         int num = 0;
         List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravan);

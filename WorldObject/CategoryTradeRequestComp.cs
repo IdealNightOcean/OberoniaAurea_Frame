@@ -84,7 +84,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
                 {
                     Log.Error("Attempted to fulfill an unavailable request");
                 }
-                else if (!OberoniaAureaFrameUtility.HasAnyThings(caravan, categoryRQ_Def, PlayerCanGive))
+                else if (!OberoniaAureaFrameUtility.CaravanHasAnyThingsOf(caravan, categoryRQ_Def, PlayerCanGive))
                 {
                     Messages.Message("CommandFulfillTradeOfferFailInsufficient".Translate(RequestedThingCategoryLabel(categoryRQ_Def, categoryRQ_Count, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat)), MessageTypeDefOf.RejectInput, historical: false);
                 }
@@ -97,7 +97,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
                 }
             }
         };
-        if (!OberoniaAureaFrameUtility.HasAnyThings(caravan, categoryRQ_Def, PlayerCanGive))
+        if (!OberoniaAureaFrameUtility.CaravanHasAnyThingsOf(caravan, categoryRQ_Def, PlayerCanGive))
         {
             command_Action.Disable("OAFrame_CommandFulfillCategoryTradeFailInsufficient".Translate(RequestedThingCategoryLabel(categoryRQ_Def, 1, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat)));
         }

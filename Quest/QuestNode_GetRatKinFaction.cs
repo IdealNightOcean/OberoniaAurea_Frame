@@ -2,7 +2,7 @@
 using RimWorld.QuestGen;
 
 namespace OberoniaAurea_Frame;
-public class QuestNode_GetRatKinFaction : QuestNode_GetFactionBase
+public class QuestNode_GetRatKinFaction : QuestNode_GetFaction
 {
     protected override bool IsGoodFaction(Faction faction, Slate slate)
     {

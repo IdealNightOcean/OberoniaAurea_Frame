@@ -57,7 +57,7 @@ public class QuestNode_GetNearTile : QuestNode
         }
         if (neighborFirst.GetValue(slate))
         {
-            if (OberoniaAureaYHUtility.GetAvailableNeighborTile(rootTile, out tile, mustEmpty.GetValue(slate)))
+            if (OberoniaAureaFrameUtility.GetAvailableNeighborTile(rootTile, out tile, mustEmpty.GetValue(slate)))
             {
                 return true;
             }

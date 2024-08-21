@@ -82,11 +82,13 @@ public class QuestNode_GetFaction : QuestNode
         FactionDef fDef = factionDef.GetValue(slate);
         if (factionDef != null)
         {
-            faction = OberoniaAureaFrameUtility.RandomFactionOfDef(fDef);
-            return faction != null;
+            return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == fDef && IsGoodFaction(f, slate)).TryRandomElement(out faction);
         }
-        faction = null;
-        return false;
+        else
+        {
+            faction = null;
+            return false;
+        }
     }
 
     protected bool TryFindFaction(out Faction faction, Slate slate)
