@@ -91,7 +91,8 @@ public class QuestNode_GetFaction : QuestNode
         FactionDef fDef = factionDef.GetValue(slate);
         if (factionDef != null)
         {
-            return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == fDef && IsGoodFaction(f, slate)).TryRandomElement(out faction);
+            faction = Find.FactionManager.AllFactionsListForReading.Where(f => f.def == fDef && IsGoodFaction(f, slate)).RandomElementWithFallback(null);
+            return faction != null;
         }
         else
         {
@@ -114,7 +115,7 @@ public class QuestNode_GetFaction : QuestNode
             return false;
         }
         if (exclude.GetValue(slate) != null && exclude.GetValue(slate).Contains(faction))
-        {
+        {  
             return false;
         }
         if (faction.def.permanentEnemy)
@@ -155,7 +156,7 @@ public class QuestNode_GetFaction : QuestNode
             return false;
         }
         Faction faction2 = mustBeHostileToFaction.GetValue(slate);
-        if (faction2 == null || !faction.HostileTo(faction2))
+        if (faction2 != null && !faction.HostileTo(faction2))
         {
             return false;
         }

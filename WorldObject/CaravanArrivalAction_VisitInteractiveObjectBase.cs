@@ -61,7 +61,7 @@ public class CaravanArrivalAction_VisitInteractiveObject_Muti : CaravanArrivalAc
 {
     protected WorldObject_MutiInteractiveBase worldObject;
     protected int visitType;
-    public override string Label => "OA_VisitInteractiveObject".Translate(worldObject.Label);
+    public override string Label => "OAFrame_VisitInteractiveObject".Translate(worldObject.Label);
     public override string ReportString => "CaravanVisiting".Translate(worldObject.Label);
 
     public CaravanArrivalAction_VisitInteractiveObject_Muti()

@@ -13,6 +13,10 @@ public class QuestNode_GetMutiFactions : OberoniaAurea_Frame.QuestNode_GetFactio
     public SlateRef<bool> ignoreMinCountIfNessary = true; //必要时忽略数量下限
     protected override bool TestRunInt(Slate slate)
     {
+        if (factionCount.GetValue(slate).max <= 0)
+        {
+            return false;
+        }
         if (TryFindFactions(out List<Faction> factions, factionCount.GetValue(slate), slate))
         {
             slate.Set(storeAs.GetValue(slate), factions);
@@ -24,24 +28,29 @@ public class QuestNode_GetMutiFactions : OberoniaAurea_Frame.QuestNode_GetFactio
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        if (TryFindFactions(out List<Faction> factions, factionCount.GetValue(slate), QuestGen.slate))
+        if (TryFindFactions(out List<Faction> factions, factionCount.GetValue(slate), slate))
         {
             QuestGen.slate.Set(storeAs.GetValue(slate), factions);
+            bool addFlag = false;
+            QuestPart_InvolvedFactions questPart_InvolvedFactions = new();
             foreach (Faction f in factions)
             {
                 if (!f.Hidden)
-                {
-                    QuestPart_InvolvedFactions questPart_InvolvedFactions = new();
+                {               
                     questPart_InvolvedFactions.factions.Add(f);
-                    QuestGen.quest.AddPart(questPart_InvolvedFactions);
-                }
+                    addFlag = true;
+                }        
             }
+            if(addFlag)
+            {
+                QuestGen.quest.AddPart(questPart_InvolvedFactions);
+            }  
         }
     }
 
     private bool TryFindFactions(out List<Faction> factions, IntRange factionCount, Slate slate)
     {
-        factions = Find.FactionManager.GetFactions(allowHidden: true).Where(f => IsGoodFaction(f, slate)).InRandomOrder().Take(factionCount.RandomInRange).ToList();
+        factions = Find.FactionManager.GetFactions(allowHiddenFactions.GetValue(slate), allowDefeatedFactions.GetValue(slate), allowNonHumanlikeFactions.GetValue(slate)).Where(f => IsGoodFaction(f, slate)).InRandomOrder().Take(factionCount.RandomInRange).ToList();
         return factions.Count > 0 && (ignoreMinCountIfNessary.GetValue(slate) || factions.Count >= factionCount.min);
     }
 }

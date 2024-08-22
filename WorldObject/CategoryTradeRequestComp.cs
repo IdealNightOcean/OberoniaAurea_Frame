@@ -44,7 +44,6 @@ public class CategoryTradeRequestComp : WorldObjectComp
 
     public override string CompInspectStringExtra()
     {
-        Log.Message(activeCategoryRQ + " | " + categoryRQ_Expiration);
         if (ActiveRequest)
         {
             return "OAFrame_CaravanCategoryRequestInfo".Translate(RequestedThingCategoryLabel(categoryRQ_Def, categoryRQ_Count, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat).CapitalizeFirst(), (categoryRQ_Expiration - Find.TickManager.TicksGame).ToStringTicksToDays());
