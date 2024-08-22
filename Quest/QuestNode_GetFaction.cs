@@ -45,27 +45,22 @@ public class QuestNode_GetFaction : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        if (slate.TryGet<Faction>(storeAs.GetValue(slate), out var faction) && IsGoodFaction(faction, slate))
+        GetValidFaction(slate, out Faction faction);
+        if (faction != null)
         {
+            QuestGen.slate.Set(storeAs.GetValue(slate), faction);
             return true;
         }
-        if (factionDef != null && SetFaction(out faction, slate))
+        else
         {
-            slate.Set(storeAs.GetValue(slate), faction);
-            return true;
+            return false;
         }
-        if (TryFindFaction(out faction, slate))
-        {
-            slate.Set(storeAs.GetValue(slate), faction);
-            return true;
-        }
-        return false;
     }
 
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        if ((factionDef != null && SetFaction(out var faction, slate)) || ((!QuestGen.slate.TryGet<Faction>(storeAs.GetValue(slate), out faction) || !IsGoodFaction(faction, QuestGen.slate)) && TryFindFaction(out faction, QuestGen.slate)))
+        if (GetValidFaction(slate, out Faction faction))
         {
             QuestGen.slate.Set(storeAs.GetValue(slate), faction);
             if (!faction.Hidden)
@@ -75,6 +70,20 @@ public class QuestNode_GetFaction : QuestNode
                 QuestGen.quest.AddPart(questPart_InvolvedFactions);
             }
         }
+    }
+
+    protected virtual bool GetValidFaction(Slate slate, out Faction faction)
+    {
+        if (factionDef.GetValue(slate) != null && SetFaction(out faction, slate))
+        {
+            return true;
+        }
+        if (TryFindFaction(out faction, slate))
+        {
+            return true;
+        }
+        faction = null;
+        return false;
     }
 
     protected bool SetFaction(out Faction faction, Slate slate)
@@ -94,7 +103,7 @@ public class QuestNode_GetFaction : QuestNode
     protected bool TryFindFaction(out Faction faction, Slate slate)
     {
         return (from x in Find.FactionManager.GetFactions(allowHiddenFactions.GetValue(slate), allowDefeatedFactions.GetValue(slate), allowNonHumanlikeFactions.GetValue(slate))
-                where x != null && IsGoodFaction(x, slate)
+                where IsGoodFaction(x, slate)
                 select x).TryRandomElement(out faction);
     }
 
