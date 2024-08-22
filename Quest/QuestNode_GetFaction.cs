@@ -44,11 +44,10 @@ public class QuestNode_GetFaction : QuestNode
     public SlateRef<IEnumerable<Faction>> exclude;
 
     protected override bool TestRunInt(Slate slate)
-    {
-        GetValidFaction(slate, out Faction faction);
-        if (faction != null)
+    {    
+        if (GetValidFaction(slate, out Faction faction))
         {
-            QuestGen.slate.Set(storeAs.GetValue(slate), faction);
+            slate.Set(storeAs.GetValue(slate), faction);
             return true;
         }
         else
@@ -62,7 +61,7 @@ public class QuestNode_GetFaction : QuestNode
         Slate slate = QuestGen.slate;
         if (GetValidFaction(slate, out Faction faction))
         {
-            QuestGen.slate.Set(storeAs.GetValue(slate), faction);
+            slate.Set(storeAs.GetValue(slate), faction);
             if (!faction.Hidden)
             {
                 QuestPart_InvolvedFactions questPart_InvolvedFactions = new();
@@ -155,8 +154,8 @@ public class QuestNode_GetFaction : QuestNode
         {
             return false;
         }
-        Faction faction2 = mustBeHostileToFaction.GetValue(slate);
-        if (faction2 != null && !faction.HostileTo(faction2))
+        Faction hostileFaction = mustBeHostileToFaction.GetValue(slate);
+        if (hostileFaction != null && !faction.HostileTo(hostileFaction))
         {
             return false;
         }

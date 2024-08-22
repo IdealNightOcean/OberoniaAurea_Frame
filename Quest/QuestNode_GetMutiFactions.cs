@@ -30,7 +30,7 @@ public class QuestNode_GetMutiFactions : OberoniaAurea_Frame.QuestNode_GetFactio
         Slate slate = QuestGen.slate;
         if (TryFindFactions(out List<Faction> factions, factionCount.GetValue(slate), slate))
         {
-            QuestGen.slate.Set(storeAs.GetValue(slate), factions);
+            slate.Set(storeAs.GetValue(slate), factions);
             bool addFlag = false;
             QuestPart_InvolvedFactions questPart_InvolvedFactions = new();
             foreach (Faction f in factions)

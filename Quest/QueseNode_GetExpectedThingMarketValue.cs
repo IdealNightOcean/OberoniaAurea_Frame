@@ -28,11 +28,12 @@ public class QueseNode_GetExpectedThingMarketValue : QuestNode
 
     protected void SetVars(Slate slate)
     {
-        float expectedMarketValue = expectedThingDef.GetValue(slate).GetStatValueAbstract(StatDefOf.MarketValue) * expectedThingCount.GetValue(slate);
+        ThingDef thingDef = expectedThingDef.GetValue(slate);
+        float expectedMarketValue = thingDef.GetStatValueAbstract(StatDefOf.MarketValue) * expectedThingCount.GetValue(slate);
         slate.Set(storeMarketValueAs.GetValue(slate), expectedMarketValue);
         if (storeThing.GetValue(slate))
         {
-            slate.Set(storeMarketValueAs.GetValue(slate), expectedThingDef.GetValue(slate));
+            slate.Set(storeThingAs.GetValue(slate), thingDef);
         }
     }
 }

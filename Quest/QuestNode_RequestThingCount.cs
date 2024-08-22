@@ -18,27 +18,20 @@ public class QuestNode_RequestThingCount : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
+        return SetVars(slate);
+    }
+    protected override void RunInt()
+    {
+        SetVars(QuestGen.slate);
+    }
+
+    protected bool SetVars(Slate slate)
+    {
         Map map = slate.Get<Map>("map");
         if (map == null)
         {
             return false;
         }
-        SetVars(slate, map);
-        return true;
-    }
-    protected override void RunInt()
-    {
-        Slate slate = QuestGen.slate;
-        Map map = slate.Get<Map>("map");
-        if (map == null)
-        {
-            return;
-        }
-        SetVars(slate, map);
-    }
-
-    protected void SetVars(Slate slate, Map map)
-    {
         int requestThingCount = baseRange.GetValue(slate).RandomInRange;
         float preOffsetWealth = this.preOffsetWealth.GetValue(slate);
         int preOffsetCount = this.preOffsetCount.GetValue(slate);
@@ -50,5 +43,6 @@ public class QuestNode_RequestThingCount : QuestNode
         }
         requestThingCount = (int)(requestThingCount * (1f + baseOffset.GetValue(slate).RandomInRange));
         slate.Set(storeAs.GetValue(slate), requestThingCount);
+        return true;
     }
 }

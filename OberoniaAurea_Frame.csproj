@@ -78,7 +78,7 @@
     <Compile Include="Utility\IconUtility.cs" />
     <Compile Include="WorldObject\CaravanArrivalAction_VisitInteractiveObjectBase.cs" />
     <Compile Include="Quest\QuestNode_SeasonalRestriction.cs" />
-    <Compile Include="Quest\QuestNode_EarliestDay.cs" />
+    <Compile Include="Quest\QuestNode_EarliestDayPassed.cs" />
     <Compile Include="Quest\QuestNode_GetWorldObjectTile.cs" />
     <Compile Include="Quest\QuestNode_GetFactionLeader.cs" />
     <Compile Include="Quest\QuestNode_GetRatKinFaction.cs" />
