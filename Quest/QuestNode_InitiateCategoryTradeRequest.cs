@@ -7,6 +7,9 @@ namespace OberoniaAurea_Frame;
 //初始化类型物品交易请求（有QuestPart）
 public class QuestNode_InitiateCategoryTradeRequest : QuestNode
 {
+    [NoTranslate]
+    public SlateRef<string> inSignal;
+
     public SlateRef<ThingCategoryDef> requestedCategoryDef;
     public SlateRef<int> requestedThingCount;
     public SlateRef<int> requestQuality = -1;
@@ -32,7 +35,7 @@ public class QuestNode_InitiateCategoryTradeRequest : QuestNode
             requestIsMeat = requestIsMeat.GetValue(slate),
             requestAllowInsectMeat = requestAllowInsectMeat.GetValue(slate),
             requestAllowHumanlikeMeat = requestAllowHumanlikeMeat.GetValue(slate),
-            inSignal = slate.Get<string>("inSignal")
+            inSignal = QuestGenUtility.HardcodedSignalWithQuestID(inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal")
         };
         QuestGen.quest.AddPart(questPart_InitiateCategoryTradeRequest);
     }

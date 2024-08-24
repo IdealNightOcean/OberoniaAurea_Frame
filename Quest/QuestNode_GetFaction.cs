@@ -44,7 +44,7 @@ public class QuestNode_GetFaction : QuestNode
     public SlateRef<IEnumerable<Faction>> exclude;
 
     protected override bool TestRunInt(Slate slate)
-    {    
+    {
         if (GetValidFaction(slate, out Faction faction))
         {
             slate.Set(storeAs.GetValue(slate), faction);
@@ -114,7 +114,7 @@ public class QuestNode_GetFaction : QuestNode
             return false;
         }
         if (exclude.GetValue(slate) != null && exclude.GetValue(slate).Contains(faction))
-        {  
+        {
             return false;
         }
         if (faction.def.permanentEnemy)

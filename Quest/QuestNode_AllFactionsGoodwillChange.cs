@@ -25,7 +25,7 @@ public class QuestNode_AllFactionsGoodwillChange : QuestNode
         Slate slate = QuestGen.slate;
         QuestPart_AllFactionsGoodwillChange questPart_AllFactionsGoodwillChange = new()
         {
-            inSignal = QuestGenUtility.HardcodedSignalWithQuestID(inSignal.GetValue(slate)) ?? QuestGen.slate.Get<string>("inSignal"),
+            inSignal = QuestGenUtility.HardcodedSignalWithQuestID(inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal"),
             goodwillChange = goodwillChange.GetValue(slate),
             historyEvent = historyEvent.GetValue(slate),
             canSendMessage = canSendMessage.Equals(slate),

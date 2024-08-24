@@ -36,15 +36,15 @@ public class QuestNode_GetMutiFactions : OberoniaAurea_Frame.QuestNode_GetFactio
             foreach (Faction f in factions)
             {
                 if (!f.Hidden)
-                {               
+                {
                     questPart_InvolvedFactions.factions.Add(f);
                     addFlag = true;
-                }        
+                }
             }
-            if(addFlag)
+            if (addFlag)
             {
                 QuestGen.quest.AddPart(questPart_InvolvedFactions);
-            }  
+            }
         }
     }
 

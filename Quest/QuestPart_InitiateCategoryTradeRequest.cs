@@ -63,19 +63,18 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         base.Notify_QuestSignalReceived(signal);
-        if (!(signal.tag == inSignal))
+        if (signal.tag == inSignal)
         {
-            return;
-        }
-        CategoryTradeRequestComp component = settlement.GetComponent<CategoryTradeRequestComp>();
-        if (component != null)
-        {
-            if (component.ActiveRequest)
+            CategoryTradeRequestComp component = settlement.GetComponent<CategoryTradeRequestComp>();
+            if (component != null)
             {
-                Log.Error("Settlement " + settlement.Label + " already has an active category trade request.");
-                return;
+                if (component.ActiveRequest)
+                {
+                    Log.Error("Settlement " + settlement.Label + " already has an active category trade request.");
+                    return;
+                }
+                component.InitTradeRequest(requestedCategoryDef, requestedCount, requestDuration, requestIsMeat, requestAllowInsectMeat, requestAllowHumanlikeMeat);
             }
-            component.InitTradeRequest(requestedCategoryDef, requestedCount, requestDuration, requestIsMeat, requestAllowInsectMeat, requestAllowHumanlikeMeat);
         }
     }
 

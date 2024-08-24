@@ -30,7 +30,7 @@ public class QuestNode_GetFactionLeader : QuestNode
         Pawn leader = fVar?.leader;
         if (ValidLeader(leader))
         {
-            QuestGen.slate.Set(storeAs.GetValue(slate), leader);
+            slate.Set(storeAs.GetValue(slate), leader);
         }
     }
 

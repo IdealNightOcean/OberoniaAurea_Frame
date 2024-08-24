@@ -60,25 +60,25 @@ public class QuestPart_InitiateSaleRequest : QuestPart
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         base.Notify_QuestSignalReceived(signal);
-        if (!(signal.tag == inSignal))
+        if (signal.tag == inSignal)
         {
-            return;
-        }
-        SaleRequestComp component = settlement.GetComponent<SaleRequestComp>();
-        if (component != null)
-        {
-            if (component.ActiveRequest)
+            SaleRequestComp component = settlement.GetComponent<SaleRequestComp>();
+            if (component != null)
             {
-                Log.Error("Settlement " + settlement.Label + " already has an active sale request.");
-                return;
+                if (component.ActiveRequest)
+                {
+                    Log.Error("Settlement " + settlement.Label + " already has an active sale request.");
+                    return;
+                }
+                component.InitSaleRequest(requestedThingDef, requestedCount, requestDuration);
             }
-            component.InitSaleRequest(requestedThingDef, requestedCount, requestDuration);
         }
     }
 
     public override void Cleanup()
     {
         base.Cleanup();
+        Log.Message("clean");
         SaleRequestComp component = settlement.GetComponent<SaleRequestComp>();
         component?.Disable();
     }

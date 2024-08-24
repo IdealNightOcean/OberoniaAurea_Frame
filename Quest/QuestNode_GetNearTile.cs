@@ -27,9 +27,9 @@ public class QuestNode_GetNearTile : QuestNode
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        if (!slate.TryGet<int>(storeAs.GetValue(slate), out var _) && TryFindTile(QuestGen.slate, out var tile))
+        if (slate.TryGet<int>(storeAs.GetValue(slate), out int tile) || TryFindTile(slate, out tile))
         {
-            QuestGen.slate.Set(storeAs.GetValue(slate), tile);
+            slate.Set(storeAs.GetValue(slate), tile);
         }
     }
     protected bool ResloveCenterTile(Slate slate, out int tile)

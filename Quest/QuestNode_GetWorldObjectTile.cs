@@ -18,8 +18,7 @@ public class QuestNode_GetWorldObjectTile : QuestNode
     }
     protected override void RunInt()
     {
-        Slate slate = QuestGen.slate;
-        SetVars(slate);
+        SetVars(QuestGen.slate);
     }
     protected void SetVars(Slate slate)
     {
