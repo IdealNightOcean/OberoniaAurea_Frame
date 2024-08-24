@@ -26,8 +26,7 @@ public class QuestNode_GetFactionLeader : QuestNode
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        Faction fVar = faction.GetValue(slate);
-        Pawn leader = fVar?.leader;
+        Pawn leader = faction.GetValue(slate)?.leader;
         if (ValidLeader(leader))
         {
             slate.Set(storeAs.GetValue(slate), leader);
@@ -36,11 +35,15 @@ public class QuestNode_GetFactionLeader : QuestNode
 
     private static bool ValidLeader(Pawn leader)
     {
-        if (leader == null)
+        if (leader == null || leader.Dead)
         {
             return false;
         }
-        if (leader.Spawned && (leader.Downed || leader.IsPrisoner || !leader.Awake() || leader.InMentalState))
+        if (!leader.Spawned)
+        {
+            return true;
+        }
+        if (leader.Downed || leader.IsPrisoner || !leader.Awake() || leader.InMentalState)
         {
             return false;
         }
