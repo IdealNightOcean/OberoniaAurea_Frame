@@ -10,7 +10,7 @@ public class CaravanArrivalAction_VisitInteractiveObject : CaravanArrivalAction
 {
     protected WorldObject_InteractiveBase worldObject;
 
-    public override string Label => "OA_VisitInteractiveObject".Translate(worldObject.Label);
+    public override string Label => "OAFrame_VisitInteractiveObject".Translate(worldObject.Label);
     public override string ReportString => "CaravanVisiting".Translate(worldObject.Label);
     public CaravanArrivalAction_VisitInteractiveObject()
     { }

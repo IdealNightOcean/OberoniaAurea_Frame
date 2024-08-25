@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="HarmonyPatch\GetCriticalPawnReason_Patch.cs" />
     <Compile Include="HarmonyPatch\HarmonyPatch.cs" />
+    <Compile Include="Quest\QueseNode_GetExpectedCategoryMarketValue.cs" />
     <Compile Include="Quest\QuestNode_GetMutiFactions.cs" />
     <Compile Include="Quest\QueseNode_GetExpectedThingMarketValue.cs" />
     <Compile Include="Quest\QuestNode_AllFactionsGoodwillChange.cs" />
