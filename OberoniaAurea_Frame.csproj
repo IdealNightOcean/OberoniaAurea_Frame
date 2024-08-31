@@ -76,6 +76,7 @@
     <Compile Include="Quest\QuestPart_AllFactionsGoodwillChange.cs" />
     <Compile Include="Quest\QuestPart_InitiateCategoryTradeRequest.cs" />
     <Compile Include="Quest\QuestPart_InitiateSaleRequest.cs" />
+    <Compile Include="SiteTrader.cs" />
     <Compile Include="Utility\IconUtility.cs" />
     <Compile Include="WorldObject\CaravanArrivalAction_VisitInteractiveObjectBase.cs" />
     <Compile Include="Quest\QuestNode_SeasonalRestriction.cs" />

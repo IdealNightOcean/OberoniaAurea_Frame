@@ -16,6 +16,12 @@ public static class GetCriticalPawnReason_Patch
             if (pawn.IsFixedCaravanMember())
             {
                 __result = "OAFrame_FixedCaravanMember";
+                return;
+            }
+            if(pawn.IsSiteTraderGood())
+            {
+                __result = "OAFrame_SiteTraderGood";
+                return;
             }
         }
     }

@@ -21,7 +21,11 @@ public static class OberoniaAureaFrameUtility
         }
         return faction.def.categoryTag?.Equals("RatkinStory") ?? false;
     }
-
+    //是否是商品
+    public static bool IsSiteTraderGood(this Pawn pawn)
+    {
+        return pawn.ParentHolder is SiteTrader;
+    }
     //创建物品
     public static List<Thing> TryGenerateThing(ThingDef def, int count)
     {
