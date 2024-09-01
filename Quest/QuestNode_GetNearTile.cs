@@ -18,16 +18,17 @@ public class QuestNode_GetNearTile : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        if (TryFindTile(slate, out var tile))
+        if (slate.TryGet(storeAs.GetValue(slate), out int tile) || TryFindTile(slate, out tile))
         {
             slate.Set(storeAs.GetValue(slate), tile);
+            return true;
         }
-        return true;
+        return false;
     }
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        if (slate.TryGet<int>(storeAs.GetValue(slate), out int tile) || TryFindTile(slate, out tile))
+        if (slate.TryGet(storeAs.GetValue(slate), out int tile) || TryFindTile(slate, out tile))
         {
             slate.Set(storeAs.GetValue(slate), tile);
         }
