@@ -17,7 +17,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
 
     public SlateRef<int> originTile = -1; //搜索起点Tile，-1时默认为玩家派系基地
     public SlateRef<float> maxTileDistance; //距离originTile最大距离
-    public SlateRef<bool> nearFirst = true;
+    public SlateRef<bool> nearFirst = true; //就近优先
 
     public SlateRef<Faction> faction;
 

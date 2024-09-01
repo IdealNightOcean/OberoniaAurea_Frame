@@ -75,10 +75,6 @@ public class QuestNode_GetNearTile : QuestNode
         {
             findFlag = TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out tile, tileFinderMode: TileFinderMode.Near);
         }
-        if (findFlag)
-        {
-            return true;
-        }
-        return TileFinder.TryFindNewSiteTile(out tile);
+        return findFlag || TileFinder.TryFindNewSiteTile(out tile);
     }
 }
