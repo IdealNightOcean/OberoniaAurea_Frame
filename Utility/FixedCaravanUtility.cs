@@ -127,7 +127,7 @@ public static class FixedCaravanUtility
         {
             return true;
         }
-        Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OA_WarningAbnormalCaravan".Translate(), null, destructive: false, title: "OA_WarningAbnormalCaravanTitle".Translate()));
+        Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_WarningAbnormalCaravan".Translate(), null, destructive: false, title: "OAFrame_WarningAbnormalCaravanTitle".Translate()));
         return false;
     }
 }
