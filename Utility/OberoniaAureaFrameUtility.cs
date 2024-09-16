@@ -12,14 +12,15 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OberoniaAureaFrameUtility
 {
+    //是否为玩家派系
+    public static bool IsPlayerFaction(this Faction faction)
+    {
+        return faction?.def.isPlayer ?? false;
+    }
     //是否为鼠族派系
     public static bool IsRatkinFaction(this Faction faction)
     {
-        if (faction == null || faction.def == null)
-        {
-            return false;
-        }
-        return faction.def.categoryTag?.Equals("RatkinStory") ?? false;
+        return faction?.def.categoryTag?.Equals("RatkinStory") ?? false;
     }
     //是否是商品
     public static bool IsSiteTraderGood(this Pawn pawn)

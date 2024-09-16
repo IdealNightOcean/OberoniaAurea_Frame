@@ -54,7 +54,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
                 outSettlement = potentialSettle.RandomElement().Key;
             }
         }
-        
+
         if (ignoreConditionsIfNecessary.GetValue(slate) && outSettlement == null)
         {
             outSettlement = Find.WorldObjects.SettlementBases.Where(delegate (Settlement settlement)
@@ -68,7 +68,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
         }
         return outSettlement;
     }
-    protected bool IsGoodSettlement(Settlement settlement,Faction faction, int originTile, Slate slate, out float distance)
+    protected bool IsGoodSettlement(Settlement settlement, Faction faction, int originTile, Slate slate, out float distance)
     {
         distance = 999999f;
         if (!settlement.Visitable || settlement.Faction != faction)
