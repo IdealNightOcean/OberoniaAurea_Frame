@@ -20,7 +20,11 @@ public static class OberoniaAureaFrameUtility
     //是否为鼠族派系
     public static bool IsRatkinFaction(this Faction faction)
     {
-        return faction?.def.categoryTag?.Equals("RatkinStory") ?? false;
+        if (faction == null)
+        {
+            return false;
+        }
+        return faction.def.categoryTag?.Equals("RatkinStory") ?? false;
     }
     //是否是商品
     public static bool IsSiteTraderGood(this Pawn pawn)

@@ -11,10 +11,10 @@ public class QuestNode_RequestThingCount : QuestNode
     public SlateRef<string> storeAs;
 
     public SlateRef<IntRange> baseRange;
-    public SlateRef<FloatRange> baseOffset = new FloatRange(1f);
-    public SlateRef<float> preOffsetWealth = -1;
-    public SlateRef<int> preOffsetCount = 0;
-    public SlateRef<float> maxWealthLimit = -1;
+    public SlateRef<FloatRange> baseOffset = FloatRange.Zero;
+    public SlateRef<float> preOffsetWealth;
+    public SlateRef<int> preOffsetCount;
+    public SlateRef<int> maxCountLimit;
 
     protected override bool TestRunInt(Slate slate)
     {
@@ -35,14 +35,17 @@ public class QuestNode_RequestThingCount : QuestNode
         int requestThingCount = baseRange.GetValue(slate).RandomInRange;
         float preOffsetWealth = this.preOffsetWealth.GetValue(slate);
         int preOffsetCount = this.preOffsetCount.GetValue(slate);
-        float maxWealthLimit = this.maxWealthLimit.GetValue(slate);
-        if (preOffsetWealth > 0 && preOffsetCount > 0)
+        int maxCountLimit = this.maxCountLimit.GetValue(slate);
+        if (preOffsetWealth != 0f && preOffsetCount != 0)
         {
-            float playerWealthForStoryteller = maxWealthLimit > 0 ? Mathf.Min(maxWealthLimit, map.PlayerWealthForStoryteller) : map.PlayerWealthForStoryteller;
-            requestThingCount += (int)(playerWealthForStoryteller / preOffsetWealth) * preOffsetCount;
+            requestThingCount += (int)(map.PlayerWealthForStoryteller / preOffsetWealth) * preOffsetCount;
         }
         requestThingCount = (int)(requestThingCount * (1f + baseOffset.GetValue(slate).RandomInRange));
+        if (maxCountLimit > 0)
+        {
+            requestThingCount = Mathf.Min(requestThingCount, maxCountLimit);
+        }
         slate.Set(storeAs.GetValue(slate), requestThingCount);
-        return true;
+        return requestThingCount > 0;
     }
 }

@@ -89,7 +89,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
                 }
                 else
                 {
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAGene_CommandFulfillCategoryTradeConfirm".Translate(categoryRQ_Def), delegate
+                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillCategoryTradeConfirm".Translate(categoryRQ_Def), delegate
                     {
                         Fulfill(caravan);
                     }));
