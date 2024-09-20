@@ -130,36 +130,6 @@ public static class OberoniaAureaFrameUtility
         }
     }
 
-    public static bool GetAvailableNeighborTile(int rootTile, out int tile, bool exclusion = true)
-    {
-        List<int> allNeighborTiles = [];
-        tile = -1;
-        Find.WorldGrid.GetTileNeighbors(rootTile, allNeighborTiles);
-        var neighborTiles = allNeighborTiles.Where(t => !Find.World.Impassable(t));
-        if (neighborTiles.Any())
-        {
-            if (exclusion)
-            {
-                WorldObjectsHolder worldObjects = Find.WorldObjects;
-                foreach (int item in neighborTiles)
-                {
-                    if (!worldObjects.AnyWorldObjectAt(item))
-                    {
-                        tile = item;
-                        return true;
-                    }
-                }
-                return false;
-            }
-            else
-            {
-                tile = neighborTiles.RandomElement();
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static bool CaravanHasAnyThingsOf(Caravan caravan, ThingCategoryDef thingCategoryDef, Func<Thing, bool> validator = null)
     {
         List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravan);
@@ -187,5 +157,4 @@ public static class OberoniaAureaFrameUtility
         }
         return num >= count;
     }
-
 }

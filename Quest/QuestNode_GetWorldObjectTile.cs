@@ -13,19 +13,20 @@ public class QuestNode_GetWorldObjectTile : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        SetVars(slate);
-        return true;
+        return SetVars(slate);
     }
     protected override void RunInt()
     {
         SetVars(QuestGen.slate);
     }
-    protected void SetVars(Slate slate)
+    protected bool SetVars(Slate slate)
     {
         WorldObject worldObject = this.worldObject.GetValue(slate);
         if (worldObject != null && worldObject.Spawned)
         {
             slate.Set(storeAs.GetValue(slate), worldObject.Tile);
+            return true;
         }
+        return false;
     }
 }

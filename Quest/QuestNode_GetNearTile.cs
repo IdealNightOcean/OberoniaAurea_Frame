@@ -11,14 +11,19 @@ public class QuestNode_GetNearTile : QuestNode
 
     public SlateRef<WorldObject> worldObject;
     public SlateRef<int> centerTile = Tile.Invalid;
-    public SlateRef<bool> mustEmpty = true;
-    public SlateRef<bool> neighborFirst;
+    public SlateRef<bool> allowCaravans;
+    public SlateRef<bool> preferNeighborTiles;
+    public SlateRef<bool> preferCloserTiles = true;
     public SlateRef<int> minDist = 0;
     public SlateRef<int> maxDist = 999;
 
     protected override bool TestRunInt(Slate slate)
     {
-        if (slate.TryGet(storeAs.GetValue(slate), out int tile) || TryFindTile(slate, out tile))
+        if (slate.TryGet(storeAs.GetValue(slate), out int _))
+        {
+            return true;
+        }
+        else if (TryFindTile(slate, out int tile))
         {
             slate.Set(storeAs.GetValue(slate), tile);
             return true;
@@ -28,7 +33,7 @@ public class QuestNode_GetNearTile : QuestNode
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        if (slate.TryGet(storeAs.GetValue(slate), out int tile) || TryFindTile(slate, out tile))
+        if (!slate.TryGet(storeAs.GetValue(slate), out int _) && TryFindTile(slate, out int tile))
         {
             slate.Set(storeAs.GetValue(slate), tile);
         }
@@ -56,26 +61,18 @@ public class QuestNode_GetNearTile : QuestNode
         {
             return false;
         }
-        if (neighborFirst.GetValue(slate))
+        if (preferNeighborTiles.GetValue(slate))
         {
-            if (OberoniaAureaFrameUtility.GetAvailableNeighborTile(rootTile, out tile, mustEmpty.GetValue(slate)))
+            if (TileFinderUtility.GetAvailableNeighborTile(rootTile, out tile))
             {
                 return true;
             }
         }
-        tile = Tile.Invalid;
-        WorldObjectsHolder worldObjects = Find.WorldObjects;
+
         int minDist = this.minDist.GetValue(slate);
         int maxDist = this.maxDist.GetValue(slate);
-        bool findFlag;
-        if (mustEmpty.GetValue(slate))
-        {
-            findFlag = TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out tile, (int t) => !worldObjects.AnyWorldObjectAt(t), tileFinderMode: TileFinderMode.Near);
-        }
-        else
-        {
-            findFlag = TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out tile, tileFinderMode: TileFinderMode.Near);
-        }
-        return findFlag || TileFinder.TryFindNewSiteTile(out tile);
+        bool allowCaravans = this.allowCaravans.GetValue(slate);
+        TileFinderMode tileFinderMode = preferCloserTiles.GetValue(slate) ? TileFinderMode.Near : TileFinderMode.Random;
+        return TileFinderUtility.TryFindNewAvaliableTile(out tile, rootTile, minDist, maxDist, allowCaravans, tileFinderMode);
     }
 }
