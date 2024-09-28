@@ -82,7 +82,20 @@ public static class OberoniaAureaFrameUtility
             }
         }
     }
-
+    //移除第一个健康状态
+    public static void RemoveFirstHediffOfDef(Pawn pawn, HediffDef def, bool mustBeVisible = false)
+    {
+        List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
+        for (int i = 0; i < hediffs.Count; i++)
+        {
+            Hediff hediff = hediffs[i];
+            if (hediff.def == def && (!mustBeVisible || hediff.Visible))
+            {
+                pawn.health.RemoveHediff(hediff);
+                return;
+            }
+        }
+    }
     //地图上派系威胁的数量
     public static int ThreatsCountOfFactionOnMap(Map map, Faction faction)
     {
