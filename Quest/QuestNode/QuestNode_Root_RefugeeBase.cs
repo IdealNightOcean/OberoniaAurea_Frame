@@ -65,6 +65,44 @@ public abstract class QuestNode_Root_RefugeeBase : QuestNode
         return QuestGen_Get.GetMap() != null;
     }
 
-    protected abstract List<Pawn> GeneratePawns(int lodgerCount, Faction faction, Quest quest, Map map, string lodgerRecruitedSignal = null);
+    protected virtual List<Pawn> GeneratePawns(int lodgerCount, Faction faction, Map map, Quest quest, string lodgerRecruitedSignal = null)
+    {
+        List<Pawn> pawns = [];
+        for (int i = 0; i < lodgerCount; i++)
+        {
+            Pawn pawn = quest.GeneratePawn(PawnKindDefOf.Refugee, faction, allowAddictions: true, null, 0f, mustBeCapableOfViolence: true, null, 0f, 0f, ensureNonNumericName: false, forceGenerateNewPawn: true, DevelopmentalStage.Adult, allowPregnant: true);
+            pawns.Add(pawn);
+            quest.PawnJoinOffer(pawn, "LetterJoinOfferLabel".Translate(pawn.Named("PAWN")), "LetterJoinOfferTitle".Translate(pawn.Named("PAWN")), "LetterJoinOfferText".Translate(pawn.Named("PAWN"), map.Parent.Named("MAP")), delegate
+            {
+                quest.JoinPlayer(map.Parent, Gen.YieldSingle(pawn), joinPlayer: true);
+                quest.Letter(LetterDefOf.PositiveEvent, null, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, label: "LetterLabelMessageRecruitSuccess".Translate() + ": " + pawn.LabelShortCap, text: "MessageRecruitJoinOfferAccepted".Translate(pawn.Named("RECRUITEE")));
+                quest.SignalPass(null, null, lodgerRecruitedSignal);
+            }, delegate
+            {
+                quest.RecordHistoryEvent(HistoryEventDefOf.CharityRefused_ThreatReward_Joiner);
+            }, null, null, null, charity: true);
+        }
+        return pawns;
+    }
 
+    protected virtual List<Pawn> GeneratePawns(int lodgerCount, int childCount, Faction faction, Map map, Quest quest, string lodgerRecruitedSignal = null)
+    {
+        List<Pawn> pawns = [];
+        for (int i = 0; i < lodgerCount; i++)
+        {
+            DevelopmentalStage developmentalStages = (i > 0 && i >= lodgerCount - childCount) ? DevelopmentalStage.Child : DevelopmentalStage.Adult;
+            Pawn pawn = quest.GeneratePawn(PawnKindDefOf.Refugee, faction, allowAddictions: true, null, 0f, mustBeCapableOfViolence: true, null, 0f, 0f, ensureNonNumericName: false, forceGenerateNewPawn: true, developmentalStages, allowPregnant: true);
+            pawns.Add(pawn);
+            quest.PawnJoinOffer(pawn, "LetterJoinOfferLabel".Translate(pawn.Named("PAWN")), "LetterJoinOfferTitle".Translate(pawn.Named("PAWN")), "LetterJoinOfferText".Translate(pawn.Named("PAWN"), map.Parent.Named("MAP")), delegate
+            {
+                quest.JoinPlayer(map.Parent, Gen.YieldSingle(pawn), joinPlayer: true);
+                quest.Letter(LetterDefOf.PositiveEvent, null, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, label: "LetterLabelMessageRecruitSuccess".Translate() + ": " + pawn.LabelShortCap, text: "MessageRecruitJoinOfferAccepted".Translate(pawn.Named("RECRUITEE")));
+                quest.SignalPass(null, null, lodgerRecruitedSignal);
+            }, delegate
+            {
+                quest.RecordHistoryEvent(HistoryEventDefOf.CharityRefused_ThreatReward_Joiner);
+            }, null, null, null, charity: true);
+        }
+        return pawns;
+    }
 }
