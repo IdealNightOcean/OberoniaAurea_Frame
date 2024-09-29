@@ -50,7 +50,7 @@ public class QuestNode_GetDropSpot : QuestNode
             }
             else
             {
-                dropSpot = DropCellFinder.FindRaidDropCenterDistant(map,true);
+                dropSpot = DropCellFinder.FindRaidDropCenterDistant(map, true);
                 return dropSpot != IntVec3.Invalid;
             }
         }
