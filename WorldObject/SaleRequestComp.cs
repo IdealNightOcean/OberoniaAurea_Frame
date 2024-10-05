@@ -35,7 +35,7 @@ public class SaleRequestComp : WorldObjectComp
 
     public override IEnumerable<Gizmo> GetCaravanGizmos(Caravan caravan)
     {
-        if (ActiveRequest && CaravanVisitUtility.SettlementVisitedNow(caravan) == parent)
+        if (ActiveRequest)
         {
             yield return FulfillRequestCommand(caravan);
         }
