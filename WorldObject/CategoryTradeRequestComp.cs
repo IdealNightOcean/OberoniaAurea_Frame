@@ -46,7 +46,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
     {
         if (ActiveRequest)
         {
-            return "OAFrame_CaravanCategoryRequestInfo".Translate(RequestedThingCategoryLabel(categoryRQ_Def, categoryRQ_Count, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat).CapitalizeFirst(), (categoryRQ_Expiration - Find.TickManager.TicksGame).ToStringTicksToDays());
+            return "OAFrame_CaravanCategoryRequestInfo".Translate(RequestedThingCategoryLabel(categoryRQ_Def, categoryRQ_Left, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat).CapitalizeFirst(), (categoryRQ_Expiration - Find.TickManager.TicksGame).ToStringTicksToDays());
         }
         return null;
     }
@@ -70,37 +70,26 @@ public class CategoryTradeRequestComp : WorldObjectComp
         categoryRQ_AllowHumanlikeMeat = false;
     }
 
-    private Command FulfillRequestCommand(Caravan caravan)
+    private Command_Action FulfillRequestCommand(Caravan caravan)
     {
-        Command_Action command_Action = new()
+        Command_Action cmmand_Action = new()
         {
             defaultLabel = "CommandFulfillTradeOffer".Translate(),
             defaultDesc = "CommandFulfillTradeOfferDesc".Translate(),
             icon = IconUtility.TradeCommandIcon,
             action = delegate
             {
-                if (!ActiveRequest)
+                Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillCategoryTradeConfirm".Translate(categoryRQ_Def), delegate
                 {
-                    Log.Error("Attempted to fulfill an unavailable request");
-                }
-                else if (!OberoniaAureaFrameUtility.CaravanHasAnyThingsOf(caravan, categoryRQ_Def, PlayerCanGive))
-                {
-                    Messages.Message("CommandFulfillTradeOfferFailInsufficient".Translate(RequestedThingCategoryLabel(categoryRQ_Def, categoryRQ_Count, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat)), MessageTypeDefOf.RejectInput, historical: false);
-                }
-                else
-                {
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillCategoryTradeConfirm".Translate(categoryRQ_Def), delegate
-                    {
-                        Fulfill(caravan);
-                    }));
-                }
+                    Fulfill(caravan);
+                }));
             }
         };
         if (!OberoniaAureaFrameUtility.CaravanHasAnyThingsOf(caravan, categoryRQ_Def, PlayerCanGive))
         {
-            command_Action.Disable("OAFrame_CommandFulfillCategoryTradeFailInsufficient".Translate(RequestedThingCategoryLabel(categoryRQ_Def, 1, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat)));
+            cmmand_Action.Disable("OAFrame_CommandFulfillCategoryTradeFailInsufficient".Translate(RequestedThingCategoryLabel(categoryRQ_Def, 1, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat)));
         }
-        return command_Action;
+        return cmmand_Action;
     }
 
     private void Fulfill(Caravan caravan)
@@ -125,12 +114,6 @@ public class CategoryTradeRequestComp : WorldObjectComp
         }
         if (categoryRQ_Left <= 0)
         {
-            /*
-            if (parent.Faction != null)
-            {
-                Faction.OfPlayer.TryAffectGoodwillWith(parent.Faction, 12, canSendMessage: true, canSendHostilityLetter: true, HistoryEventDefOf.QuestGoodwillReward);
-            }
-            */
             QuestUtility.SendQuestTargetSignals(parent.questTags, "OAFrame_CategoryRQFulfilled", parent.Named("SUBJECT"), caravan.Named("CARAVAN"));
             Disable();
         }

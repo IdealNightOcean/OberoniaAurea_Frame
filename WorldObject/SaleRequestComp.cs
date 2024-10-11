@@ -55,7 +55,7 @@ public class SaleRequestComp : WorldObjectComp
         saleRQ_Count = 0;
     }
 
-    private Command FulfillRequestCommand(Caravan caravan)
+    private Command_Action FulfillRequestCommand(Caravan caravan)
     {
         Command_Action command_Action = new()
         {
@@ -64,17 +64,10 @@ public class SaleRequestComp : WorldObjectComp
             icon = IconUtility.TradeCommandIcon,
             action = delegate
             {
-                if (!ActiveRequest)
+                Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillSaleRQConfirm".Translate(GenLabel.ThingLabel(saleRQ_ThingDef, null, saleRQ_Count)), delegate
                 {
-                    Log.Error("Attempted to fulfill an unavailable request");
-                }
-                else
-                {
-                    Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillSaleRQConfirm".Translate(GenLabel.ThingLabel(saleRQ_ThingDef, null, saleRQ_Count)), delegate
-                    {
-                        Fulfill(caravan);
-                    }));
-                }
+                    Fulfill(caravan);
+                }));
             }
         };
         return command_Action;
