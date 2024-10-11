@@ -61,7 +61,7 @@ public static class OberoniaAureaFrameUtility
     }
 
 
-    //添加健康状态
+    //添加健康状态 √
     public static void AdjustOrAddHediff(Pawn pawn, HediffDef hediffDef, float severity = -1, int overrideDisappearTicks = -1, BodyPartRecord part = null, DamageInfo? dinfo = null, DamageWorker.DamageResult result = null)
     {
         Hediff hediff = pawn?.health.GetOrAddHediff(hediffDef, part, dinfo, result);
@@ -82,7 +82,7 @@ public static class OberoniaAureaFrameUtility
             }
         }
     }
-    //移除第一个健康状态
+    //移除第一个健康状态 √
     public static void RemoveFirstHediffOfDef(Pawn pawn, HediffDef def, bool mustBeVisible = false)
     {
         List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
@@ -96,28 +96,16 @@ public static class OberoniaAureaFrameUtility
             }
         }
     }
-    //地图上派系威胁的数量
+    //地图上派系威胁的数量 √
     public static int ThreatsCountOfFactionOnMap(Map map, Faction faction)
     {
         IEnumerable<Verse.AI.IAttackTarget> potentiallyDangerous = map.attackTargetsCache.TargetsHostileToFaction(faction).Where(t => GenHostility.IsActiveThreatTo(t, faction));
         return potentiallyDangerous.Count();
     }
-    //地图上玩家派系威胁的数量
+    //地图上玩家派系威胁的数量 √
     public static int ThreatsCountOfPlayerOnMap(Map map)
     {
         return ThreatsCountOfFactionOnMap(map, Faction.OfPlayer);
-    }
-
-    //地图上派系敌人的数量
-    public static int HostilePawnsCountOfFactionOnMap(Map map, Faction faction)
-    {
-        IEnumerable<Pawn> potentiallyDangerous = map.mapPawns.AllPawnsSpawned.Where(p => !p.DeadOrDowned && !p.IsPrisoner && !p.InContainerEnclosed && p.Faction != faction && p.HostileTo(faction));
-        return potentiallyDangerous.Count();
-    }
-    //地图上玩家敌人的数量
-    public static int HostilePawnsCountOfPlayerOnMap(Map map)
-    {
-        return HostilePawnsCountOfFactionOnMap(map, Faction.OfPlayer);
     }
 
     public static Faction RandomFactionOfDef(FactionDef def, bool allowDefeated = false)

@@ -1,4 +1,5 @@
 ﻿using RimWorld.Planet;
+using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
@@ -31,6 +32,22 @@ public abstract class WorldObject_InteractiveBase : WorldObject
         }
     }
     public virtual void Notify_CaravanArrived(Caravan caravan) { }
+
+    public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
+    {
+        foreach (FloatMenuOption floatMenuOption in base.GetFloatMenuOptions(caravan))
+        {
+            yield return floatMenuOption;
+        }
+        foreach (FloatMenuOption floatMenuOption2 in GetSpecificFloatMenuOptions(caravan))
+        {
+            yield return floatMenuOption2;
+        }
+    }
+    public virtual IEnumerable<FloatMenuOption> GetSpecificFloatMenuOptions(Caravan caravan)
+    {
+        return CaravanArrivalAction_VisitInteractiveObject.GetFloatMenuOptions(caravan, this);
+    }
 
     public override void ExposeData()
     {
