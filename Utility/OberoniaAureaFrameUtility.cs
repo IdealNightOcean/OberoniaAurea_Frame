@@ -60,70 +60,22 @@ public static class OberoniaAureaFrameUtility
         return lists;
     }
 
-
-    //添加健康状态 √
-    public static void AdjustOrAddHediff(Pawn pawn, HediffDef hediffDef, float severity = -1, int overrideDisappearTicks = -1, BodyPartRecord part = null, DamageInfo? dinfo = null, DamageWorker.DamageResult result = null)
+    public static Faction RandomFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false)
     {
-        Hediff hediff = pawn?.health.GetOrAddHediff(hediffDef, part, dinfo, result);
-        if (hediff == null)
-        {
-            return;
-        }
-        if (severity > 0)
-        {
-            hediff.Severity = severity;
-        }
-        if (overrideDisappearTicks > 0)
-        {
-            HediffComp_Disappears comp = hediff.TryGetComp<HediffComp_Disappears>();
-            if (comp != null)
-            {
-                comp.ticksToDisappear = overrideDisappearTicks;
-            }
-        }
-    }
-    //移除第一个健康状态 √
-    public static void RemoveFirstHediffOfDef(Pawn pawn, HediffDef def, bool mustBeVisible = false)
-    {
-        List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
-        for (int i = 0; i < hediffs.Count; i++)
-        {
-            Hediff hediff = hediffs[i];
-            if (hediff.def == def && (!mustBeVisible || hediff.Visible))
-            {
-                pawn.health.RemoveHediff(hediff);
-                return;
-            }
-        }
-    }
-    //地图上派系威胁的数量 √
-    public static int ThreatsCountOfFactionOnMap(Map map, Faction faction)
-    {
-        IEnumerable<Verse.AI.IAttackTarget> potentiallyDangerous = map.attackTargetsCache.TargetsHostileToFaction(faction).Where(t => GenHostility.IsActiveThreatTo(t, faction));
-        return potentiallyDangerous.Count();
-    }
-    //地图上玩家派系威胁的数量 √
-    public static int ThreatsCountOfPlayerOnMap(Map map)
-    {
-        return ThreatsCountOfFactionOnMap(map, Faction.OfPlayer);
-    }
-
-    public static Faction RandomFactionOfDef(FactionDef def, bool allowDefeated = false)
-    {
-        Faction faction = Find.FactionManager.AllFactionsListForReading.Where(ValidFaction).RandomElementWithFallback(null);
+        Faction faction = Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).RandomElementWithFallback(null);
         return faction;
 
-        bool ValidFaction(Faction f)
+        bool ValidFaction(Faction tf)
         {
-            if (f == null)
+            if (tf == null)
             {
                 return false;
             }
-            if (f.def != def)
+            if (tf.defeated && !allowDefeated)
             {
                 return false;
             }
-            if (f.defeated && !allowDefeated)
+            if (tf.temporary && !allowTemporary)
             {
                 return false;
             }
