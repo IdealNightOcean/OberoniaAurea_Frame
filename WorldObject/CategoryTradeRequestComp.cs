@@ -66,6 +66,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
         categoryRQ_Def = null;
         categoryRQ_Count = 0;
         categoryRQ_Left = 0;
+        categoryRQ_IsMeat = false;
         categoryRQ_AllowInsectMeat = false;
         categoryRQ_AllowHumanlikeMeat = false;
     }
@@ -96,7 +97,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
     {
         List<Thing> list = CaravanInventoryUtility.TakeThings(caravan, delegate (Thing thing)
         {
-            if (!thing.def.thingCategories.Contains(categoryRQ_Def))
+            if (!thing.def.IsWithinCategory(categoryRQ_Def))
             {
                 return 0;
             }

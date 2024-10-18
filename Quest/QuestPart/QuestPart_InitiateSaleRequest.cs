@@ -78,9 +78,8 @@ public class QuestPart_InitiateSaleRequest : QuestPart
     public override void Cleanup()
     {
         base.Cleanup();
-        Log.Message("clean");
-        SaleRequestComp component = settlement.GetComponent<SaleRequestComp>();
-        component?.Disable();
+        SaleRequestComp saleRequestComp = settlement.GetComponent<SaleRequestComp>();
+        saleRequestComp?.Disable();
     }
 
     public override void ExposeData()

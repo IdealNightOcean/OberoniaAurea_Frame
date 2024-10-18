@@ -81,9 +81,8 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
     public override void Cleanup()
     {
         base.Cleanup();
-        Log.Message("clean");
-        SaleRequestComp component = settlement.GetComponent<SaleRequestComp>();
-        component?.Disable();
+        CategoryTradeRequestComp categoryRequestComp = settlement.GetComponent<CategoryTradeRequestComp>();
+        categoryRequestComp?.Disable();
     }
 
     public override void ExposeData()

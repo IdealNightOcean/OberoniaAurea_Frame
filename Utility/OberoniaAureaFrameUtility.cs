@@ -89,7 +89,7 @@ public static class OberoniaAureaFrameUtility
         for (int i = 0; i < list.Count; i++)
         {
             Thing thing = list[i];
-            if (thing.def.thingCategories.Contains(thingCategoryDef) && (validator == null || validator(thing)))
+            if (thing.def.IsWithinCategory(thingCategoryDef) && (validator == null || validator(thing)))
             {
                 return true;
             }
