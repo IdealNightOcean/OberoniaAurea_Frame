@@ -6,6 +6,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+//大地图简单商店
 public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable
 {
     protected static readonly List<string> TempExtantNames = [];
