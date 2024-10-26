@@ -41,4 +41,9 @@ public static class OAFrame_PawnUtility
             }
         }
     }
+
+    public static bool PawnSleepNow(Pawn pawn)
+    {
+        return pawn.jobs?.curDriver?.asleep ?? false;
+    }
 }
