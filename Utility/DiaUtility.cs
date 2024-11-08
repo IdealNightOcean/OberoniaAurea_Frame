@@ -21,7 +21,7 @@ public static class OAFrame_DiaUtility
             };
             root.options.Add(accept);
         }
-        if (rejectAction != null)
+        if (rejectText != null)
         {
             DiaOption reject = new(rejectText)
             {

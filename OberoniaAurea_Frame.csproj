@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IsolatedPawnGroupMakerDef.cs" />
     <Compile Include="PatchOperationCheckDLC.cs" />
     <Compile Include="Quest\QuestPart\QuestPart_OARefugeeInteractions.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_Root_RefugeeBase.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Quest\QuestPart\QuestPart_InitiateSaleRequest.cs" />
     <Compile Include="SiteTrader.cs" />
     <Compile Include="Utility\DiaUtility.cs" />
+    <Compile Include="Utility\PawnGenerateUtility.cs" />
     <Compile Include="Utility\MapUtility.cs" />
     <Compile Include="Utility\IconUtility.cs" />
     <Compile Include="Utility\PawnUtility.cs" />
