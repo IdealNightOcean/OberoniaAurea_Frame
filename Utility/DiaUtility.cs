@@ -5,13 +5,13 @@ namespace OberoniaAurea_Frame;
 
 public static class OAFrame_DiaUtility
 {
-    public static DiaNode DefaultConfirmDiaNode(TaggedString text, Action acceptAction = null, Action rejectAction = null)
+    public static Dialog_NodeTree DefaultConfirmDiaNodeTree(TaggedString text, Action acceptAction = null, Action rejectAction = null)
     {
-        return ConfirmDiaNode(text, "Confirm".Translate(), acceptAction, "GoBack".Translate(), rejectAction);
+        return ConfirmDiaNodeTree(text, "Confirm".Translate(), acceptAction, "GoBack".Translate(), rejectAction);
     }
-    public static DiaNode ConfirmDiaNode(TaggedString text, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
+    public static Dialog_NodeTree ConfirmDiaNodeTree(TaggedString text, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
     {
-        DiaNode root = new(text);
+        DiaNode rootnode = new(text);
         if (acceptText != null)
         {
             DiaOption accept = new(acceptText)
@@ -19,7 +19,7 @@ public static class OAFrame_DiaUtility
                 resolveTree = true,
                 action = acceptAction
             };
-            root.options.Add(accept);
+            rootnode.options.Add(accept);
         }
         if (rejectText != null)
         {
@@ -28,8 +28,9 @@ public static class OAFrame_DiaUtility
                 resolveTree = true,
                 action = rejectAction
             };
-            root.options.Add(reject);
+            rootnode.options.Add(reject);
         }
-        return root;
+        Dialog_NodeTree nodeTree = new(rootnode);
+        return nodeTree;
     }
 }

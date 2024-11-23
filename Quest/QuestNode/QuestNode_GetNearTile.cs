@@ -51,6 +51,12 @@ public class QuestNode_GetNearTile : QuestNode
             tile = worldObject.GetValue(slate).Tile;
             return tile != Tile.Invalid;
         }
+        Map map = slate.Get<Map>("map");
+        if(map != null)
+        {
+            tile = map.Tile;
+            return true;
+        }
         return false;
     }
 

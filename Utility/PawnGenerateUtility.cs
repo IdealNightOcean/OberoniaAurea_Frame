@@ -20,7 +20,12 @@ public static class PawnGenerateUtility
         }
         return result;
     }
-    public static IEnumerable<Pawn> GeneratePawns(PawnGroupMakerParms parms, PawnGroupMaker pawnGroupMaker, bool warnOnZeroResults = true)
+    public static bool TryGetRandomPawnGroupMaker(PawnGroupKindDef pawnGroupKindDef, IsolatedPawnGroupMakerDef pawnGroupMakerDef, out PawnGroupMaker pawnGroupMaker)
+    {
+        return pawnGroupMakerDef.pawnGroupMakers.Where((PawnGroupMaker gm) => gm.kindDef == pawnGroupKindDef).TryRandomElementByWeight((PawnGroupMaker gm) => gm.commonality, out pawnGroupMaker);
+    }
+
+    public static IEnumerable<Pawn> GeneratePawns(PawnGroupMakerParms parms, PawnGroupMaker pawnGroupMaker, bool needFaction = true, bool warnOnZeroResults = true)
     {
         if (parms.groupKind == null)
         {
@@ -28,7 +33,7 @@ public static class PawnGenerateUtility
             yield break;
         }
 
-        if (parms.faction == null)
+        if (needFaction && parms.faction == null)
         {
             Log.Error("Tried to generate pawn kinds with null faction. parms=" + parms);
             yield break;

@@ -85,6 +85,7 @@
     <Compile Include="Quest\QuestPart\QuestPart_InitiateSaleRequest.cs" />
     <Compile Include="SiteTrader.cs" />
     <Compile Include="Utility\DiaUtility.cs" />
+    <Compile Include="Utility\FactionUtility.cs" />
     <Compile Include="Utility\PawnGenerateUtility.cs" />
     <Compile Include="Utility\MapUtility.cs" />
     <Compile Include="Utility\IconUtility.cs" />

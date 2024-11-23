@@ -2,7 +2,6 @@
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -12,20 +11,6 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OberoniaAureaFrameUtility
 {
-    //是否为玩家派系
-    public static bool IsPlayerFaction(this Faction faction)
-    {
-        return faction?.def.isPlayer ?? false;
-    }
-    //是否为鼠族派系
-    public static bool IsRatkinFaction(this Faction faction)
-    {
-        if (faction == null)
-        {
-            return false;
-        }
-        return faction.def.categoryTag?.Equals("RatkinStory") ?? false;
-    }
     //是否是商品
     public static bool IsSiteTraderGood(this Pawn pawn)
     {
@@ -60,29 +45,6 @@ public static class OberoniaAureaFrameUtility
         return lists;
     }
 
-    public static Faction RandomFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false)
-    {
-        Faction faction = Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).RandomElementWithFallback(null);
-        return faction;
-
-        bool ValidFaction(Faction tf)
-        {
-            if (tf == null)
-            {
-                return false;
-            }
-            if (tf.defeated && !allowDefeated)
-            {
-                return false;
-            }
-            if (tf.temporary && !allowTemporary)
-            {
-                return false;
-            }
-            return true;
-        }
-    }
-
     public static bool CaravanHasAnyThingsOf(Caravan caravan, ThingCategoryDef thingCategoryDef, Func<Thing, bool> validator = null)
     {
         List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravan);
@@ -110,4 +72,5 @@ public static class OberoniaAureaFrameUtility
         }
         return num >= count;
     }
+
 }

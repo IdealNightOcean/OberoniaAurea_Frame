@@ -7,4 +7,5 @@ namespace OberoniaAurea_Frame;
 public class IsolatedPawnGroupMakerDef : Def
 {
     public List<PawnGroupMaker> pawnGroupMakers;
+    public TraderKindDef traderKind;
 }

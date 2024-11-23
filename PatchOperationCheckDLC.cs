@@ -5,14 +5,14 @@ namespace OberoniaAurea_Frame;
 
 public class PatchOperationCheckDLC : PatchOperation
 {
-    private bool Royalty;
-    private bool Ideology;
-    private bool Biotech;
-    private bool Anomaly;
+    public bool Royalty;
+    public bool Ideology;
+    public bool Biotech;
+    public bool Anomaly;
 
-    private PatchOperation match;
+    public PatchOperation match;
 
-    private PatchOperation nomatch;
+    public PatchOperation nomatch;
 
     protected override bool ApplyWorker(XmlDocument xml)
     {
