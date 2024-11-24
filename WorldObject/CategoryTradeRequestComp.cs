@@ -77,7 +77,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
         {
             defaultLabel = "CommandFulfillTradeOffer".Translate(),
             defaultDesc = "CommandFulfillTradeOfferDesc".Translate(),
-            icon = IconUtility.TradeCommandIcon,
+            icon = OAFrame_IconUtility.TradeCommandIcon,
             action = delegate
             {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillCategoryTradeConfirm".Translate(categoryRQ_Def), delegate
@@ -86,7 +86,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
                 }));
             }
         };
-        if (!OberoniaAureaFrameUtility.CaravanHasAnyThingsOf(caravan, categoryRQ_Def, PlayerCanGive))
+        if (!OAFrame_CaravanUtility.CaravanHasAnyThingsOf(caravan, categoryRQ_Def, PlayerCanGive))
         {
             cmmand_Action.Disable("OAFrame_CommandFulfillCategoryTradeFailInsufficient".Translate(RequestedThingCategoryLabel(categoryRQ_Def, 1, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat)));
         }

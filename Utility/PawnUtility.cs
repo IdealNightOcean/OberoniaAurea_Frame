@@ -6,6 +6,11 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_PawnUtility
 {
+    //是否是商品
+    public static bool IsSiteTraderGood(this Pawn pawn)
+    {
+        return pawn.ParentHolder is SiteTrader;
+    }
     //添加健康状态
     public static void AdjustOrAddHediff(Pawn pawn, HediffDef hediffDef, float severity = -1, int overrideDisappearTicks = -1, BodyPartRecord part = null, DamageInfo? dinfo = null, DamageWorker.DamageResult result = null)
     {

@@ -1,48 +1,27 @@
-﻿using RimWorld;
-using RimWorld.Planet;
+﻿using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
-
-[StaticConstructorOnStartup]
-public static class OberoniaAureaFrameUtility
+public static class OAFrame_CaravanUtility
 {
-    //是否是商品
-    public static bool IsSiteTraderGood(this Pawn pawn)
+    public static bool IsExactTypeCaravan(object caravan)
     {
-        return pawn.ParentHolder is SiteTrader;
-    }
-    //创建物品
-    public static List<Thing> TryGenerateThing(ThingDef def, int count)
-    {
-        List<Thing> list = [];
-        int stackLimit = def.stackLimit;
-        int remaining = count;
-        while (remaining > 0)
+        if (caravan == null)
         {
-            Thing thing = ThingMaker.MakeThing(def);
-            thing.stackCount = Mathf.Min(remaining, stackLimit);
-            list.Add(thing);
-            remaining -= stackLimit;
+            return false;
         }
-        return list;
-    }
-
-    public static List<List<Thing>> TryGengrateThingGroup(ThingDef def, int count)
-    {
-        List<List<Thing>> lists = [];
-        int perPodCount = Mathf.Max(1, Mathf.FloorToInt(150 / def.GetStatValueAbstract(StatDefOf.Mass)));
-        int remaining = count;
-        while (remaining > 0)
+        if (caravan.GetType() == typeof(Caravan))
         {
-            lists.Add(TryGenerateThing(def, Mathf.Min(remaining, perPodCount)));
-            remaining -= perPodCount;
+            return true;
         }
-        return lists;
+        Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_WarningAbnormalCaravan".Translate(), null, destructive: false, title: "OAFrame_WarningAbnormalCaravanTitle".Translate()));
+        return false;
     }
 
     public static bool CaravanHasAnyThingsOf(Caravan caravan, ThingCategoryDef thingCategoryDef, Func<Thing, bool> validator = null)
@@ -72,5 +51,4 @@ public static class OberoniaAureaFrameUtility
         }
         return num >= count;
     }
-
 }

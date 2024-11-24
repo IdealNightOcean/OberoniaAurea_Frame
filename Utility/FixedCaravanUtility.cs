@@ -6,7 +6,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public static class FixedCaravanUtility
+public static class OAFrame_FixedCaravanUtility
 {
     private static readonly List<Thing> TempInventoryItems = [];
     private static readonly List<Thing> TempAddedItems = [];
@@ -117,17 +117,5 @@ public static class FixedCaravanUtility
         }
         TempAddedItems.Clear();
     }
-    public static bool IsExactTypeCaravan(object caravan)
-    {
-        if (caravan == null)
-        {
-            return false;
-        }
-        if (caravan.GetType() == typeof(Caravan))
-        {
-            return true;
-        }
-        Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_WarningAbnormalCaravan".Translate(), null, destructive: false, title: "OAFrame_WarningAbnormalCaravanTitle".Translate()));
-        return false;
-    }
+
 }

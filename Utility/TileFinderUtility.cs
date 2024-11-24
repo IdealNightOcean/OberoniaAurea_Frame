@@ -6,7 +6,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 [StaticConstructorOnStartup]
-public static class TileFinderUtility
+public static class OAFrame_TileFinderUtility
 {
     public static bool GetAvailableNeighborTile(int rootTile, out int tile, bool exclusion = true)
     {

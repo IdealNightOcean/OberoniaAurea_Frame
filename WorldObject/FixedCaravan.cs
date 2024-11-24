@@ -47,7 +47,7 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
     public ThingOwner<Pawn> pawns;
     public List<Pawn> PawnsListForReading => pawns.InnerListForReading;
     public int PawnsCount => pawns.Count;
-    protected IEnumerable<Thing> AllItems => FixedCaravanUtility.AllInventoryItems(this);
+    protected IEnumerable<Thing> AllItems => OAFrame_FixedCaravanUtility.AllInventoryItems(this);
 
     protected bool skillsDirty = true;
     protected readonly Dictionary<SkillDef, int> totalSkills = [];
@@ -123,7 +123,7 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
         }
         else
         {
-            FixedCaravanUtility.GiveThing(this, thing);
+            OAFrame_FixedCaravanUtility.GiveThing(this, thing);
         }
     }
 
@@ -146,7 +146,7 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
             action = delegate
             {
                 PreConvertToCaravanByPlayer();
-                FixedCaravanUtility.ConvertToCaravan(this);
+                OAFrame_FixedCaravanUtility.ConvertToCaravan(this);
             }
         };
         yield return command_Convert;

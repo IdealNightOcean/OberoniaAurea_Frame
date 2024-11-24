@@ -4,7 +4,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 [StaticConstructorOnStartup]
-public static class ReflectionUtility
+public static class OAFrame_ReflectionUtility
 {
     public static BindingFlags InstanceAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
     public static T GetFieldValue<T>(object obj, string name, T fallback)

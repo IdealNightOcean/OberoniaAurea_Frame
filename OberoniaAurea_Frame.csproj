@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MoteAttached_Text.cs" />
     <Compile Include="IsolatedPawnGroupMakerDef.cs" />
     <Compile Include="PatchOperationCheckDLC.cs" />
     <Compile Include="Quest\QuestPart\QuestPart_OARefugeeInteractions.cs" />
@@ -84,8 +85,10 @@
     <Compile Include="Quest\QuestPart\QuestPart_InitiateCategoryTradeRequest.cs" />
     <Compile Include="Quest\QuestPart\QuestPart_InitiateSaleRequest.cs" />
     <Compile Include="SiteTrader.cs" />
+    <Compile Include="Utility\DefOf.cs" />
     <Compile Include="Utility\DiaUtility.cs" />
     <Compile Include="Utility\FactionUtility.cs" />
+    <Compile Include="Utility\CaravanUtility.cs" />
     <Compile Include="Utility\PawnGenerateUtility.cs" />
     <Compile Include="Utility\MapUtility.cs" />
     <Compile Include="Utility\IconUtility.cs" />
@@ -102,7 +105,7 @@
     <Compile Include="WorldObject\CategoryTradeRequestComp.cs" />
     <Compile Include="WorldObject\WorldObject_WithMutiFactions.cs" />
     <Compile Include="WorldObject\WorldObject_InteractiveBase.cs" />
-    <Compile Include="Utility\OberoniaAureaFrameUtility.cs" />
+    <Compile Include="Utility\MiscUtility.cs" />
     <Compile Include="Utility\ReflectionUtility.cs" />
     <Compile Include="Utility\FixedCaravanUtility.cs" />
     <Compile Include="WorldObject\FixedCaravan.cs" />

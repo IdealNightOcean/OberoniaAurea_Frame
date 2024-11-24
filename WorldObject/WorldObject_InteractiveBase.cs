@@ -7,6 +7,7 @@ namespace OberoniaAurea_Frame;
 
 public abstract class WorldObject_InteractiveBase : WorldObject
 {
+    protected virtual string VisitLabel => null;
     protected WorldObject associateWorldObject;
     public WorldObject AssociateWorldObject
     {
@@ -46,7 +47,7 @@ public abstract class WorldObject_InteractiveBase : WorldObject
     }
     public virtual IEnumerable<FloatMenuOption> GetSpecificFloatMenuOptions(Caravan caravan)
     {
-        return CaravanArrivalAction_VisitInteractiveObject.GetFloatMenuOptions(caravan, this);
+        return CaravanArrivalAction_VisitInteractiveObject.GetFloatMenuOptions(caravan, this, VisitLabel);
     }
 
     public override void ExposeData()

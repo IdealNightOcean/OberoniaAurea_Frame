@@ -61,7 +61,7 @@ public class SaleRequestComp : WorldObjectComp
         {
             defaultLabel = "OAFrame_CommandReciveSaleOffer".Translate(),
             defaultDesc = "OAFrame_CommandReciveSaleOfferDesc".Translate(),
-            icon = IconUtility.TradeCommandIcon,
+            icon = OAFrame_IconUtility.TradeCommandIcon,
             action = delegate
             {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillSaleRQConfirm".Translate(GenLabel.ThingLabel(saleRQ_ThingDef, null, saleRQ_Count)), delegate
@@ -74,7 +74,7 @@ public class SaleRequestComp : WorldObjectComp
     }
     private void Fulfill(Caravan caravan)
     {
-        List<Thing> things = OberoniaAureaFrameUtility.TryGenerateThing(saleRQ_ThingDef, saleRQ_Count);
+        List<Thing> things = OAFrame_MiscUtility.TryGenerateThing(saleRQ_ThingDef, saleRQ_Count);
         foreach (Thing t in things)
         {
             CaravanInventoryUtility.GiveThing(caravan, t);

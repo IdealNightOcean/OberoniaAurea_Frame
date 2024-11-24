@@ -4,7 +4,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 [StaticConstructorOnStartup]
-public static class IconUtility
+public static class OAFrame_IconUtility
 {
     public static readonly Texture2D RecombineIcon = ContentFinder<Texture2D>.Get("UI/Gizmos/RecombineGenes");
 

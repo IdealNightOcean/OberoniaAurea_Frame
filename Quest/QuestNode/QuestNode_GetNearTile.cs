@@ -69,7 +69,7 @@ public class QuestNode_GetNearTile : QuestNode
         }
         if (preferNeighborTiles.GetValue(slate))
         {
-            if (TileFinderUtility.GetAvailableNeighborTile(rootTile, out tile))
+            if (OAFrame_TileFinderUtility.GetAvailableNeighborTile(rootTile, out tile))
             {
                 return true;
             }
@@ -79,6 +79,6 @@ public class QuestNode_GetNearTile : QuestNode
         int maxDist = this.maxDist.GetValue(slate);
         bool allowCaravans = this.allowCaravans.GetValue(slate);
         TileFinderMode tileFinderMode = preferCloserTiles.GetValue(slate) ? TileFinderMode.Near : TileFinderMode.Random;
-        return TileFinderUtility.TryFindNewAvaliableTile(out tile, rootTile, minDist, maxDist, allowCaravans, tileFinderMode);
+        return OAFrame_TileFinderUtility.TryFindNewAvaliableTile(out tile, rootTile, minDist, maxDist, allowCaravans, tileFinderMode);
     }
 }
