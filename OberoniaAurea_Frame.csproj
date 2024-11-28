@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IncidentWorker_IsolatedTraderCaravanArrival.cs" />
     <Compile Include="MoteAttached_Text.cs" />
     <Compile Include="IsolatedPawnGroupMakerDef.cs" />
     <Compile Include="PatchOperationCheckDLC.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="Quest\QuestNode\QuestNode_EarliestDayPassed.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetWorldObjectTile.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetFactionLeader.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetRatKinFaction.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_GetRatkinFaction.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetNearbySettlementOfFaction.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetFaction.cs" />
     <Compile Include="WorldObject\CategoryTradeRequestComp.cs" />

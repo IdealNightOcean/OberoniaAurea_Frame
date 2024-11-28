@@ -1,6 +1,4 @@
 ﻿using RimWorld;
-using RimWorld.Planet;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -48,7 +46,7 @@ public static class OAFrame_MiscUtility
         vector.y = (float)UI.screenHeight - vector.y;
         Text.Font = GameFont.Tiny;
         float x = Text.CalcSize(text).x;
-        GUI.DrawTexture(new Rect(vector.x - x / 2f - 4f, vector.y, x + 8f, 12f), TexUI.GrayTextBG);
+        GUI.DrawTexture(new Rect(vector.x - x / 2f - 4f, vector.y, x + 8f, 16f), TexUI.GrayTextBG);
         GUI.color = textColor;
         Text.Anchor = TextAnchor.UpperCenter;
         Widgets.Label(new Rect(vector.x - x / 2f, vector.y - 2f, x, 999f), text);

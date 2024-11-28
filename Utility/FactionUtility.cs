@@ -25,11 +25,10 @@ public static class OAFrame_FactionUtility
         }
         return faction.def.categoryTag?.Equals("RatkinStory") ?? false;
     }
-    public static Faction RandomFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false, bool allowNonHumanlike = false)
-    {
-        Faction faction = Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).RandomElementWithFallback(null);
-        return faction;
 
+    public static List<Faction> ValidFactionsOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false, bool allowNonHumanlike = false)
+    {
+        return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).ToList();
         bool ValidFaction(Faction tf)
         {
             if (tf == null)
@@ -51,11 +50,14 @@ public static class OAFrame_FactionUtility
             return true;
         }
     }
-    public static Faction RandomTempFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowNonHumanlike = false)
+    public static Faction RandomFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false, bool allowNonHumanlike = false)
     {
-        Faction faction = Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).RandomElementWithFallback(null);
-        return faction;
+        return ValidFactionsOfDef(def, allowDefeated, allowTemporary, allowNonHumanlike).RandomElementWithFallback(null);
+    }
 
+    public static List<Faction> ValidTempFactionsOfDef(FactionDef def, bool allowDefeated = false, bool allowNonHumanlike = false)
+    {
+        return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).ToList();
         bool ValidFaction(Faction tf)
         {
             if (tf == null)
@@ -73,22 +75,29 @@ public static class OAFrame_FactionUtility
             return tf.temporary;
         }
     }
+    public static Faction RandomTempFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowNonHumanlike = false)
+    {
+        return ValidTempFactionsOfDef(def, allowDefeated, allowNonHumanlike).RandomElementWithFallback(null);
+    }
 
-    public static Faction GenerateTempFaction(FactionDef templateDef)
+    public static Faction GenerateTempFaction(FactionDef templateDef, FactionRelationKind relationKindWithPlayer = FactionRelationKind.Neutral)
     {
         if (templateDef == null)
         {
             return null;
         }
         List<FactionRelation> RelationList = [];
+        Faction ofPlayer = Faction.OfPlayer;
         foreach (Faction otherF in Find.FactionManager.AllFactionsListForReading)
         {
             if (!otherF.def.PermanentlyHostileTo(templateDef))
             {
+                FactionRelationKind relationKind = otherF == ofPlayer ? relationKindWithPlayer : FactionRelationKind.Neutral;
+
                 RelationList.Add(new FactionRelation
                 {
                     other = otherF,
-                    kind = FactionRelationKind.Neutral
+                    kind = relationKind
                 });
             }
         }
