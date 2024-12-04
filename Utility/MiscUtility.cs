@@ -9,7 +9,20 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_MiscUtility
 {
-
+    //尝试立刻触发事件
+    public static bool TryFireIncidentNow(IncidentDef incidentDef, IncidentParms parms)
+    {
+        if (incidentDef.Worker.CanFireNow(parms))
+        {
+            return incidentDef.Worker.TryExecute(parms);
+        }
+        return false;
+    }
+    //添加队列事件
+    public static void AddNewQueuedIncident(IncidentDef incidentDef, int delayTicks, IncidentParms parms = null, int retryDurationTicks = 0)
+    {
+        Find.Storyteller.incidentQueue.Add(incidentDef, Find.TickManager.TicksGame + delayTicks, parms, retryDurationTicks);
+    }
     //创建物品
     public static List<Thing> TryGenerateThing(ThingDef def, int count)
     {
