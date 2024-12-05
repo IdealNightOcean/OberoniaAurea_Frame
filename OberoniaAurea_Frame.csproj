@@ -66,6 +66,8 @@
     <Compile Include="MoteAttached_Text.cs" />
     <Compile Include="IsolatedPawnGroupMakerDef.cs" />
     <Compile Include="PatchOperationCheckDLC.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_FireIncident.cs" />
+    <Compile Include="Quest\QuestPart\QuestPart_FireIncident.cs" />
     <Compile Include="Quest\QuestPart\QuestPart_OARefugeeInteractions.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_Root_RefugeeBase.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetDropSpot.cs" />
