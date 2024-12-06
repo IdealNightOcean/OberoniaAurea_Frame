@@ -37,7 +37,9 @@ public class QuestNode_FireIncident : QuestNode
     }
     protected virtual IncidentParms ResolveParms(Slate slate)
     {
-        return parms.GetValue(slate);
+        IncidentParms parms = this.parms.GetValue(slate);
+        parms ??= new IncidentParms();
+        return parms;
     }
     protected bool ResolveIncidentTarget(Slate slate)
     {
@@ -61,7 +63,7 @@ public class QuestNode_FireIncident : QuestNode
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        if(!ResolveIncidentTarget(slate))
+        if (!ResolveIncidentTarget(slate))
         {
             return;
         }
