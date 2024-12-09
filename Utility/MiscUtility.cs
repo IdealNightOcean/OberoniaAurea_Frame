@@ -19,8 +19,13 @@ public static class OAFrame_MiscUtility
         return false;
     }
     //添加队列事件
-    public static void AddNewQueuedIncident(IncidentDef incidentDef, int delayTicks, IncidentParms parms = null, int retryDurationTicks = 0)
+    public static void AddNewQueuedIncident(IncidentDef incidentDef, int delayTicks, IncidentParms parms, int retryDurationTicks = 0)
     {
+        if (parms == null)
+        {
+            Log.Error("Try add a new queued incident,but IncidentParms is NULL.");
+            return;
+        }
         Find.Storyteller.incidentQueue.Add(incidentDef, Find.TickManager.TicksGame + delayTicks, parms, retryDurationTicks);
     }
     //创建物品
