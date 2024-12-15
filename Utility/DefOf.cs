@@ -6,6 +6,4 @@ namespace OberoniaAurea_Frame;
 public static class OAFrameDefOf
 {
     public static ThingDef OAFrame_Mote_AttachedText;
-
-    public static RaidStrategyDef OAFrame_ImmediateAttack_NeverFlee;
 }

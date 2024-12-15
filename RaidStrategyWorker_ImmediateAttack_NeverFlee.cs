@@ -5,7 +5,7 @@ using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
-public class RaidStrategyWorker_ImmediateAttack_NeverFlee : RaidStrategyWorker
+public abstract class RaidStrategyWorker_ImmediateAttack_NeverFlee : RaidStrategyWorker
 {
     protected override LordJob MakeLordJob(IncidentParms parms, Map map, List<Pawn> pawns, int raidSeed)
     {

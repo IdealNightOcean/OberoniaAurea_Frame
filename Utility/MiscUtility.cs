@@ -63,11 +63,15 @@ public static class OAFrame_MiscUtility
         Vector2 vector = Find.Camera.WorldToScreenPoint(position) / Prefs.UIScale;
         vector.y = (float)UI.screenHeight - vector.y;
         Text.Font = GameFont.Tiny;
-        float x = Text.CalcSize(text).x;
-        GUI.DrawTexture(new Rect(vector.x - x / 2f - 4f, vector.y, x + 8f, 16f), TexUI.GrayTextBG);
+        float rectY = vector.y;
+
+        float textWidth = Text.CalcSize(text).x;
+        float textX = vector.x - textWidth / 2f;
+
+        GUI.DrawTexture(new Rect(textX - 4f, rectY, textWidth + 8f, 16f), TexUI.GrayTextBG);
         GUI.color = textColor;
         Text.Anchor = TextAnchor.UpperCenter;
-        Widgets.Label(new Rect(vector.x - x / 2f, vector.y - 2f, x, 999f), text);
+        Widgets.Label(new Rect(textX, rectY - 2f, textWidth, 128f), text);
         GUI.color = Color.white;
         Text.Anchor = TextAnchor.UpperLeft;
     }
