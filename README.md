@@ -1,13 +1,13 @@
 
 # 介绍
 
-该仓库是个人库**金鸢尾兰系列框架（OberoniaAurea_Frame）**的C#源代码文件，是部分游戏RimWorld模组的内置（后会改为前置）框架。
+该仓库是个人库 **金鸢尾兰系列框架（OberoniaAurea_Frame）** 的C#源代码文件，是部分游戏RimWorld模组的内置（后会改为前置）框架。
 
 
 
 本框架应用于以下模组
 
-+ [OA]鼠族派系扩展：金鸢尾兰   [![Steam Downloads](https://img.shields.io/steam/downloads/3159926804?label=Steam%20Workshop&color=yellow)](https://steamcommunity.com/sharedfiles/filedetails/?id=3159926804)
++ [OA]鼠族派系扩展：金鸢尾兰  [![Steam Downloads](https://img.shields.io/steam/downloads/3159926804?label=Steam%20Workshop&color=yellow)](https://steamcommunity.com/sharedfiles/filedetails/?id=3159926804)
 
 + [OA]鼠族基因扩展  [![Steam Downloads](https://img.shields.io/steam/downloads/3300291918?style=flat&logo=steam&label=Steam%20Workshop)](https://steamcommunity.com/sharedfiles/filedetails/?id=3300291918)
 
