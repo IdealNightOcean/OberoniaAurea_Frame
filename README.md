@@ -11,7 +11,7 @@
 
 + [OA]鼠族基因扩展  [![Steam Downloads](https://img.shields.io/steam/downloads/3300291918?style=flat&logo=steam&label=Steam%20Workshop)](https://steamcommunity.com/sharedfiles/filedetails/?id=3300291918)
 
-+ [OA]鼠族剧本扩展：风雪的遗孤  [![Steam Downloads](https://img.shields.io/steam/downloads/3381392312?style=flat&logo=steam&label=Steam%20Workshop&color=cyan)
++ [OA]鼠族剧本扩展：风雪的遗孤  [![Steam Downloads](https://img.shields.io/steam/downloads/3381392312?style=flat&logo=steam&label=Steam%20Workshop&color=blue)
 ](https://steamcommunity.com/sharedfiles/filedetails/?id=3381392312)
 
 
