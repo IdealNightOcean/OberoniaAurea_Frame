@@ -65,7 +65,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
         }
         PawnGroupMakerParms groupMakerParms = IncidentParmsUtility.GetDefaultPawnGroupMakerParms(PawnGroupKindDef, parms, ensureCanGenerateAtLeastOnePawn: true);
         groupMakerParms.tile = Tile.Invalid;
-        if (!PawnGenerateUtility.TryGetRandomPawnGroupMaker(PawnGroupKindDef, PawnGroupMakerDef, out PawnGroupMaker groupMaker))
+        if (!OAFrame_PawnGenerateUtility.TryGetRandomPawnGroupMaker(PawnGroupKindDef, PawnGroupMakerDef, out PawnGroupMaker groupMaker))
         {
             return false;
         }
@@ -100,7 +100,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
     protected virtual List<Pawn> SpawnTradePawns(IncidentParms parms, PawnGroupMakerParms groupMakerParms, PawnGroupMaker groupMaker)
     {
         Map map = (Map)parms.target;
-        List<Pawn> pawns = PawnGenerateUtility.GeneratePawns(groupMakerParms, groupMaker, needFaction: false, warnOnZeroResults: false).ToList();
+        List<Pawn> pawns = OAFrame_PawnGenerateUtility.GeneratePawns(groupMakerParms, groupMaker, needFaction: false, warnOnZeroResults: false).ToList();
         foreach (Pawn pawn in pawns)
         {
             IntVec3 loc = CellFinder.RandomClosewalkCellNear(parms.spawnCenter, map, 5);
