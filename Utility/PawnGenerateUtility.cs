@@ -5,7 +5,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame.Utility;
 
-public static class PawnGenerateUtility
+public static class OAFrame_PawnGenerateUtility
 {
     public static bool TryGetRandomPawnGroupMaker(PawnGroupMakerParms parms, IsolatedPawnGroupMakerDef pawnGroupMakerDef, out PawnGroupMaker pawnGroupMaker)
     {
