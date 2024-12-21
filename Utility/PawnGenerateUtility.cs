@@ -7,6 +7,24 @@ namespace OberoniaAurea_Frame.Utility;
 
 public static class PawnGenerateUtility
 {
+    public static PawnGenerationRequest CommonPawnGenerationRequest(PawnKindDef kindDef,Faction faction = null,bool forceNew = false, bool allowChild = false)
+    {
+        PawnGenerationRequest request = new(kindDef, faction)
+        {
+            Context = PawnGenerationContext.NonPlayer,
+            AllowDead = false,
+            AllowDowned = false,
+            ForceGenerateNewPawn = forceNew,
+            CanGeneratePawnRelations = false,
+            RelationWithExtraPawnChanceFactor = 0f,
+            AllowedDevelopmentalStages = DevelopmentalStage.Adult,
+        };
+        if (allowChild && Find.Storyteller.difficulty.ChildrenAllowed)
+        {
+            request.AllowedDevelopmentalStages |= DevelopmentalStage.Child;
+        }
+        return request;
+    }
     public static bool TryGetRandomPawnGroupMaker(PawnGroupMakerParms parms, IsolatedPawnGroupMakerDef pawnGroupMakerDef, out PawnGroupMaker pawnGroupMaker)
     {
         if (parms.seed.HasValue)
