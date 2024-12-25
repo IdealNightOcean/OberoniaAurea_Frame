@@ -10,9 +10,9 @@ namespace OberoniaAurea_Frame;
 public static class OAFrame_MiscUtility
 {
     //尝试立刻触发事件
-    public static bool TryFireIncidentNow(IncidentDef incidentDef, IncidentParms parms)
+    public static bool TryFireIncidentNow(IncidentDef incidentDef, IncidentParms parms, bool force = false)
     {
-        if (incidentDef.Worker.CanFireNow(parms))
+        if (force || incidentDef.Worker.CanFireNow(parms))
         {
             return incidentDef.Worker.TryExecute(parms);
         }
