@@ -26,7 +26,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
             {
                 yield return questLookTarget;
             }
-            if (settlement != null)
+            if (settlement is not null)
             {
                 yield return settlement;
             }
@@ -41,7 +41,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
             {
                 yield return involvedFaction;
             }
-            if (settlement.Faction != null)
+            if (settlement.Faction is not null)
             {
                 yield return settlement.Faction;
             }
@@ -66,7 +66,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
         if (signal.tag == inSignal)
         {
             CategoryTradeRequestComp component = settlement.GetComponent<CategoryTradeRequestComp>();
-            if (component != null)
+            if (component is not null)
             {
                 if (component.ActiveRequest)
                 {
@@ -105,7 +105,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
         settlement = Find.WorldObjects.Settlements.Where(delegate (Settlement x)
         {
             CategoryTradeRequestComp component = x.GetComponent<CategoryTradeRequestComp>();
-            return component != null && !component.ActiveRequest && x.Faction != Faction.OfPlayer;
+            return component is not null && !component.ActiveRequest && x.Faction != Faction.OfPlayer;
         }).RandomElementWithFallback();
         settlement ??= Find.WorldObjects.Settlements.RandomElementWithFallback();
         requestedCategoryDef = ThingCategoryDefOf.StoneBlocks;

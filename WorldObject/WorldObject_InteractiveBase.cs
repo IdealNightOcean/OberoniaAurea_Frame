@@ -14,7 +14,7 @@ public abstract class WorldObject_InteractiveBase : WorldObject
         get { return associateWorldObject; }
         set
         {
-            if (value != null)
+            if (value is not null)
             {
                 associateWorldObject = value;
             }
@@ -25,9 +25,9 @@ public abstract class WorldObject_InteractiveBase : WorldObject
     {
         get
         {
-            if (cachedMat == null)
+            if (cachedMat is null)
             {
-                cachedMat = MaterialPool.MatFrom(color: (base.Faction == null) ? Color.white : base.Faction.Color, texPath: def.texture, shader: ShaderDatabase.WorldOverlayTransparentLit, renderQueue: WorldMaterials.WorldObjectRenderQueue);
+                cachedMat = MaterialPool.MatFrom(color: (base.Faction is null) ? Color.white : base.Faction.Color, texPath: def.texture, shader: ShaderDatabase.WorldOverlayTransparentLit, renderQueue: WorldMaterials.WorldObjectRenderQueue);
             }
             return cachedMat;
         }

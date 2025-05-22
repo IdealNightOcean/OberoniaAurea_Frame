@@ -21,7 +21,7 @@ public class QuestNode_SeasonalRestriction : QuestNode
     protected bool ValidSeason(Slate slate)
     {
         Map map = slate.Get<Map>("map");
-        if (map == null)
+        if (map is null)
         {
             return false;
         }

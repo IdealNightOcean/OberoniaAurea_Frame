@@ -24,7 +24,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
     protected virtual Settlement RandomNearbySettlement(int originTile, Slate slate)
     {
         Faction faction = this.faction.GetValue(slate);
-        if (faction == null)
+        if (faction is null)
         {
             return null;
         }
@@ -55,7 +55,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
             }
         }
 
-        if (ignoreConditionsIfNecessary.GetValue(slate) && outSettlement == null)
+        if (ignoreConditionsIfNecessary.GetValue(slate) && outSettlement is null)
         {
             outSettlement = Find.WorldObjects.SettlementBases.Where(delegate (Settlement settlement)
             {
@@ -105,7 +105,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
             originTile = map.Tile;
         }
         Settlement settlement = RandomNearbySettlement(originTile, slate);
-        if (settlement != null)
+        if (settlement is not null)
         {
             slate.Set(storeAs.GetValue(slate), settlement);
             return true;

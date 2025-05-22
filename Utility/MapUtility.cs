@@ -8,6 +8,17 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_MapUtility
 {
+    public static int AmountSendableSilver(Map map)
+    {
+        return AmountSendableThing(map, ThingDefOf.Silver);
+    }
+    public static int AmountSendableThing(Map map, ThingDef thingDef)
+    {
+        return (from t in TradeUtility.AllLaunchableThingsForTrade(map)
+                where t.def == thingDef
+                select t).Sum((Thing t) => t.stackCount);
+    }
+
     //地图上派系威胁的数量
     public static int ThreatsCountOfFactionOnMap(Map map, Faction faction)
     {
