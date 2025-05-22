@@ -20,7 +20,7 @@ public class Thought_SituationalGiveHediff : Thought_Situational
     public static void RemoveHediff(Pawn pawn, HediffDef hediffDef)
     {
         Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-        if (firstHediffOfDef != null)
+        if (firstHediffOfDef is not null)
         {
             pawn.health.RemoveHediff(firstHediffOfDef);
         }

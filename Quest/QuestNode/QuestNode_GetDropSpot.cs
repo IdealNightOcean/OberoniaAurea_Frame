@@ -39,7 +39,7 @@ public class QuestNode_GetDropSpot : QuestNode
     {
         dropSpot = IntVec3.Invalid;
         Map map = slate.Get<Map>("map");
-        if (map == null)
+        if (map is null)
         {
             return false;
         }

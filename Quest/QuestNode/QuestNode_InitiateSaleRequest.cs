@@ -17,7 +17,7 @@ public class QuestNode_InitiateSaleRequest : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        return settlement.GetValue(slate) != null && requestedThingCount.GetValue(slate) > 0 && requestedThingDef.GetValue(slate) != null && duration.GetValue(slate) > 0;
+        return settlement.GetValue(slate) is not null && requestedThingCount.GetValue(slate) > 0 && requestedThingDef.GetValue(slate) is not null && duration.GetValue(slate) > 0;
     }
     protected override void RunInt()
     {

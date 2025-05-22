@@ -14,7 +14,7 @@ public static class OAFrame_FixedCaravanUtility
 
     public static bool IsFixedCaravanMember(this Pawn pawn)
     {
-        return pawn.GetFixedCaravan() != null;
+        return pawn.GetFixedCaravan() is not null;
     }
     public static FixedCaravan GetFixedCaravan(this Pawn pawn)
     {
@@ -96,7 +96,7 @@ public static class OAFrame_FixedCaravanUtility
             return;
         }
         Pawn pawn = CaravanInventoryUtility.FindPawnToMoveInventoryTo(thing, fixedCaravan.PawnsListForReading, null);
-        if (pawn == null)
+        if (pawn is null)
         {
             Log.Error($"Failed to give item {thing} to caravan {fixedCaravan}; item was lost");
             thing.Destroy();

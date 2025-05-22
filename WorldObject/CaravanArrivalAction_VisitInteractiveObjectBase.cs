@@ -27,7 +27,7 @@ public class CaravanArrivalAction_VisitInteractiveObject : CaravanArrivalAction
         {
             return floatMenuAcceptanceReport;
         }
-        if (worldObject != null && worldObject.Tile != destinationTile)
+        if (worldObject is not null && worldObject.Tile != destinationTile)
         {
             return false;
         }
@@ -80,7 +80,7 @@ public class CaravanArrivalAction_VisitInteractiveObject_Muti : CaravanArrivalAc
         {
             return floatMenuAcceptanceReport;
         }
-        if (worldObject != null && worldObject.Tile != destinationTile)
+        if (worldObject is not null && worldObject.Tile != destinationTile)
         {
             return false;
         }

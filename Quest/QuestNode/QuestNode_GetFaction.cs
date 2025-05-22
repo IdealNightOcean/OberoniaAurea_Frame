@@ -73,7 +73,7 @@ public class QuestNode_GetFaction : QuestNode
 
     protected virtual bool GetValidFaction(Slate slate, out Faction faction)
     {
-        if (factionDef.GetValue(slate) != null)
+        if (factionDef.GetValue(slate) is not null)
         {
             return SetFaction(out faction, slate);
         }
@@ -88,10 +88,10 @@ public class QuestNode_GetFaction : QuestNode
     protected bool SetFaction(out Faction faction, Slate slate)
     {
         FactionDef fDef = factionDef.GetValue(slate);
-        if (factionDef != null)
+        if (factionDef is not null)
         {
             faction = Find.FactionManager.AllFactionsListForReading.Where(f => f.def == fDef && IsGoodFaction(f, slate)).RandomElementWithFallback(null);
-            return faction != null;
+            return faction is not null;
         }
         else
         {
@@ -109,11 +109,11 @@ public class QuestNode_GetFaction : QuestNode
 
     protected virtual bool IsGoodFaction(Faction faction, Slate slate)
     {
-        if (ofPawn.GetValue(slate) != null && faction != ofPawn.GetValue(slate).Faction)
+        if (ofPawn.GetValue(slate) is not null && faction != ofPawn.GetValue(slate).Faction)
         {
             return false;
         }
-        if (exclude.GetValue(slate) != null && exclude.GetValue(slate).Contains(faction))
+        if (exclude.GetValue(slate) is not null && exclude.GetValue(slate).Contains(faction))
         {
             return false;
         }
@@ -155,7 +155,7 @@ public class QuestNode_GetFaction : QuestNode
             return false;
         }
         Faction hostileFaction = mustBeHostileToFaction.GetValue(slate);
-        if (hostileFaction != null && !faction.HostileTo(hostileFaction))
+        if (hostileFaction is not null && !faction.HostileTo(hostileFaction))
         {
             return false;
         }
@@ -164,7 +164,7 @@ public class QuestNode_GetFaction : QuestNode
 
     private static bool IsLeaderSafe(Pawn leader)
     {
-        if (leader == null || leader.Spawned || leader.IsPrisoner)
+        if (leader is null || leader.Spawned || leader.IsPrisoner)
         {
             return false;
         }

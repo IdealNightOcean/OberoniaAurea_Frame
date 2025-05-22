@@ -12,7 +12,7 @@ public static class OAFrame_DiaUtility
     public static Dialog_NodeTree ConfirmDiaNodeTree(TaggedString text, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
     {
         DiaNode rootnode = new(text);
-        if (acceptText != null)
+        if (acceptText is not null)
         {
             DiaOption accept = new(acceptText)
             {
@@ -21,7 +21,7 @@ public static class OAFrame_DiaUtility
             };
             rootnode.options.Add(accept);
         }
-        if (rejectText != null)
+        if (rejectText is not null)
         {
             DiaOption reject = new(rejectText)
             {
