@@ -20,18 +20,17 @@ public abstract class WorldObject_InteractiveBase : WorldObject
             }
         }
     }
+
     private Material cachedMat;
     public override Material Material
     {
         get
         {
-            if (cachedMat is null)
-            {
-                cachedMat = MaterialPool.MatFrom(color: (base.Faction is null) ? Color.white : base.Faction.Color, texPath: def.texture, shader: ShaderDatabase.WorldOverlayTransparentLit, renderQueue: WorldMaterials.WorldObjectRenderQueue);
-            }
+            cachedMat ??= MaterialPool.MatFrom(color: (base.Faction is null) ? Color.white : base.Faction.Color, texPath: def.texture, shader: ShaderDatabase.WorldOverlayTransparentLit, renderQueue: WorldMaterials.WorldObjectRenderQueue);
             return cachedMat;
         }
     }
+
     public virtual void Notify_CaravanArrived(Caravan caravan) { }
 
     public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)

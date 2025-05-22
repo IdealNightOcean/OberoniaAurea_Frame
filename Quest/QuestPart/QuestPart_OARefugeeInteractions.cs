@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using RimWorld.Planet;
+using RimWorld.QuestGen;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -85,6 +86,53 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
     public MapParent mapParent;
 
     public int pawnsLeftUnhealthy;
+
+
+    public void InitWithDefaultSingals(bool allowAssaultColony, bool allowLeave, bool allowBadThought)
+    {
+        this.allowAssaultColony = allowAssaultColony;
+        this.allowLeave = allowLeave;
+        this.allowBadThought = allowBadThought;
+
+        inSignalDestroyed = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Destroyed");
+        inSignalSurgeryViolation = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.SurgeryViolation");
+        inSignalKidnapped = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Kidnapped");
+        inSignalAssaultColony = QuestGen.GenerateNewSignal("AssaultColony");
+        inSignalLeftMap = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.LeftMap");
+        inSignalBanished = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Banished");
+
+        if (allowAssaultColony)
+        {
+            outSignalDestroyed_AssaultColony = QuestGen.GenerateNewSignal("LodgerDestroyed_AssaultColony");
+            outSignalArrested_AssaultColony = QuestGen.GenerateNewSignal("LodgerArrested_AssaultColony");
+            outSignalSurgeryViolation_AssaultColony = QuestGen.GenerateNewSignal("LodgerSurgeryViolation_AssaultColony");
+            outSignalPsychicRitualTarget_AssaultColony = QuestGen.GenerateNewSignal("LodgerPsychicRitualTarget_AssaultColony");
+        }
+
+        if (allowLeave)
+        {
+            outSignalDestroyed_LeaveColony = QuestGen.GenerateNewSignal("LodgerDestroyed_LeaveColony");
+            outSignalArrested_LeaveColony = QuestGen.GenerateNewSignal("LodgerArrested_LeaveColony");
+            outSignalSurgeryViolation_LeaveColony = QuestGen.GenerateNewSignal("LodgerSurgeryViolation_LeaveColony");
+            outSignalPsychicRitualTarget_LeaveColony = QuestGen.GenerateNewSignal("LodgerPsychicRitualTarget_LeaveColony");
+        }
+
+        if (allowBadThought)
+        {
+            outSignalDestroyed_BadThought = QuestGen.GenerateNewSignal("LodgerDestroyed_BadThought");
+            outSignalArrested_BadThought = QuestGen.GenerateNewSignal("LodgerArrested_BadThought");
+            outSignalSurgeryViolation_BadThought = QuestGen.GenerateNewSignal("LodgerSurgeryViolation_BadThought");
+            outSignalPsychicRitualTarget_BadThought = QuestGen.GenerateNewSignal("LodgerPsychicRitualTarget_BadThought");
+        }
+
+        outSignalLast_Destroyed = QuestGen.GenerateNewSignal("LastLodger_Destroyed");
+        outSignalLast_Arrested = QuestGen.GenerateNewSignal("LastLodger_Arrested");
+        outSignalLast_Kidnapped = QuestGen.GenerateNewSignal("LastLodger_Kidnapped");
+        outSignalLast_Recruited = QuestGen.GenerateNewSignal("LastLodger_Recruited");
+        outSignalLast_LeftMapAllHealthy = QuestGen.GenerateNewSignal("LastLodger_LeftMapAllHealthy");
+        outSignalLast_LeftMapAllNotHealthy = QuestGen.GenerateNewSignal("LastLodger_LeftMapAllNotHealthy");
+        outSignalLast_Banished = QuestGen.GenerateNewSignal("LastLodger_Banished");
+    }
 
     protected override void ProcessQuestSignal(Signal signal)
     {
