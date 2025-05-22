@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Release\</OutputPath>
+    <OutputPath>E:\ProgramFiles\Steam\steamapps\common\RimWorld\Mods\[OA]Ratkin Knight Order\Frame\1.5\Assemblies\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPawnPreApplyDamage.cs" />
     <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />
     <Compile Include="LordJob\LordJob_AssistColony_NeverFlee.cs" />
     <Compile Include="IncidentWorker_IsolatedTraderCaravanArrival.cs" />
