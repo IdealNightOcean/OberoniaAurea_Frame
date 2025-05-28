@@ -1,5 +1,5 @@
-﻿using RimWorld;
-using RimWorld.Planet;
+﻿using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -35,17 +35,41 @@ public static class OAFrame_FixedCaravanUtility
         }
         return TempInventoryItems;
     }
-    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObjectDef def, int initTicks = 0)
+
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan)
     {
-        FixedCaravan fixedCaravan = (FixedCaravan)WorldObjectMaker.MakeWorldObject(def);
+        FixedCaravan fixedCaravan = (FixedCaravan)WorldObjectMaker.MakeWorldObject(OAFrameDefOf.OAFrame_FixedCaravan);
         fixedCaravan.curName = caravan.Name;
         fixedCaravan.Tile = caravan.Tile;
-        fixedCaravan.ticksRemaining = initTicks;
         fixedCaravan.SetFaction(caravan.Faction);
-        ConvertToFixedCaravan(caravan, fixedCaravan);
+
+        try
+        {
+            ConvertToFixedCaravan(caravan, fixedCaravan);
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"Failed to convert Caravan {caravan} to a FixedCaravan: " + ex.Message);
+            fixedCaravan.Destroy();
+            return null;
+        }
+
         return fixedCaravan;
     }
-    public static void ConvertToFixedCaravan(Caravan caravan, FixedCaravan fixedCaravan, bool addToWorldPawnsIfNotAlready = true)
+
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObject_InteractiveWithFixedCarvanBase worldObject)
+    {
+        if (worldObject is null)
+        {
+            Log.Error($"Failed to convert Caravan {caravan} to a FixedCaravan: WorldObject is null");
+            return null;
+        }
+        FixedCaravan fixedCaravan = CreateFixedCaravan(caravan);
+        fixedCaravan.SetAssociatedWorldObject(worldObject);
+        return fixedCaravan;
+    }
+
+    private static void ConvertToFixedCaravan(Caravan caravan, FixedCaravan fixedCaravan, bool addToWorldPawnsIfNotAlready = true)
     {
         TempPawns.Clear();
         TempPawns.AddRange(caravan.PawnsListForReading);
@@ -73,6 +97,7 @@ public static class OAFrame_FixedCaravanUtility
         caravan.Destroy();
 
     }
+
     public static Caravan ConvertToCaravan(FixedCaravan fixedCaravan)
     {
         TempPawns.Clear();
@@ -83,11 +108,11 @@ public static class OAFrame_FixedCaravanUtility
         {
             Find.WorldSelector.Select(caravan, playSound: false);
         }
-        fixedCaravan.Notify_ConvertToCaravan();
         fixedCaravan.Destroy();
         TempPawns.Clear();
         return caravan;
     }
+
     public static void GiveThing(FixedCaravan fixedCaravan, Thing thing)
     {
         if (AllInventoryItems(fixedCaravan).Contains(thing))
