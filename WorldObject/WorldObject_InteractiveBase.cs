@@ -5,7 +5,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public abstract class WorldObject_InteractiveBase : WorldObject
+public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssociate
 {
     protected virtual string VisitLabel => null;
     protected WorldObject associateWorldObject;

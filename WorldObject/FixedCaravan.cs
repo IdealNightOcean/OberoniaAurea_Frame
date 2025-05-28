@@ -6,17 +6,14 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
+public class FixedCaravan : WorldObject, IRenameable, IThingHolder
 {
     private Material cachedMat;
     public override Material Material
     {
         get
         {
-            if (cachedMat is null)
-            {
-                cachedMat = MaterialPool.MatFrom(base.Faction.def.settlementTexturePath, ShaderDatabase.WorldOverlayTransparentLit, base.Faction.Color, WorldMaterials.WorldObjectRenderQueue);
-            }
+            cachedMat ??= MaterialPool.MatFrom(base.Faction.def.settlementTexturePath, ShaderDatabase.WorldOverlayTransparentLit, base.Faction.Color, WorldMaterials.WorldObjectRenderQueue);
             return cachedMat;
         }
     }
@@ -36,15 +33,9 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
     }
     public string BaseLabel => def.label;
     public string InspectLabel => RenamableLabel;
-    public ThingOwner GetDirectlyHeldThings()
-    {
-        return pawns;
-    }
-    public virtual void GetChildHolders(List<IThingHolder> outChildren)
-    {
-        ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
-    }
-    public ThingOwner<Pawn> pawns;
+    public override bool HasName => !curName.NullOrEmpty();
+
+    protected ThingOwner<Pawn> pawns;
     public List<Pawn> PawnsListForReading => pawns.InnerListForReading;
     public int PawnsCount => pawns.Count;
     protected IEnumerable<Thing> AllItems => OAFrame_FixedCaravanUtility.AllInventoryItems(this);
@@ -52,11 +43,13 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
     protected bool skillsDirty = true;
     protected readonly Dictionary<SkillDef, int> totalSkills = [];
 
-    public int ticksRemaining;
+    protected WorldObject_InteractiveWithFixedCarvanBase associatedWorldObject;
+
     public FixedCaravan()
     {
         pawns = new ThingOwner<Pawn>(this, oneStackOnly: false, LookMode.Reference);
     }
+
     public void AddPawn(Pawn pawn, bool addCarriedPawnToWorldPawnsIfAny = true)
     {
         if (pawn is null)
@@ -127,9 +120,22 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
         }
     }
 
+    public void SetAssociatedWorldObject(WorldObject_InteractiveWithFixedCarvanBase worldObject)
+    {
+        if (worldObject is not null)
+        {
+            Log.Error("Tried to set an associated world object that does not implement IFixedCaravanAssociate: " + worldObject);
+            return;
+        }
+
+        associatedWorldObject = worldObject;
+    }
+
+
     protected virtual void PreConvertToCaravanByPlayer()
-    { }
-    public abstract void Notify_ConvertToCaravan();
+    {
+        associatedWorldObject?.Notify_FixedCaravanLeaveByPlayer(this);
+    }
 
     public override IEnumerable<Gizmo> GetGizmos()
     {
@@ -153,11 +159,19 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
 
     }
 
+    public ThingOwner GetDirectlyHeldThings()
+    {
+        return pawns;
+    }
+    public virtual void GetChildHolders(List<IThingHolder> outChildren)
+    {
+        ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
+    }
     public override void ExposeData()
     {
         base.ExposeData();
         Scribe_Deep.Look(ref pawns, "pawns", this);
-        Scribe_Values.Look(ref ticksRemaining, "ticksRemaining", 0);
         Scribe_Values.Look(ref curName, "curName");
+        Scribe_References.Look(ref associatedWorldObject, "associatedWorldObject");
     }
 }

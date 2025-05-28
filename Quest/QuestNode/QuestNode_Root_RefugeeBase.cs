@@ -9,6 +9,9 @@ namespace OberoniaAurea_Frame;
 
 public class QuestNode_Root_RefugeeBase : QuestNode
 {
+    protected virtual PawnKindDef FixedPawnKind => PawnKindDefOf.Refugee;
+    protected virtual ThoughtDef AddMemory => null;
+
     protected static readonly QuestGen_Pawns.GetPawnParms FactionOpponentPawnParams = new()
     {
         mustBeWorldPawn = true,
@@ -24,7 +27,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
         private int lodgerCount = 1;
         private int childCount = 0;
-        public int LodgerCount { readonly get { return lodgerCount; } set { lodgerCount = Mathf.Max(0, lodgerCount); } }
+        public int LodgerCount { readonly get { return lodgerCount; } set { lodgerCount = Mathf.Max(0, value); } }
         public int ChildCount { readonly get { return childCount; } set { childCount = Mathf.Clamp(value, 0, lodgerCount); } }
 
         public int questDurationTicks = 60000;
@@ -61,13 +64,26 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         string lodgerBecameMutantSignal = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.BecameMutant");
         string lodgerArrestedOrRecruited = QuestGen.GenerateNewSignal("Lodger_ArrestedOrRecruited");
 
-        quest.AnySignal(inSignals: [lodgerRecruitedSignal, lodgerArrestedSignal], outSignals: [lodgerArrestedOrRecruited]);
-
         List<Pawn> pawns = GeneratePawns(questParameter, lodgerRecruitedSignal);
+        if (pawns.NullOrEmpty())
+        {
+            quest.End(QuestEndOutcome.Unknown, sendLetter: true, playSound: false);
+            return;
+        }
+
         Pawn asker = pawns.First();
 
-        QuestPart_ExtraFaction questPart_ExtraFaction = quest.ExtraFaction(faction, pawns, ExtraFactionType.MiniFaction, areHelpers: false, [lodgerRecruitedSignal, lodgerBecameMutantSignal]);
-        quest.PawnsArrive(pawns, null, questParameter.map.Parent, null, joinPlayer: true, null, "[lodgersArriveLetterLabel]", "[lodgersArriveLetterText]");
+        quest.AnySignal(inSignals: [lodgerRecruitedSignal, lodgerArrestedSignal], outSignals: [lodgerArrestedOrRecruited]);
+
+        quest.ExtraFaction(faction, pawns, ExtraFactionType.MiniFaction, areHelpers: false, [lodgerRecruitedSignal, lodgerBecameMutantSignal]);
+        quest.PawnsArrive(pawns,
+            inSignal: null,
+            questParameter.map.Parent,
+            arrivalMode: null,
+            joinPlayer: true,
+            walkInSpot: null,
+            customLetterLabel: "[lodgersArriveLetterLabel]",
+            customLetterText: "[lodgersArriveLetterText]");
 
         SetQuestAward(questParameter);
 
@@ -78,7 +94,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             mapParent = questParameter.map.Parent,
             signalListenMode = QuestPart.SignalListenMode.Always
         };
-        questPart_RefugeeInteractions.InitWithDefaultSingals(questParameter.allowAssaultColony, questParameter.allowLeave, questParameter.allowBadThought); ;
+        questPart_RefugeeInteractions.InitWithDefaultSingals(questParameter.allowAssaultColony, questParameter.allowLeave, questParameter.allowBadThought);
         questPart_RefugeeInteractions.inSignalArrested = lodgerArrestedSignal;
         questPart_RefugeeInteractions.inSignalRecruited = lodgerRecruitedSignal;
         questPart_RefugeeInteractions.pawns.AddRange(pawns);
@@ -90,8 +106,8 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerSurgicallyViolated, questPart_RefugeeInteractions.outSignalSurgeryViolation_LeaveColony);
 
         SetQuestEndComp(questParameter, questPart_RefugeeInteractions, pawns);
-
         SetPawnsLeaveComp(questParameter, pawns, lodgerArrestedOrRecruited);
+        SetSlateValue(questParameter, pawns);
     }
 
     protected virtual QuestParameter InitQuestParameter(Faction faction)
@@ -103,11 +119,37 @@ public class QuestNode_Root_RefugeeBase : QuestNode
     {
         Quest quest = questParameter.quest;
         List<Pawn> pawns = [];
+        int adultCount = questParameter.LodgerCount - questParameter.ChildCount;
+        ThoughtDef addMemory = AddMemory;
+
         for (int i = 0; i < questParameter.LodgerCount; i++)
         {
-            DevelopmentalStage developmentalStages = i < questParameter.ChildCount ? DevelopmentalStage.Child : DevelopmentalStage.Adult;
-            Pawn pawn = quest.GeneratePawn(PawnKindDefOf.Refugee, questParameter.faction, allowAddictions: true, null, 0f, mustBeCapableOfViolence: true, null, 0f, 0f, ensureNonNumericName: false, forceGenerateNewPawn: true, developmentalStages, allowPregnant: true);
+            DevelopmentalStage developmentalStages = i < adultCount ? DevelopmentalStage.Adult : DevelopmentalStage.Child;
+            Pawn pawn = quest.GeneratePawn(FixedPawnKind, questParameter.faction,
+                allowAddictions: true,
+                forcedTraits: null,
+                biocodeWeaponChance: 0f,
+                mustBeCapableOfViolence: true,
+                extraPawnForExtraRelationChance: null,
+                relationWithExtraPawnChanceFactor: 0f,
+                biocodeApparelChance: 0f,
+                ensureNonNumericName: false,
+                forceGenerateNewPawn: true,
+                developmentalStages: developmentalStages,
+                allowPregnant: false);
+
             pawns.Add(pawn);
+
+            if (addMemory is not null)
+            {
+                QuestPart_AddMemoryThought questPart_AddMemoryThought = new()
+                {
+                    inSignal = questParameter.slate.Get<string>("inSignal"),
+                    pawn = pawn,
+                };
+                quest.AddPart(questPart_AddMemoryThought);
+            }
+
             quest.PawnJoinOffer(pawn,
                 "LetterJoinOfferLabel".Translate(pawn.Named("PAWN")),
                 "LetterJoinOfferTitle".Translate(pawn.Named("PAWN")),
@@ -116,14 +158,22 @@ public class QuestNode_Root_RefugeeBase : QuestNode
                 delegate
                 {
                     quest.JoinPlayer(questParameter.map.Parent, Gen.YieldSingle(pawn), joinPlayer: true);
-                    quest.Letter(LetterDefOf.PositiveEvent, null, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, label: "LetterLabelMessageRecruitSuccess".Translate() + ": " + pawn.LabelShortCap, text: "MessageRecruitJoinOfferAccepted".Translate(pawn.Named("RECRUITEE")));
+                    quest.Letter(LetterDefOf.PositiveEvent,
+                                 inSignal: null, chosenPawnSignal: null, relatedFaction: null, useColonistsOnMap: null,
+                                 useColonistsFromCaravanArg: false,
+                                 QuestPart.SignalListenMode.OngoingOnly,
+                                 lookTargets: null,
+                                 filterDeadPawnsFromLookTargets: false,
+                                 label: "LetterLabelMessageRecruitSuccess".Translate() + ": " + pawn.LabelShortCap,
+                                 text: "MessageRecruitJoinOfferAccepted".Translate(pawn.Named("RECRUITEE")));
                     quest.SignalPass(null, null, lodgerRecruitedSignal);
                 },
                 delegate
                 {
                     quest.RecordHistoryEvent(HistoryEventDefOf.CharityRefused_ThreatReward_Joiner);
                 },
-                null, null, null, charity: true);
+                inSignal: null, outSignalPawnAccepted: null, outSignalPawnRejected: null,
+                charity: true);
         }
         return pawns;
     }
@@ -181,15 +231,32 @@ public class QuestNode_Root_RefugeeBase : QuestNode
     {
         Quest quest = questParameter.quest;
 
-        quest.Delay(questParameter.questDurationTicks, delegate
-        {
-            quest.SignalPassWithFaction(questParameter.faction, null, delegate
+        quest.Delay(questParameter.questDurationTicks,
+            delegate
             {
-                quest.Letter(LetterDefOf.PositiveEvent, null, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgersLeavingLetterText]", null, "[lodgersLeavingLetterLabel]");
-            });
-            quest.Leave(pawns, null, sendStandardLetter: false, leaveOnCleanup: false, inSignalRemovePawn, wakeUp: true);
-        }, null, null, null, reactivatable: false, null, null, isQuestTimeout: false, "GuestsDepartsIn".Translate(), "GuestsDepartsOn".Translate(), "QuestDelay");
-
+                quest.SignalPassWithFaction(questParameter.faction, action: null,
+                    delegate
+                    {
+                        quest.Letter(LetterDefOf.PositiveEvent,
+                                     inSignal: null, chosenPawnSignal: null, relatedFaction: null, useColonistsOnMap: null,
+                                     useColonistsFromCaravanArg: false,
+                                     QuestPart.SignalListenMode.OngoingOnly,
+                                     lookTargets: null,
+                                     filterDeadPawnsFromLookTargets: false,
+                                     text: "[lodgersLeavingLetterText]",
+                                     textRules: null,
+                                     label: "[lodgersLeavingLetterLabel]");
+                    });
+                quest.Leave(pawns, inSignal: null, sendStandardLetter: false, leaveOnCleanup: false, inSignalRemovePawn, wakeUp: true);
+            },
+            inSignalEnable: null, inSignalDisable: null, outSignalComplete: null,
+            reactivatable: false,
+            inspectStringTargets: null,
+            inspectString: null,
+            isQuestTimeout: false,
+            expiryInfoPart: "GuestsDepartsIn".Translate(),
+            expiryInfoPartTip: "GuestsDepartsOn".Translate(),
+            debugLabel: "QuestDelay");
     }
 
     private void SetQuestEndLetters(QuestParameter questParameter, QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)
@@ -229,11 +296,9 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         Quest quest = questParameter.quest;
         Faction faction = questParameter.faction;
 
-
-
-        string failSignal = QuestGenUtility.HardcodedSignalWithQuestID("childCare.Fail");
-        string bigFailSignal = QuestGenUtility.HardcodedSignalWithQuestID("childCare.BigFail");
-        string successSignal = QuestGenUtility.HardcodedSignalWithQuestID("childCare.Success");
+        string failSignal = QuestGenUtility.HardcodedSignalWithQuestID("refugee.Fail");
+        string bigFailSignal = QuestGenUtility.HardcodedSignalWithQuestID("refugee.BigFail");
+        string successSignal = QuestGenUtility.HardcodedSignalWithQuestID("refugee.Success");
 
         quest.AnySignal(inSignals: [questPart_RefugeeInteractions.outSignalLast_Destroyed, questPart_RefugeeInteractions.outSignalLast_Arrested], outSignals: [failSignal]);
 
@@ -271,6 +336,19 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             }
             quest.End(QuestEndOutcome.Success, questParameter.goodwillSuccess, faction, null, QuestPart.SignalListenMode.OngoingOnly, sendStandardLetter: true);
         }, inSignal: questPart_RefugeeInteractions.outSignalLast_LeftMapAllHealthy);
+    }
+
+    protected virtual void SetSlateValue(QuestParameter questParameter, List<Pawn> pawns)
+    {
+        Slate slate = questParameter.slate;
+
+        slate.Set("map", questParameter.map);
+        slate.Set("faction", questParameter.faction);
+        slate.Set("questDurationTicks", questParameter.questDurationTicks);
+        slate.Set("lodgerCount", questParameter.LodgerCount);
+        slate.Set("lodgersCountMinusOne", questParameter.LodgerCount - 1);
+        slate.Set("lodgers", pawns);
+        slate.Set("asker", pawns.First());
     }
 
     protected override bool TestRunInt(Slate slate)

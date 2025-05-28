@@ -9,6 +9,7 @@ public abstract class WorldObject_MutiInteractiveBase : WorldObject_InteractiveB
     {
         Notify_CaravanArrived(caravan, 0);
     }
+
     public abstract void Notify_CaravanArrived(Caravan caravan, int visitType);
 
     public override void ExposeData()
