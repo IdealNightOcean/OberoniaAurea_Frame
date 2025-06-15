@@ -6,7 +6,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public class FixedCaravan : WorldObject, IRenameable, IThingHolder
+public class FixedCaravan : WorldObject, IThingHolder
 {
     private Material cachedMat;
     public override Material Material
@@ -19,20 +19,8 @@ public class FixedCaravan : WorldObject, IRenameable, IThingHolder
     }
     public override Color ExpandingIconColor => base.Faction.Color;
 
-    public string curName;
-    public string RenamableLabel
-    {
-        get
-        {
-            return curName ?? BaseLabel;
-        }
-        set
-        {
-            curName = value;
-        }
-    }
-    public string BaseLabel => def.label;
-    public string InspectLabel => RenamableLabel;
+    public string curName = null;
+    public override string Label => curName ?? base.Label;
     public override bool HasName => !curName.NullOrEmpty();
 
     protected ThingOwner<Pawn> pawns;
@@ -122,15 +110,18 @@ public class FixedCaravan : WorldObject, IRenameable, IThingHolder
 
     public void SetAssociatedWorldObject(WorldObject_InteractiveWithFixedCarvanBase worldObject)
     {
-        if (worldObject is not null)
+        if (worldObject is null)
         {
-            Log.Error("Tried to set an associated world object that does not implement IFixedCaravanAssociate: " + worldObject);
+            Log.Error($"Failed to set WorldObject to {this}: WorldObject is null");
             return;
         }
 
         associatedWorldObject = worldObject;
+        if (associatedWorldObject.FixedCaravanName is not null)
+        {
+            curName = associatedWorldObject.FixedCaravanName;
+        }
     }
-
 
     protected virtual void PreConvertToCaravanByPlayer()
     {

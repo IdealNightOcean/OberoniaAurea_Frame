@@ -1,4 +1,5 @@
 ﻿using RimWorld.Planet;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Verse;
 
@@ -6,6 +7,8 @@ namespace OberoniaAurea_Frame;
 
 public abstract class WorldObject_InteractiveWithFixedCarvanBase : WorldObject_InteractiveBase
 {
+    public virtual string FixedCaravanName => null;
+
     protected bool isWorking;
     protected int ticksRemaining;
 
@@ -96,12 +99,32 @@ public abstract class WorldObject_InteractiveWithFixedCarvanBase : WorldObject_I
         EndWork(interrupt: true, coverToCaravan: false);
     }
 
-    public override void Destroy()
+
+    public override IEnumerable<Gizmo> GetGizmos()
     {
-        FinishWork();
-        base.Destroy();
+        foreach(Gizmo gizmo in base.GetGizmos())
+        {
+            yield return gizmo;
+        }
+
+        if (DebugSettings.ShowDevGizmos && isWorking)
+        {
+            yield return new Command_Action
+            {
+                defaultLabel = "Dev: Finish Work",
+                action = () => EndWork(interrupt: false, coverToCaravan: true),
+            };
+        }
     }
 
+    public override void Destroy()
+    {
+        if (isWorking)
+        {
+            EndWork(interrupt: true, coverToCaravan: true);
+        }
+        base.Destroy();
+    }
     public override void ExposeData()
     {
         base.ExposeData();
