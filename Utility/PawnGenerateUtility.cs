@@ -45,13 +45,13 @@ public static class OAFrame_PawnGenerateUtility
 
     public static IEnumerable<Pawn> GeneratePawns(PawnGroupMakerParms parms, PawnGroupMaker pawnGroupMaker, bool needFaction = true, bool warnOnZeroResults = true)
     {
-        if (parms.groupKind == null)
+        if (parms.groupKind is null)
         {
             Log.Error("Tried to generate pawns with null pawn group kind def. parms=" + parms);
             yield break;
         }
 
-        if (needFaction && parms.faction == null)
+        if (needFaction && parms.faction is null)
         {
             Log.Error("Tried to generate pawn kinds with null faction. parms=" + parms);
             yield break;

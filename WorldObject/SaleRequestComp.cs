@@ -80,7 +80,7 @@ public class SaleRequestComp : WorldObjectComp
             CaravanInventoryUtility.GiveThing(caravan, t);
         }
         /*
-        if (parent.Faction != null)
+        if (parent.Faction is not null)
         {
             Faction.OfPlayer.TryAffectGoodwillWith(parent.Faction, 12, canSendMessage: true, canSendHostilityLetter: true, HistoryEventDefOf.QuestGoodwillReward);
         }

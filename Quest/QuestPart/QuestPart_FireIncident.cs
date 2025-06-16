@@ -27,7 +27,7 @@ public class QuestPart_FireIncident : QuestPart
             {
                 yield return questLookTarget;
             }
-            if (mapParent != null)
+            if (mapParent is not null)
             {
                 yield return mapParent;
             }
@@ -36,7 +36,7 @@ public class QuestPart_FireIncident : QuestPart
 
     public override void Notify_QuestSignalReceived(Signal signal)
     {
-        if (signal.tag != inSignal || incidentParms == null)
+        if (signal.tag != inSignal || incidentParms is null)
         {
             return;
         }
@@ -46,7 +46,7 @@ public class QuestPart_FireIncident : QuestPart
             OAFrame_MiscUtility.TryFireIncidentNow(incident, incidentParms);
             incidentParms.target = Find.World;
         }
-        else if (mapParent != null && mapParent.HasMap)
+        else if (mapParent is not null && mapParent.HasMap)
         {
             Map targetMap = mapParent.Map;
             ResolveParms_Map(targetMap);
@@ -94,7 +94,7 @@ public class QuestPart_FireIncident : QuestPart
     {
 
         incidentParms = parms;
-        if (incidentParms.target is Map map && map.Parent != null)
+        if (incidentParms.target is Map map && map.Parent is not null)
         {
             this.mapParent = map.Parent;
             incidentParms.target = null;
@@ -129,7 +129,7 @@ public class QuestPart_FireIncident : QuestPart
     {
         base.AssignDebugData();
         inSignal = "DebugSignal" + Rand.Int;
-        if (Find.AnyPlayerHomeMap != null)
+        if (Find.AnyPlayerHomeMap is not null)
         {
             incident = IncidentDefOf.RaidEnemy;
             IncidentParms incidentParms = new()

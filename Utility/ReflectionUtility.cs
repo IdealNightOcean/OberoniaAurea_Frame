@@ -10,7 +10,7 @@ public static class OAFrame_ReflectionUtility
     public static T GetFieldValue<T>(object obj, string name, T fallback)
     {
         object obj2 = (obj?.GetType().GetField(name, InstanceAttr))?.GetValue(obj);
-        if (obj2 != null)
+        if (obj2 is not null)
         {
             return (T)obj2;
         }

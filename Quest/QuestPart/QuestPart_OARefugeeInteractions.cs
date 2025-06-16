@@ -225,7 +225,7 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
                     break;
             }
         }
-        if (inSignalAssaultColony != null && signal.tag == inSignalAssaultColony)
+        if (inSignalAssaultColony is not null && signal.tag == inSignalAssaultColony)
         {
             AssaultColony(null);
         }
@@ -351,7 +351,7 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         Scribe_Values.Look(ref pawnsLeftUnhealthy, "pawnsLeftUnhealthy", 0);
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {
-            pawns.RemoveAll((Pawn x) => x == null);
+            pawns.RemoveAll((Pawn x) => x is null);
         }
     }
 }

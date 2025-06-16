@@ -35,7 +35,7 @@ public class QuestNode_GetFactionLeader : QuestNode
 
     private static bool ValidLeader(Pawn leader)
     {
-        if (leader == null || leader.Dead)
+        if (leader is null || leader.Dead)
         {
             return false;
         }

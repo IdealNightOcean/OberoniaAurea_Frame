@@ -11,7 +11,7 @@ public static class GetCriticalPawnReason_Patch
     [HarmonyPostfix]
     public static void Postfix(ref string __result, Pawn pawn)
     {
-        if (__result == null && !pawn.Discarded)
+        if (__result is null && !pawn.Discarded)
         {
             if (pawn.IsFixedCaravanMember())
             {

@@ -21,7 +21,7 @@ public class QuestNode_FireIncident : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        if (incidentDef.GetValue(slate) == null)
+        if (incidentDef.GetValue(slate) is null)
         {
             return false;
         }
@@ -45,11 +45,11 @@ public class QuestNode_FireIncident : QuestNode
     {
         if (!worldIncident.GetValue(slate))
         {
-            if (mapParent.GetValue(slate) != null)
+            if (mapParent.GetValue(slate) is not null)
             {
                 return true;
             }
-            else if (parms.GetValue(slate) != null)
+            else if (parms.GetValue(slate) is not null)
             {
                 return parms.GetValue(slate).target is Map;
             }

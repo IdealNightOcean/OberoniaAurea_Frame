@@ -13,7 +13,7 @@ public class BulletBase : Bullet
     private void ProjectileImpact(Thing hitThing, bool blockedByShield = false)
     {
         GenClamor.DoClamor(this, 12f, ClamorDefOf.Impact);
-        if (!blockedByShield && def.projectile.landedEffecter != null)
+        if (!blockedByShield && def.projectile.landedEffecter is not null)
         {
             def.projectile.landedEffecter.Spawn(Position, Map).Cleanup();
         }
@@ -30,7 +30,7 @@ public class BulletBase : Bullet
         NotifyImpact(hitThing, map, position);
         ImpactCell(position, battleLogEntry_RangedImpact);
 
-        if (hitThing != null)
+        if (hitThing is not null)
         {
             ImpactThing(hitThing, battleLogEntry_RangedImpact);
             return;

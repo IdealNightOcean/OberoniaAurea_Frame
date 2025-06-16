@@ -9,7 +9,7 @@ public static class OAFrame_CaravanUtility
 {
     public static bool IsExactTypeCaravan(object caravan)
     {
-        if (caravan == null)
+        if (caravan is null)
         {
             return false;
         }
@@ -27,7 +27,7 @@ public static class OAFrame_CaravanUtility
         for (int i = 0; i < list.Count; i++)
         {
             Thing thing = list[i];
-            if (thing.def.IsWithinCategory(thingCategoryDef) && (validator == null || validator(thing)))
+            if (thing.def.IsWithinCategory(thingCategoryDef) && (validator is null || validator(thing)))
             {
                 return true;
             }
@@ -41,7 +41,7 @@ public static class OAFrame_CaravanUtility
         for (int i = 0; i < list.Count; i++)
         {
             Thing thing = list[i];
-            if (thing.def.thingCategories.Contains(thingCategoryDef) && (validator == null || validator(thing)))
+            if (thing.def.thingCategories.Contains(thingCategoryDef) && (validator is null || validator(thing)))
             {
                 num += thing.stackCount;
             }

@@ -18,14 +18,14 @@ public class PatchOperationCheckDLC : PatchOperation
     {
         if (CheckDLC())
         {
-            if (match != null)
+            if (match is not null)
             {
                 return match.Apply(xml);
             }
         }
         else
         {
-            if (nomatch != null)
+            if (nomatch is not null)
             {
                 return nomatch.Apply(xml);
             }

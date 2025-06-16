@@ -19,7 +19,7 @@ public static class OAFrame_FactionUtility
     //是否为鼠族派系
     public static bool IsRatkinFaction(this Faction faction)
     {
-        if (faction == null)
+        if (faction is null)
         {
             return false;
         }
@@ -31,7 +31,7 @@ public static class OAFrame_FactionUtility
         return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).ToList();
         bool ValidFaction(Faction tf)
         {
-            if (tf == null)
+            if (tf is null)
             {
                 return false;
             }
@@ -60,7 +60,7 @@ public static class OAFrame_FactionUtility
         return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).ToList();
         bool ValidFaction(Faction tf)
         {
-            if (tf == null)
+            if (tf is null)
             {
                 return false;
             }
@@ -82,7 +82,7 @@ public static class OAFrame_FactionUtility
 
     public static Faction GenerateTempFaction(FactionDef templateDef, FactionRelationKind relationKindWithPlayer = FactionRelationKind.Neutral)
     {
-        if (templateDef == null)
+        if (templateDef is null)
         {
             return null;
         }

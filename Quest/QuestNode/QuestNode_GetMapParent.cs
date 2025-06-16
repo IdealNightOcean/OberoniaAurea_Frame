@@ -15,7 +15,7 @@ public class QuestNode_GetMapParent : QuestNode
     {
         Slate slate = QuestGen.slate;
         MapParent mapParent = targetMap.GetValue(slate)?.Parent;
-        if (mapParent != null)
+        if (mapParent is not null)
         {
             slate.Set(storeAs.GetValue(slate), mapParent);
         }
@@ -24,7 +24,7 @@ public class QuestNode_GetMapParent : QuestNode
     {
 
         MapParent mapParent = targetMap.GetValue(slate)?.Parent;
-        if (mapParent != null)
+        if (mapParent is not null)
         {
             slate.Set(storeAs.GetValue(slate), mapParent);
             return true;

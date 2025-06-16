@@ -18,7 +18,7 @@ public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
 
     public void AddParticipantFaction(Faction newPaFaction)
     {
-        if (newPaFaction != null)
+        if (newPaFaction is not null)
         {
             participantFactions.Add(newPaFaction);
         }

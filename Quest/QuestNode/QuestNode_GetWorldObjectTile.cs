@@ -22,7 +22,7 @@ public class QuestNode_GetWorldObjectTile : QuestNode
     protected bool SetVars(Slate slate)
     {
         WorldObject worldObject = this.worldObject.GetValue(slate);
-        if (worldObject != null && worldObject.Spawned)
+        if (worldObject is not null && worldObject.Spawned)
         {
             slate.Set(storeAs.GetValue(slate), worldObject.Tile);
             return true;
