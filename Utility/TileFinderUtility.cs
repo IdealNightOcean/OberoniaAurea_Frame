@@ -8,9 +8,9 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_TileFinderUtility
 {
-    public static bool GetAvailableNeighborTile(int rootTile, out int tile, bool exclusion = true)
+    public static bool GetAvailableNeighborTile(PlanetTile rootTile, out PlanetTile tile, bool exclusion = true)
     {
-        List<int> allNeighborTiles = [];
+        List<PlanetTile> allNeighborTiles = [];
         tile = -1;
         Find.WorldGrid.GetTileNeighbors(rootTile, allNeighborTiles);
         var neighborTiles = allNeighborTiles.Where(t => !Find.World.Impassable(t));
@@ -37,34 +37,34 @@ public static class OAFrame_TileFinderUtility
         }
         return false;
     }
-    public static bool TryFindNewAvaliableTile(out int tile, int nearThisTile = -1, int minDist = 7, int maxDist = 27, bool allowCaravans = false, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
+    public static bool TryFindNewAvaliableTile(out PlanetTile tile, PlanetTile nearThisTile, int minDist = 7, int maxDist = 27, bool canBeSpace = false, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
     {
-        int rootTile;
-        if (nearThisTile != -1)
+        PlanetTile rootTile;
+        if (nearThisTile.Valid && (canBeSpace || !nearThisTile.LayerDef.isSpace))
         {
             rootTile = nearThisTile;
         }
-        else if (!TileFinder.TryFindRandomPlayerTile(out rootTile, allowCaravans, (int x) => FindAvaliableTile(x, minDist, maxDist, tileFinderMode, exitOnFirstTileFound) != -1))
+        else if (!TileFinder.TryFindRandomPlayerTile(out rootTile, allowCaravans: false, (PlanetTile x) => FindAvaliableTile(x, minDist, maxDist, tileFinderMode, exitOnFirstTileFound).Valid))
         {
-            tile = -1;
+            tile = PlanetTile.Invalid;
             return false;
         }
         tile = FindAvaliableTile(rootTile, minDist, maxDist, tileFinderMode, exitOnFirstTileFound);
-        return tile != -1;
+        return tile.Valid;
     }
 
-    public static int FindAvaliableTile(int rootTile, int minDist = 7, int maxDist = 27, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
+    public static PlanetTile FindAvaliableTile(int rootTile, int minDist = 7, int maxDist = 27, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
     {
-        if (TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out int result, IsValidAvaliableTileForNewObject, ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: false, exitOnFirstTileFound))
+        if (TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out PlanetTile result, IsValidAvaliableTileForNewObject, ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: false, exitOnFirstTileFound))
         {
             return result;
         }
-        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out result, (int x) => IsValidAvaliableTileForNewObject(x) && (!Find.World.Impassable(x) || Find.WorldGrid[x].WaterCovered), ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: true, exitOnFirstTileFound) ? result : (-1);
+        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out result, (PlanetTile x) => IsValidAvaliableTileForNewObject(x) && (!Find.World.Impassable(x) || Find.WorldGrid[x].WaterCovered), ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: true, exitOnFirstTileFound) ? result : PlanetTile.Invalid;
     }
-    public static bool IsValidAvaliableTileForNewObject(int tile)
+    public static bool IsValidAvaliableTileForNewObject(PlanetTile tile)
     {
         Tile worldTile = Find.WorldGrid[tile];
-        if (!worldTile.biome.canBuildBase || !worldTile.biome.implemented)
+        if (!worldTile.PrimaryBiome.canBuildBase || !worldTile.PrimaryBiome.implemented)
         {
             return false;
         }

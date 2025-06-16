@@ -7,7 +7,7 @@ namespace OberoniaAurea_Frame.Utility;
 
 public static class OAFrame_PawnGenerateUtility
 {
-    public static PawnGenerationRequest CommonPawnGenerationRequest(PawnKindDef kindDef,Faction faction = null,bool forceNew = false, bool allowChild = false)
+    public static PawnGenerationRequest CommonPawnGenerationRequest(PawnKindDef kindDef, Faction faction = null, bool forceNew = false, bool allowChild = false)
     {
         PawnGenerationRequest request = new(kindDef, faction)
         {
