@@ -20,7 +20,7 @@ public class CaravanArrivalAction_VisitInteractiveObject : CaravanArrivalAction
         this.worldObject = worldObject;
     }
 
-    public override FloatMenuAcceptanceReport StillValid(Caravan caravan, int destinationTile)
+    public override FloatMenuAcceptanceReport StillValid(Caravan caravan, PlanetTile destinationTile)
     {
         FloatMenuAcceptanceReport floatMenuAcceptanceReport = base.StillValid(caravan, destinationTile);
         if (!floatMenuAcceptanceReport)
@@ -73,7 +73,7 @@ public class CaravanArrivalAction_VisitInteractiveObject_Muti : CaravanArrivalAc
         this.visitType = visitTypeInt;
     }
 
-    public override FloatMenuAcceptanceReport StillValid(Caravan caravan, int destinationTile)
+    public override FloatMenuAcceptanceReport StillValid(Caravan caravan, PlanetTile destinationTile)
     {
         FloatMenuAcceptanceReport floatMenuAcceptanceReport = base.StillValid(caravan, destinationTile);
         if (!floatMenuAcceptanceReport)

@@ -115,12 +115,12 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable
     {
         for (int i = 0; i < things.Count; i++)
         {
-            if (things[i] is Pawn p)
+            if (things[i] is Pawn pawn)
             {
-                p.Tick();
-                if (p.Dead)
+                pawn.DoTick();
+                if (pawn.Dead)
                 {
-                    things.Remove(p);
+                    things.Remove(pawn);
                 }
             }
         }
