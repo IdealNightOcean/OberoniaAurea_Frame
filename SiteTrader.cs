@@ -26,14 +26,14 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable
     public int Silver => CountHeldOf(ThingDefOf.Silver);
     public int RandomPriceFactorSeed => randomPriceFactorSeed;
     public string TraderName => traderName;
-    public bool CanTradeNow => associateWorldObject != null;
+    public bool CanTradeNow => associateWorldObject is not null;
     public float TradePriceImprovementOffsetForPlayer => 0f;
     public TradeCurrency TradeCurrency => traderKind.tradeCurrency;
     public IThingHolder ParentHolder
     {
         get
         {
-            if (associateWorldObject == null || !associateWorldObject.Spawned)
+            if (associateWorldObject is null || !associateWorldObject.Spawned)
             {
                 return null;
             }
@@ -71,7 +71,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable
             TempExtantNames.AddRange(maps[i].passingShipManager.passingShips.Select((PassingShip x) => x.name));
         }
         traderName = NameGenerator.GenerateName(RulePackDefOf.NamerTraderGeneral, TempExtantNames);
-        if (faction != null)
+        if (faction is not null)
         {
             traderName = string.Format("{0} {1} {2}", traderName, "OfLower".Translate(), faction.Name);
         }
@@ -174,7 +174,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable
             return;
         }
         Pawn pawn = CaravanInventoryUtility.FindPawnToMoveInventoryTo(thing, caravan.PawnsListForReading, null);
-        if (pawn == null)
+        if (pawn is null)
         {
             Log.Error("Could not find any pawn to give sold thing to.");
             thing.Destroy();
@@ -201,7 +201,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable
     public void ChangeCountHeldOf(ThingDef thingDef, ThingDef stuffDef, int count)
     {
         Thing thing = HeldThingMatching(thingDef, stuffDef);
-        if (thing == null)
+        if (thing is null)
         {
             Log.Error("Changing count of thing trader doesn't have: " + thingDef);
         }
@@ -226,7 +226,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable
         if (Scribe.mode == LoadSaveMode.Saving)
         {
             tmpSavedPawns.Clear();
-            if (things != null)
+            if (things is not null)
             {
                 for (int num = things.Count - 1; num >= 0; num--)
                 {
@@ -248,7 +248,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable
         Scribe_Values.Look(ref randomPriceFactorSeed, "randomPriceFactorSeed", 0);
         if (Scribe.mode == LoadSaveMode.PostLoadInit || Scribe.mode == LoadSaveMode.Saving)
         {
-            tmpSavedPawns.RemoveAll((Pawn x) => x == null);
+            tmpSavedPawns.RemoveAll((Pawn x) => x is null);
             for (int i = 0; i < tmpSavedPawns.Count; i++)
             {
                 things.TryAdd(tmpSavedPawns[i], canMergeWithExistingStacks: false);

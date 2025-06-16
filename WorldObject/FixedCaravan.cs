@@ -13,7 +13,7 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
     {
         get
         {
-            if (cachedMat == null)
+            if (cachedMat is null)
             {
                 cachedMat = MaterialPool.MatFrom(base.Faction.def.settlementTexturePath, ShaderDatabase.WorldOverlayTransparentLit, base.Faction.Color, WorldMaterials.WorldObjectRenderQueue);
             }
@@ -59,7 +59,7 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
     }
     public void AddPawn(Pawn pawn, bool addCarriedPawnToWorldPawnsIfAny = true)
     {
-        if (pawn == null)
+        if (pawn is null)
         {
             Log.Warning("Tried to add a null pawn to " + this);
             return;
@@ -70,7 +70,7 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
             return;
         }
         Pawn carriedPawn = pawn.carryTracker.CarriedThing as Pawn;
-        if (carriedPawn != null)
+        if (carriedPawn is not null)
         {
             pawn.carryTracker.innerContainer.Remove(carriedPawn);
         }
@@ -81,7 +81,7 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
             {
                 pawn.guest.CapturedBy(base.Faction);
             }
-            if (carriedPawn != null)
+            if (carriedPawn is not null)
             {
                 if (CaravanUtility.ShouldAutoCapture(carriedPawn, base.Faction))
                 {
@@ -113,7 +113,7 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
     }
     public void AddPawnOrItem(Thing thing, bool addCarriedPawnToWorldPawnsIfAny = true)
     {
-        if (thing == null)
+        if (thing is null)
         {
             Log.Warning("Tried to add a null thing to " + this);
         }

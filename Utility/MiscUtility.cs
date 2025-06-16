@@ -21,7 +21,7 @@ public static class OAFrame_MiscUtility
     //添加队列事件
     public static void AddNewQueuedIncident(IncidentDef incidentDef, int delayTicks, IncidentParms parms, int retryDurationTicks = 0)
     {
-        if (parms == null)
+        if (parms is null)
         {
             Log.Error("Try add a new queued incident,but IncidentParms is NULL.");
             return;

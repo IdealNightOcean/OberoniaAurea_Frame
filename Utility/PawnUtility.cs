@@ -16,7 +16,7 @@ public static class OAFrame_PawnUtility
     public static void AdjustOrAddHediff(Pawn pawn, HediffDef hediffDef, float severity = -1, int overrideDisappearTicks = -1, BodyPartRecord part = null, DamageInfo? dinfo = null, DamageWorker.DamageResult result = null)
     {
         Hediff hediff = pawn?.health.GetOrAddHediff(hediffDef, part, dinfo, result);
-        if (hediff == null)
+        if (hediff is null)
         {
             return;
         }
@@ -27,7 +27,7 @@ public static class OAFrame_PawnUtility
         if (overrideDisappearTicks > 0)
         {
             HediffComp_Disappears comp = hediff.TryGetComp<HediffComp_Disappears>();
-            if (comp != null)
+            if (comp is not null)
             {
                 comp.ticksToDisappear = overrideDisappearTicks;
             }

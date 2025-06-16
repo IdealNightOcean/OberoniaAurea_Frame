@@ -23,7 +23,7 @@ public class QuestPart_InitiateSaleRequest : QuestPart
             {
                 yield return questLookTarget;
             }
-            if (settlement != null)
+            if (settlement is not null)
             {
                 yield return settlement;
             }
@@ -38,7 +38,7 @@ public class QuestPart_InitiateSaleRequest : QuestPart
             {
                 yield return involvedFaction;
             }
-            if (settlement.Faction != null)
+            if (settlement.Faction is not null)
             {
                 yield return settlement.Faction;
             }
@@ -63,7 +63,7 @@ public class QuestPart_InitiateSaleRequest : QuestPart
         if (signal.tag == inSignal)
         {
             SaleRequestComp component = settlement.GetComponent<SaleRequestComp>();
-            if (component != null)
+            if (component is not null)
             {
                 if (component.ActiveRequest)
                 {
@@ -99,7 +99,7 @@ public class QuestPart_InitiateSaleRequest : QuestPart
         settlement = Find.WorldObjects.Settlements.Where(delegate (Settlement x)
         {
             SaleRequestComp component = x.GetComponent<SaleRequestComp>();
-            return component != null && !component.ActiveRequest && x.Faction != Faction.OfPlayer;
+            return component is not null && !component.ActiveRequest && x.Faction != Faction.OfPlayer;
         }).RandomElementWithFallback();
         settlement ??= Find.WorldObjects.Settlements.RandomElementWithFallback();
         requestedThingDef = ThingDefOf.Silver;

@@ -62,7 +62,7 @@ public abstract class QuestNode_Root_RefugeeBase : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        return QuestGen_Get.GetMap() != null;
+        return QuestGen_Get.GetMap() is not null;
     }
 
     protected virtual List<Pawn> GeneratePawns(int lodgerCount, Faction faction, Map map, Quest quest, string lodgerRecruitedSignal = null)

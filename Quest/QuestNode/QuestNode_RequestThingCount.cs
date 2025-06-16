@@ -28,7 +28,7 @@ public class QuestNode_RequestThingCount : QuestNode
     protected bool SetVars(Slate slate)
     {
         Map map = slate.Get<Map>("map");
-        if (map == null)
+        if (map is null)
         {
             return false;
         }

@@ -24,7 +24,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
     }
     protected override bool TryResolveParmsGeneral(IncidentParms parms)
     {
-        if (PawnGroupMakerDef == null)
+        if (PawnGroupMakerDef is null)
         {
             return false;
         }
@@ -39,7 +39,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
         }
 
         parms.traderKind ??= PawnGroupMakerDef.traderKind;
-        if (parms.traderKind == null)
+        if (parms.traderKind is null)
         {
             return false;
         }
@@ -50,7 +50,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
     protected virtual bool TryResolveFaction(IncidentParms parms)
     {
         parms.faction ??= Find.FactionManager.RandomNonHostileFaction(allowNonHumanlike: false);
-        return parms.faction != null;
+        return parms.faction is not null;
     }
     protected override bool TryExecuteWorker(IncidentParms parms)
     {
@@ -76,7 +76,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
         }
         for (int i = 0; i < pawns.Count; i++)
         {
-            if (pawns[i].needs != null && pawns[i].needs.food != null)
+            if (pawns[i].needs is not null && pawns[i].needs.food is not null)
             {
                 pawns[i].needs.food.CurLevel = pawns[i].needs.food.MaxLevel;
             }
