@@ -8,6 +8,11 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_MapUtility
 {
+    public static MapComponent_SpecialBuildingManager GetSpecialBuildingManager(Map map)
+    {
+        return map?.GetComponent<MapComponent_SpecialBuildingManager>();
+    }
+
     //地图上派系威胁的数量
     public static int ThreatsCountOfFactionOnMap(Map map, Faction faction)
     {

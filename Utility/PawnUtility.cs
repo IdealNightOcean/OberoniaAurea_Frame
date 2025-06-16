@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RimWorld;
+using System.Collections.Generic;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -50,5 +51,14 @@ public static class OAFrame_PawnUtility
     public static bool PawnSleepNow(Pawn pawn)
     {
         return pawn.jobs?.curDriver?.asleep ?? false;
+    }
+
+    public static int GetSkillLevelOfPawn(Pawn pawn, SkillDef skill)
+    {
+        if (pawn?.skills is null)
+        {
+            return 0;
+        }
+        return pawn.skills.GetSkill(skill).GetLevel();
     }
 }
