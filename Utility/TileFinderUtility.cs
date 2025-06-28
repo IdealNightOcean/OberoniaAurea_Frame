@@ -61,6 +61,7 @@ public static class OAFrame_TileFinderUtility
         }
         return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out result, (int x) => IsValidAvaliableTileForNewObject(x) && (!Find.World.Impassable(x) || Find.WorldGrid[x].WaterCovered), ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: true, exitOnFirstTileFound) ? result : (-1);
     }
+
     public static bool IsValidAvaliableTileForNewObject(int tile)
     {
         Tile worldTile = Find.WorldGrid[tile];

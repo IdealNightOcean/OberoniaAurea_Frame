@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -6,11 +7,12 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_PawnUtility
 {
-    //是否是商品
-    public static bool IsSiteTraderGood(this Pawn pawn)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsChildOfRetentionHolder(this Pawn p)
     {
-        return pawn.ParentHolder is SiteTrader;
+        return p.ParentHolder is IPawnRetentionHolder;
     }
+
     //添加健康状态
     public static void AdjustOrAddHediff(Pawn pawn, HediffDef hediffDef, float severity = -1, int overrideDisappearTicks = -1, BodyPartRecord part = null, DamageInfo? dinfo = null, DamageWorker.DamageResult result = null)
     {
@@ -47,6 +49,7 @@ public static class OAFrame_PawnUtility
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool PawnSleepNow(Pawn pawn)
     {
         return pawn.jobs?.curDriver?.asleep ?? false;

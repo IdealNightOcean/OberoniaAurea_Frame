@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
 
@@ -10,6 +11,7 @@ namespace OberoniaAurea_Frame;
 public static class OAFrame_MiscUtility
 {
     //尝试立刻触发事件
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool TryFireIncidentNow(IncidentDef incidentDef, IncidentParms parms, bool force = false)
     {
         if (force || incidentDef.Worker.CanFireNow(parms))
@@ -19,6 +21,7 @@ public static class OAFrame_MiscUtility
         return false;
     }
     //添加队列事件
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void AddNewQueuedIncident(IncidentDef incidentDef, int delayTicks, IncidentParms parms, int retryDurationTicks = 0)
     {
         if (parms is null)
