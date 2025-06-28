@@ -102,7 +102,7 @@ public abstract class WorldObject_InteractiveWithFixedCarvanBase : WorldObject_I
 
     public override IEnumerable<Gizmo> GetGizmos()
     {
-        foreach(Gizmo gizmo in base.GetGizmos())
+        foreach (Gizmo gizmo in base.GetGizmos())
         {
             yield return gizmo;
         }

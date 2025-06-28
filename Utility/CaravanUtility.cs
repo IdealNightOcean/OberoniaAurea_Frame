@@ -1,6 +1,7 @@
 ﻿using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -21,7 +22,7 @@ public static class OAFrame_CaravanUtility
         return false;
     }
 
-    public static bool CaravanHasAnyThingsOf(Caravan caravan, ThingCategoryDef thingCategoryDef, Func<Thing, bool> validator = null)
+    public static bool CaravanHasAnyThingsOfCategory(Caravan caravan, ThingCategoryDef thingCategoryDef, Func<Thing, bool> validator = null)
     {
         List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravan);
         for (int i = 0; i < list.Count; i++)
@@ -34,7 +35,7 @@ public static class OAFrame_CaravanUtility
         }
         return false;
     }
-    public static bool CaravanHasEnoughThingsOf(Caravan caravan, ThingCategoryDef thingCategoryDef, int count, Func<Thing, bool> validator = null)
+    public static bool CaravanHasEnoughThingsOfCategory(Caravan caravan, ThingCategoryDef thingCategoryDef, int count, Func<Thing, bool> validator = null)
     {
         int num = 0;
         List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravan);
@@ -47,5 +48,26 @@ public static class OAFrame_CaravanUtility
             }
         }
         return num >= count;
+    }
+
+    public static int RemoveThings(Caravan caravan, ThingDef thingDef, int count)
+    {
+        int remaining = count;
+        List<Thing> takeThings = CaravanInventoryUtility.TakeThings(caravan, delegate (Thing thing)
+        {
+            if (thingDef != thing.def)
+            {
+                return 0;
+            }
+            int takeCount = Mathf.Min(remaining, thing.stackCount);
+            remaining -= takeCount;
+            return takeCount;
+        });
+        for (int i = 0; i < takeThings.Count; i++)
+        {
+            takeThings[i].Destroy();
+        }
+
+        return remaining;
     }
 }

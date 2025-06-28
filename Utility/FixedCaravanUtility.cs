@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -12,14 +13,12 @@ public static class OAFrame_FixedCaravanUtility
     private static readonly List<Thing> TempAddedItems = [];
     private static readonly List<Pawn> TempPawns = [];
 
-    public static bool IsFixedCaravanMember(this Pawn pawn)
-    {
-        return pawn.GetFixedCaravan() is not null;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static FixedCaravan GetFixedCaravan(this Pawn pawn)
     {
         return pawn.ParentHolder as FixedCaravan;
     }
+
     public static List<Thing> AllInventoryItems(FixedCaravan fixedCaravan)
     {
         TempInventoryItems.Clear();

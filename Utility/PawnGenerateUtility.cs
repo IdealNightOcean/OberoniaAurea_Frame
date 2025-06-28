@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Verse;
 
 namespace OberoniaAurea_Frame.Utility;
@@ -38,6 +39,8 @@ public static class OAFrame_PawnGenerateUtility
         }
         return result;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool TryGetRandomPawnGroupMaker(PawnGroupKindDef pawnGroupKindDef, IsolatedPawnGroupMakerDef pawnGroupMakerDef, out PawnGroupMaker pawnGroupMaker)
     {
         return pawnGroupMakerDef.pawnGroupMakers.Where((PawnGroupMaker gm) => gm.kindDef == pawnGroupKindDef).TryRandomElementByWeight((PawnGroupMaker gm) => gm.commonality, out pawnGroupMaker);
