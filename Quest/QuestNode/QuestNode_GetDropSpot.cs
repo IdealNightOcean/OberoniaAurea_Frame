@@ -44,7 +44,7 @@ public class QuestNode_GetDropSpot : QuestNode
         {
             return false;
         }
-        if(useTradeSpot.GetValue(slate))
+        if (useTradeSpot.GetValue(slate))
         {
             dropSpot = DropCellFinder.TradeDropSpot(map);
             return true;

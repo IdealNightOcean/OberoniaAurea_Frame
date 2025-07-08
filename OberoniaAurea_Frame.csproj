@@ -62,6 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SimpleUniqueList.cs" />
+    <Compile Include="SimpleHashList.cs" />
     <Compile Include="IPawnKeeperHolder.cs" />
     <Compile Include="SimpleMapCahce.cs" />
     <Compile Include="WorldObject\WorldObject_InteractiveWithFixedCarvanBase.cs" />
