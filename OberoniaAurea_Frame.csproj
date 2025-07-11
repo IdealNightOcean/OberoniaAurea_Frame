@@ -26,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -64,7 +64,13 @@
   <ItemGroup>
     <Compile Include="BulletBase.cs" />
     <Compile Include="CompSpecialBuilding.cs" />
+    <Compile Include="WorldObject\IFixedCaravanAssociate.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
+    <Compile Include="SimpleValueCache.cs" />
+    <Compile Include="WorldObject\ICaravanAssociate.cs" />
     <Compile Include="IPawnPreApplyDamage.cs" />
+    <Compile Include="IPawnRetentionHolder.cs" />
     <Compile Include="MapComponent_SpecialBuildingManager.cs" />
     <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />
     <Compile Include="LordJob\LordJob_AssistColony_NeverFlee.cs" />
@@ -78,7 +84,9 @@
     <Compile Include="Quest\QuestNode\QuestNode_Root_RefugeeBase.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetDropSpot.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateThingDefCount.cs" />
+    <Compile Include="SimpleHashList.cs" />
     <Compile Include="SimpleMapCahce.cs" />
+    <Compile Include="SimpleUniqueList.cs" />
     <Compile Include="Thought_SituationalGiveHediff.cs" />
     <Compile Include="HarmonyPatch\GetCriticalPawnReason_Patch.cs" />
     <Compile Include="HarmonyPatch\HarmonyPatch.cs" />
@@ -124,6 +132,7 @@
     <Compile Include="WorldObject\WorldObject_MutiInteractiveBase.cs" />
     <Compile Include="WorldObject\SaleRequestComp.cs" />
     <Compile Include="LordJob\LordJob_AssaultThings_NeverFlee.cs" />
+    <Compile Include="WorldObject\WorldObject_InteractWithFixedCarvanBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

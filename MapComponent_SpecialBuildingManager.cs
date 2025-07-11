@@ -23,11 +23,11 @@ public class MapComponent_SpecialBuildingManager : MapComponent
 
     public void RemoveBuilding(ThingDef def)
     {
-        if(buildingTable is null)
+        if (buildingTable is null)
         {
             return;
         }
-        
+
         int newCount = buildingTable.TryGetValue(def, fallback: -999) - 1;
         if (newCount == -1000)
         {
@@ -36,7 +36,7 @@ public class MapComponent_SpecialBuildingManager : MapComponent
         else if (newCount <= 0)
         {
             buildingTable.Remove(def);
-            if(buildingTable.Count == 0)
+            if (buildingTable.Count == 0)
             {
                 buildingTable = null;
             }

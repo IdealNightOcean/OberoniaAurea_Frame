@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -9,21 +10,11 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_FactionUtility
 {
-
-    //是否为玩家派系
-    public static bool IsPlayerFaction(this Faction faction)
-    {
-        return faction?.def.isPlayer ?? false;
-    }
-
     //是否为鼠族派系
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsRatkinFaction(this Faction faction)
     {
-        if (faction is null)
-        {
-            return false;
-        }
-        return faction.def.categoryTag?.Equals("RatkinStory") ?? false;
+        return faction?.def?.categoryTag == "RatkinStory";
     }
 
     public static List<Faction> ValidFactionsOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false, bool allowNonHumanlike = false)
@@ -50,6 +41,8 @@ public static class OAFrame_FactionUtility
             return true;
         }
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Faction RandomFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false, bool allowNonHumanlike = false)
     {
         return ValidFactionsOfDef(def, allowDefeated, allowTemporary, allowNonHumanlike).RandomElementWithFallback(null);
@@ -75,6 +68,8 @@ public static class OAFrame_FactionUtility
             return tf.temporary;
         }
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Faction RandomTempFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowNonHumanlike = false)
     {
         return ValidTempFactionsOfDef(def, allowDefeated, allowNonHumanlike).RandomElementWithFallback(null);

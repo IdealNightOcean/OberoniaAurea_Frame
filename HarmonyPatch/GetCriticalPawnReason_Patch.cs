@@ -13,14 +13,9 @@ public static class GetCriticalPawnReason_Patch
     {
         if (__result is null && !pawn.Discarded)
         {
-            if (pawn.IsFixedCaravanMember())
+            if (pawn.IsChildOfRetentionHolder())
             {
-                __result = "OAFrame_FixedCaravanMember";
-                return;
-            }
-            if (pawn.IsSiteTraderGood())
-            {
-                __result = "OAFrame_SiteTraderGood";
+                __result = "OAFrame_ChildOfRetentionHolder";
                 return;
             }
         }

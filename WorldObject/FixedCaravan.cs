@@ -6,7 +6,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
+public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder, IPawnRetentionHolder
 {
     private Material cachedMat;
     public override Material Material

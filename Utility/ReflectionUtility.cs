@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -16,6 +17,8 @@ public static class OAFrame_ReflectionUtility
         }
         return fallback;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SetFieldValue(object obj, string name, object value)
     {
         (obj?.GetType().GetField(name, InstanceAttr))?.SetValue(obj, value);

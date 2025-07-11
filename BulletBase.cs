@@ -9,6 +9,7 @@ namespace OberoniaAurea_Frame;
 public class BulletBase : Bullet
 {
     public override bool AnimalsFleeImpact => true;
+    protected BattleLogEntry_RangedImpact sharedBattleLogEntry;
 
     private void ProjectileImpact(Thing hitThing, bool blockedByShield = false)
     {
@@ -22,24 +23,27 @@ public class BulletBase : Bullet
 
     protected override void Impact(Thing hitThing, bool blockedByShield = false)
     {
-        Map map = base.Map;
-        IntVec3 position = base.Position;
+        Map map = Map;
+        IntVec3 position = Position;
         ProjectileImpact(hitThing, blockedByShield);
         BattleLogEntry_RangedImpact battleLogEntry_RangedImpact = new(launcher, hitThing, intendedTarget.Thing, equipmentDef, def, targetCoverDef);
+        sharedBattleLogEntry = battleLogEntry_RangedImpact;
         Find.BattleLog.Add(battleLogEntry_RangedImpact);
         NotifyImpact(hitThing, map, position);
-        ImpactCell(position, battleLogEntry_RangedImpact);
+        ImpactCell(position);
 
         if (hitThing is not null)
         {
-            ImpactThing(hitThing, battleLogEntry_RangedImpact);
+            ImpactThingCommon(hitThing);
+            sharedBattleLogEntry = null;
             return;
         }
 
+        sharedBattleLogEntry = null;
         if (!blockedByShield)
         {
-            SoundDefOf.BulletImpact_Ground.PlayOneShot(new TargetInfo(base.Position, map));
-            if (base.Position.GetTerrain(map).takeSplashes)
+            SoundDefOf.BulletImpact_Ground.PlayOneShot(new TargetInfo(Position, map));
+            if (Position.GetTerrain(map).takeSplashes)
             {
                 FleckMaker.WaterSplash(ExactPosition, map, Mathf.Sqrt((float)DamageAmount) * 1f, 4f);
             }
@@ -49,57 +53,49 @@ public class BulletBase : Bullet
             }
         }
 
-        if (Rand.Chance(base.DamageDef.igniteCellChance))
+        if (Rand.Chance(DamageDef.igniteCellChance))
         {
-            FireUtility.TryStartFireIn(base.Position, map, Rand.Range(0.55f, 0.85f), launcher);
+            FireUtility.TryStartFireIn(Position, map, Rand.Range(0.55f, 0.85f), launcher);
         }
     }
 
-    protected virtual void ImpactCell(IntVec3 hitCell, BattleLogEntry_RangedImpact battleLogEntry_RangedImpact)
+    protected virtual void ImpactCell(IntVec3 hitCell)
     { }
-    protected void ImpactThing(Thing hitThing, BattleLogEntry_RangedImpact battleLogEntry_RangedImpact)
+    protected void ImpactThingCommon(Thing hitThing)
     {
         Quaternion exactRotation = ExactRotation;
         bool instigatorGuilty = launcher is not Pawn pawn || !pawn.Drafted;
 
-        ImpactThing(hitThing, exactRotation, instigatorGuilty, battleLogEntry_RangedImpact);
+        ImpactThing(hitThing, exactRotation, instigatorGuilty);
 
         if (hitThing is Pawn hitPawn)
         {
-            ImpactPawn(hitPawn, battleLogEntry_RangedImpact);
+            ImpactPawn(hitPawn);
         }
 
-        if (base.ExtraDamages is null)
+        if (ExtraDamages is not null)
         {
-            return;
-        }
-        else
-        {
-            foreach (ExtraDamage extraDamage in base.ExtraDamages)
+            foreach (ExtraDamage extraDamage in ExtraDamages)
             {
                 if (Rand.Chance(extraDamage.chance))
                 {
                     DamageDef extraDamageDef = extraDamage.def;
                     float extraDamageAmount = extraDamage.amount;
                     float extraDamageArmorPenetration = extraDamage.AdjustedArmorPenetration();
-                    exactRotation = ExactRotation;
                     DamageInfo dinfo2 = new(extraDamageDef, extraDamageAmount, extraDamageArmorPenetration, exactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing, instigatorGuilty);
-                    hitThing.TakeDamage(dinfo2).AssociateWithLog(battleLogEntry_RangedImpact);
+                    hitThing.TakeDamage(dinfo2).AssociateWithLog(sharedBattleLogEntry);
                 }
             }
         }
     }
 
-    protected virtual void ImpactThing(Thing hitThing, Quaternion exactRotation, bool instigatorGuilty, BattleLogEntry_RangedImpact battleLogEntry_RangedImpact)
+    protected virtual void ImpactThing(Thing hitThing, Quaternion exactRotation, bool instigatorGuilty)
     {
-        DamageDef damageDef = base.DamageDef;
-        float amount = DamageAmount;
-        float armorPenetration = ArmorPenetration;
-        DamageInfo dinfo = new(damageDef, amount, armorPenetration, exactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing, instigatorGuilty);
+        DamageInfo dinfo = new(DamageDef, DamageAmount, ArmorPenetration, exactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing, instigatorGuilty);
         dinfo.SetWeaponQuality(equipmentQuality);
-        hitThing.TakeDamage(dinfo).AssociateWithLog(battleLogEntry_RangedImpact);
+        hitThing.TakeDamage(dinfo).AssociateWithLog(sharedBattleLogEntry);
     }
-    protected virtual void ImpactPawn(Pawn hitPawn, BattleLogEntry_RangedImpact battleLogEntry_RangedImpact)
+    protected virtual void ImpactPawn(Pawn hitPawn)
     {
         hitPawn.stances?.stagger.Notify_BulletImpact(this);
     }

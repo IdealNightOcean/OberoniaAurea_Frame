@@ -1,35 +1,49 @@
 ﻿using System;
 using Verse;
 
-namespace OberoniaAurea.RatkinOrder;
+namespace OberoniaAurea_Frame;
 
-public struct SimpleMapCahce<T> where T : struct
+public struct SimpleMapCahce<T> where T : unmanaged
 {
     private Map cachedMap;
     private readonly bool onlyPlayerHome;
 
     private T cachedResult;
+    private readonly T defaultValue;
 
     private int nextCheckTick;
     private readonly int cacheInterval;
 
     private readonly Func<Map, T> checker;
 
+    public SimpleMapCahce(int cacheInterval, bool onlyPlayerHome, Func<Map, T> checker)
+    {
+        cachedMap = null;
+        defaultValue = default;
+        cachedResult = default;
+        nextCheckTick = -1;
+
+        this.onlyPlayerHome = onlyPlayerHome;
+        this.cacheInterval = cacheInterval;
+        this.checker = checker ?? throw new ArgumentNullException(nameof(checker)); ;
+    }
+
     public SimpleMapCahce(int cacheInterval, T defaultValue, bool onlyPlayerHome, Func<Map, T> checker)
     {
         cachedMap = null;
+        this.defaultValue = defaultValue;
         cachedResult = defaultValue;
         nextCheckTick = -1;
 
         this.onlyPlayerHome = onlyPlayerHome;
         this.cacheInterval = cacheInterval;
-        this.checker = checker;
+        this.checker = checker ?? throw new ArgumentNullException(nameof(checker)); ;
     }
 
     public void Reset()
     {
         cachedMap = null;
-        cachedResult = default;
+        cachedResult = defaultValue;
         nextCheckTick = -1;
     }
 
@@ -37,7 +51,7 @@ public struct SimpleMapCahce<T> where T : struct
     {
         if (map is null || (onlyPlayerHome && !map.IsPlayerHome))
         {
-            return default;
+            return defaultValue;
         }
 
         try
@@ -59,7 +73,7 @@ public struct SimpleMapCahce<T> where T : struct
         }
         catch
         {
-            return default;
+            return defaultValue;
         }
 
         return cachedResult;

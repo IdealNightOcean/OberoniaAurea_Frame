@@ -12,10 +12,6 @@ public static class OAFrame_FixedCaravanUtility
     private static readonly List<Thing> TempAddedItems = [];
     private static readonly List<Pawn> TempPawns = [];
 
-    public static bool IsFixedCaravanMember(this Pawn pawn)
-    {
-        return pawn.GetFixedCaravan() is not null;
-    }
     public static FixedCaravan GetFixedCaravan(this Pawn pawn)
     {
         return pawn.ParentHolder as FixedCaravan;
