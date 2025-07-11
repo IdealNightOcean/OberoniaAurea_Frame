@@ -19,7 +19,6 @@ public class CompProperties_PawnPreApplyDamage : CompProperties
     }
 }
 
-
 public class CompPawnPreApplyDamageHandler : ThingComp
 {
 

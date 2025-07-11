@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using RimWorld;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -52,6 +54,25 @@ public static class OAFrame_PawnUtility
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool PawnSleepNow(Pawn pawn)
     {
-        return pawn.jobs?.curDriver?.asleep ?? false;
+        return pawn.jobs?.curDriver?.asleep is true;
+    }
+
+    public static int GetMaxSkillLevelOfPawns(IEnumerable<Pawn> pawns, SkillDef skill)
+    {
+        if (pawns is null)
+        {
+            return -1;
+        }
+        int maxSkillLevel = -1;
+
+        foreach (Pawn pawn in pawns)
+        {
+            if (pawn.skills is null)
+            {
+                continue;
+            }
+            maxSkillLevel = Mathf.Max(maxSkillLevel, pawn.skills.GetSkill(skill).GetLevel());
+        }
+        return maxSkillLevel;
     }
 }

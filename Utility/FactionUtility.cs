@@ -10,23 +10,11 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_FactionUtility
 {
-
-    //是否为玩家派系
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsPlayerFaction(this Faction faction)
-    {
-        return faction?.def.isPlayer ?? false;
-    }
-
     //是否为鼠族派系
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsRatkinFaction(this Faction faction)
     {
-        if (faction is null)
-        {
-            return false;
-        }
-        return faction.def.categoryTag?.Equals("RatkinStory") ?? false;
+        return faction?.def?.categoryTag == "RatkinStory";
     }
 
     public static List<Faction> ValidFactionsOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false, bool allowNonHumanlike = false)
