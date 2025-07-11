@@ -84,7 +84,6 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         {
             innerList.Insert(index, item);
         }
-
     }
     public bool Contains(T item) => innerHashSet.Contains(item);
     public void CopyTo(T[] array, int arrayIndex) => innerList.CopyTo(array, arrayIndex);
