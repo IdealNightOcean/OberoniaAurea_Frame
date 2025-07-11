@@ -3,7 +3,6 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-
 public class MoteAttached_Text : MoteAttached
 {
     public string text;

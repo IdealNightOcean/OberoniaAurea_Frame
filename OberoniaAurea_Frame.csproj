@@ -78,7 +78,9 @@
     <Compile Include="Quest\QuestNode\QuestNode_Root_RefugeeBase.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetDropSpot.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateThingDefCount.cs" />
+    <Compile Include="SimpleHashList.cs" />
     <Compile Include="SimpleMapCahce.cs" />
+    <Compile Include="SimpleUniqueList.cs" />
     <Compile Include="Thought_SituationalGiveHediff.cs" />
     <Compile Include="HarmonyPatch\GetCriticalPawnReason_Patch.cs" />
     <Compile Include="HarmonyPatch\HarmonyPatch.cs" />

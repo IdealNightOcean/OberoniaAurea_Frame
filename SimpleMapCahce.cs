@@ -1,7 +1,7 @@
 ﻿using System;
 using Verse;
 
-namespace OberoniaAurea.RatkinOrder;
+namespace OberoniaAurea_Frame;
 
 public struct SimpleMapCahce<T> where T : struct
 {
