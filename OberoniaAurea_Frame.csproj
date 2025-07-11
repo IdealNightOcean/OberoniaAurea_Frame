@@ -65,7 +65,7 @@
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
     <Compile Include="SimpleUniqueList.cs" />
     <Compile Include="SimpleHashList.cs" />
-    <Compile Include="IPawnKeeperHolder.cs" />
+    <Compile Include="IPawnRetentionHolder.cs" />
     <Compile Include="SimpleMapCahce.cs" />
     <Compile Include="WorldObject\WorldObject_InteractiveWithFixedCarvanBase.cs" />
     <Compile Include="WorldObject\ICaravanAssociate.cs" />

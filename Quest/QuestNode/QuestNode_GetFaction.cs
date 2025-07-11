@@ -88,7 +88,7 @@ public class QuestNode_GetFaction : QuestNode
     protected bool SetFaction(out Faction faction, Slate slate)
     {
         FactionDef fDef = factionDef.GetValue(slate);
-        if (factionDef != null)
+        if (fDef is not null)
         {
             faction = Find.FactionManager.AllFactionsListForReading.Where(f => f.def == fDef && IsGoodFaction(f, slate)).RandomElementWithFallback(null);
             return faction is not null;
