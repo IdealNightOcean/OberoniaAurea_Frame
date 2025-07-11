@@ -64,7 +64,7 @@
   <ItemGroup>
     <Compile Include="BulletBase.cs" />
     <Compile Include="CompSpecialBuilding.cs" />
-    <Compile Include="ICaravanAssociate.cs" />
+    <Compile Include="WorldObject\ICaravanAssociate.cs" />
     <Compile Include="IPawnPreApplyDamage.cs" />
     <Compile Include="IPawnRetentionHolder.cs" />
     <Compile Include="MapComponent_SpecialBuildingManager.cs" />

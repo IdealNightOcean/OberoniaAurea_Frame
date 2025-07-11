@@ -1,6 +1,8 @@
 ﻿using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -47,5 +49,29 @@ public static class OAFrame_CaravanUtility
             }
         }
         return num >= count;
+    }
+
+    public static int RemoveThings(Caravan caravan, ThingDef thingDef, int count)
+    {
+        int remaining = count;
+        List<Thing> takeThings = CaravanInventoryUtility.TakeThings(caravan, GetTakeThingCount);
+        for (int i = 0; i < takeThings.Count; i++)
+        {
+            takeThings[i].Destroy();
+        }
+
+        return remaining;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        int GetTakeThingCount(Thing thing)
+        {
+            if (remaining <= 0 || thingDef != thing.def)
+            {
+                return 0;
+            }
+            int takeCount = Mathf.Min(remaining, thing.stackCount);
+            remaining -= takeCount;
+            return takeCount;
+        }
     }
 }
