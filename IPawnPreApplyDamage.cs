@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using Verse;
 
@@ -61,7 +62,7 @@ public class CompPawnPreApplyDamageHandler : ThingComp
             int insertIndex = 0;
             foreach (IPawnPreApplyDamage d in pawnPreApplyDamages)
             {
-                if (d.Priority <= damageProcessor.Priority)
+                if (d.Priority >= damageProcessor.Priority)
                 {
                     break;
                 }

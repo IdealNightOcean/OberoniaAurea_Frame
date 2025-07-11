@@ -8,6 +8,7 @@ public class QuestNode_GetDropSpot : QuestNode
 {
     [NoTranslate]
     public SlateRef<string> storeAs;
+    public SlateRef<bool> useTradeSpot;
     public SlateRef<bool> preferCenterClose;
     public SlateRef<bool> preferCloseColony;
     public SlateRef<float> minDistanceFromEdge;
@@ -42,6 +43,11 @@ public class QuestNode_GetDropSpot : QuestNode
         if (map is null)
         {
             return false;
+        }
+        if (useTradeSpot.GetValue(slate))
+        {
+            dropSpot = DropCellFinder.TradeDropSpot(map);
+            return true;
         }
         if (preferCenterClose.GetValue(slate))
         {
