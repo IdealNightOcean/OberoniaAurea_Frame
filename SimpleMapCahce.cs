@@ -9,6 +9,7 @@ public struct SimpleMapCahce<T> where T : struct
     private readonly bool onlyPlayerHome;
 
     private T cachedResult;
+    private readonly T defaultValue;
 
     private int nextCheckTick;
     private readonly int cacheInterval;
@@ -19,6 +20,7 @@ public struct SimpleMapCahce<T> where T : struct
     {
         cachedMap = null;
         cachedResult = defaultValue;
+        this.defaultValue = defaultValue;
         nextCheckTick = -1;
 
         this.onlyPlayerHome = onlyPlayerHome;
@@ -29,7 +31,7 @@ public struct SimpleMapCahce<T> where T : struct
     public void Reset()
     {
         cachedMap = null;
-        cachedResult = default;
+        cachedResult = defaultValue;
         nextCheckTick = -1;
     }
 
@@ -37,7 +39,7 @@ public struct SimpleMapCahce<T> where T : struct
     {
         if (map is null || (onlyPlayerHome && !map.IsPlayerHome))
         {
-            return default;
+            return defaultValue;
         }
 
         try
@@ -59,7 +61,7 @@ public struct SimpleMapCahce<T> where T : struct
         }
         catch
         {
-            return default;
+            return defaultValue;
         }
 
         return cachedResult;
