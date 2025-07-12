@@ -67,6 +67,7 @@
     <Compile Include="SimpleHashList.cs" />
     <Compile Include="IPawnRetentionHolder.cs" />
     <Compile Include="SimpleMapCahce.cs" />
+    <Compile Include="SimpleValueCache.cs" />
     <Compile Include="WorldObject\WorldObject_InteractiveWithFixedCarvanBase.cs" />
     <Compile Include="WorldObject\ICaravanAssociate.cs" />
     <Compile Include="IPawnPreApplyDamage.cs" />
