@@ -10,7 +10,7 @@ public class BulletBase : Bullet
 {
     public override bool AnimalsFleeImpact => true;
 
-    protected BattleLogEntry_RangedImpact shareBattleLogEntry;
+    protected BattleLogEntry_RangedImpact sharedBattleLogEntry;
 
     private void ProjectileImpact(Thing hitThing, bool blockedByShield = false)
     {
@@ -28,7 +28,7 @@ public class BulletBase : Bullet
         IntVec3 position = Position;
         ProjectileImpact(hitThing, blockedByShield);
         BattleLogEntry_RangedImpact battleLogEntry_RangedImpact = new(launcher, hitThing, intendedTarget.Thing, equipmentDef, def, targetCoverDef);
-        shareBattleLogEntry = battleLogEntry_RangedImpact;
+        sharedBattleLogEntry = battleLogEntry_RangedImpact;
         Find.BattleLog.Add(battleLogEntry_RangedImpact);
         NotifyImpact(hitThing, map, position);
         ImpactCell(position);
@@ -36,11 +36,11 @@ public class BulletBase : Bullet
         if (hitThing is not null)
         {
             ImpactThingCommon(hitThing);
-            shareBattleLogEntry = null;
+            sharedBattleLogEntry = null;
             return;
         }
 
-        shareBattleLogEntry = null;
+        sharedBattleLogEntry = null;
         if (!blockedByShield)
         {
             SoundDefOf.BulletImpact_Ground.PlayOneShot(new TargetInfo(Position, map));
@@ -81,7 +81,7 @@ public class BulletBase : Bullet
                 if (Rand.Chance(extraDamage.chance))
                 {
                     DamageInfo dinfo2 = new(extraDamage.def, extraDamage.amount, extraDamage.AdjustedArmorPenetration(), exactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing, instigatorGuilty);
-                    hitThing.TakeDamage(dinfo2).AssociateWithLog(shareBattleLogEntry);
+                    hitThing.TakeDamage(dinfo2).AssociateWithLog(sharedBattleLogEntry);
                 }
             }
         }
@@ -95,7 +95,7 @@ public class BulletBase : Bullet
     {
         DamageInfo dinfo = new(def.projectile.damageDef, DamageAmount, ArmorPenetration, exactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing, instigatorGuilty);
         dinfo.SetWeaponQuality(equipmentQuality);
-        hitThing.TakeDamage(dinfo).AssociateWithLog(shareBattleLogEntry);
+        hitThing.TakeDamage(dinfo).AssociateWithLog(sharedBattleLogEntry);
     }
 
     protected virtual void ImpactPawn(Pawn hitPawn)
