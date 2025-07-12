@@ -1,10 +1,6 @@
-﻿using RimWorld.Planet;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Verse;
+﻿namespace OberoniaAurea_Frame;
 
-namespace OberoniaAurea_Frame;
-
+/*
 public abstract class WorldObject_InteractiveWithFixedCarvanBase : WorldObject_InteractiveBase
 {
     public virtual string FixedCaravanName => null;
@@ -133,3 +129,4 @@ public abstract class WorldObject_InteractiveWithFixedCarvanBase : WorldObject_I
         Scribe_References.Look(ref associatedFixedCaravan, "associatedFixedCaravan");
     }
 }
+*/
