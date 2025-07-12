@@ -56,7 +56,7 @@ public static class OAFrame_FixedCaravanUtility
         return fixedCaravan;
     }
 
-    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObject_InteractiveWithFixedCarvanBase worldObject)
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObject_InteractWithFixedCarvanBase worldObject)
     {
         if (worldObject is null)
         {
@@ -110,6 +110,14 @@ public static class OAFrame_FixedCaravanUtility
         fixedCaravan.Destroy();
         TempPawns.Clear();
         return caravan;
+    }
+
+    public static void GiveThings(FixedCaravan fixedCaravan, IEnumerable<Thing> things)
+    {
+        foreach (Thing t in things)
+        {
+            GiveThing(fixedCaravan, t);
+        }
     }
 
     public static void GiveThing(FixedCaravan fixedCaravan, Thing thing)
