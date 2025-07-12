@@ -1,6 +1,7 @@
 ﻿using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using Verse;
 
@@ -31,7 +32,7 @@ public class FixedCaravan : WorldObject, IThingHolder
     protected bool skillsDirty = true;
     protected readonly Dictionary<SkillDef, int> totalSkills = [];
 
-    protected WorldObject_InteractiveWithFixedCarvanBase associatedWorldObject;
+    protected WorldObject_InteractWithFixedCarvanBase associatedWorldObject;
 
     public FixedCaravan()
     {
@@ -108,7 +109,7 @@ public class FixedCaravan : WorldObject, IThingHolder
         }
     }
 
-    public void SetAssociatedWorldObject(WorldObject_InteractiveWithFixedCarvanBase worldObject)
+    public void SetAssociatedWorldObject(WorldObject_InteractWithFixedCarvanBase worldObject)
     {
         if (worldObject is null)
         {
@@ -148,6 +149,20 @@ public class FixedCaravan : WorldObject, IThingHolder
         };
         yield return command_Convert;
 
+    }
+
+    public override string GetInspectString()
+    {
+        if (associatedWorldObject is null)
+        {
+            return base.GetInspectString();
+        }
+        else
+        {
+            StringBuilder stringBuilder = new(base.GetInspectString());
+            stringBuilder.AppendInNewLine(associatedWorldObject.FixedCaravanWorkDesc());
+            return stringBuilder.ToString();
+        }
     }
 
     public ThingOwner GetDirectlyHeldThings()

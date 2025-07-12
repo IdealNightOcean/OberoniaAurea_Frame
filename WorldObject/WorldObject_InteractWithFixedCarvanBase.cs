@@ -1,11 +1,12 @@
-﻿using RimWorld.Planet;
+﻿using RimWorld;
+using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public abstract class WorldObject_InteractiveWithFixedCarvanBase : WorldObject_InteractiveBase
+public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_InteractiveBase, IFixedCaravanAssociate
 {
     public virtual string FixedCaravanName => null;
 
@@ -17,7 +18,7 @@ public abstract class WorldObject_InteractiveWithFixedCarvanBase : WorldObject_I
 
     public override void Notify_CaravanArrived(Caravan caravan)
     {
-        if (!OAFrame_CaravanUtility.IsExactTypeCaravan(caravan))
+        if (isWorking || !OAFrame_CaravanUtility.IsExactTypeCaravan(caravan))
         {
             return;
         }
@@ -87,7 +88,7 @@ public abstract class WorldObject_InteractiveWithFixedCarvanBase : WorldObject_I
 
     protected abstract void FinishWork();
     protected abstract void InterruptWork();
-    public virtual void Reset()
+    protected virtual void Reset()
     {
         isWorking = false;
         ticksRemaining = TicksNeeded;
@@ -99,6 +100,10 @@ public abstract class WorldObject_InteractiveWithFixedCarvanBase : WorldObject_I
         EndWork(interrupt: true, coverToCaravan: false);
     }
 
+    public virtual string FixedCaravanWorkDesc()
+    {
+        return "OAFrame_FixedCaravanWork_TimeLeft".Translate(ticksRemaining.ToStringTicksToPeriod());
+    }
 
     public override IEnumerable<Gizmo> GetGizmos()
     {
