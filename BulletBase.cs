@@ -82,7 +82,6 @@ public class BulletBase : Bullet
                     DamageDef extraDamageDef = extraDamage.def;
                     float extraDamageAmount = extraDamage.amount;
                     float extraDamageArmorPenetration = extraDamage.AdjustedArmorPenetration();
-                    exactRotation = ExactRotation;
                     DamageInfo dinfo2 = new(extraDamageDef, extraDamageAmount, extraDamageArmorPenetration, exactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing, instigatorGuilty);
                     hitThing.TakeDamage(dinfo2).AssociateWithLog(sharedBattleLogEntry);
                 }
@@ -92,10 +91,7 @@ public class BulletBase : Bullet
 
     protected virtual void ImpactThing(Thing hitThing, Quaternion exactRotation, bool instigatorGuilty)
     {
-        DamageDef damageDef = DamageDef;
-        float amount = DamageAmount;
-        float armorPenetration = ArmorPenetration;
-        DamageInfo dinfo = new(damageDef, amount, armorPenetration, exactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing, instigatorGuilty);
+        DamageInfo dinfo = new(DamageDef, DamageAmount, ArmorPenetration, exactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing, instigatorGuilty);
         dinfo.SetWeaponQuality(equipmentQuality);
         hitThing.TakeDamage(dinfo).AssociateWithLog(sharedBattleLogEntry);
     }

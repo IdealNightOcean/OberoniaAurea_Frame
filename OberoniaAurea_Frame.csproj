@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="BulletBase.cs" />
     <Compile Include="CompSpecialBuilding.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
     <Compile Include="SimpleValueCache.cs" />
     <Compile Include="WorldObject\ICaravanAssociate.cs" />

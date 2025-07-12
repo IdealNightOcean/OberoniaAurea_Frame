@@ -10,7 +10,7 @@ public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
     protected List<Faction> participantFactions = [];
     public List<Faction> ParticipantFactions => participantFactions;
 
-    public void SetParticipantFactions(List<Faction> newPaFactions)
+    public void SetParticipantFactions(IEnumerable<Faction> newPaFactions)
     {
         participantFactions.Clear();
         AddParticipantFactions(newPaFactions);
@@ -23,8 +23,9 @@ public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
             participantFactions.Add(newPaFaction);
         }
     }
-    public void AddParticipantFactions(List<Faction> newPaFactions)
+    public void AddParticipantFactions(IEnumerable<Faction> newPaFactions)
     {
+        participantFactions ??= [];
         participantFactions.AddRange(newPaFactions);
     }
     public override void ExposeData()
