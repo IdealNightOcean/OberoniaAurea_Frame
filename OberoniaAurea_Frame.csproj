@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="BulletBase.cs" />
     <Compile Include="CompSpecialBuilding.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
+    <Compile Include="SimpleValueCache.cs" />
     <Compile Include="WorldObject\ICaravanAssociate.cs" />
     <Compile Include="IPawnPreApplyDamage.cs" />
     <Compile Include="IPawnRetentionHolder.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="WorldObject\WorldObject_MutiInteractiveBase.cs" />
     <Compile Include="WorldObject\SaleRequestComp.cs" />
     <Compile Include="LordJob\LordJob_AssaultThings_NeverFlee.cs" />
+    <Compile Include="WorldObject_InteractiveWithFixedCarvanBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

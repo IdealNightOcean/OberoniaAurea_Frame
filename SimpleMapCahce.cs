@@ -3,7 +3,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public struct SimpleMapCahce<T> where T : struct
+public struct SimpleMapCahce<T> where T : unmanaged
 {
     private Map cachedMap;
     private readonly bool onlyPlayerHome;
@@ -16,16 +16,28 @@ public struct SimpleMapCahce<T> where T : struct
 
     private readonly Func<Map, T> checker;
 
-    public SimpleMapCahce(int cacheInterval, T defaultValue, bool onlyPlayerHome, Func<Map, T> checker)
+    public SimpleMapCahce(int cacheInterval, bool onlyPlayerHome, Func<Map, T> checker)
     {
         cachedMap = null;
-        cachedResult = defaultValue;
-        this.defaultValue = defaultValue;
+        defaultValue = default;
+        cachedResult = default;
         nextCheckTick = -1;
 
         this.onlyPlayerHome = onlyPlayerHome;
         this.cacheInterval = cacheInterval;
-        this.checker = checker;
+        this.checker = checker ?? throw new ArgumentNullException(nameof(checker)); ;
+    }
+
+    public SimpleMapCahce(int cacheInterval, T defaultValue, bool onlyPlayerHome, Func<Map, T> checker)
+    {
+        cachedMap = null;
+        this.defaultValue = defaultValue;
+        cachedResult = defaultValue;
+        nextCheckTick = -1;
+
+        this.onlyPlayerHome = onlyPlayerHome;
+        this.cacheInterval = cacheInterval;
+        this.checker = checker ?? throw new ArgumentNullException(nameof(checker)); ;
     }
 
     public void Reset()
