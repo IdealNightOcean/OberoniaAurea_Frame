@@ -66,6 +66,7 @@
     <Compile Include="CompSpecialBuilding.cs" />
     <Compile Include="MapComponent_SpecialBuildingManager.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
     <Compile Include="SimpleUniqueList.cs" />
     <Compile Include="SimpleHashList.cs" />
     <Compile Include="IPawnRetentionHolder.cs" />

@@ -15,7 +15,7 @@ public class BulletBase : Bullet
     private void ProjectileImpact(Thing hitThing, bool blockedByShield = false)
     {
         GenClamor.DoClamor(this, 12f, ClamorDefOf.Impact);
-        if (!blockedByShield && def.projectile.landedEffecter != null)
+        if (!blockedByShield && def.projectile.landedEffecter is not null)
         {
             def.projectile.landedEffecter.Spawn(Position, Map).Cleanup();
         }
