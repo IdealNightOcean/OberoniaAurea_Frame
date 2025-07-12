@@ -62,6 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulletBase.cs" />
+    <Compile Include="CompSpecialBuilding.cs" />
+    <Compile Include="MapComponent_SpecialBuildingManager.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
     <Compile Include="SimpleUniqueList.cs" />
     <Compile Include="SimpleHashList.cs" />

@@ -10,6 +10,12 @@ namespace OberoniaAurea_Frame;
 public static class OAFrame_MapUtility
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static MapComponent_SpecialBuildingManager GetSpecialBuildingManager(Map map)
+    {
+        return map?.GetComponent<MapComponent_SpecialBuildingManager>();
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int AmountSendableSilver(Map map)
     {
         return AmountSendableThing(map, ThingDefOf.Silver);

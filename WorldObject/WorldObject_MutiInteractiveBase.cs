@@ -10,5 +10,4 @@ public abstract class WorldObject_MutiInteractiveBase : WorldObject_InteractiveB
     }
 
     public abstract void Notify_CaravanArrived(Caravan caravan, int visitType);
-
 }
