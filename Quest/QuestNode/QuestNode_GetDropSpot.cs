@@ -67,7 +67,7 @@ public class QuestNode_GetDropSpot : QuestNode
             return true;
         }
 
-        if (CellFinderLoose.TryGetRandomCellWith((IntVec3 x) => x.Standable(map) && !x.Roofed(map) && !x.Fogged(map) && x.DistanceToEdge(map) >= minDistanceFromEdge.GetValue(slate) && map.reachability.CanReachColony(x), map, 1000, out dropSpot))
+        if (CellFinderLoose.TryGetRandomCellWith(c => c.Standable(map) && !c.Roofed(map) && !c.Fogged(map) && c.DistanceToEdge(map) >= minDistanceFromEdge.GetValue(slate) && map.reachability.CanReachColony(c), map, 500, out dropSpot))
         {
             return true;
         }

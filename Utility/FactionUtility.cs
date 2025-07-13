@@ -99,7 +99,7 @@ public static class OAFrame_FactionUtility
         FactionGeneratorParms parms = new(templateDef, default, true);
         if (ModsConfig.IdeologyActive)
         {
-            parms.ideoGenerationParms = new IdeoGenerationParms(parms.factionDef, forceNoExpansionIdeo: false, DefDatabase<PreceptDef>.AllDefs.Where((PreceptDef p) => p.proselytizes || p.approvesOfCharity).ToList());
+            parms.ideoGenerationParms = new IdeoGenerationParms(parms.factionDef, forceNoExpansionIdeo: false, DefDatabase<PreceptDef>.AllDefs.Where(p => p.proselytizes || p.approvesOfCharity).ToList());
         }
         Faction faction = FactionGenerator.NewGeneratedFactionWithRelations(parms, RelationList);
         faction.temporary = true;

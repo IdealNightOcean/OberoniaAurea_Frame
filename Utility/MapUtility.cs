@@ -26,7 +26,7 @@ public static class OAFrame_MapUtility
     {
         return (from t in TradeUtility.AllLaunchableThingsForTrade(map)
                 where t.def == thingDef
-                select t).Sum((Thing t) => t.stackCount);
+                select t).Sum(t => t.stackCount);
     }
 
     //地图上派系威胁的数量

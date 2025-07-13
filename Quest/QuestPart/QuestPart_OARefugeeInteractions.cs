@@ -168,7 +168,7 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
             {
                 pawnsLeftUnhealthy++;
             }
-            int num = pawns.Count((Pawn p) => p.Downed);
+            int num = pawns.Count(p => p.Downed);
             if (pawns.Count - num <= 0)
             {
                 if (pawnsLeftUnhealthy > 0 || num > 0)
@@ -399,7 +399,7 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         Scribe_Values.Look(ref pawnsLeftUnhealthy, "pawnsLeftUnhealthy", 0);
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {
-            pawns.RemoveAll((Pawn x) => x is null);
+            pawns.RemoveAll(p => p is null);
         }
     }
 }
