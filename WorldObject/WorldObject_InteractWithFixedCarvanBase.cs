@@ -95,7 +95,7 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
         associatedFixedCaravan = null;
     }
 
-    public virtual void Notify_FixedCaravanLeaveByPlayer(FixedCaravan fixedCaravan)
+    public virtual void PreConvertToCaravanByPlayer(FixedCaravan fixedCaravan)
     {
         EndWork(interrupt: true, coverToCaravan: false);
     }
