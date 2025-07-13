@@ -56,7 +56,7 @@ public static class OAFrame_FixedCaravanUtility
         return fixedCaravan;
     }
 
-    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObject_InteractWithFixedCarvanBase worldObject)
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObject worldObject)
     {
         if (worldObject is null)
         {
