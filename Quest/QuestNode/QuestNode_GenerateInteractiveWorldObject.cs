@@ -8,7 +8,7 @@ namespace OberoniaAurea_Frame;
 public class QuestNode_GenerateInteractiveWorldObject : QuestNode
 {
     public SlateRef<WorldObjectDef> def;
-    public SlateRef<int> tile;
+    public SlateRef<PlanetTile> tile;
     public SlateRef<Faction> faction;
 
     [NoTranslate]

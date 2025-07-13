@@ -16,7 +16,7 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
     {
         get
         {
-            cachedMat ??= MaterialPool.MatFrom(color: (base.Faction is null) ? Color.white : base.Faction.Color, texPath: def.texture, shader: ShaderDatabase.WorldOverlayTransparentLit, renderQueue: WorldMaterials.WorldObjectRenderQueue);
+            cachedMat ??= MaterialPool.MatFrom(color: (Faction is null) ? Color.white : Faction.Color, texPath: def.texture, shader: ShaderDatabase.WorldOverlayTransparentLit, renderQueue: WorldMaterials.WorldObjectRenderQueue);
             return cachedMat;
         }
     }

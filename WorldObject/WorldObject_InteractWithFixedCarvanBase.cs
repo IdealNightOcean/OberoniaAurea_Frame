@@ -6,7 +6,6 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-/*
 public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_InteractiveBase, IFixedCaravanAssociate
 {
     public virtual string FixedCaravanName => null;
@@ -15,15 +14,20 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
     protected int ticksRemaining;
 
     protected FixedCaravan associatedFixedCaravan;
+    public FixedCaravan AssociatedFixedCaravan => associatedFixedCaravan;
     public virtual int TicksNeeded => 30000;
 
     public override void Notify_CaravanArrived(Caravan caravan)
     {
-        if (isWorking || !OAFrame_CaravanUtility.IsExactTypeCaravan(caravan))
+        if (isWorking)
         {
-            return;
+            Messages.Message("OAGene_Message_AlreadyHasFixedCarvan".Translate(), MessageTypeDefOf.RejectInput, historical: false);
+
         }
-        StartWork(caravan);
+        else if (OAFrame_CaravanUtility.IsExactTypeCaravan(caravan))
+        {
+            StartWork(caravan);
+        }
     }
 
     protected override void Tick()
@@ -39,10 +43,9 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected virtual void WorkTick()
     {
-        ticksRemaining--;
-        if (ticksRemaining < 0)
+        if (--ticksRemaining < 0)
         {
-            EndWork(interrupt: false, coverToCaravan: true);
+            EndWork(interrupt: false, convertToCaravan: true);
         }
     }
 
@@ -64,7 +67,7 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
         return true;
     }
 
-    public void EndWork(bool interrupt = false, bool coverToCaravan = true)
+    public void EndWork(bool interrupt = false, bool convertToCaravan = true)
     {
         if (isWorking)
         {
@@ -79,7 +82,7 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
             }
         }
 
-        if (coverToCaravan && associatedFixedCaravan is not null)
+        if (convertToCaravan && associatedFixedCaravan is not null)
         {
             OAFrame_FixedCaravanUtility.ConvertToCaravan(associatedFixedCaravan);
         }
@@ -96,9 +99,9 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
         associatedFixedCaravan = null;
     }
 
-    public virtual void Notify_FixedCaravanLeaveByPlayer(FixedCaravan fixedCaravan)
+    public virtual void PreConvertToCaravanByPlayer()
     {
-        EndWork(interrupt: true, coverToCaravan: false);
+        EndWork(interrupt: true, convertToCaravan: false);
     }
 
     public virtual string FixedCaravanWorkDesc()
@@ -118,7 +121,7 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
             yield return new Command_Action
             {
                 defaultLabel = "Dev: Finish Work",
-                action = () => EndWork(interrupt: false, coverToCaravan: true),
+                action = () => EndWork(interrupt: false, convertToCaravan: true),
             };
         }
     }
@@ -127,7 +130,7 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
     {
         if (isWorking)
         {
-            EndWork(interrupt: true, coverToCaravan: true);
+            EndWork(interrupt: true, convertToCaravan: true);
         }
         base.Destroy();
     }
@@ -140,4 +143,3 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
         Scribe_References.Look(ref associatedFixedCaravan, "associatedFixedCaravan");
     }
 }
-*/

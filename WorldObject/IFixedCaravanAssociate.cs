@@ -2,7 +2,8 @@
 
 public interface IFixedCaravanAssociate
 {
+    FixedCaravan AssociatedFixedCaravan { get; }
     string FixedCaravanName { get; }
-    void PreConvertToCaravanByPlayer(FixedCaravan fixedCaravan);
+    void PreConvertToCaravanByPlayer();
     string FixedCaravanWorkDesc();
 }

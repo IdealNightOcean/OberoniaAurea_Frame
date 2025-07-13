@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Verse;
 
-namespace OberoniaAurea_Frame.Utility;
+namespace OberoniaAurea_Frame;
 
 public static class OAFrame_PawnGenerateUtility
 {
@@ -32,7 +32,7 @@ public static class OAFrame_PawnGenerateUtility
         {
             Rand.PushState(parms.seed.Value);
         }
-        bool result = pawnGroupMakerDef.pawnGroupMakers.Where((PawnGroupMaker gm) => gm.kindDef == parms.groupKind && gm.CanGenerateFrom(parms)).TryRandomElementByWeight((PawnGroupMaker gm) => gm.commonality, out pawnGroupMaker);
+        bool result = pawnGroupMakerDef.pawnGroupMakers.Where(gm => gm.kindDef == parms.groupKind && gm.CanGenerateFrom(parms)).TryRandomElementByWeight(gm => gm.commonality, out pawnGroupMaker);
         if (parms.seed.HasValue)
         {
             Rand.PopState();
@@ -43,7 +43,7 @@ public static class OAFrame_PawnGenerateUtility
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool TryGetRandomPawnGroupMaker(PawnGroupKindDef pawnGroupKindDef, IsolatedPawnGroupMakerDef pawnGroupMakerDef, out PawnGroupMaker pawnGroupMaker)
     {
-        return pawnGroupMakerDef.pawnGroupMakers.Where((PawnGroupMaker gm) => gm.kindDef == pawnGroupKindDef).TryRandomElementByWeight((PawnGroupMaker gm) => gm.commonality, out pawnGroupMaker);
+        return pawnGroupMakerDef.pawnGroupMakers.Where(gm => gm.kindDef == pawnGroupKindDef).TryRandomElementByWeight(gm => gm.commonality, out pawnGroupMaker);
     }
 
     public static IEnumerable<Pawn> GeneratePawns(PawnGroupMakerParms parms, PawnGroupMaker pawnGroupMaker, bool needFaction = true, bool warnOnZeroResults = true)

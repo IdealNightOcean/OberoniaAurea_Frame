@@ -1,7 +1,9 @@
 ﻿using RimWorld;
 using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -12,10 +14,12 @@ public static class OAFrame_FixedCaravanUtility
     private static readonly List<Thing> TempAddedItems = [];
     private static readonly List<Pawn> TempPawns = [];
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static FixedCaravan GetFixedCaravan(this Pawn pawn)
     {
         return pawn.ParentHolder as FixedCaravan;
     }
+
     public static List<Thing> AllInventoryItems(FixedCaravan fixedCaravan)
     {
         TempInventoryItems.Clear();
@@ -31,17 +35,53 @@ public static class OAFrame_FixedCaravanUtility
         }
         return TempInventoryItems;
     }
-    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObjectDef def, int initTicks = 0)
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan)
+    {
+        return CreateFixedCaravan(caravan, OAFrameDefOf.OAFrame_FixedCaravan);
+    }
+
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObjectDef def)
     {
         FixedCaravan fixedCaravan = (FixedCaravan)WorldObjectMaker.MakeWorldObject(def);
         fixedCaravan.curName = caravan.Name;
         fixedCaravan.Tile = caravan.Tile;
-        fixedCaravan.ticksRemaining = initTicks;
         fixedCaravan.SetFaction(caravan.Faction);
-        ConvertToFixedCaravan(caravan, fixedCaravan);
+
+        try
+        {
+            ConvertToFixedCaravan(caravan, fixedCaravan);
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"Failed to convert Caravan {caravan} to a FixedCaravan: " + ex.Message);
+            fixedCaravan.Destroy();
+            return null;
+        }
+
         return fixedCaravan;
     }
-    public static void ConvertToFixedCaravan(Caravan caravan, FixedCaravan fixedCaravan, bool addToWorldPawnsIfNotAlready = true)
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObject worldObject)
+    {
+        return CreateFixedCaravan(caravan, OAFrameDefOf.OAFrame_FixedCaravan, worldObject);
+    }
+
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObjectDef def, WorldObject worldObject)
+    {
+        if (worldObject is null)
+        {
+            Log.Error($"Failed to convert Caravan {caravan} to FixedCaravan due to a null worldObject.");
+            return null;
+        }
+        FixedCaravan fixedCaravan = CreateFixedCaravan(caravan, def);
+        fixedCaravan.SetAssociatedWorldObject(worldObject);
+        return fixedCaravan;
+    }
+
+    private static void ConvertToFixedCaravan(Caravan caravan, FixedCaravan fixedCaravan, bool addToWorldPawnsIfNotAlready = true)
     {
         TempPawns.Clear();
         TempPawns.AddRange(caravan.PawnsListForReading);
@@ -69,6 +109,7 @@ public static class OAFrame_FixedCaravanUtility
         caravan.Destroy();
 
     }
+
     public static Caravan ConvertToCaravan(FixedCaravan fixedCaravan)
     {
         TempPawns.Clear();
@@ -79,11 +120,20 @@ public static class OAFrame_FixedCaravanUtility
         {
             Find.WorldSelector.Select(caravan, playSound: false);
         }
-        fixedCaravan.Notify_ConvertToCaravan();
         fixedCaravan.Destroy();
         TempPawns.Clear();
         return caravan;
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void GiveThings(FixedCaravan fixedCaravan, IEnumerable<Thing> things)
+    {
+        foreach (Thing t in things)
+        {
+            GiveThing(fixedCaravan, t);
+        }
+    }
+
     public static void GiveThing(FixedCaravan fixedCaravan, Thing thing)
     {
         if (AllInventoryItems(fixedCaravan).Contains(thing))
@@ -103,6 +153,7 @@ public static class OAFrame_FixedCaravanUtility
             thing.Destroy();
         }
     }
+
     public static void GivePawnsOrThings(FixedCaravan fixedCaravan, List<Thing> things)
     {
         TempAddedItems.Clear();

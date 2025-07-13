@@ -13,7 +13,7 @@ public static class OAFrame_TileFinderUtility
         List<PlanetTile> allNeighborTiles = [];
         tile = -1;
         Find.WorldGrid.GetTileNeighbors(rootTile, allNeighborTiles);
-        var neighborTiles = allNeighborTiles.Where(t => !Find.World.Impassable(t));
+        IEnumerable<PlanetTile> neighborTiles = allNeighborTiles.Where(t => !Find.World.Impassable(t));
         if (neighborTiles.Any())
         {
             if (exclusion)
@@ -44,7 +44,7 @@ public static class OAFrame_TileFinderUtility
         {
             rootTile = nearThisTile;
         }
-        else if (!TileFinder.TryFindRandomPlayerTile(out rootTile, allowCaravans: false, (PlanetTile x) => FindAvaliableTile(x, minDist, maxDist, tileFinderMode, exitOnFirstTileFound).Valid))
+        else if (!TileFinder.TryFindRandomPlayerTile(out rootTile, allowCaravans: false, x => FindAvaliableTile(x, minDist, maxDist, tileFinderMode, exitOnFirstTileFound).Valid))
         {
             tile = PlanetTile.Invalid;
             return false;
@@ -59,7 +59,7 @@ public static class OAFrame_TileFinderUtility
         {
             return result;
         }
-        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out result, (PlanetTile x) => IsValidAvaliableTileForNewObject(x) && (!Find.World.Impassable(x) || Find.WorldGrid[x].WaterCovered), ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: true, exitOnFirstTileFound) ? result : PlanetTile.Invalid;
+        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out result, x => IsValidAvaliableTileForNewObject(x) && (!Find.World.Impassable(x) || Find.WorldGrid[x].WaterCovered), ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: true, exitOnFirstTileFound) ? result : PlanetTile.Invalid;
     }
     public static bool IsValidAvaliableTileForNewObject(PlanetTile tile)
     {

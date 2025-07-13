@@ -9,6 +9,7 @@ public class PatchOperationCheckDLC : PatchOperation
     public bool Ideology;
     public bool Biotech;
     public bool Anomaly;
+    public bool Odyssey;
 
     public PatchOperation match;
 
@@ -47,6 +48,10 @@ public class PatchOperationCheckDLC : PatchOperation
             return false;
         }
         if (Anomaly && !ModsConfig.AnomalyActive)
+        {
+            return false;
+        }
+        if (Odyssey && !ModsConfig.OdysseyActive)
         {
             return false;
         }

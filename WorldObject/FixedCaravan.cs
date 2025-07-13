@@ -1,50 +1,30 @@
 ﻿using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder, IPawnRetentionHolder
+public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
 {
     private Material cachedMat;
     public override Material Material
     {
         get
         {
-            if (cachedMat is null)
-            {
-                cachedMat = MaterialPool.MatFrom(base.Faction.def.settlementTexturePath, ShaderDatabase.WorldOverlayTransparentLit, base.Faction.Color, WorldMaterials.WorldObjectRenderQueue);
-            }
+            cachedMat ??= MaterialPool.MatFrom(Faction.def.settlementTexturePath, ShaderDatabase.WorldOverlayTransparentLit, Faction.Color, WorldMaterials.WorldObjectRenderQueue);
             return cachedMat;
         }
     }
-    public override Color ExpandingIconColor => base.Faction.Color;
+    public override Color ExpandingIconColor => Faction.Color;
 
-    public string curName;
-    public string RenamableLabel
-    {
-        get
-        {
-            return curName ?? BaseLabel;
-        }
-        set
-        {
-            curName = value;
-        }
-    }
-    public string BaseLabel => def.label;
-    public string InspectLabel => RenamableLabel;
-    public ThingOwner GetDirectlyHeldThings()
-    {
-        return pawns;
-    }
-    public virtual void GetChildHolders(List<IThingHolder> outChildren)
-    {
-        ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
-    }
-    public ThingOwner<Pawn> pawns;
+    public string curName = null;
+    public override string Label => curName ?? base.Label;
+    public override bool HasName => !curName.NullOrEmpty();
+
+    protected ThingOwner<Pawn> pawns;
     public List<Pawn> PawnsListForReading => pawns.InnerListForReading;
     public int PawnsCount => pawns.Count;
     protected IEnumerable<Thing> AllItems => OAFrame_FixedCaravanUtility.AllInventoryItems(this);
@@ -52,11 +32,14 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder, IPa
     protected bool skillsDirty = true;
     protected readonly Dictionary<SkillDef, int> totalSkills = [];
 
-    public int ticksRemaining;
+    protected WorldObject associatedWorldObject;
+    [Unsaved] protected IFixedCaravanAssociate associatedInterface;
+
     public FixedCaravan()
     {
         pawns = new ThingOwner<Pawn>(this, oneStackOnly: false, LookMode.Reference);
     }
+
     public void AddPawn(Pawn pawn, bool addCarriedPawnToWorldPawnsIfAny = true)
     {
         if (pawn is null)
@@ -77,15 +60,15 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder, IPa
         pawn.DeSpawnOrDeselect();
         if (pawns.TryAdd(pawn))
         {
-            if (CaravanUtility.ShouldAutoCapture(pawn, base.Faction))
+            if (CaravanUtility.ShouldAutoCapture(pawn, Faction))
             {
-                pawn.guest.CapturedBy(base.Faction);
+                pawn.guest.CapturedBy(Faction);
             }
             if (carriedPawn is not null)
             {
-                if (CaravanUtility.ShouldAutoCapture(carriedPawn, base.Faction))
+                if (CaravanUtility.ShouldAutoCapture(carriedPawn, Faction))
                 {
-                    carriedPawn.guest.CapturedBy(base.Faction, pawn);
+                    carriedPawn.guest.CapturedBy(Faction, pawn);
                 }
                 AddPawn(carriedPawn, addCarriedPawnToWorldPawnsIfAny);
                 if (addCarriedPawnToWorldPawnsIfAny)
@@ -127,9 +110,34 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder, IPa
         }
     }
 
+    public void SetAssociatedWorldObject(WorldObject worldObject)
+    {
+        if (worldObject is null)
+        {
+            Log.Error($"Failed to set WorldObject to {this}: WorldObject is null");
+            return;
+        }
+
+        associatedWorldObject = worldObject;
+        TrySetAssociatedInterface();
+        if (associatedInterface?.FixedCaravanName is not null)
+        {
+            curName = associatedInterface.FixedCaravanName;
+        }
+    }
+
+    protected virtual void TrySetAssociatedInterface()
+    {
+        if (associatedWorldObject is IFixedCaravanAssociate caravanAssociate)
+        {
+            associatedInterface = caravanAssociate;
+        }
+    }
+
     protected virtual void PreConvertToCaravanByPlayer()
-    { }
-    public abstract void Notify_ConvertToCaravan();
+    {
+        associatedInterface?.PreConvertToCaravanByPlayer();
+    }
 
     public override IEnumerable<Gizmo> GetGizmos()
     {
@@ -153,11 +161,38 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder, IPa
 
     }
 
+    public override string GetInspectString()
+    {
+        if (associatedInterface is null)
+        {
+            return base.GetInspectString();
+        }
+        else
+        {
+            StringBuilder stringBuilder = new(base.GetInspectString());
+            stringBuilder.AppendInNewLine(associatedInterface.FixedCaravanWorkDesc());
+            return stringBuilder.ToString();
+        }
+    }
+
+    public ThingOwner GetDirectlyHeldThings()
+    {
+        return pawns;
+    }
+    public virtual void GetChildHolders(List<IThingHolder> outChildren)
+    {
+        ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
+    }
     public override void ExposeData()
     {
         base.ExposeData();
         Scribe_Deep.Look(ref pawns, "pawns", this);
-        Scribe_Values.Look(ref ticksRemaining, "ticksRemaining", 0);
         Scribe_Values.Look(ref curName, "curName");
+        Scribe_References.Look(ref associatedWorldObject, "associatedWorldObject");
+
+        if (Scribe.mode == LoadSaveMode.PostLoadInit)
+        {
+            TrySetAssociatedInterface();
+        }
     }
 }
