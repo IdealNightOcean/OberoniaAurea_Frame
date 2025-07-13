@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Verse;
 
-namespace OberoniaAurea_Frame.Utility;
+namespace OberoniaAurea_Frame;
 
 public static class OAFrame_PawnGenerateUtility
 {

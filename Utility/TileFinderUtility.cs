@@ -13,7 +13,7 @@ public static class OAFrame_TileFinderUtility
         List<int> allNeighborTiles = [];
         tile = -1;
         Find.WorldGrid.GetTileNeighbors(rootTile, allNeighborTiles);
-        var neighborTiles = allNeighborTiles.Where(t => !Find.World.Impassable(t));
+        IEnumerable<int> neighborTiles = allNeighborTiles.Where(t => !Find.World.Impassable(t));
         if (neighborTiles.Any())
         {
             if (exclusion)

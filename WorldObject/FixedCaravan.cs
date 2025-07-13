@@ -136,7 +136,7 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
 
     protected virtual void PreConvertToCaravanByPlayer()
     {
-        associatedInterface?.PreConvertToCaravanByPlayer(this);
+        associatedInterface?.PreConvertToCaravanByPlayer();
     }
 
     public override IEnumerable<Gizmo> GetGizmos()
