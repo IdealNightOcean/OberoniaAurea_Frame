@@ -44,7 +44,7 @@ public static class OAFrame_TileFinderUtility
         {
             rootTile = nearThisTile;
         }
-        else if (!TileFinder.TryFindRandomPlayerTile(out rootTile, allowCaravans, (int x) => FindAvaliableTile(x, minDist, maxDist, tileFinderMode, exitOnFirstTileFound) != -1))
+        else if (!TileFinder.TryFindRandomPlayerTile(out rootTile, allowCaravans, x => FindAvaliableTile(x, minDist, maxDist, tileFinderMode, exitOnFirstTileFound) != -1))
         {
             tile = -1;
             return false;
@@ -59,7 +59,7 @@ public static class OAFrame_TileFinderUtility
         {
             return result;
         }
-        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out result, (int x) => IsValidAvaliableTileForNewObject(x) && (!Find.World.Impassable(x) || Find.WorldGrid[x].WaterCovered), ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: true, exitOnFirstTileFound) ? result : (-1);
+        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out result, x => IsValidAvaliableTileForNewObject(x) && (!Find.World.Impassable(x) || Find.WorldGrid[x].WaterCovered), ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: true, exitOnFirstTileFound) ? result : (-1);
     }
 
     public static bool IsValidAvaliableTileForNewObject(int tile)

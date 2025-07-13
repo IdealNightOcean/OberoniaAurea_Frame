@@ -54,7 +54,7 @@ public static class OAFrame_PawnUtility
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool PawnSleepNow(Pawn pawn)
     {
-        return pawn.jobs?.curDriver?.asleep is true;
+        return pawn.jobs?.curDriver?.asleep ?? false;
     }
 
     public static int GetMaxSkillLevelOfPawns(IEnumerable<Pawn> pawns, SkillDef skill)

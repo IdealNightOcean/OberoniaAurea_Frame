@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="BulletBase.cs" />
     <Compile Include="CompSpecialBuilding.cs" />
+    <Compile Include="WorldObject\IFixedCaravanAssociate.cs" />
     <Compile Include="MapComponent_SpecialBuildingManager.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="IPawnRetentionHolder.cs" />
     <Compile Include="SimpleMapCahce.cs" />
     <Compile Include="SimpleValueCache.cs" />
-    <Compile Include="WorldObject\WorldObject_InteractiveWithFixedCarvanBase.cs" />
+    <Compile Include="WorldObject\WorldObject_InteractWithFixedCarvanBase.cs" />
     <Compile Include="WorldObject\ICaravanAssociate.cs" />
     <Compile Include="IPawnPreApplyDamage.cs" />
     <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />
