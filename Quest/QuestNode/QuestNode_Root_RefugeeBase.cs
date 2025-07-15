@@ -41,6 +41,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         public Faction faction;
         public PawnKindDef fixedPawnKind;
         public ThoughtDef addMemory;
+        public List<Pawn> pawns;
 
         public QuestParameter(Faction faction, Map map)
         {
@@ -53,15 +54,18 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         }
     }
 
+    protected QuestParameter questParameter;
+
     protected override void RunInt()
     {
+        questParameter = null;
         Faction faction = GetOrGenerateFaction();
         if (faction is null || faction.HostileTo(Faction.OfPlayer))
         {
             return;
         }
 
-        QuestParameter questParameter = InitQuestParameter(faction);
+        questParameter = InitQuestParameter(faction);
         Quest quest = questParameter.quest;
 
         string lodgerArrestedSignal = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Arrested");
@@ -70,12 +74,13 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         string lodgerArrestedOrRecruited = QuestGen.GenerateNewSignal("Lodger_ArrestedOrRecruited");
         quest.AnySignal(inSignals: [lodgerRecruitedSignal, lodgerArrestedSignal], outSignals: [lodgerArrestedOrRecruited]);
 
-        List<Pawn> pawns = GeneratePawns(questParameter, lodgerRecruitedSignal);
+        List<Pawn> pawns = GeneratePawns(lodgerRecruitedSignal);
         if (pawns.NullOrEmpty())
         {
             quest.End(QuestEndOutcome.Unknown, sendLetter: true, playSound: false);
             return;
         }
+        questParameter.pawns = pawns;
 
         quest.ExtraFaction(faction, pawns, ExtraFactionType.MiniFaction, areHelpers: false, [lodgerRecruitedSignal, lodgerBecameMutantSignal]);
 
@@ -111,7 +116,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
         }
 
-        SetQuestAward(questParameter);
+        SetQuestAward();
 
         QuestPart_OARefugeeInteractions questPart_RefugeeInteractions = new()
         {
@@ -126,15 +131,15 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         questPart_RefugeeInteractions.pawns.AddRange(pawns);
         quest.AddPart(questPart_RefugeeInteractions);
 
-        SetQuestEndLetters(questParameter, questPart_RefugeeInteractions);
+        SetQuestEndLetters(questPart_RefugeeInteractions);
 
         quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerDied, questPart_RefugeeInteractions.outSignalDestroyed_LeaveColony);
         quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerArrested, questPart_RefugeeInteractions.outSignalArrested_LeaveColony);
         quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerSurgicallyViolated, questPart_RefugeeInteractions.outSignalSurgeryViolation_LeaveColony);
 
-        SetQuestEndCompCommon(questParameter, questPart_RefugeeInteractions, pawns);
-        SetPawnsLeaveComp(questParameter, pawns, lodgerArrivalSignal, lodgerArrestedOrRecruited);
-        SetSlateValue(questParameter, pawns);
+        SetQuestEndCompCommon(questPart_RefugeeInteractions);
+        SetPawnsLeaveComp(lodgerArrivalSignal, lodgerArrestedOrRecruited);
+        SetSlateValue();
     }
 
     protected virtual QuestParameter InitQuestParameter(Faction faction)
@@ -142,7 +147,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         return new QuestParameter(faction, QuestGen_Get.GetMap());
     }
 
-    protected List<Pawn> GeneratePawns(QuestParameter questParameter, string lodgerRecruitedSignal = null)
+    protected List<Pawn> GeneratePawns(string lodgerRecruitedSignal = null)
     {
         Quest quest = questParameter.quest;
         List<Pawn> pawns = [];
@@ -213,7 +218,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
     protected virtual void PostPawnGenerated(Pawn pawn) { }
 
-    protected virtual void SetQuestAward(QuestParameter questParameter)
+    protected void SetQuestAward()
     {
         QuestPart_Choice questPart_Choice = questParameter.quest.RewardChoice();
         QuestPart_Choice.Choice choice = new()
@@ -239,8 +244,12 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             choice.rewards.Add(new Reward_DevelopmentPoints(questParameter.quest));
         }
 
+        AddQuestAward(choice);
+
         questPart_Choice.choices.Add(choice);
     }
+
+    protected virtual void AddQuestAward(QuestPart_Choice.Choice choice) { }
 
     protected virtual Faction GetOrGenerateFaction()
     {
@@ -266,18 +275,18 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         return faction;
     }
 
-    protected virtual void SetQuestEndComp(QuestParameter questParameter, QuestPart_OARefugeeInteractions questPart_Interactions, string failSignal, string bigFailSignal, string successSignal) { }
+    protected virtual void SetQuestEndComp(QuestPart_OARefugeeInteractions questPart_Interactions, string failSignal, string bigFailSignal, string successSignal) { }
 
-    protected virtual void SetPawnsLeaveComp(QuestParameter questParameter, List<Pawn> pawns, string inSignalEnable, string inSignalRemovePawn)
+    protected virtual void SetPawnsLeaveComp(string inSignalEnable, string inSignalRemovePawn)
     {
         if (questParameter.questDurationTicks > 0)
         {
-            DefaultDelayLeaveComp(questParameter, pawns, inSignalEnable, inSignalDisable: null, inSignalRemovePawn);
+            DefaultDelayLeaveComp(inSignalEnable, inSignalDisable: null, inSignalRemovePawn);
         }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected void DefaultDelayLeaveComp(QuestParameter questParameter, List<Pawn> pawns, string inSignalEnable, string inSignalDisable, string inSignalRemovePawn)
+    protected void DefaultDelayLeaveComp(string inSignalEnable, string inSignalDisable, string inSignalRemovePawn)
     {
         Quest quest = questParameter.quest;
 
@@ -300,7 +309,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
                                      textRules: null,
                                      label: "[lodgersLeavingLetterLabel]");
                     });
-                quest.Leave(pawns, inSignal: null, sendStandardLetter: false, leaveOnCleanup: false, inSignalRemovePawn, wakeUp: true);
+                quest.Leave(questParameter.pawns, inSignal: null, sendStandardLetter: false, leaveOnCleanup: false, inSignalRemovePawn, wakeUp: true);
             },
             inSignalEnable: inSignalEnable,
             inSignalDisable: inSignalDisable,
@@ -314,7 +323,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             debugLabel: "QuestDelay");
     }
 
-    private void SetQuestEndLetters(QuestParameter questParameter, QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)
+    protected void SetQuestEndLetters(QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)
     {
         Quest quest = questParameter.quest;
 
@@ -346,7 +355,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalLast_Arrested, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgersAllArrestedLetterText]", null, "[lodgersAllArrestedLetterLabel]");
     }
 
-    private void SetQuestEndCompCommon(QuestParameter questParameter, QuestPart_OARefugeeInteractions questPart_RefugeeInteractions, List<Pawn> pawns)
+    protected void SetQuestEndCompCommon(QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)
     {
         Quest quest = questParameter.quest;
         Faction faction = questParameter.faction;
@@ -375,7 +384,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         quest.AnySignal(inSignals: bigFailureSignals, outSignals: [bigFailSignal]);
         quest.AnySignal(inSignals: [questPart_RefugeeInteractions.outSignalLast_Recruited, questPart_RefugeeInteractions.outSignalLast_LeftMapAllNotHealthy, questPart_RefugeeInteractions.outSignalLast_LeftMapAllHealthy], outSignals: [successSignal]);
 
-        SetQuestEndComp(questParameter, questPart_RefugeeInteractions, failSignal, bigFailSignal, successSignal);
+        SetQuestEndComp(questPart_RefugeeInteractions, failSignal, bigFailSignal, successSignal);
 
         quest.End(QuestEndOutcome.Fail, questParameter.goodwillFailure, faction, failSignal);
         quest.End(QuestEndOutcome.Fail, questParameter.goodwillFailure, faction, bigFailSignal, QuestPart.SignalListenMode.OngoingOnly, sendStandardLetter: true);
@@ -387,13 +396,13 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             if (ModsConfig.RoyaltyActive)
             {
                 FloatRange marketValueRange = questParameter.rewardValueRange * Find.Storyteller.difficulty.EffectiveQuestRewardValueFactor;
-                quest.AddQuestRefugeeDelayedReward(quest.AccepterPawn, faction, pawns, marketValueRange);
+                quest.AddQuestRefugeeDelayedReward(quest.AccepterPawn, faction, questParameter.pawns, marketValueRange);
             }
             quest.End(QuestEndOutcome.Success, questParameter.goodwillSuccess, faction, null, QuestPart.SignalListenMode.OngoingOnly, sendStandardLetter: true);
         }, inSignal: questPart_RefugeeInteractions.outSignalLast_LeftMapAllHealthy);
     }
 
-    protected virtual void SetSlateValue(QuestParameter questParameter, List<Pawn> pawns)
+    protected virtual void SetSlateValue()
     {
         Slate slate = questParameter.slate;
 
@@ -402,18 +411,13 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         slate.Set("questDurationTicks", questParameter.questDurationTicks);
         slate.Set("lodgerCount", questParameter.LodgerCount);
         slate.Set("lodgersCountMinusOne", questParameter.LodgerCount - 1);
-        slate.Set("lodgers", pawns);
-        slate.Set("asker", pawns.First());
+        slate.Set("lodgers", questParameter.pawns);
+        slate.Set("asker", questParameter.pawns.First());
         if (questParameter.arrivalDelayTicks > 0)
         {
             slate.Set("arrivalDelayTicks", questParameter.arrivalDelayTicks);
         }
     }
 
-    protected override bool TestRunInt(Slate slate)
-    {
-        return QuestGen_Get.GetMap() is not null;
-    }
-
-
+    protected override bool TestRunInt(Slate slate) => QuestGen_Get.GetMap() is not null;
 }

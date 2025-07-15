@@ -23,11 +23,16 @@ public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
             participantFactions.Add(newPaFaction);
         }
     }
+
     public void AddParticipantFactions(IEnumerable<Faction> newPaFactions)
     {
         participantFactions ??= [];
-        participantFactions.AddRange(newPaFactions);
+        foreach (Faction faction in newPaFactions)
+        {
+            participantFactions.AddDistinct(faction);
+        }
     }
+
     public override void ExposeData()
     {
         base.ExposeData();

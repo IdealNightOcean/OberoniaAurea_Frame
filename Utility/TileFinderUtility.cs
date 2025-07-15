@@ -37,29 +37,15 @@ public static class OAFrame_TileFinderUtility
         }
         return false;
     }
-    public static bool TryFindNewAvaliableTile(out int tile, int nearThisTile = -1, int minDist = 7, int maxDist = 27, bool allowCaravans = false, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
+    public static bool TryFindNewAvaliableTile(out int tile, int rootTile = -1, int minDist = 7, int maxDist = 27, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
     {
-        int rootTile;
-        if (nearThisTile != -1)
+        tile = Tile.Invalid;
+        if (rootTile == Tile.Invalid)
         {
-            rootTile = nearThisTile;
-        }
-        else if (!TileFinder.TryFindRandomPlayerTile(out rootTile, allowCaravans, x => FindAvaliableTile(x, minDist, maxDist, tileFinderMode, exitOnFirstTileFound) != -1))
-        {
-            tile = -1;
             return false;
         }
-        tile = FindAvaliableTile(rootTile, minDist, maxDist, tileFinderMode, exitOnFirstTileFound);
-        return tile != -1;
-    }
 
-    public static int FindAvaliableTile(int rootTile, int minDist = 7, int maxDist = 27, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
-    {
-        if (TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out int result, IsValidAvaliableTileForNewObject, ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: false, exitOnFirstTileFound))
-        {
-            return result;
-        }
-        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out result, x => IsValidAvaliableTileForNewObject(x) && (!Find.World.Impassable(x) || Find.WorldGrid[x].WaterCovered), ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: true, exitOnFirstTileFound) ? result : (-1);
+        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out tile, IsValidAvaliableTileForNewObject, ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: false, exitOnFirstTileFound);
     }
 
     public static bool IsValidAvaliableTileForNewObject(int tile)

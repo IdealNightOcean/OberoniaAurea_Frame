@@ -11,7 +11,7 @@ public class QuestNode_GetNearTile : QuestNode
 
     public SlateRef<WorldObject> worldObject;
     public SlateRef<int> centerTile = Tile.Invalid;
-    public SlateRef<bool> allowCaravans;
+
     public SlateRef<bool> preferNeighborTiles;
     public SlateRef<bool> preferCloserTiles = true;
     public SlateRef<int> minDist = 0;
@@ -44,20 +44,22 @@ public class QuestNode_GetNearTile : QuestNode
         if (centerTile.GetValue(slate) != Tile.Invalid)
         {
             tile = centerTile.GetValue(slate);
-            return true;
         }
-        if (worldObject.GetValue(slate) is not null)
+        else if (worldObject.GetValue(slate) is not null)
         {
             tile = worldObject.GetValue(slate).Tile;
             return tile != Tile.Invalid;
         }
-        Map map = slate.Get<Map>("map");
-        if (map is not null)
+        else
         {
-            tile = map.Tile;
-            return true;
+            Map map = slate.Get<Map>("map");
+            if (map is not null)
+            {
+                tile = map.Tile;
+            }
         }
-        return false;
+
+        return tile != Tile.Invalid;
     }
 
     protected bool TryFindTile(Slate slate, out int tile)
@@ -77,8 +79,7 @@ public class QuestNode_GetNearTile : QuestNode
 
         int minDist = this.minDist.GetValue(slate);
         int maxDist = this.maxDist.GetValue(slate);
-        bool allowCaravans = this.allowCaravans.GetValue(slate);
         TileFinderMode tileFinderMode = preferCloserTiles.GetValue(slate) ? TileFinderMode.Near : TileFinderMode.Random;
-        return OAFrame_TileFinderUtility.TryFindNewAvaliableTile(out tile, rootTile, minDist, maxDist, allowCaravans, tileFinderMode);
+        return OAFrame_TileFinderUtility.TryFindNewAvaliableTile(out tile, rootTile, minDist, maxDist, tileFinderMode);
     }
 }

@@ -62,24 +62,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BulletBase.cs" />
-    <Compile Include="CompSpecialBuilding.cs" />
-    <Compile Include="WorldObject\IFixedCaravanAssociate.cs" />
+    <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
+    <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
+    <Compile Include="Interface\IQuestAssociate.cs" />
+    <Compile Include="LordJob\LordJob_VisitColony.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
+    <Compile Include="Thing\BulletBase.cs" />
+    <Compile Include="Thing\CompSpecialBuilding.cs" />
+    <Compile Include="WorldObject\MapParent_Enterable.cs" />
+    <Compile Include="Interface\IFixedCaravanAssociate.cs" />
     <Compile Include="MapComponent_SpecialBuildingManager.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
     <Compile Include="SimpleUniqueList.cs" />
     <Compile Include="SimpleHashList.cs" />
-    <Compile Include="IPawnRetentionHolder.cs" />
+    <Compile Include="Interface\IPawnRetentionHolder.cs" />
     <Compile Include="SimpleMapCahce.cs" />
     <Compile Include="SimpleValueCache.cs" />
     <Compile Include="WorldObject\WorldObject_InteractWithFixedCarvanBase.cs" />
-    <Compile Include="WorldObject\ICaravanAssociate.cs" />
-    <Compile Include="IPawnPreApplyDamage.cs" />
+    <Compile Include="Interface\ICaravanAssociate.cs" />
+    <Compile Include="Interface\IPawnPreApplyDamage.cs" />
     <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />
     <Compile Include="LordJob\LordJob_AssistColony_NeverFlee.cs" />
-    <Compile Include="IncidentWorker_IsolatedTraderCaravanArrival.cs" />
-    <Compile Include="MoteAttached_Text.cs" />
+    <Compile Include="Incident\IncidentWorker_IsolatedTraderCaravanArrival.cs" />
+    <Compile Include="Thing\MoteAttached_Text.cs" />
     <Compile Include="IsolatedPawnGroupMakerDef.cs" />
     <Compile Include="PatchOperationCheckDLC.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_FireIncident.cs" />
@@ -133,6 +140,7 @@
     <Compile Include="WorldObject\WorldObject_MutiInteractiveBase.cs" />
     <Compile Include="WorldObject\SaleRequestComp.cs" />
     <Compile Include="LordJob\LordJob_AssaultThings_NeverFlee.cs" />
+    <Compile Include="WorldObject\CaravanArrivalAction_GenerateAndEnter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

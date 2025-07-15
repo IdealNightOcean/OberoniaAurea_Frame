@@ -7,7 +7,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 //QuestNode：获取指定数量多个派系
-public class QuestNode_GetMutiFactions : OberoniaAurea_Frame.QuestNode_GetFaction
+public class QuestNode_GetMutiFactions : QuestNode_GetFaction
 {
     public SlateRef<IntRange> factionCount;
     public SlateRef<bool> ignoreMinCountIfNessary = true; //必要时忽略数量下限
