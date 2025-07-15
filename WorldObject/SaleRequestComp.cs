@@ -28,7 +28,7 @@ public class SaleRequestComp : WorldObjectComp
     {
         if (ActiveRequest)
         {
-            return "CaravanRequestInfo".Translate(TradeRequestUtility.RequestedThingLabel(saleRQ_ThingDef, saleRQ_Count).CapitalizeFirst(), (saleRQ_Expiration - Find.TickManager.TicksGame).ToStringTicksToDays(), (saleRQ_ThingDef.GetStatValueAbstract(StatDefOf.MarketValue) * (float)saleRQ_Count).ToStringMoney());
+            return "CaravanRequestInfo".Translate(TradeRequestUtility.RequestedThingLabel(saleRQ_ThingDef, saleRQ_Count).CapitalizeFirst(), (saleRQ_Expiration - Find.TickManager.TicksGame).ToStringTicksToDays(), (saleRQ_ThingDef.GetStatValueAbstract(StatDefOf.MarketValue) * saleRQ_Count).ToStringMoney());
         }
         return null;
     }

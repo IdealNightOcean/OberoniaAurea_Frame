@@ -6,10 +6,11 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssociate
+public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssociate, IQuestAssociate
 {
     protected virtual string VisitLabel => null;
     protected Quest quest;
+    public Quest AssociatedQuest => quest;
 
     private Material cachedMat;
     public override Material Material
@@ -21,7 +22,7 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
         }
     }
 
-    public void SetQuest(Quest quest)
+    public void SetAssociatedQuest(Quest quest)
     {
         this.quest = quest;
     }
