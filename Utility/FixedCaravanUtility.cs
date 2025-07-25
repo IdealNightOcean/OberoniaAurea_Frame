@@ -1,4 +1,5 @@
-﻿using RimWorld.Planet;
+﻿using RimWorld;
+using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,7 @@ public static class OAFrame_FixedCaravanUtility
 
     public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObjectDef def)
     {
-        FixedCaravan fixedCaravan = (FixedCaravan)WorldObjectMaker.MakeWorldObject(OAFrameDefOf.OAFrame_FixedCaravan);
+        FixedCaravan fixedCaravan = (FixedCaravan)WorldObjectMaker.MakeWorldObject(def);
         fixedCaravan.curName = caravan.Name;
         fixedCaravan.Tile = caravan.Tile;
         fixedCaravan.SetFaction(caravan.Faction);

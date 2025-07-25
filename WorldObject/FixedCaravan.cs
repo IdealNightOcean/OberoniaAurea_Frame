@@ -7,7 +7,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
+public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
 {
     private Material cachedMat;
     public override Material Material
@@ -135,8 +135,9 @@ public abstract class FixedCaravan : WorldObject, IRenameable, IThingHolder
     }
 
     protected virtual void PreConvertToCaravanByPlayer()
-    { }
-    public abstract void Notify_ConvertToCaravan();
+    {
+        associatedInterface?.PreConvertToCaravanByPlayer();
+    }
 
     public override IEnumerable<Gizmo> GetGizmos()
     {
