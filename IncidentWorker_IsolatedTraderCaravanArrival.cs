@@ -1,5 +1,4 @@
-﻿using OberoniaAurea_Frame.Utility;
-using RimWorld;
+﻿using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +13,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
     protected virtual IsolatedPawnGroupMakerDef PawnGroupMakerDef => null;
     protected override PawnGroupKindDef PawnGroupKindDef => PawnGroupKindDefOf.Trader;
 
-    protected override bool FactionCanBeGroupSource(Faction f, Map map, bool desperate = false)
+    public override bool FactionCanBeGroupSource(Faction f, IncidentParms parms, bool desperate = false)
     {
         return !f.HostileTo(Faction.OfPlayer);
     }
@@ -64,7 +63,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
             return false;
         }
         PawnGroupMakerParms groupMakerParms = IncidentParmsUtility.GetDefaultPawnGroupMakerParms(PawnGroupKindDef, parms, ensureCanGenerateAtLeastOnePawn: true);
-        groupMakerParms.tile = Tile.Invalid;
+        groupMakerParms.tile = PlanetTile.Invalid;
         if (!OAFrame_PawnGenerateUtility.TryGetRandomPawnGroupMaker(PawnGroupKindDef, PawnGroupMakerDef, out PawnGroupMaker groupMaker))
         {
             return false;

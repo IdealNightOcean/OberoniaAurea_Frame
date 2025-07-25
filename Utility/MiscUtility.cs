@@ -64,7 +64,7 @@ public static class OAFrame_MiscUtility
     {
         Vector3 position = new(worldPos.x, 0f, worldPos.y);
         Vector2 vector = Find.Camera.WorldToScreenPoint(position) / Prefs.UIScale;
-        vector.y = (float)UI.screenHeight - vector.y;
+        vector.y = UI.screenHeight - vector.y;
         Text.Font = GameFont.Tiny;
         float rectY = vector.y;
 

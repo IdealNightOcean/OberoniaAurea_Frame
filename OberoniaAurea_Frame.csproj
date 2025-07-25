@@ -18,7 +18,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
+<<<<<<< HEAD
     <OutputPath>E:\ProgramFiles\Steam\steamapps\common\RimWorld\Mods\[OA]Ratkin Knight Order\Frame\1.5\Assemblies\</OutputPath>
+=======
+    <OutputPath>Release\</OutputPath>
+>>>>>>> 1.6
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +30,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
+<<<<<<< HEAD
     <OutputPath>E:\ProgramFiles\Steam\steamapps\common\RimWorld\Mods\[OA]Ratkin Knight Order\Frame\1.5\Assemblies\</OutputPath>
+=======
+    <OutputPath>Release\</OutputPath>
+>>>>>>> 1.6
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -62,6 +70,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="BulletBase.cs" />
     <Compile Include="CompSpecialBuilding.cs" />
     <Compile Include="WorldObject\IFixedCaravanAssociate.cs" />
@@ -76,10 +85,31 @@
     <Compile Include="WorldObject\WorldObject_InteractWithFixedCarvanBase.cs" />
     <Compile Include="WorldObject\ICaravanAssociate.cs" />
     <Compile Include="IPawnPreApplyDamage.cs" />
+=======
+    <Compile Include="IncidentWorker_GiveQuest_Map.cs" />
+    <Compile Include="IncidentWorker_GiveQuest.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_TransToHardcodedSignalWithQuestID.cs" />
+    <Compile Include="Thing\BulletBase.cs" />
+    <Compile Include="Thing\CompDestoryAfterSwapMap.cs" />
+    <Compile Include="Thing\CompSpecialBuilding.cs" />
+    <Compile Include="HarmonyPatch\MapParent_GetShuttleFloatMenuOptions_Patch.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
+    <Compile Include="WorldObject\CaravanArrivalAction_GenerateAndEnter.cs" />
+    <Compile Include="WorldObject\IQuestAssociate.cs" />
+    <Compile Include="WorldObject\IFixedCaravanAssociate.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
+    <Compile Include="SimpleValueCache.cs" />
+    <Compile Include="WorldObject\ICaravanAssociate.cs" />
+    <Compile Include="IPawnPreApplyDamage.cs" />
+    <Compile Include="IPawnRetentionHolder.cs" />
+    <Compile Include="MapComponent_SpecialBuildingManager.cs" />
+>>>>>>> 1.6
     <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />
     <Compile Include="LordJob\LordJob_AssistColony_NeverFlee.cs" />
     <Compile Include="IncidentWorker_IsolatedTraderCaravanArrival.cs" />
-    <Compile Include="MoteAttached_Text.cs" />
+    <Compile Include="Thing\MoteAttached_Text.cs" />
     <Compile Include="IsolatedPawnGroupMakerDef.cs" />
     <Compile Include="PatchOperationCheckDLC.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_FireIncident.cs" />
@@ -88,6 +118,9 @@
     <Compile Include="Quest\QuestNode\QuestNode_Root_RefugeeBase.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetDropSpot.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateThingDefCount.cs" />
+    <Compile Include="SimpleHashList.cs" />
+    <Compile Include="SimpleMapCahce.cs" />
+    <Compile Include="SimpleUniqueList.cs" />
     <Compile Include="Thought_SituationalGiveHediff.cs" />
     <Compile Include="HarmonyPatch\GetCriticalPawnReason_Patch.cs" />
     <Compile Include="HarmonyPatch\HarmonyPatch.cs" />
@@ -123,6 +156,7 @@
     <Compile Include="Quest\QuestNode\QuestNode_GetFaction.cs" />
     <Compile Include="WorldObject\CategoryTradeRequestComp.cs" />
     <Compile Include="LordJob\LordJob_AssaultColony_NeverFlee.cs" />
+    <Compile Include="WorldObject\MapParent_Enterable.cs" />
     <Compile Include="WorldObject\WorldObject_WithMutiFactions.cs" />
     <Compile Include="WorldObject\WorldObject_InteractiveBase.cs" />
     <Compile Include="Utility\MiscUtility.cs" />
@@ -133,6 +167,7 @@
     <Compile Include="WorldObject\WorldObject_MutiInteractiveBase.cs" />
     <Compile Include="WorldObject\SaleRequestComp.cs" />
     <Compile Include="LordJob\LordJob_AssaultThings_NeverFlee.cs" />
+    <Compile Include="WorldObject\WorldObject_InteractWithFixedCarvanBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

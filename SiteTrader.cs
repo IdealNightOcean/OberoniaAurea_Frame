@@ -68,7 +68,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
         List<Map> maps = Find.Maps;
         for (int i = 0; i < maps.Count; i++)
         {
-            TempExtantNames.AddRange(maps[i].passingShipManager.passingShips.Select((PassingShip x) => x.name));
+            TempExtantNames.AddRange(maps[i].passingShipManager.passingShips.Select(x => x.name));
         }
         traderName = NameGenerator.GenerateName(RulePackDefOf.NamerTraderGeneral, TempExtantNames);
         if (faction is not null)
@@ -115,12 +115,12 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
     {
         for (int i = 0; i < things.Count; i++)
         {
-            if (things[i] is Pawn p)
+            if (things[i] is Pawn pawn)
             {
-                p.Tick();
-                if (p.Dead)
+                pawn.DoTick();
+                if (pawn.Dead)
                 {
-                    things.Remove(p);
+                    things.Remove(pawn);
                 }
             }
         }
@@ -248,7 +248,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
         Scribe_Values.Look(ref randomPriceFactorSeed, "randomPriceFactorSeed", 0);
         if (Scribe.mode == LoadSaveMode.PostLoadInit || Scribe.mode == LoadSaveMode.Saving)
         {
-            tmpSavedPawns.RemoveAll((Pawn x) => x is null);
+            tmpSavedPawns.RemoveAll(x => x is null);
             for (int i = 0; i < tmpSavedPawns.Count; i++)
             {
                 things.TryAdd(tmpSavedPawns[i], canMergeWithExistingStacks: false);

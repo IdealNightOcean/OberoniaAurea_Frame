@@ -8,7 +8,7 @@ namespace OberoniaAurea_Frame;
 public class QuestNode_GenerateInteractiveWorldObject : QuestNode
 {
     public SlateRef<WorldObjectDef> def;
-    public SlateRef<int> tile;
+    public SlateRef<PlanetTile> tile;
     public SlateRef<Faction> faction;
 
     [NoTranslate]
@@ -19,7 +19,7 @@ public class QuestNode_GenerateInteractiveWorldObject : QuestNode
         Slate slate = QuestGen.slate;
         WorldObject_InteractiveBase worldObject = GenerateWorldObject(slate);
         worldObject.Tile = tile.GetValue(slate);
-        worldObject.SetQuest(QuestGen.quest);
+        worldObject.SetAssociatedQuest(QuestGen.quest);
         if (faction.GetValue(slate) is not null)
         {
             worldObject.SetFaction(faction.GetValue(slate));

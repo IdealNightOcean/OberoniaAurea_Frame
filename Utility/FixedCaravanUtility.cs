@@ -35,7 +35,13 @@ public static class OAFrame_FixedCaravanUtility
         return TempInventoryItems;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static FixedCaravan CreateFixedCaravan(Caravan caravan)
+    {
+        return CreateFixedCaravan(caravan, OAFrameDefOf.OAFrame_FixedCaravan);
+    }
+
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObjectDef def)
     {
         FixedCaravan fixedCaravan = (FixedCaravan)WorldObjectMaker.MakeWorldObject(OAFrameDefOf.OAFrame_FixedCaravan);
         fixedCaravan.curName = caravan.Name;
@@ -56,14 +62,20 @@ public static class OAFrame_FixedCaravanUtility
         return fixedCaravan;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObject worldObject)
+    {
+        return CreateFixedCaravan(caravan, OAFrameDefOf.OAFrame_FixedCaravan, worldObject);
+    }
+
+    public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObjectDef def, WorldObject worldObject)
     {
         if (worldObject is null)
         {
-            Log.Error($"Failed to convert Caravan {caravan} to a FixedCaravan: WorldObject is null");
+            Log.Error($"Failed to convert Caravan {caravan} to FixedCaravan due to a null worldObject.");
             return null;
         }
-        FixedCaravan fixedCaravan = CreateFixedCaravan(caravan);
+        FixedCaravan fixedCaravan = CreateFixedCaravan(caravan, def);
         fixedCaravan.SetAssociatedWorldObject(worldObject);
         return fixedCaravan;
     }
@@ -112,6 +124,7 @@ public static class OAFrame_FixedCaravanUtility
         return caravan;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void GiveThings(FixedCaravan fixedCaravan, IEnumerable<Thing> things)
     {
         foreach (Thing t in things)
@@ -139,6 +152,7 @@ public static class OAFrame_FixedCaravanUtility
             thing.Destroy();
         }
     }
+
     public static void GivePawnsOrThings(FixedCaravan fixedCaravan, List<Thing> things)
     {
         TempAddedItems.Clear();

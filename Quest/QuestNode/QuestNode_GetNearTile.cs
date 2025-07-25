@@ -10,7 +10,7 @@ public class QuestNode_GetNearTile : QuestNode
     public SlateRef<string> storeAs;
 
     public SlateRef<WorldObject> worldObject;
-    public SlateRef<int> centerTile = Tile.Invalid;
+    public SlateRef<PlanetTile> centerTile = PlanetTile.Invalid;
     public SlateRef<bool> allowCaravans;
     public SlateRef<bool> preferNeighborTiles;
     public SlateRef<bool> preferCloserTiles = true;
@@ -19,11 +19,11 @@ public class QuestNode_GetNearTile : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        if (slate.TryGet(storeAs.GetValue(slate), out int _))
+        if (slate.TryGet(storeAs.GetValue(slate), out PlanetTile _))
         {
             return true;
         }
-        else if (TryFindTile(slate, out int tile))
+        else if (TryFindTile(slate, out PlanetTile tile))
         {
             slate.Set(storeAs.GetValue(slate), tile);
             return true;
@@ -33,15 +33,15 @@ public class QuestNode_GetNearTile : QuestNode
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        if (!slate.TryGet(storeAs.GetValue(slate), out int _) && TryFindTile(slate, out int tile))
+        if (!slate.TryGet(storeAs.GetValue(slate), out int _) && TryFindTile(slate, out PlanetTile tile))
         {
             slate.Set(storeAs.GetValue(slate), tile);
         }
     }
-    protected bool ResloveCenterTile(Slate slate, out int tile)
+    protected bool ResloveCenterTile(Slate slate, out PlanetTile tile)
     {
-        tile = Tile.Invalid;
-        if (centerTile.GetValue(slate) != Tile.Invalid)
+        tile = PlanetTile.Invalid;
+        if (centerTile.GetValue(slate).Valid)
         {
             tile = centerTile.GetValue(slate);
             return true;
@@ -49,7 +49,7 @@ public class QuestNode_GetNearTile : QuestNode
         if (worldObject.GetValue(slate) is not null)
         {
             tile = worldObject.GetValue(slate).Tile;
-            return tile != Tile.Invalid;
+            return tile.Valid;
         }
         Map map = slate.Get<Map>("map");
         if (map is not null)
@@ -60,10 +60,10 @@ public class QuestNode_GetNearTile : QuestNode
         return false;
     }
 
-    protected bool TryFindTile(Slate slate, out int tile)
+    protected bool TryFindTile(Slate slate, out PlanetTile tile)
     {
-        tile = Tile.Invalid;
-        if (!ResloveCenterTile(slate, out int rootTile))
+        tile = PlanetTile.Invalid;
+        if (!ResloveCenterTile(slate, out PlanetTile rootTile))
         {
             return false;
         }
