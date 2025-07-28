@@ -25,7 +25,9 @@ public class BulletBase : Bullet
     {
         Map map = Map;
         IntVec3 position = Position;
-        ProjectileImpact(Map, position, blockedByShield);
+        Vector3 exactPosition = ExactPosition;
+
+        ProjectileImpact(map, position, blockedByShield);
         BattleLogEntry_RangedImpact battleLogEntry_RangedImpact = new(launcher, hitThing, intendedTarget.Thing, equipmentDef, def, targetCoverDef);
         sharedBattleLogEntry = battleLogEntry_RangedImpact;
         Find.BattleLog.Add(battleLogEntry_RangedImpact);
@@ -42,20 +44,20 @@ public class BulletBase : Bullet
         sharedBattleLogEntry = null;
         if (!blockedByShield)
         {
-            SoundDefOf.BulletImpact_Ground.PlayOneShot(new TargetInfo(Position, map));
-            if (Position.GetTerrain(map).takeSplashes)
+            SoundDefOf.BulletImpact_Ground.PlayOneShot(new TargetInfo(position, map));
+            if (position.GetTerrain(map).takeSplashes)
             {
-                FleckMaker.WaterSplash(ExactPosition, map, Mathf.Sqrt(DamageAmount) * 1f, 4f);
+                FleckMaker.WaterSplash(exactPosition, map, Mathf.Sqrt(DamageAmount) * 1f, 4f);
             }
             else
             {
-                FleckMaker.Static(ExactPosition, map, FleckDefOf.ShotHit_Dirt);
+                FleckMaker.Static(exactPosition, map, FleckDefOf.ShotHit_Dirt);
             }
         }
 
         if (Rand.Chance(DamageDef.igniteCellChance))
         {
-            FireUtility.TryStartFireIn(Position, map, Rand.Range(0.55f, 0.85f), launcher);
+            FireUtility.TryStartFireIn(position, map, Rand.Range(0.55f, 0.85f), launcher);
         }
     }
 

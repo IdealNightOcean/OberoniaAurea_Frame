@@ -23,6 +23,7 @@ public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
             participantFactions.Add(newPaFaction);
         }
     }
+
     public void AddParticipantFactions(IEnumerable<Faction> newPaFactions)
     {
         participantFactions ??= [];
@@ -31,6 +32,7 @@ public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
             participantFactions.AddUnique(faction);
         }
     }
+
     public override void ExposeData()
     {
         base.ExposeData();

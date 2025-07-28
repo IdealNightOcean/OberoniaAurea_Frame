@@ -1,6 +1,7 @@
 ﻿using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
@@ -54,27 +55,31 @@ public static class OAFrame_CaravanUtility
         return false;
     }
 
-    public static int RemoveThings(Caravan caravan, ThingDef thingDef, int count)
+    public static int RemoveThingOfDef(Caravan caravan, ThingDef thingDef, int count)
     {
+        List<Thing> takeThings = [];
         int remaining = count;
-        List<Thing> takeThings = CaravanInventoryUtility.TakeThings(caravan, GetTakeThingCount);
+        int takeCount;
+        foreach (Thing item in CaravanInventoryUtility.AllInventoryItems(caravan).ToList())
+        {
+            if (item.def != thingDef)
+            {
+                continue;
+            }
+
+            takeCount = Mathf.Min(remaining, item.stackCount);
+            takeThings.Add(item.holdingOwner.Take(item, takeCount));
+            if ((remaining -= takeCount) <= 0)
+            {
+                break;
+            }
+        }
+
         for (int i = 0; i < takeThings.Count; i++)
         {
             takeThings[i].Destroy();
         }
 
         return remaining;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        int GetTakeThingCount(Thing thing)
-        {
-            if (remaining <= 0 || thingDef != thing.def)
-            {
-                return 0;
-            }
-            int takeCount = Mathf.Min(remaining, thing.stackCount);
-            remaining -= takeCount;
-            return takeCount;
-        }
     }
 }

@@ -9,7 +9,7 @@ public abstract class RaidStrategyWorker_ImmediateAttack_NeverFlee : RaidStrateg
 {
     protected override LordJob MakeLordJob(IncidentParms parms, Map map, List<Pawn> pawns, int raidSeed)
     {
-        IntVec3 originCell = (parms.spawnCenter.IsValid ? parms.spawnCenter : pawns[0].PositionHeld);
+        IntVec3 originCell = parms.spawnCenter.IsValid ? parms.spawnCenter : pawns[0].PositionHeld;
         if (parms.attackTargets is not null && parms.attackTargets.Count > 0)
         {
             return new LordJob_AssaultThings_NeverFlee(parms.faction, parms.attackTargets);

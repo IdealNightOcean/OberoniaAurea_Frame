@@ -23,9 +23,9 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         {
             return false;
         }
-        foreach (PocketMapParent item in Find.World.pocketMaps.ToList())
+        foreach (PocketMapParent pocketMap in Find.World.pocketMaps.ToList())
         {
-            if (item.sourceMap == Map && item.Map.mapPawns.AnyPawnBlockingMapRemoval)
+            if (pocketMap.sourceMap == Map && pocketMap.Map.mapPawns.AnyPawnBlockingMapRemoval)
             {
                 return false;
             }

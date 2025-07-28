@@ -92,7 +92,6 @@ public class QuestPart_FireIncident : QuestPart
 
     public void SetIncidentParms_MapParent(IncidentParms parms, MapParent mapParent = null)
     {
-
         incidentParms = parms;
         if (incidentParms.target is Map map && map.Parent is not null)
         {

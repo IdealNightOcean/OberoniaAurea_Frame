@@ -5,7 +5,6 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-
 public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
 {
     private MapParent mapParent;

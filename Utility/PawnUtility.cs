@@ -36,6 +36,7 @@ public static class OAFrame_PawnUtility
             }
         }
     }
+
     //移除第一个健康状态
     public static void RemoveFirstHediffOfDef(Pawn pawn, HediffDef def, bool mustBeVisible = false)
     {
@@ -74,5 +75,31 @@ public static class OAFrame_PawnUtility
             maxSkillLevel = Mathf.Max(maxSkillLevel, pawn.skills.GetSkill(skill).GetLevel());
         }
         return maxSkillLevel;
+    }
+
+    public static (Pawn, int) GetMaxSkillLevelPawn(IEnumerable<Pawn> pawns, SkillDef skill)
+    {
+        if (pawns is null)
+        {
+            return (null, -1);
+        }
+        Pawn maxSkillPawn = null;
+        int maxSkillLevel = -1;
+
+        int skillLevel;
+        foreach (Pawn pawn in pawns)
+        {
+            if (pawn.skills is null)
+            {
+                continue;
+            }
+            skillLevel = pawn.skills.GetSkill(skill).GetLevel();
+            if (skillLevel > maxSkillLevel)
+            {
+                maxSkillLevel = skillLevel;
+                maxSkillPawn = pawn;
+            }
+        }
+        return (maxSkillPawn, maxSkillLevel);
     }
 }

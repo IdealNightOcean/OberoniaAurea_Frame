@@ -37,30 +37,17 @@ public static class OAFrame_TileFinderUtility
         }
         return false;
     }
-    public static bool TryFindNewAvaliableTile(out PlanetTile tile, PlanetTile nearThisTile, int minDist = 7, int maxDist = 27, bool canBeSpace = false, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
+    public static bool TryFindNewAvaliableTile(out PlanetTile tile, PlanetTile rootTile, int minDist = 7, int maxDist = 27, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
     {
-        PlanetTile rootTile;
-        if (nearThisTile.Valid && (canBeSpace || !nearThisTile.LayerDef.isSpace))
+        tile = PlanetTile.Invalid;
+        if (!rootTile.Valid)
         {
-            rootTile = nearThisTile;
-        }
-        else if (!TileFinder.TryFindRandomPlayerTile(out rootTile, allowCaravans: false, x => FindAvaliableTile(x, minDist, maxDist, tileFinderMode, exitOnFirstTileFound).Valid))
-        {
-            tile = PlanetTile.Invalid;
             return false;
         }
-        tile = FindAvaliableTile(rootTile, minDist, maxDist, tileFinderMode, exitOnFirstTileFound);
-        return tile.Valid;
+
+        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out tile, IsValidAvaliableTileForNewObject, ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: false, exitOnFirstTileFound);
     }
 
-    public static PlanetTile FindAvaliableTile(int rootTile, int minDist = 7, int maxDist = 27, TileFinderMode tileFinderMode = TileFinderMode.Near, bool exitOnFirstTileFound = false)
-    {
-        if (TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out PlanetTile result, IsValidAvaliableTileForNewObject, ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: false, exitOnFirstTileFound))
-        {
-            return result;
-        }
-        return TileFinder.TryFindPassableTileWithTraversalDistance(rootTile, minDist, maxDist, out result, x => IsValidAvaliableTileForNewObject(x) && (!Find.World.Impassable(x) || Find.WorldGrid[x].WaterCovered), ignoreFirstTilePassability: false, tileFinderMode, canTraverseImpassable: true, exitOnFirstTileFound) ? result : PlanetTile.Invalid;
-    }
     public static bool IsValidAvaliableTileForNewObject(PlanetTile tile)
     {
         Tile worldTile = Find.WorldGrid[tile];

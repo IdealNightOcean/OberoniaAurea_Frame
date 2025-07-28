@@ -62,8 +62,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IncidentWorker_GiveQuest_Map.cs" />
-    <Compile Include="IncidentWorker_GiveQuest.cs" />
+    <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
+    <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
+    <Compile Include="LordJob\LordJob_VisitColonyBase.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_TransToHardcodedSignalWithQuestID.cs" />
     <Compile Include="Thing\BulletBase.cs" />
     <Compile Include="Thing\CompDestoryAfterSwapMap.cs" />
@@ -71,19 +72,20 @@
     <Compile Include="HarmonyPatch\MapParent_GetShuttleFloatMenuOptions_Patch.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
+    <Compile Include="Interface\IPawnFloatMenuOptionProvider.cs" />
     <Compile Include="WorldObject\CaravanArrivalAction_GenerateAndEnter.cs" />
-    <Compile Include="WorldObject\IQuestAssociate.cs" />
-    <Compile Include="WorldObject\IFixedCaravanAssociate.cs" />
+    <Compile Include="Interface\IQuestAssociate.cs" />
+    <Compile Include="Interface\IFixedCaravanAssociate.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
     <Compile Include="SimpleValueCache.cs" />
-    <Compile Include="WorldObject\ICaravanAssociate.cs" />
-    <Compile Include="IPawnPreApplyDamage.cs" />
-    <Compile Include="IPawnRetentionHolder.cs" />
+    <Compile Include="Interface\ICaravanAssociate.cs" />
+    <Compile Include="Interface\IPawnPreApplyDamage.cs" />
+    <Compile Include="Interface\IPawnRetentionHolder.cs" />
     <Compile Include="MapComponent_SpecialBuildingManager.cs" />
     <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />
     <Compile Include="LordJob\LordJob_AssistColony_NeverFlee.cs" />
-    <Compile Include="IncidentWorker_IsolatedTraderCaravanArrival.cs" />
+    <Compile Include="Incident\IncidentWorker_IsolatedTraderCaravanArrival.cs" />
     <Compile Include="Thing\MoteAttached_Text.cs" />
     <Compile Include="IsolatedPawnGroupMakerDef.cs" />
     <Compile Include="PatchOperationCheckDLC.cs" />

@@ -150,7 +150,7 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
             defaultLabel = "CommandReformCaravan".Translate(),
             defaultDesc = "CommandReformCaravanDesc".Translate(),
             icon = FormCaravanComp.FormCaravanCommand,
-            Disabled = (PawnsCount == 0),
+            Disabled = PawnsCount == 0,
             action = delegate
             {
                 PreConvertToCaravanByPlayer();
