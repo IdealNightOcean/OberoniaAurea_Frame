@@ -21,7 +21,7 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
     {
         if (isWorking)
         {
-            Messages.Message("OAGene_Message_AlreadyHasFixedCarvan".Translate(), MessageTypeDefOf.RejectInput, historical: false);
+            Messages.Message("OAFrame_Message_AlreadyHasFixedCarvan".Translate(), MessageTypeDefOf.RejectInput, historical: false);
 
         }
         else if (OAFrame_CaravanUtility.IsExactTypeCaravan(caravan))

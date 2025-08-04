@@ -41,20 +41,19 @@ public struct SimpleValueCache<T> where T : unmanaged
 
     public T GetCachedResult()
     {
-        try
+        if (Find.TickManager.TicksGame > nextCheckTick)
         {
-            if (Find.TickManager.TicksGame > nextCheckTick)
+            nextCheckTick = Find.TickManager.TicksGame + cacheInterval;
+            try
             {
                 cachedResult = checker();
-                nextCheckTick = Find.TickManager.TicksGame + cacheInterval;
             }
-        }
-        catch
-        {
-            return defaultValue;
+            catch
+            {
+                return defaultValue;
+            }
         }
 
         return cachedResult;
     }
-
 }

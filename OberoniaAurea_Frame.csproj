@@ -64,10 +64,19 @@
   <ItemGroup>
     <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
+    <Compile Include="Interface\ILordFloatMenuProvider.cs" />
     <Compile Include="Interface\IQuestAssociate.cs" />
-    <Compile Include="LordJob\LordJob_VisitColony.cs" />
+    <Compile Include="Lord\LordJob_VisitColonyBase.cs" />
+    <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
+    <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
+    <Compile Include="Quest\QuestNode\QuestNode_QuestUnique.cs" />
+    <Compile Include="Quest\Quest_TransToHardcodedSignalWithQuestID.cs" />
+    <Compile Include="Quest\Quest_InitiateSaleRequest.cs" />
+    <Compile Include="Quest\Quest_InitiateCategoryTradeRequest.cs" />
+    <Compile Include="Quest\Quest_FireIncident.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
+    <Compile Include="Quest\Quest_AllFactionsGoodwillChange.cs" />
     <Compile Include="Thing\BulletBase.cs" />
     <Compile Include="Thing\CompSpecialBuilding.cs" />
     <Compile Include="WorldObject\MapParent_Enterable.cs" />
@@ -84,13 +93,11 @@
     <Compile Include="Interface\ICaravanAssociate.cs" />
     <Compile Include="Interface\IPawnPreApplyDamage.cs" />
     <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />
-    <Compile Include="LordJob\LordJob_AssistColony_NeverFlee.cs" />
+    <Compile Include="Lord\LordJob_AssistColony_NeverFlee.cs" />
     <Compile Include="Incident\IncidentWorker_IsolatedTraderCaravanArrival.cs" />
     <Compile Include="Thing\MoteAttached_Text.cs" />
     <Compile Include="IsolatedPawnGroupMakerDef.cs" />
     <Compile Include="PatchOperationCheckDLC.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_FireIncident.cs" />
-    <Compile Include="Quest\QuestPart\QuestPart_FireIncident.cs" />
     <Compile Include="Quest\QuestPart\QuestPart_OARefugeeInteractions.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_Root_RefugeeBase.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetDropSpot.cs" />
@@ -101,15 +108,9 @@
     <Compile Include="Quest\QuestNode\QueseNode_GetExpectedCategoryMarketValue.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetMutiFactions.cs" />
     <Compile Include="Quest\QuestNode\QueseNode_GetExpectedThingMarketValue.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_AllFactionsGoodwillChange.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetMapParent.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetNearTile.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_InitiateCategoryTradeRequest.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_InitiateSaleRequest.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_RequestThingCount.cs" />
-    <Compile Include="Quest\QuestPart\QuestPart_AllFactionsGoodwillChange.cs" />
-    <Compile Include="Quest\QuestPart\QuestPart_InitiateCategoryTradeRequest.cs" />
-    <Compile Include="Quest\QuestPart\QuestPart_InitiateSaleRequest.cs" />
     <Compile Include="SiteTrader.cs" />
     <Compile Include="Utility\DefOf.cs" />
     <Compile Include="Utility\DiaUtility.cs" />
@@ -129,7 +130,7 @@
     <Compile Include="Quest\QuestNode\QuestNode_GetNearbySettlementOfFaction.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetFaction.cs" />
     <Compile Include="WorldObject\CategoryTradeRequestComp.cs" />
-    <Compile Include="LordJob\LordJob_AssaultColony_NeverFlee.cs" />
+    <Compile Include="Lord\LordJob_AssaultColony_NeverFlee.cs" />
     <Compile Include="WorldObject\WorldObject_WithMutiFactions.cs" />
     <Compile Include="WorldObject\WorldObject_InteractiveBase.cs" />
     <Compile Include="Utility\MiscUtility.cs" />
@@ -139,7 +140,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorldObject\WorldObject_MutiInteractiveBase.cs" />
     <Compile Include="WorldObject\SaleRequestComp.cs" />
-    <Compile Include="LordJob\LordJob_AssaultThings_NeverFlee.cs" />
+    <Compile Include="Lord\LordJob_AssaultThings_NeverFlee.cs" />
     <Compile Include="WorldObject\CaravanArrivalAction_GenerateAndEnter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

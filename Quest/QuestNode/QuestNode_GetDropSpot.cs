@@ -72,6 +72,5 @@ public class QuestNode_GetDropSpot : QuestNode
             return true;
         }
         return false;
-
     }
 }

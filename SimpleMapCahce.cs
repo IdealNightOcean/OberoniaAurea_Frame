@@ -54,29 +54,20 @@ public struct SimpleMapCahce<T> where T : unmanaged
             return defaultValue;
         }
 
-        try
+        if (map != cachedMap || Find.TickManager.TicksGame > nextCheckTick)
         {
-            if (map == cachedMap)
+            nextCheckTick = Find.TickManager.TicksGame + cacheInterval;
+            cachedMap = map;
+            try
             {
-                if (Find.TickManager.TicksGame > nextCheckTick)
-                {
-                    cachedResult = checker(map);
-                    nextCheckTick = Find.TickManager.TicksGame + cacheInterval;
-                }
-            }
-            else
-            {
-                cachedMap = map;
                 cachedResult = checker(map);
-                nextCheckTick = Find.TickManager.TicksGame + cacheInterval;
             }
-        }
-        catch
-        {
-            return defaultValue;
+            catch
+            {
+                return defaultValue;
+            }
         }
 
         return cachedResult;
     }
-
 }

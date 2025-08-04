@@ -49,5 +49,4 @@ public class QuestNode_GetFactionLeader : QuestNode
         }
         return true;
     }
-
 }

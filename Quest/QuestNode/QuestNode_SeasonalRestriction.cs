@@ -35,5 +35,4 @@ public class QuestNode_SeasonalRestriction : QuestNode
             _ => false,
         };
     }
-
 }

@@ -1,10 +1,94 @@
 ﻿using RimWorld;
 using RimWorld.Planet;
+using RimWorld.QuestGen;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
+
+public class QuestNode_FireIncident : QuestNode
+{
+    [NoTranslate]
+    public SlateRef<string> inSignal;
+
+    public SlateRef<IncidentDef> incidentDef;
+    public SlateRef<IncidentParms> parms;
+    public SlateRef<bool> worldIncident;
+    public SlateRef<MapParent> mapParent;
+
+    public SlateRef<float> minPoints = -1f;
+    public SlateRef<float> maxPoints = 99999f;
+    public SlateRef<float> currentPointsFactor = 1f;
+
+    protected override bool TestRunInt(Slate slate)
+    {
+        if (incidentDef.GetValue(slate) is null)
+        {
+            return false;
+        }
+        if (minPoints.GetValue(slate) > maxPoints.GetValue(slate))
+        {
+            return false;
+        }
+        if (currentPointsFactor.GetValue(slate) <= 0f)
+        {
+            return false;
+        }
+        return true;
+    }
+    protected virtual IncidentParms ResolveParms(Slate slate)
+    {
+        IncidentParms parms = this.parms.GetValue(slate);
+        parms ??= new IncidentParms();
+        return parms;
+    }
+    protected bool ResolveIncidentTarget(Slate slate)
+    {
+        if (!worldIncident.GetValue(slate))
+        {
+            if (mapParent.GetValue(slate) is not null)
+            {
+                return true;
+            }
+            else if (parms.GetValue(slate) is not null)
+            {
+                return parms.GetValue(slate).target is Map;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    protected override void RunInt()
+    {
+        Slate slate = QuestGen.slate;
+        if (!ResolveIncidentTarget(slate))
+        {
+            return;
+        }
+        IncidentParms incidentParms = ResolveParms(slate);
+        QuestPart_FireIncident questPart_FireIncident = new()
+        {
+            inSignal = QuestGenUtility.HardcodedSignalWithQuestID(inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal"),
+            incident = incidentDef.GetValue(slate),
+            minPoints = minPoints.GetValue(slate),
+            maxPoints = maxPoints.GetValue(slate),
+            currentPointsFactor = currentPointsFactor.GetValue(slate),
+        };
+        if (worldIncident.GetValue(slate))
+        {
+            questPart_FireIncident.SetIncidentParms_World(incidentParms);
+        }
+        else
+        {
+            questPart_FireIncident.SetIncidentParms_MapParent(incidentParms, mapParent.GetValue(slate));
+        }
+        QuestGen.quest.AddPart(questPart_FireIncident);
+    }
+}
 
 public class QuestPart_FireIncident : QuestPart
 {
@@ -18,6 +102,8 @@ public class QuestPart_FireIncident : QuestPart
 
     protected bool worldIncident;
     protected MapParent mapParent;
+
+
 
     public override IEnumerable<GlobalTargetInfo> QuestLookTargets
     {
@@ -111,6 +197,18 @@ public class QuestPart_FireIncident : QuestPart
         worldIncident = true;
     }
 
+    public override void Cleanup()
+    {
+        base.Cleanup();
+        inSignal = null;
+        incident = null;
+        incidentParms = null;
+        currentPointsFactor = 1f;
+        minPoints = -1f;
+        maxPoints = 99999f;
+        mapParent = null;
+    }
+
     public override void ExposeData()
     {
         base.ExposeData();
@@ -140,4 +238,3 @@ public class QuestPart_FireIncident : QuestPart
         }
     }
 }
-

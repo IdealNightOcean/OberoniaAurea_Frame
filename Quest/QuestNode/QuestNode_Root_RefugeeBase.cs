@@ -83,6 +83,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         questParameter.pawns = pawns;
 
         quest.ExtraFaction(faction, pawns, ExtraFactionType.MiniFaction, areHelpers: false, [lodgerRecruitedSignal, lodgerBecameMutantSignal]);
+        quest.SetAllApparelLocked(pawns);
 
         string lodgerArrivalSignal = null;
         if (questParameter.arrivalDelayTicks > 0)
@@ -147,7 +148,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         return new QuestParameter(faction, QuestGen_Get.GetMap());
     }
 
-    protected List<Pawn> GeneratePawns(string lodgerRecruitedSignal = null)
+    protected virtual List<Pawn> GeneratePawns(string lodgerRecruitedSignal = null)
     {
         Quest quest = questParameter.quest;
         List<Pawn> pawns = [];

@@ -138,10 +138,7 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
     public void EnsureUnique()
     {
         innerList.Clear();
-        foreach (T item in innerHashSet)
-        {
-            innerList.Add(item);
-        }
+        innerList.AddRange(innerHashSet);
     }
 
     public void Clear()
