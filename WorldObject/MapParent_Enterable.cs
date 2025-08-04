@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -63,6 +64,30 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         foreach (FloatMenuOption floatMenuOption2 in CaravanArrivalAction_GenerateAndEnter.GetFloatMenuOptions(caravan, this))
         {
             yield return floatMenuOption2;
+        }
+    }
+
+    public override IEnumerable<FloatMenuOption> GetTransportersFloatMenuOptions(IEnumerable<IThingHolder> pods, Action<PlanetTile, TransportersArrivalAction> launchAction)
+    {
+        foreach (FloatMenuOption transportersFloatMenuOption in base.GetTransportersFloatMenuOptions(pods, launchAction))
+        {
+            yield return transportersFloatMenuOption;
+        }
+        foreach (FloatMenuOption floatMenuOption in TransportersArrivalAction_VisitEnterableMap.GetFloatMenuOptions(launchAction, pods, this))
+        {
+            yield return floatMenuOption;
+        }
+    }
+
+    public override IEnumerable<FloatMenuOption> GetShuttleFloatMenuOptions(IEnumerable<IThingHolder> pods, Action<PlanetTile, TransportersArrivalAction> launchAction)
+    {
+        foreach (FloatMenuOption shuttleFloatMenuOption in base.GetShuttleFloatMenuOptions(pods, launchAction))
+        {
+            yield return shuttleFloatMenuOption;
+        }
+        foreach (FloatMenuOption floatMenuOption in TransportersArrivalAction_VisitEnterableMap.GetFloatMenuOptions(launchAction, pods, this))
+        {
+            yield return floatMenuOption;
         }
     }
 

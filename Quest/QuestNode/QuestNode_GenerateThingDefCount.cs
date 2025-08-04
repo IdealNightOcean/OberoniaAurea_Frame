@@ -5,8 +5,8 @@ namespace OberoniaAurea_Frame;
 
 public class QuestNode_GenerateThingDefCount : QuestNode
 {
-    SlateRef<ThingDef> thingDef;
-    SlateRef<int> count;
+    private SlateRef<ThingDef> thingDef;
+    private SlateRef<int> count;
 
     [NoTranslate]
     public SlateRef<string> storeAs;

@@ -1,16 +1,47 @@
 ﻿using RimWorld;
+using RimWorld.QuestGen;
 using System.Linq;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//统一影响全部派系关系
+//统一影响全部派系关系（有QuestPart）
+public class QuestNode_AllFactionsGoodwillChange : QuestNode
+{
+    [NoTranslate]
+    public SlateRef<string> inSignal;
+
+    public SlateRef<int> goodwillChange;
+    public SlateRef<HistoryEventDef> historyEvent;
+    public SlateRef<bool> canSendMessage = true;
+    public SlateRef<bool> canSendHostilityLetter = true;
+
+    protected override bool TestRunInt(Slate slate)
+    {
+        return true;
+    }
+
+    protected override void RunInt()
+    {
+        Slate slate = QuestGen.slate;
+        QuestPart_AllFactionsGoodwillChange questPart_AllFactionsGoodwillChange = new()
+        {
+            inSignal = QuestGenUtility.HardcodedSignalWithQuestID(inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal"),
+            goodwillChange = goodwillChange.GetValue(slate),
+            historyEvent = historyEvent.GetValue(slate),
+            canSendMessage = canSendMessage.GetValue(slate),
+            canSendHostilityLetter = canSendHostilityLetter.GetValue(slate)
+        };
+        QuestGen.quest.AddPart(questPart_AllFactionsGoodwillChange);
+    }
+}
+
 public class QuestPart_AllFactionsGoodwillChange : QuestPart
 {
     public string inSignal;
 
     public int goodwillChange;
-    public HistoryEventDef historyEvent = null;
+    public HistoryEventDef historyEvent;
     public bool canSendMessage = true;
     public bool canSendHostilityLetter = true;
 
@@ -39,6 +70,13 @@ public class QuestPart_AllFactionsGoodwillChange : QuestPart
         return true;
     }
 
+    public override void Cleanup()
+    {
+        base.Cleanup();
+        inSignal = null;
+        historyEvent = null;
+        goodwillChange = 0;
+    }
 
     public override void ExposeData()
     {
@@ -49,5 +87,4 @@ public class QuestPart_AllFactionsGoodwillChange : QuestPart
         Scribe_Values.Look(ref canSendMessage, "canSendMessage", defaultValue: true);
         Scribe_Values.Look(ref canSendHostilityLetter, "canSendHostilityLetter", defaultValue: true);
     }
-
 }

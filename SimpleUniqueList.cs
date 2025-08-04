@@ -61,10 +61,7 @@ public class SimpleUniqueList<T> : IList<T>, IExposable, IDisposable
         return innerList.GetEnumerator();
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public int IndexOf(T item) => innerList.IndexOf(item);
     public void Insert(int index, T item)
@@ -77,19 +74,11 @@ public class SimpleUniqueList<T> : IList<T>, IExposable, IDisposable
         {
             innerList.Insert(index, item);
         }
-
     }
     public bool Contains(T item) => innerList.Contains(item);
     public void CopyTo(T[] array, int arrayIndex) => innerList.CopyTo(array, arrayIndex);
 
-    public void Add(T item)
-    {
-        if (!innerList.Contains(item))
-        {
-            innerList.Add(item);
-        }
-    }
-
+    public void Add(T item) => innerList.AddUnique(item);
     public void AddRange(IEnumerable<T> collection)
     {
         if (collection is null)
@@ -107,10 +96,10 @@ public class SimpleUniqueList<T> : IList<T>, IExposable, IDisposable
     }
 
     public bool Remove(T item) => innerList.Remove(item);
-
     public void RemoveAt(int index) => innerList.RemoveAt(index);
-
     public int RemoveAll(Predicate<T> match) => innerList.RemoveAll(match);
+    public void Clear() => innerList.Clear();
+    public void Dispose() => innerList = null;
 
     public void EnsureUnique()
     {
@@ -120,16 +109,6 @@ public class SimpleUniqueList<T> : IList<T>, IExposable, IDisposable
         {
             innerList.Add(item);
         }
-    }
-
-    public void Clear()
-    {
-        innerList.Clear();
-    }
-
-    public void Dispose()
-    {
-        innerList = null;
     }
 
     public void ExposeData()

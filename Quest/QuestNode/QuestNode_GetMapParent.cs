@@ -34,5 +34,4 @@ public class QuestNode_GetMapParent : QuestNode
             return false;
         }
     }
-
 }

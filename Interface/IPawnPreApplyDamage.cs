@@ -7,8 +7,8 @@ namespace OberoniaAurea_Frame;
 
 public interface IPawnPreApplyDamage
 {
-    public int Priority { get; }
-    public void PawnPreApplyDamage(ref DamageInfo dinfo, out bool absorbed);
+    int Priority { get; }
+    void PawnPreApplyDamage(ref DamageInfo dinfo, out bool absorbed);
 }
 
 public class CompProperties_PawnPreApplyDamage : CompProperties
@@ -22,7 +22,7 @@ public class CompProperties_PawnPreApplyDamage : CompProperties
 public class CompPawnPreApplyDamageHandler : ThingComp
 {
 
-    [Unsaved] List<IPawnPreApplyDamage> pawnPreApplyDamages;
+    [Unsaved] private List<IPawnPreApplyDamage> pawnPreApplyDamages;
 
     public override void PostPreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
     {

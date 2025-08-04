@@ -64,13 +64,12 @@ public class CaravanArrivalAction_VisitInteractiveObject_Muti : CaravanArrivalAc
     public override string Label => "OAFrame_VisitInteractiveObject".Translate(worldObject.Label);
     public override string ReportString => "CaravanVisiting".Translate(worldObject.Label);
 
-    public CaravanArrivalAction_VisitInteractiveObject_Muti()
-    { }
+    public CaravanArrivalAction_VisitInteractiveObject_Muti() { }
 
     public CaravanArrivalAction_VisitInteractiveObject_Muti(WorldObject_MutiInteractiveBase worldObject, int visitTypeInt)
     {
         this.worldObject = worldObject;
-        this.visitType = visitTypeInt;
+        visitType = visitTypeInt;
     }
 
     public override FloatMenuAcceptanceReport StillValid(Caravan caravan, PlanetTile destinationTile)

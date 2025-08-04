@@ -25,6 +25,5 @@ public class QuestNode_SetMutiFactionsForWorldObject : QuestNode
                 mutiFactions.AddParticipantFactions(participantFactions);
             }
         }
-
     }
 }

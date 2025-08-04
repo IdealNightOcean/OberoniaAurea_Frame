@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -43,6 +44,30 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
     public virtual IEnumerable<FloatMenuOption> GetSpecificFloatMenuOptions(Caravan caravan)
     {
         return CaravanArrivalAction_VisitInteractiveObject.GetFloatMenuOptions(caravan, this, VisitLabel);
+    }
+
+    public override IEnumerable<FloatMenuOption> GetTransportersFloatMenuOptions(IEnumerable<IThingHolder> pods, Action<PlanetTile, TransportersArrivalAction> launchAction)
+    {
+        foreach (FloatMenuOption floatMenuOption in base.GetTransportersFloatMenuOptions(pods, launchAction))
+        {
+            yield return floatMenuOption;
+        }
+        foreach (FloatMenuOption floatMenuOption in TransportersArrivalAction_VisitInteractiveObject.GetFloatMenuOptions(launchAction, pods, this))
+        {
+            yield return floatMenuOption;
+        }
+    }
+
+    public override IEnumerable<FloatMenuOption> GetShuttleFloatMenuOptions(IEnumerable<IThingHolder> pods, Action<PlanetTile, TransportersArrivalAction> launchAction)
+    {
+        foreach (FloatMenuOption floatMenuOption in base.GetTransportersFloatMenuOptions(pods, launchAction))
+        {
+            yield return floatMenuOption;
+        }
+        foreach (FloatMenuOption floatMenuOption in TransportersArrivalAction_VisitInteractiveObject.GetFloatMenuOptions(launchAction, pods, this))
+        {
+            yield return floatMenuOption;
+        }
     }
 
     public override void ExposeData()

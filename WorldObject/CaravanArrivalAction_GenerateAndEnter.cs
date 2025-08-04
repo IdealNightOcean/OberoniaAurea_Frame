@@ -43,7 +43,7 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
         {
             LongEventHandler.QueueLongEvent(delegate
             {
-                Map orGenerateMap = GetOrGenerateMapUtility.GetOrGenerateMap(mapParent.Tile, new IntVec3(200, 1, 200), mapParent.def);
+                Map orGenerateMap = GetOrGenerateMapUtility.GetOrGenerateMap(mapParent.Tile, mapParent.def.overrideMapSize ?? new IntVec3(200, 1, 200), mapParent.def);
 
                 if (orGenerateMap is not null)
                 {
