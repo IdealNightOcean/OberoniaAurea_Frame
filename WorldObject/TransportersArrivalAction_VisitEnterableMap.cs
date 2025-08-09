@@ -31,15 +31,11 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
 
     public override FloatMenuAcceptanceReport StillValid(IEnumerable<IThingHolder> pods, PlanetTile destinationTile)
     {
-        FloatMenuAcceptanceReport floatMenuAcceptanceReport = base.StillValid(pods, destinationTile);
-        if (!floatMenuAcceptanceReport)
-        {
-            return floatMenuAcceptanceReport;
-        }
         if (mapParent is not null && mapParent.Tile != destinationTile)
         {
             return false;
         }
+
         return CanVisit(pods, mapParent);
     }
 
@@ -75,15 +71,16 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
         {
             return false;
         }
+        if (mapParent.HasMap)
+        {
+            return true;
+        }
+
         if (!TransportersArrivalActionUtility.AnyNonDownedColonist(pods))
         {
             return false;
         }
-        if (mapParent.EnterCooldownBlocksEntering())
-        {
-            return FloatMenuAcceptanceReport.WithFailMessage("MessageEnterCooldownBlocksEntering".Translate(mapParent.EnterCooldownTicksLeft().ToStringTicksToPeriod()));
-        }
-        return true;
+        return mapParent.CanEnterMap(pods);
     }
 
     public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Action<PlanetTile, TransportersArrivalAction> launchAction, IEnumerable<IThingHolder> pods, MapParent_Enterable mapParent)

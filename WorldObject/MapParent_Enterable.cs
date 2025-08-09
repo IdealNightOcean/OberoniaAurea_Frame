@@ -17,6 +17,24 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         this.quest = quest;
     }
 
+    public virtual FloatMenuAcceptanceReport CanEnterMap(IEnumerable<IThingHolder> pods)
+    {
+        if (this.EnterCooldownBlocksEntering())
+        {
+            return FloatMenuAcceptanceReport.WithFailMessage("MessageEnterCooldownBlocksEntering".Translate(this.EnterCooldownTicksLeft().ToStringTicksToPeriod()));
+        }
+        return true;
+    }
+
+    public virtual FloatMenuAcceptanceReport CanEnterMap(Caravan caravan)
+    {
+        if (this.EnterCooldownBlocksEntering())
+        {
+            return FloatMenuAcceptanceReport.WithFailMessage("MessageEnterCooldownBlocksEntering".Translate(this.EnterCooldownTicksLeft().ToStringTicksToPeriod()));
+        }
+        return true;
+    }
+
     public override bool ShouldRemoveMapNow(out bool alsoRemoveWorldObject)
     {
         alsoRemoveWorldObject = false;

@@ -7,33 +7,25 @@ namespace OberoniaAurea_Frame;
 
 public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
 {
-    private MapParent mapParent;
-
+    private MapParent_Enterable mapParent;
     public override string Label => "EnterMap".Translate(mapParent.Label);
-
     public override string ReportString => "CaravanEntering".Translate(mapParent.Label);
 
     public CaravanArrivalAction_GenerateAndEnter() { }
 
-    public CaravanArrivalAction_GenerateAndEnter(MapParent mapParent)
+    public CaravanArrivalAction_GenerateAndEnter(MapParent_Enterable mapParent)
     {
         this.mapParent = mapParent;
     }
 
     public override FloatMenuAcceptanceReport StillValid(Caravan caravan, PlanetTile destinationTile)
     {
-        FloatMenuAcceptanceReport floatMenuAcceptanceReport = base.StillValid(caravan, destinationTile);
-        if (!floatMenuAcceptanceReport)
-        {
-            return floatMenuAcceptanceReport;
-        }
-
         if (mapParent is not null && mapParent.Tile != destinationTile)
         {
             return false;
         }
 
-        return CanGenerate(mapParent);
+        return CanVisit(caravan, mapParent);
     }
 
     public override void Arrived(Caravan caravan)
@@ -57,7 +49,7 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
         }
     }
 
-    private static void EnterMap(Caravan caravan, Map map, MapParent mapParent)
+    private static void EnterMap(Caravan caravan, Map map, MapParent_Enterable mapParent)
     {
         CaravanDropInventoryMode dropInventoryMode = map.IsPlayerHome ? CaravanDropInventoryMode.UnloadIndividually : CaravanDropInventoryMode.DoNotDrop;
         bool draftColonists = mapParent.Faction is not null && mapParent.Faction.HostileTo(Faction.OfPlayer);
@@ -75,7 +67,7 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
         Scribe_References.Look(ref mapParent, "mapParent");
     }
 
-    public static FloatMenuAcceptanceReport CanGenerate(MapParent mapParent)
+    public static FloatMenuAcceptanceReport CanVisit(Caravan caravan, MapParent_Enterable mapParent)
     {
         if (mapParent is null || !mapParent.Spawned || mapParent.HasMap)
         {
@@ -87,11 +79,11 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
             return FloatMenuAcceptanceReport.WithFailMessage("MessageEnterCooldownBlocksEntering".Translate(mapParent.EnterCooldownTicksLeft().ToStringTicksToPeriod()));
         }
 
-        return true;
+        return mapParent.CanEnterMap(caravan);
     }
 
-    public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, MapParent mapParent)
+    public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, MapParent_Enterable mapParent)
     {
-        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => CanGenerate(mapParent), () => new CaravanArrivalAction_GenerateAndEnter(mapParent), "EnterMap".Translate(mapParent.Label), caravan, mapParent.Tile, mapParent);
+        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => CanVisit(caravan, mapParent), () => new CaravanArrivalAction_GenerateAndEnter(mapParent), "EnterMap".Translate(mapParent.Label), caravan, mapParent.Tile, mapParent);
     }
 }
