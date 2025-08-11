@@ -69,6 +69,7 @@
     <Compile Include="Lord\LordJob_VisitColonyBase.cs" />
     <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
     <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
+    <Compile Include="Quest\Quest_MultiSignalCount.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_QuestUnique.cs" />
     <Compile Include="Quest\Quest_TransToHardcodedSignalWithQuestID.cs" />
     <Compile Include="Quest\Quest_InitiateSaleRequest.cs" />

@@ -47,7 +47,7 @@ public static class OAFrame_MiscUtility
         return list;
     }
 
-    public static List<List<Thing>> TryGengrateThingGroup(ThingDef def, int count)
+    public static List<List<Thing>> TryGenerateThingGroup(ThingDef def, int count)
     {
         List<List<Thing>> lists = [];
         int perPodCount = Mathf.Max(1, Mathf.FloorToInt(150 / def.GetStatValueAbstract(StatDefOf.Mass)));

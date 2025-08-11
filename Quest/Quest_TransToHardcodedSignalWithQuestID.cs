@@ -47,6 +47,8 @@ public class QuestPart_TransToHardcodedSignalWithQuestID : QuestPart
     private string inSignal;
     private string outSignal;
 
+    public QuestPart_TransToHardcodedSignalWithQuestID() { }
+
     public QuestPart_TransToHardcodedSignalWithQuestID(string originalSignal, string resultSignal)
     {
         SetSignalTrans(originalSignal, resultSignal);
