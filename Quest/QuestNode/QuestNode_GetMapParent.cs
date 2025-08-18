@@ -13,25 +13,21 @@ public class QuestNode_GetMapParent : QuestNode
 
     protected override void RunInt()
     {
-        Slate slate = QuestGen.slate;
-        MapParent mapParent = targetMap.GetValue(slate)?.Parent;
-        if (mapParent is not null)
-        {
-            slate.Set(storeAs.GetValue(slate), mapParent);
-        }
+        SetVars(QuestGen.slate);
     }
+
     protected override bool TestRunInt(Slate slate)
     {
+        SetVars(slate);
+        return true;
+    }
 
+    private void SetVars(Slate slate)
+    {
         MapParent mapParent = targetMap.GetValue(slate)?.Parent;
         if (mapParent is not null)
         {
             slate.Set(storeAs.GetValue(slate), mapParent);
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 }

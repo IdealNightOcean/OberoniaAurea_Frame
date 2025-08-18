@@ -62,11 +62,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component\CooldownRecord.cs" />
+    <Compile Include="Component\CooldownRecordManager.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
     <Compile Include="Interface\ILordFloatMenuProvider.cs" />
     <Compile Include="Interface\IQuestAssociate.cs" />
+    <Compile Include="JobDriver_InteractWithThingAtOnce.cs" />
+    <Compile Include="JobDriver_TalkWithAtOnce.cs" />
     <Compile Include="Lord\LordJob_VisitColonyBase.cs" />
+    <Compile Include="Lord\LordJob_VisitColonyTalkable.cs" />
     <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
     <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
     <Compile Include="Quest\Quest_MultiSignalCount.cs" />
@@ -80,17 +85,18 @@
     <Compile Include="Quest\Quest_AllFactionsGoodwillChange.cs" />
     <Compile Include="Thing\BulletBase.cs" />
     <Compile Include="Thing\CompSpecialBuilding.cs" />
+    <Compile Include="Utility\QuestUtility.cs" />
     <Compile Include="WorldObject\MapParent_Enterable.cs" />
     <Compile Include="Interface\IFixedCaravanAssociate.cs" />
     <Compile Include="MapComponent_SpecialBuildingManager.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
-    <Compile Include="SimpleUniqueList.cs" />
-    <Compile Include="SimpleHashList.cs" />
+    <Compile Include="Component\SimpleUniqueList.cs" />
+    <Compile Include="Component\SimpleHashList.cs" />
     <Compile Include="Interface\IPawnRetentionHolder.cs" />
-    <Compile Include="SimpleMapCahce.cs" />
-    <Compile Include="SimpleValueCache.cs" />
-    <Compile Include="WorldObject\WorldObject_InteractWithFixedCarvanBase.cs" />
+    <Compile Include="Component\SimpleMapCahce.cs" />
+    <Compile Include="Component\SimpleValueCache.cs" />
+    <Compile Include="WorldObject\WorldObject_InteractWithFixedCaravanBase.cs" />
     <Compile Include="Interface\ICaravanAssociate.cs" />
     <Compile Include="Interface\IPawnPreApplyDamage.cs" />
     <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />

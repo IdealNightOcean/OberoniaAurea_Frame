@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -20,6 +21,7 @@ public static class OAFrame_MiscUtility
         }
         return false;
     }
+
     //添加队列事件
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void AddNewQueuedIncident(IncidentDef incidentDef, int delayTicks, IncidentParms parms, int retryDurationTicks = 0)
@@ -31,6 +33,7 @@ public static class OAFrame_MiscUtility
         }
         Find.Storyteller.incidentQueue.Add(incidentDef, Find.TickManager.TicksGame + delayTicks, parms, retryDurationTicks);
     }
+
     //创建物品
     public static List<Thing> TryGenerateThing(ThingDef def, int count)
     {
@@ -47,36 +50,11 @@ public static class OAFrame_MiscUtility
         return list;
     }
 
-    public static List<List<Thing>> TryGenerateThingGroup(ThingDef def, int count)
+    public static void ValidateSingleton<T>(T instance, string instanceName) where T : class
     {
-        List<List<Thing>> lists = [];
-        int perPodCount = Mathf.Max(1, Mathf.FloorToInt(150 / def.GetStatValueAbstract(StatDefOf.Mass)));
-        int remaining = count;
-        while (remaining > 0)
+        if (instance is not null)
         {
-            lists.Add(TryGenerateThing(def, Mathf.Min(remaining, perPodCount)));
-            remaining -= perPodCount;
+            throw new InvalidOperationException($"{instanceName} is not null when constructing. {typeof(T).Name} is a simple singleton. Use {instanceName} instead of creating new instance.");
         }
-        return lists;
     }
-
-    public static void DrawText(Vector2 worldPos, string text, Color textColor)
-    {
-        Vector3 position = new(worldPos.x, 0f, worldPos.y);
-        Vector2 vector = Find.Camera.WorldToScreenPoint(position) / Prefs.UIScale;
-        vector.y = UI.screenHeight - vector.y;
-        Text.Font = GameFont.Tiny;
-        float rectY = vector.y;
-
-        float textWidth = Text.CalcSize(text).x;
-        float textX = vector.x - textWidth / 2f;
-
-        GUI.DrawTexture(new Rect(textX - 4f, rectY, textWidth + 8f, 16f), TexUI.GrayTextBG);
-        GUI.color = textColor;
-        Text.Anchor = TextAnchor.UpperCenter;
-        Widgets.Label(new Rect(textX, rectY - 2f, textWidth, 128f), text);
-        GUI.color = Color.white;
-        Text.Anchor = TextAnchor.UpperLeft;
-    }
-
 }

@@ -14,6 +14,11 @@ public class QuestNode_GenerateInteractiveWorldObject : QuestNode
     [NoTranslate]
     public SlateRef<string> storeAs;
 
+    protected override bool TestRunInt(Slate slate)
+    {
+        return def.GetValue(slate) is not null;
+    }
+
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -33,10 +38,5 @@ public class QuestNode_GenerateInteractiveWorldObject : QuestNode
     protected virtual WorldObject_InteractiveBase GenerateWorldObject(Slate slate)
     {
         return (WorldObject_InteractiveBase)WorldObjectMaker.MakeWorldObject(def.GetValue(slate));
-    }
-
-    protected override bool TestRunInt(Slate slate)
-    {
-        return true;
     }
 }

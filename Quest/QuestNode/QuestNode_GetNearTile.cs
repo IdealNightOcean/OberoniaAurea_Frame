@@ -48,7 +48,6 @@ public class QuestNode_GetNearTile : QuestNode
         else if (worldObject.GetValue(slate) is not null)
         {
             tile = worldObject.GetValue(slate).Tile;
-            return tile != Tile.Invalid;
         }
         else
         {
@@ -79,6 +78,10 @@ public class QuestNode_GetNearTile : QuestNode
 
         int minDist = this.minDist.GetValue(slate);
         int maxDist = this.maxDist.GetValue(slate);
+        if (minDist > maxDist)
+        {
+            (minDist, maxDist) = (maxDist, minDist);
+        }
         TileFinderMode tileFinderMode = preferCloserTiles.GetValue(slate) ? TileFinderMode.Near : TileFinderMode.Random;
         return OAFrame_TileFinderUtility.TryFindNewAvaliableTile(out tile, rootTile, minDist, maxDist, tileFinderMode);
     }

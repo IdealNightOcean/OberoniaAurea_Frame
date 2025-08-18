@@ -1,5 +1,6 @@
 ﻿using RimWorld;
 using RimWorld.QuestGen;
+using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -13,19 +14,17 @@ public class QuestNode_SeasonalRestriction : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        return ValidSeason(slate);
-    }
-    protected override void RunInt()
-    { }
-
-    protected bool ValidSeason(Slate slate)
-    {
+        Season season;
         Map map = slate.Get<Map>("map");
         if (map is null)
         {
-            return false;
+            season = GenDate.Season(GenTicks.TicksAbs, Vector2.zero);
         }
-        Season season = GenLocalDate.Season(map);
+        else
+        {
+            season = GenLocalDate.Season(map);
+        }
+
         return season switch
         {
             Season.Spring => allowSpring.GetValue(slate),
@@ -35,4 +34,5 @@ public class QuestNode_SeasonalRestriction : QuestNode
             _ => false,
         };
     }
+    protected override void RunInt() { }
 }

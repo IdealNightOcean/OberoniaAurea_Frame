@@ -11,7 +11,6 @@ public class QuestNode_EarliestDayPassed : QuestNode
     {
         return GenDate.DaysPassed >= earliestDayPassed.GetValue(slate);
     }
-    protected override void RunInt()
-    { }
+    protected override void RunInt() { }
 
 }
