@@ -15,6 +15,8 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
     public List<Thing> gifts;
     public StateGraph exitSubgraph;
 
+    public override bool ShouldExistWithoutPawns => true;
+
     public LordJob_VisitColonyBase() { }
 
     public LordJob_VisitColonyBase(Faction faction, IntVec3 chillSpot, int? durationTicks = null)

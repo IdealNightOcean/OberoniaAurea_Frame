@@ -62,12 +62,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component\CooldownRecordManager.cs" />
+    <Compile Include="Component\CooldownRecord.cs" />
+    <Compile Include="JobDriver_InteractWithThingAtOnce.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
     <Compile Include="Interface\ILordFloatMenuProvider.cs" />
+    <Compile Include="JobDriver_TalkWithAtOnce.cs" />
+    <Compile Include="Lord\LordJob_VisitColonyTalkable.cs" />
     <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
     <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
     <Compile Include="Lord\LordJob_VisitColonyBase.cs" />
+    <Compile Include="Quest\Quest_PawnNegativeSiganl.cs" />
     <Compile Include="Quest\Quest_MultiSignalCount.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_QuestUnique.cs" />
     <Compile Include="Quest\Quest_TransToHardcodedSignalWithQuestID.cs" />
@@ -78,12 +84,13 @@
     <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
     <Compile Include="Interface\IPawnFloatMenuOptionProvider.cs" />
+    <Compile Include="Utility\QuestUtility.cs" />
     <Compile Include="WorldObject\CaravanArrivalAction_GenerateAndEnter.cs" />
     <Compile Include="Interface\IQuestAssociate.cs" />
     <Compile Include="Interface\IFixedCaravanAssociate.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
-    <Compile Include="SimpleValueCache.cs" />
+    <Compile Include="Component\SimpleValueCache.cs" />
     <Compile Include="Interface\ICaravanAssociate.cs" />
     <Compile Include="Interface\IPawnPreApplyDamage.cs" />
     <Compile Include="Interface\IPawnRetentionHolder.cs" />
@@ -99,9 +106,9 @@
     <Compile Include="Quest\QuestNode\QuestNode_Root_RefugeeBase.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetDropSpot.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateThingDefCount.cs" />
-    <Compile Include="SimpleHashList.cs" />
-    <Compile Include="SimpleMapCahce.cs" />
-    <Compile Include="SimpleUniqueList.cs" />
+    <Compile Include="Component\SimpleHashList.cs" />
+    <Compile Include="Component\SimpleMapCahce.cs" />
+    <Compile Include="Component\SimpleUniqueList.cs" />
     <Compile Include="Thought_SituationalGiveHediff.cs" />
     <Compile Include="HarmonyPatch\GetCriticalPawnReason_Patch.cs" />
     <Compile Include="HarmonyPatch\HarmonyPatch.cs" />
@@ -147,7 +154,7 @@
     <Compile Include="WorldObject\WorldObject_MutiInteractiveBase.cs" />
     <Compile Include="WorldObject\SaleRequestComp.cs" />
     <Compile Include="Lord\LordJob_AssaultThings_NeverFlee.cs" />
-    <Compile Include="WorldObject\WorldObject_InteractWithFixedCarvanBase.cs" />
+    <Compile Include="WorldObject\WorldObject_InteractWithFixedCaravanBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

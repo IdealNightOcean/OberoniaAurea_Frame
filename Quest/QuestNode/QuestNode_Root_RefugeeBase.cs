@@ -35,22 +35,22 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         public int goodwillFailure;
         public FloatRange rewardValueRange;
 
-        public readonly Quest quest;
-        public readonly Slate slate;
         public Map map;
         public Faction faction;
         public PawnKindDef fixedPawnKind;
         public ThoughtDef addMemory;
         public List<Pawn> pawns;
 
-        public QuestParameter(Faction faction, Map map)
+        public QuestParameter()
+        {
+            map = QuestGen_Get.GetMap();
+            fixedPawnKind = PawnKindDefOf.Refugee;
+        }
+
+        public QuestParameter(Map map)
         {
             this.map = map;
-            this.faction = faction;
-
             fixedPawnKind = PawnKindDefOf.Refugee;
-            quest = QuestGen.quest;
-            slate = QuestGen.slate;
         }
     }
 
@@ -58,15 +58,16 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
     protected override void RunInt()
     {
-        questParameter = null;
+        InitQuestParameter();
+        Quest quest = QuestGen.quest;
+
         Faction faction = GetOrGenerateFaction();
         if (faction is null || faction.HostileTo(Faction.OfPlayer))
         {
+            quest.End(QuestEndOutcome.Unknown, sendLetter: true, playSound: false);
             return;
         }
-
-        questParameter = InitQuestParameter(faction);
-        Quest quest = questParameter.quest;
+        questParameter.faction = faction;
 
         string lodgerArrestedSignal = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Arrested");
         string lodgerRecruitedSignal = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Recruited");
@@ -85,43 +86,14 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         quest.ExtraFaction(faction, pawns, ExtraFactionType.MiniFaction, areHelpers: false, [lodgerRecruitedSignal, lodgerBecameMutantSignal]);
         quest.SetAllApparelLocked(pawns);
 
-        string lodgerArrivalSignal = null;
-        if (questParameter.arrivalDelayTicks > 0)
-        {
-            lodgerArrivalSignal = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Arrival");
-            quest.Delay(questParameter.arrivalDelayTicks, delegate
-            {
-                quest.PawnsArrive(pawns,
-                                  inSignal: null,
-                                  questParameter.map.Parent,
-                                  arrivalMode: null,
-                                  joinPlayer: true,
-                                  walkInSpot: null,
-                                  customLetterLabel: "[lodgersArriveLetterLabel]",
-                                  customLetterText: "[lodgersArriveLetterText]");
-            },
-            inSignalEnable: null,
-            inSignalDisable: null,
-            outSignalComplete: lodgerArrivalSignal);
-        }
-        else
-        {
-            quest.PawnsArrive(pawns,
-                              inSignal: null,
-                              questParameter.map.Parent,
-                              arrivalMode: null,
-                              joinPlayer: true,
-                              walkInSpot: null,
-                              customLetterLabel: "[lodgersArriveLetterLabel]",
-                              customLetterText: "[lodgersArriveLetterText]");
-
-        }
+        string lodgerArrivalSignal = QuestGenUtility.HardcodedSignalWithQuestID("Lodger_Arrival");
+        PawnArrival(lodgerArrivalSignal);
 
         SetQuestAward();
 
         QuestPart_OARefugeeInteractions questPart_RefugeeInteractions = new()
         {
-            inSignalEnable = questParameter.slate.Get<string>("inSignal"),
+            inSignalEnable = QuestGen.slate.Get<string>("inSignal"),
             faction = faction,
             mapParent = questParameter.map.Parent,
             inSignalArrested = lodgerArrestedSignal,
@@ -143,14 +115,19 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         SetSlateValue();
     }
 
-    protected virtual QuestParameter InitQuestParameter(Faction faction)
+    protected virtual void InitQuestParameter()
     {
-        return new QuestParameter(faction, QuestGen_Get.GetMap());
+        questParameter = new QuestParameter();
+    }
+
+    protected virtual void ClearQuestParameter()
+    {
+        questParameter = null;
     }
 
     protected virtual List<Pawn> GeneratePawns(string lodgerRecruitedSignal = null)
     {
-        Quest quest = questParameter.quest;
+        Quest quest = QuestGen.quest;
         List<Pawn> pawns = [];
         int adultCount = questParameter.LodgerCount - questParameter.ChildCount;
         ThoughtDef addMemory = questParameter.addMemory;
@@ -180,7 +157,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             {
                 QuestPart_AddMemoryThought questPart_AddMemoryThought = new()
                 {
-                    inSignal = questParameter.slate.Get<string>("inSignal"),
+                    inSignal = QuestGen.slate.Get<string>("inSignal"),
                     pawn = pawn,
                 };
                 quest.AddPart(questPart_AddMemoryThought);
@@ -219,9 +196,44 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
     protected virtual void PostPawnGenerated(Pawn pawn) { }
 
+    protected virtual void PawnArrival(string lodgerArrivalSignal)
+    {
+        Quest quest = QuestGen.quest;
+
+        if (questParameter.arrivalDelayTicks > 0)
+        {
+            quest.Delay(questParameter.arrivalDelayTicks, delegate
+            {
+                quest.PawnsArrive(questParameter.pawns,
+                                  inSignal: null,
+                                  questParameter.map.Parent,
+                                  arrivalMode: null,
+                                  joinPlayer: true,
+                                  walkInSpot: null,
+                                  customLetterLabel: "[lodgersArriveLetterLabel]",
+                                  customLetterText: "[lodgersArriveLetterText]");
+            },
+            inSignalEnable: null,
+            inSignalDisable: null,
+            outSignalComplete: lodgerArrivalSignal);
+        }
+        else
+        {
+            quest.PawnsArrive(questParameter.pawns,
+                              inSignal: null,
+                              questParameter.map.Parent,
+                              arrivalMode: null,
+                              joinPlayer: true,
+                              walkInSpot: null,
+                              customLetterLabel: "[lodgersArriveLetterLabel]",
+                              customLetterText: "[lodgersArriveLetterText]");
+            quest.SendSignals(outSignals: [lodgerArrivalSignal]);
+        }
+    }
+
     protected void SetQuestAward()
     {
-        QuestPart_Choice questPart_Choice = questParameter.quest.RewardChoice();
+        QuestPart_Choice questPart_Choice = QuestGen.quest.RewardChoice();
         QuestPart_Choice.Choice choice = new()
         {
             rewards =
@@ -242,7 +254,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
         if (ModsConfig.IdeologyActive && Faction.OfPlayer.ideos.FluidIdeo is not null)
         {
-            choice.rewards.Add(new Reward_DevelopmentPoints(questParameter.quest));
+            choice.rewards.Add(new Reward_DevelopmentPoints(QuestGen.quest));
         }
 
         AddQuestAward(choice);
@@ -278,18 +290,18 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
     protected virtual void SetQuestEndComp(QuestPart_OARefugeeInteractions questPart_Interactions, string failSignal, string bigFailSignal, string successSignal) { }
 
-    protected virtual void SetPawnsLeaveComp(string inSignalEnable, string inSignalRemovePawn)
+    protected virtual void SetPawnsLeaveComp(string lodgerArrivalSignal, string inSignalRemovePawn)
     {
         if (questParameter.questDurationTicks > 0)
         {
-            DefaultDelayLeaveComp(inSignalEnable, inSignalDisable: null, inSignalRemovePawn);
+            DefaultDelayLeaveComp(lodgerArrivalSignal, inSignalDisable: null, inSignalRemovePawn);
         }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected void DefaultDelayLeaveComp(string inSignalEnable, string inSignalDisable, string inSignalRemovePawn)
+    protected void DefaultDelayLeaveComp(string lodgerArrivalSignal, string inSignalDisable, string inSignalRemovePawn)
     {
-        Quest quest = questParameter.quest;
+        Quest quest = QuestGen.quest;
 
         quest.Delay(questParameter.questDurationTicks,
             delegate
@@ -312,7 +324,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
                     });
                 quest.Leave(questParameter.pawns, inSignal: null, sendStandardLetter: false, leaveOnCleanup: false, inSignalRemovePawn, wakeUp: true);
             },
-            inSignalEnable: inSignalEnable,
+            inSignalEnable: lodgerArrivalSignal,
             inSignalDisable: inSignalDisable,
             outSignalComplete: null,
             reactivatable: false,
@@ -326,7 +338,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
     protected void SetQuestEndLetters(QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)
     {
-        Quest quest = questParameter.quest;
+        Quest quest = QuestGen.quest;
 
         if (questParameter.allowAssaultColony)
         {
@@ -358,7 +370,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
     protected void SetQuestEndCompCommon(QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)
     {
-        Quest quest = questParameter.quest;
+        Quest quest = QuestGen.quest;
         Faction faction = questParameter.faction;
 
         string failSignal = QuestGenUtility.HardcodedSignalWithQuestID("refugee.Fail");
@@ -405,7 +417,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
     protected virtual void SetSlateValue()
     {
-        Slate slate = questParameter.slate;
+        Slate slate = QuestGen.slate;
 
         slate.Set("map", questParameter.map);
         slate.Set("faction", questParameter.faction);

@@ -21,12 +21,13 @@ public class QueseNode_GetExpectedCategoryMarketValue : QuestNode
         SetVars(slate);
         return true;
     }
+
     protected override void RunInt()
     {
         SetVars(QuestGen.slate);
     }
 
-    protected void SetVars(Slate slate)
+    private void SetVars(Slate slate)
     {
         float expectedMarketValue = unitPrice.GetValue(slate) * expectedThingCount.GetValue(slate);
         slate.Set(storeMarketValueAs.GetValue(slate), expectedMarketValue);

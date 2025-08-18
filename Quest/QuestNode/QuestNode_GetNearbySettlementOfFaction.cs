@@ -15,77 +15,11 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
 
     public SlateRef<bool> ignoreConditionsIfNecessary; //必要时忽视一切条件
 
-    public SlateRef<int> originTile = -1; //搜索起点Tile，-1时默认为玩家派系基地
+    public SlateRef<PlanetTile> originTile = PlanetTile.Invalid; //搜索起点Tile，-1时默认为玩家派系基地
     public SlateRef<float> maxTileDistance; //距离originTile最大距离
     public SlateRef<bool> preferCloser = true; //就近优先
 
     public SlateRef<Faction> faction;
-
-    protected virtual Settlement RandomNearbySettlement(int originTile, Slate slate)
-    {
-        Faction faction = this.faction.GetValue(slate);
-        if (faction is null)
-        {
-            return null;
-        }
-
-        Settlement outSettlement = null;
-
-        List<Settlement> settlementList = Find.WorldObjects.SettlementBases;
-        Dictionary<Settlement, float> potentialSettle = [];
-        float distance = 999999f;
-        for (int i = 0; i < settlementList.Count; i++)
-        {
-            Settlement settle = settlementList[i];
-            if (IsGoodSettlement(settle, faction, originTile, slate, out distance))
-            {
-                potentialSettle.Add(settle, distance);
-            }
-        }
-        if (potentialSettle.Any())
-        {
-            if (preferCloser.GetValue(slate))
-            {
-                potentialSettle.OrderBy(sd => sd.Value);
-                outSettlement = potentialSettle.First().Key;
-            }
-            else
-            {
-                outSettlement = potentialSettle.RandomElement().Key;
-            }
-        }
-
-        if (ignoreConditionsIfNecessary.GetValue(slate) && outSettlement is null)
-        {
-            outSettlement = Find.WorldObjects.SettlementBases.Where(delegate (Settlement settlement)
-            {
-                if (!settlement.Visitable || settlement.Faction != faction)
-                {
-                    return false;
-                }
-                return true;
-            }).RandomElementWithFallback();
-        }
-        return outSettlement;
-    }
-    protected bool IsGoodSettlement(Settlement settlement, Faction faction, int originTile, Slate slate, out float distance)
-    {
-        distance = 999999f;
-        if (!settlement.Visitable || settlement.Faction != faction)
-        {
-            return false;
-        }
-        distance = Find.WorldGrid.ApproxDistanceInTiles(originTile, settlement.Tile);
-        if (distance > maxTileDistance.GetValue(slate))
-        {
-            return false;
-        }
-        if (!Find.WorldReachability.CanReach(originTile, settlement.Tile))
-        {
-            return false;
-        }
-        return true;
-    }
 
     protected override void RunInt()
     {
@@ -96,20 +30,102 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
     {
         return SetVars(slate);
     }
+
     protected bool SetVars(Slate slate)
     {
-        int originTile = this.originTile.GetValue(slate);
-        if (originTile < 0)
+        if (!ResolveOriginTile(slate, out PlanetTile centerTile))
         {
-            Map map = slate.Get<Map>("map");
-            originTile = map.Tile;
+            return false;
         }
-        Settlement settlement = RandomNearbySettlement(originTile, slate);
+
+        Settlement settlement = RandomNearbySettlement(centerTile, slate);
         if (settlement is not null)
         {
             slate.Set(storeAs.GetValue(slate), settlement);
             return true;
         }
         return false;
+    }
+
+    private bool ResolveOriginTile(Slate slate, out PlanetTile centerTile)
+    {
+        centerTile = originTile.GetValue(slate);
+        if (centerTile.Valid)
+        {
+            return true;
+        }
+
+        Map map = slate.Get<Map>("map");
+        if (map is null)
+        {
+            centerTile = PlanetTile.Invalid;
+            return false;
+        }
+
+        centerTile = map.Tile;
+        return centerTile.Valid;
+    }
+
+    protected virtual Settlement RandomNearbySettlement(PlanetTile centerTile, Slate slate)
+    {
+        Faction faction = this.faction.GetValue(slate);
+        if (faction is null)
+        {
+            return null;
+        }
+
+        List<Settlement> settlementList = Find.WorldObjects.SettlementBases;
+        List<(Settlement, float)> potentialSettle = [];
+        float maxDistance = maxTileDistance.GetValue(slate);
+        for (int i = 0; i < settlementList.Count; i++)
+        {
+            Settlement settle = settlementList[i];
+            if (IsGoodSettlement(settle, faction, centerTile, maxDistance, out float distance))
+            {
+                potentialSettle.Add((settle, distance));
+            }
+        }
+
+        if (potentialSettle.Count > 0)
+        {
+            if (preferCloser.GetValue(slate))
+            {
+                potentialSettle.OrderBy(sd => sd.Item2);
+                return potentialSettle.First().Item1;
+            }
+            else
+            {
+                return potentialSettle.RandomElement().Item1;
+            }
+        }
+
+        if (ignoreConditionsIfNecessary.GetValue(slate))
+        {
+            return Find.WorldObjects.SettlementBases.Where(s => s.Faction == faction && s.Tile.Layer == centerTile.Layer && s.Visitable)
+                                                    .OrderBy(s => Find.WorldGrid.ApproxDistanceInTiles(centerTile, s.Tile))
+                                                    .Take(3)
+                                                    .FirstOrFallback(null);
+        }
+
+        return null;
+    }
+
+    protected bool IsGoodSettlement(Settlement settlement, Faction faction, PlanetTile centerTile, float maxDistance, out float distance)
+    {
+        distance = 999999f;
+        if (settlement.Faction != faction || settlement.Tile.Layer != centerTile.Layer || !settlement.Visitable)
+        {
+            return false;
+        }
+        distance = Find.WorldGrid.ApproxDistanceInTiles(centerTile, settlement.Tile);
+        if (distance > maxDistance)
+        {
+            return false;
+        }
+        if (!Find.WorldReachability.CanReach(centerTile, settlement.Tile))
+        {
+            return false;
+        }
+        return true;
     }
 }

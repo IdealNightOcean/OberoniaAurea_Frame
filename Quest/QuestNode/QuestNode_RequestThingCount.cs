@@ -1,4 +1,5 @@
-﻿using RimWorld.QuestGen;
+﻿using RimWorld;
+using RimWorld.QuestGen;
 using UnityEngine;
 using Verse;
 
@@ -14,38 +15,45 @@ public class QuestNode_RequestThingCount : QuestNode
     public SlateRef<FloatRange> baseOffset = FloatRange.Zero;
     public SlateRef<float> preOffsetWealth;
     public SlateRef<int> preOffsetCount;
-    public SlateRef<int> maxCountLimit;
+    public SlateRef<int> minCountLimit = 1;
+    public SlateRef<int> maxCountLimit = -1;
 
     protected override bool TestRunInt(Slate slate)
     {
-        return SetVars(slate);
+        SetVars(slate);
+        return true;
     }
     protected override void RunInt()
     {
         SetVars(QuestGen.slate);
     }
 
-    protected bool SetVars(Slate slate)
+    private void SetVars(Slate slate)
     {
-        Map map = slate.Get<Map>("map");
-        if (map is null)
-        {
-            return false;
-        }
         int requestThingCount = baseRange.GetValue(slate).RandomInRange;
         float preOffsetWealth = this.preOffsetWealth.GetValue(slate);
         int preOffsetCount = this.preOffsetCount.GetValue(slate);
-        int maxCountLimit = this.maxCountLimit.GetValue(slate);
+
         if (preOffsetWealth != 0f && preOffsetCount != 0)
         {
-            requestThingCount += (int)(map.PlayerWealthForStoryteller / preOffsetWealth) * preOffsetCount;
+            requestThingCount += (int)(WealthUtility.PlayerWealth / preOffsetWealth) * preOffsetCount;
         }
         requestThingCount = (int)(requestThingCount * (1f + baseOffset.GetValue(slate).RandomInRange));
-        if (maxCountLimit > 0)
+
+        int trueMin = Mathf.Max(minCountLimit.GetValue(slate), 1);
+        int trueMax = maxCountLimit.GetValue(slate);
+        if (trueMax > 0)
         {
-            requestThingCount = Mathf.Min(requestThingCount, maxCountLimit);
+            if (trueMin > trueMax)
+            {
+                (trueMin, trueMax) = (trueMax, trueMin);
+            }
         }
+        else
+        {
+            trueMax = int.MaxValue - 1;
+        }
+        requestThingCount = Mathf.Clamp(requestThingCount, trueMin, trueMax);
         slate.Set(storeAs.GetValue(slate), requestThingCount);
-        return requestThingCount > 0;
     }
 }

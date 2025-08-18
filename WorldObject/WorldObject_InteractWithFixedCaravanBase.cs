@@ -6,8 +6,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_InteractiveBase, IFixedCaravanAssociate
+public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_InteractiveBase, IFixedCaravanAssociate
 {
+    protected virtual WorldObjectDef FixedCaravanDef => OAFrameDefOf.OAFrame_FixedCaravan;
     public virtual string FixedCaravanName => null;
 
     protected bool isWorking;
@@ -21,7 +22,7 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
     {
         if (isWorking)
         {
-            Messages.Message("OAFrame_Message_AlreadyHasFixedCarvan".Translate(), MessageTypeDefOf.RejectInput, historical: false);
+            Messages.Message("OAFrame_Message_AlreadyHasFixedCaravan".Translate(), MessageTypeDefOf.RejectInput, historical: false);
 
         }
         else if (OAFrame_CaravanUtility.IsExactTypeCaravan(caravan))
@@ -39,7 +40,6 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
         }
     }
 
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected virtual void WorkTick()
     {
@@ -51,7 +51,7 @@ public abstract class WorldObject_InteractWithFixedCarvanBase : WorldObject_Inte
 
     public virtual bool StartWork(Caravan caravan)
     {
-        FixedCaravan fixedCaravan = OAFrame_FixedCaravanUtility.CreateFixedCaravan(caravan, this);
+        FixedCaravan fixedCaravan = OAFrame_FixedCaravanUtility.CreateFixedCaravan(caravan, FixedCaravanDef, this);
         if (fixedCaravan is null)
         {
             Reset();
