@@ -49,15 +49,18 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
     private bool ResolveOriginTile(Slate slate, out int centerTile)
     {
         centerTile = originTile.GetValue(slate);
-        if (centerTile < 0)
+        if (centerTile >= 0)
         {
-            Map map = slate.Get<Map>("map");
-            if (map is null)
-            {
-                return false;
-            }
-            centerTile = map.Tile;
+            return true;
         }
+
+        Map map = slate.Get<Map>("map");
+        if (map is null)
+        {
+            return false;
+        }
+
+        centerTile = map.Tile;
         return centerTile >= 0;
     }
 

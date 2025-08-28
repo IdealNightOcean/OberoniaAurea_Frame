@@ -13,7 +13,7 @@ public static class OAFrame_QuestUtility
     {
         Slate slate = new();
         slate.Set("points", points);
-        return TryGenerateQuestAndMakeAvailable(out quest, scriptDef, slate, sendAvailableLetter);
+        return TryGenerateQuestAndMakeAvailable(out quest, scriptDef, slate, forced, sendAvailableLetter);
     }
 
     public static bool TryGenerateQuestAndMakeAvailable(out Quest quest, QuestScriptDef scriptDef, Slate slate, bool forced = false, bool sendAvailableLetter = true)
