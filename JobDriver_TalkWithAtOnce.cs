@@ -32,20 +32,19 @@ public abstract class JobDriver_TalkWithAtOnce : JobDriver
 
     protected abstract void TalkAction(Pawn talker, Pawn talkWith);
 
-    public static void EnableLordJobTalk(JobDef talkJob, Pawn talkWith)
+    public static void EnableLordJobTalk(Pawn talkWith)
     {
-        if (talkWith.GetLord()?.LordJob is LordJob_VisitColonyTalkable talkLordJob && talkLordJob.IsAssociateJobToPawn(talkJob, talkWith))
+        if (talkWith.GetLord()?.LordJob is LordJob_VisitColonyTalkable talkLordJob)
         {
-            talkLordJob.SetTalkAvailable(false);
+            talkLordJob.EnableTalk(talkWith);
         }
     }
 
-    public static void DisableLordJobTalk(JobDef talkJob, Pawn talkWith)
+    public static void DisableLordJobTalk(Pawn talkWith)
     {
-        if (talkWith.GetLord()?.LordJob is LordJob_VisitColonyTalkable talkLordJob && talkLordJob.IsAssociateJobToPawn(talkJob, talkWith))
+        if (talkWith.GetLord()?.LordJob is LordJob_VisitColonyTalkable talkLordJob && talkLordJob.CanTalkWith(talkWith))
         {
-            talkLordJob.SetTalkAvailable(false);
+            talkLordJob.DisableTalk();
         }
     }
-
 }

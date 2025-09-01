@@ -15,8 +15,10 @@ public static class OAFrame_PawnUtility
         return p.ParentHolder is IPawnRetentionHolder;
     }
 
-    //添加健康状态
-    public static void AdjustOrAddHediff(Pawn pawn, HediffDef hediffDef, float severity = -1, int overrideDisappearTicks = -1, BodyPartRecord part = null, DamageInfo? dinfo = null, DamageWorker.DamageResult result = null)
+    /// <summary>
+    /// 添加健康状态
+    /// </summary>
+    public static void AdjustOrAddHediff(this Pawn pawn, HediffDef hediffDef, float severity = -1, int overrideDisappearTicks = -1, BodyPartRecord part = null, DamageInfo? dinfo = null, DamageWorker.DamageResult result = null)
     {
         Hediff hediff = pawn?.health.GetOrAddHediff(hediffDef, part, dinfo, result);
         if (hediff is null)
@@ -37,8 +39,10 @@ public static class OAFrame_PawnUtility
         }
     }
 
-    //移除第一个健康状态
-    public static void RemoveFirstHediffOfDef(Pawn pawn, HediffDef def, bool mustBeVisible = false)
+    /// <summary>
+    /// 移除第一个相关Def的健康状态
+    /// </summary>
+    public static void RemoveFirstHediffOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
     {
         List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
         for (int i = 0; i < hediffs.Count; i++)
@@ -53,7 +57,7 @@ public static class OAFrame_PawnUtility
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool PawnSleepNow(Pawn pawn)
+    public static bool SleepNow(this Pawn pawn)
     {
         return pawn.jobs?.curDriver?.asleep ?? false;
     }

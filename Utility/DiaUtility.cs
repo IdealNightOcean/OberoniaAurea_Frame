@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Runtime.CompilerServices;
 using Verse;
 
@@ -17,9 +18,21 @@ public static class OAFrame_DiaUtility
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Dialog_NodeTreeWithFactionInfo DefaultConfirmDiaNodeTreeWithFactionInfo(TaggedString text, Faction faction, Action acceptAction = null, Action rejectAction = null)
+    {
+        return new Dialog_NodeTreeWithFactionInfo(ConfirmDiaNode(text, "Confirm".Translate(), acceptAction, "Close".Translate(), rejectAction), faction);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Dialog_NodeTree ConfirmDiaNodeTree(TaggedString text, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
     {
         return new Dialog_NodeTree(ConfirmDiaNode(text, acceptText, acceptAction, rejectText, rejectAction));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Dialog_NodeTreeWithFactionInfo ConfirmDiaNodeTreeWithFactionInfo(TaggedString text, Faction faction, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
+    {
+        return new Dialog_NodeTreeWithFactionInfo(ConfirmDiaNode(text, acceptText, acceptAction, rejectText, rejectAction), faction);
     }
 
     public static DiaNode ConfirmDiaNode(TaggedString text, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)

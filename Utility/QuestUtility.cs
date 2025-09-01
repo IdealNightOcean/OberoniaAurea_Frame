@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System;
 using System.Runtime.CompilerServices;
@@ -9,6 +10,23 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_QuestUtility
 {
+    public static MapParent GetAvailableMapParent(this Quest quest, MapParent originParent)
+    {
+        if (originParent is not null && originParent.HasMap && quest.IsParentSuitableForQuest(originParent))
+        {
+            return originParent;
+        }
+        else
+        {
+            MapParent mapParent = quest.TryFindNewSuitableMapParentForRetarget();
+            if (mapParent is null || !mapParent.HasMap)
+            {
+                return null;
+            }
+            return mapParent;
+        }
+    }
+
     public static bool TryGenerateQuestAndMakeAvailable(out Quest quest, QuestScriptDef scriptDef, float points, bool forced = false, IIncidentTarget target = null, bool sendAvailableLetter = true)
     {
         Slate slate = new();
@@ -55,14 +73,14 @@ public static class OAFrame_QuestUtility
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsQuestAvailable(Quest quest)
+    public static bool IsQuestAvailable(this Quest quest)
     {
         return quest is not null && (quest.State == QuestState.NotYetAccepted || quest.State == QuestState.Ongoing);
     }
 
     // 任务可用时发送信件
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SendLetterQuestAvailable(Quest quest)
+    public static void SendLetterQuestAvailable(this Quest quest)
     {
         if (!quest.hidden && quest.root.sendAvailableLetter)
         {

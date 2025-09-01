@@ -20,6 +20,7 @@ public static class OAFrame_MiscUtility
         }
         return false;
     }
+
     //添加队列事件
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void AddNewQueuedIncident(IncidentDef incidentDef, int delayTicks, IncidentParms parms, int retryDurationTicks = 0)
@@ -31,6 +32,7 @@ public static class OAFrame_MiscUtility
         }
         Find.Storyteller.incidentQueue.Add(incidentDef, Find.TickManager.TicksGame + delayTicks, parms, retryDurationTicks);
     }
+
     //创建物品
     public static List<Thing> TryGenerateThing(ThingDef def, int count)
     {

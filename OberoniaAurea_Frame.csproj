@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Component\CooldownRecordManager.cs" />
     <Compile Include="Component\CooldownRecord.cs" />
+    <Compile Include="Interface\ILordJobWithTalk.cs" />
     <Compile Include="JobDriver_InteractWithThingAtOnce.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
