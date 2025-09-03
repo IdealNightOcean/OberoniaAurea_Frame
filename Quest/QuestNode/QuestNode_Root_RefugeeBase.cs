@@ -92,10 +92,11 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             return;
         }
         questParameter.pawns = pawns;
-        slate.Set("lodgerCount", pawns.Count);
-        slate.Set("lodgersCountMinusOne", pawns.Count - 1);
+
         slate.Set("lodgers", pawns);
         slate.Set("asker", pawns[0]);
+        slate.Set("lodgerCount", pawns.Count);
+        slate.Set("lodgersCountMinusOne", pawns.Count - 1);
 
         quest.ExtraFaction(faction, pawns, ExtraFactionType.MiniFaction, areHelpers: false, [lodgerRecruitedSignal, lodgerBecameMutantSignal]);
         quest.SetAllApparelLocked(pawns);
@@ -254,10 +255,9 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         {
             rewards =
             {
-                new Reward_VisitorsHelp(),
+                new Reward_VisitorsHelp()
             }
         };
-
         if (questParameter.allowFutureReward)
         {
             choice.rewards.Add(new Reward_PossibleFutureReward());

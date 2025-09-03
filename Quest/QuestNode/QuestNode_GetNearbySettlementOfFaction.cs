@@ -83,6 +83,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
                 potentialSettle.Add((settle, distance));
             }
         }
+
         if (potentialSettle.Count > 0)
         {
             if (preferCloser.GetValue(slate))

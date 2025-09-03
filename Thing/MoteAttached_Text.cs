@@ -25,9 +25,7 @@ public class MoteAttached_Text : MoteAttached
 
     protected override bool EndOfLife => AgeSecs >= TimeBeforeStartFadeout + def.mote.fadeOutTime;
 
-    protected override void DrawAt(Vector3 drawLoc, bool flip = false)
-    {
-    }
+    protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
 
     public override void DrawGUIOverlay()
     {

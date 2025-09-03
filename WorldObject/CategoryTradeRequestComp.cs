@@ -86,7 +86,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
                 }));
             }
         };
-        if (!OAFrame_CaravanUtility.CaravanHasAnyThingsOfCategory(caravan, categoryRQ_Def, PlayerCanGive))
+        if (!caravan.HasAnyThingOfCategory(categoryRQ_Def, PlayerCanGive))
         {
             cmmand_Action.Disable("OAFrame_CommandFulfillCategoryTradeFailInsufficient".Translate(RequestedThingCategoryLabel(categoryRQ_Def, 1, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat)));
         }

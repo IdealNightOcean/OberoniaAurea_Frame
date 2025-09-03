@@ -55,14 +55,14 @@ public static class OAFrame_QuestUtility
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsQuestAvailable(Quest quest)
+    public static bool IsQuestAvailable(this Quest quest)
     {
         return quest is not null && (quest.State == QuestState.NotYetAccepted || quest.State == QuestState.Ongoing);
     }
 
     // 任务可用时发送信件
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SendLetterQuestAvailable(Quest quest)
+    public static void SendLetterQuestAvailable(this Quest quest)
     {
         if (!quest.hidden && quest.root.sendAvailableLetter)
         {

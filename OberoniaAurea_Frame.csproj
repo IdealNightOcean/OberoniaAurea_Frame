@@ -67,6 +67,7 @@
     <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
     <Compile Include="Interface\ILordFloatMenuProvider.cs" />
+    <Compile Include="Interface\ILordJobWithTalk.cs" />
     <Compile Include="Interface\IQuestAssociate.cs" />
     <Compile Include="JobDriver_InteractWithThingAtOnce.cs" />
     <Compile Include="JobDriver_TalkWithAtOnce.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Lord\LordJob_VisitColonyTalkable.cs" />
     <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
     <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
+    <Compile Include="Quest\Quest_PawnNegativeSiganl.cs" />
     <Compile Include="Quest\Quest_MultiSignalCount.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_QuestUnique.cs" />
     <Compile Include="Quest\Quest_TransToHardcodedSignalWithQuestID.cs" />

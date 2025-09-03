@@ -6,7 +6,7 @@ using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
-public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase
+public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWithTalk
 {
     protected Pawn talkablePawn;
     protected string talkLabel;
@@ -14,6 +14,7 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase
     protected bool canTalkNow;
 
     public Pawn TalkablePawn => talkablePawn;
+    public bool CanTalkNow => canTalkNow;
 
     public LordJob_VisitColonyTalkable() : base() { }
     public LordJob_VisitColonyTalkable(Faction faction, IntVec3 chillSpot, int? durationTicks = null) : base(faction, chillSpot, durationTicks)
@@ -25,18 +26,38 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase
         SetTalkAction(talkablePawn, talkJob, talkLabel);
     }
 
-    public void SetTalkAction(Pawn talkablePawn, JobDef talkJob, string talkLabel = "OAFrame_TalkWith")
+    public void SetTalkAction(Pawn talkablePawn, JobDef talkJob, string talkLabel = "OAFrame_TalkWith", bool initTalkActive = true)
     {
-        this.talkablePawn = talkablePawn;
         this.talkJob = talkJob;
         this.talkLabel = talkLabel;
-        SetTalkAvailable(true);
+        if (initTalkActive)
+        {
+            EnableTalk(talkablePawn);
+        }
+        else
+        {
+            this.talkablePawn = talkablePawn;
+        }
     }
 
-    public void SetTalkAvailable(bool canTalkNow)
+    public bool CanTalkWith(Pawn p)
     {
-        this.canTalkNow = canTalkNow;
+        return canTalkNow && talkablePawn == p;
     }
+
+    public void EnableTalk(Pawn p)
+    {
+        if (p is null)
+        {
+            Log.Error("Attempt to enable a LordJobWithTalk with a null Pawn.");
+            return;
+        }
+        talkablePawn = p;
+        canTalkNow = true;
+    }
+    public void EnableTalk() => EnableTalk(talkablePawn);
+
+    public void DisableTalk() => canTalkNow = false;
 
     public bool IsAssociateJobToPawn(JobDef jobDef, Pawn talkWith)
     {
@@ -66,7 +87,7 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase
         base.Notify_PawnLost(p, condition);
         if (p == talkablePawn)
         {
-            SetTalkAvailable(false);
+            DisableTalk();
         }
     }
 

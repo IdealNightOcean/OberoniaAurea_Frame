@@ -10,6 +10,8 @@ public class QueseNode_GetExpectedThingMarketValue : QuestNode
     [NoTranslate]
     public SlateRef<string> storeThingDefAs;
     [NoTranslate]
+    public SlateRef<string> storeThingCountAs;
+    [NoTranslate]
     public SlateRef<string> storeMarketValueAs;
 
     public SlateRef<ThingDef> expectedThingDef;
@@ -34,6 +36,10 @@ public class QueseNode_GetExpectedThingMarketValue : QuestNode
         if (storeThingDefAs.GetValue(slate) is not null)
         {
             slate.Set(storeThingDefAs.GetValue(slate), thingDef);
+        }
+        if (storeThingCountAs.GetValue(slate) is not null)
+        {
+            slate.Set(storeThingCountAs.GetValue(slate), expectedThingCount);
         }
         if (storeMarketValueAs.GetValue(slate) is not null)
         {
