@@ -5,9 +5,10 @@ namespace OberoniaAurea_Frame;
 
 public class QuestNode_GenerateThingDefCount : QuestNode
 {
-    private SlateRef<ThingDef> thingDef;
-    private SlateRef<int> count;
+    public SlateRef<ThingDef> thingDef;
+    public SlateRef<int> count;
 
+    public SlateRef<bool> storeAsClass;
     [NoTranslate]
     public SlateRef<string> storeAs;
     [NoTranslate]
@@ -20,14 +21,29 @@ public class QuestNode_GenerateThingDefCount : QuestNode
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        ThingDefCount thingDefCount = new(thingDef.GetValue(slate), count.GetValue(slate));
-        if (storeAs.GetValue(slate) is not null)
+        if (storeAsClass.GetValue(slate))
         {
-            QuestGen.slate.Set(storeAs.GetValue(slate), thingDefCount);
+            ThingDefCountClass thingDefCountClass = new(thingDef.GetValue(slate), count.GetValue(slate));
+            if (storeAs.GetValue(slate) is not null)
+            {
+                QuestGen.slate.Set(storeAs.GetValue(slate), thingDefCountClass);
+            }
+            if (addToList.GetValue(slate) is not null)
+            {
+                QuestGenUtility.AddToOrMakeList(slate, addToList.GetValue(slate), thingDefCountClass);
+            }
         }
-        if (addToList.GetValue(slate) is not null)
+        else
         {
-            QuestGenUtility.AddToOrMakeList(slate, addToList.GetValue(slate), thingDefCount);
+            ThingDefCount thingDefCount = new(thingDef.GetValue(slate), count.GetValue(slate));
+            if (storeAs.GetValue(slate) is not null)
+            {
+                QuestGen.slate.Set(storeAs.GetValue(slate), thingDefCount);
+            }
+            if (addToList.GetValue(slate) is not null)
+            {
+                QuestGenUtility.AddToOrMakeList(slate, addToList.GetValue(slate), thingDefCount);
+            }
         }
     }
 }

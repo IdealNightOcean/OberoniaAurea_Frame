@@ -104,6 +104,8 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         EndWork(interrupt: true, convertToCaravan: false);
     }
 
+    public virtual void PostConvertToCaravan(Caravan caravan) { }
+
     public virtual string FixedCaravanWorkDesc()
     {
         return "OAFrame_FixedCaravanWork_TimeLeft".Translate(ticksRemaining.ToStringTicksToPeriod());

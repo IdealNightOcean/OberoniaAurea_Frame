@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Component\CooldownRecord.cs" />
     <Compile Include="Component\CooldownRecordManager.cs" />
+    <Compile Include="WorkGiver_ThingDefRequestExtension.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
     <Compile Include="Interface\ILordFloatMenuProvider.cs" />
@@ -86,11 +87,9 @@
     <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
     <Compile Include="Quest\Quest_AllFactionsGoodwillChange.cs" />
     <Compile Include="Thing\BulletBase.cs" />
-    <Compile Include="Thing\CompSpecialBuilding.cs" />
     <Compile Include="Utility\QuestUtility.cs" />
     <Compile Include="WorldObject\MapParent_Enterable.cs" />
     <Compile Include="Interface\IFixedCaravanAssociate.cs" />
-    <Compile Include="MapComponent_SpecialBuildingManager.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
     <Compile Include="Component\SimpleUniqueList.cs" />

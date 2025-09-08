@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Verse;
 using Verse.AI;
+using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
@@ -30,4 +31,20 @@ public abstract class JobDriver_TalkWithAtOnce : JobDriver
     }
 
     protected abstract void TalkAction(Pawn talker, Pawn talkWith);
+
+    public static void EnableLordJobTalk(Pawn talkWith)
+    {
+        if (talkWith.GetLord()?.LordJob is LordJob_VisitColonyTalkable talkLordJob)
+        {
+            talkLordJob.EnableTalk(talkWith);
+        }
+    }
+
+    public static void DisableLordJobTalk(Pawn talkWith)
+    {
+        if (talkWith.GetLord()?.LordJob is LordJob_VisitColonyTalkable talkLordJob && talkLordJob.CanTalkWith(talkWith))
+        {
+            talkLordJob.DisableTalk();
+        }
+    }
 }

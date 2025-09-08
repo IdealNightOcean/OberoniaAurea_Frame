@@ -1,6 +1,8 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using UnityEngine;
 using Verse;
 
@@ -62,6 +64,64 @@ public static class OAFrame_PawnUtility
         return pawn.jobs?.curDriver?.asleep ?? false;
     }
 
+    /// <summary>
+    /// 造成不致命、不残疾的伤害
+    /// </summary>
+    public static void TakeNonLethalDamage(Pawn pawn, int injuriesCount, DamageDef fixedDamageDef = null)
+    {
+        if (pawn.DeadOrDowned)
+        {
+            return;
+        }
+
+        IEnumerable<BodyPartRecord> source = HittablePartsViolence();
+
+        int curInjuryNum = 0;
+        while (curInjuryNum < injuriesCount)
+        {
+            if (!source.Any())
+            {
+                break;
+            }
+
+            curInjuryNum++;
+            BodyPartRecord bodyPartRecord = source.RandomElement();
+            float maxHealth = bodyPartRecord.def.GetMaxHealth(pawn);
+            float partHealth = pawn.health.hediffSet.GetPartHealth(bodyPartRecord);
+            int min = Mathf.Min(Mathf.RoundToInt(maxHealth * 0.3f), (int)partHealth - 1);
+            int max = Mathf.Min(Mathf.RoundToInt(maxHealth * 0.8f), (int)partHealth - 1);
+            int severity = Rand.RangeInclusive(min, max);
+            DamageDef damageDef = fixedDamageDef ?? HealthUtility.RandomViolenceDamageType();
+            HediffDef hediffDefFromDamage = HealthUtility.GetHediffDefFromDamage(damageDef, pawn, bodyPartRecord);
+            if (pawn.health.WouldDieAfterAddingHediff(hediffDefFromDamage, bodyPartRecord, severity))
+            {
+                break;
+            }
+            DamageInfo dinfo = new(damageDef, severity, 999f, -1f, null, bodyPartRecord);
+            dinfo.SetAllowDamagePropagation(val: false);
+            pawn.TakeDamage(dinfo);
+        }
+        if (pawn.Dead)
+        {
+            StringBuilder stringBuilder = new();
+            stringBuilder.AppendLine(string.Concat(pawn, " died during take non-lethal damage"));
+            for (int i = 0; i < pawn.health.hediffSet.hediffs.Count; i++)
+            {
+                stringBuilder.AppendLine("   -" + pawn.health.hediffSet.hediffs[i].ToString());
+            }
+            Log.Error(stringBuilder.ToString());
+        }
+
+        IEnumerable<BodyPartRecord> HittablePartsViolence()
+        {
+            HediffSet hediffSet = pawn.health.hediffSet;
+            return from x in hediffSet.GetNotMissingParts()
+                   where x.depth == BodyPartDepth.Outside || (x.depth == BodyPartDepth.Inside && x.def.IsSolid(x, hediffSet.hediffs))
+                   where !pawn.health.hediffSet.hediffs.Any(y => y.Part == x && y.CurStage is not null && y.CurStage.partEfficiencyOffset < 0f)
+                   select x;
+        }
+    }
+
     public static int GetMaxSkillLevelOfPawns(IEnumerable<Pawn> pawns, SkillDef skill)
     {
         if (pawns is null)
@@ -105,5 +165,50 @@ public static class OAFrame_PawnUtility
             }
         }
         return (maxSkillPawn, maxSkillLevel);
+    }
+
+    public static float GetMaxStatOfPawns(IEnumerable<Pawn> pawns, StatDef statDef)
+    {
+        if (pawns is null)
+        {
+            return -999f;
+        }
+        float maxStatValue = -999f;
+
+        foreach (Pawn pawn in pawns)
+        {
+            if (!statDef.Worker.IsDisabledFor(pawn))
+            {
+                continue;
+            }
+            maxStatValue = Mathf.Max(maxStatValue, pawn.GetStatValue(statDef));
+        }
+        return maxStatValue;
+    }
+
+    public static (Pawn, float) GetMaxStatPawn(IEnumerable<Pawn> pawns, StatDef statDef)
+    {
+        if (pawns is null)
+        {
+            return (null, -999f);
+        }
+        Pawn maxStatPawn = null;
+        float maxStatValue = -999f;
+
+        float statValue;
+        foreach (Pawn pawn in pawns)
+        {
+            if (!statDef.Worker.IsDisabledFor(pawn))
+            {
+                continue;
+            }
+            statValue = pawn.GetStatValue(statDef);
+            if (statValue > maxStatValue)
+            {
+                maxStatValue = statValue;
+                maxStatPawn = pawn;
+            }
+        }
+        return (maxStatPawn, maxStatValue);
     }
 }

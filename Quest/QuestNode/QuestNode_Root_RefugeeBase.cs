@@ -39,30 +39,31 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
         public Map map;
         public Faction faction;
-        public PawnKindDef fixedPawnKind;
-        public ThoughtDef addMemory;
         public List<Pawn> pawns;
 
         public QuestParameter()
         {
             map = QuestGen_Get.GetMap();
-            fixedPawnKind = PawnKindDefOf.Refugee;
         }
 
         public QuestParameter(Map map)
         {
             this.map = map;
-            fixedPawnKind = PawnKindDefOf.Refugee;
         }
     }
 
     protected QuestParameter questParameter;
+    public virtual PawnKindDef FixedPawnKind => PawnKindDefOf.Refugee;
+    protected virtual ThoughtDef ThoughtToAdd => null;
 
     protected override void RunInt()
     {
         InitQuestParameter();
         Quest quest = QuestGen.quest;
         Slate slate = QuestGen.slate;
+
+        slate.Set("allowFutureReward", questParameter.allowFutureReward);
+        slate.Set("allowJoinOffer", questParameter.allowJoinOffer);
 
         Faction faction = GetOrGenerateFaction();
         if (faction is null || faction.HostileTo(Faction.OfPlayer))
@@ -73,6 +74,10 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         questParameter.faction = faction;
         slate.Set("map", questParameter.map);
         slate.Set("faction", faction);
+        if (!slate.TryGet("isMainFaction", out bool _))
+        {
+            slate.Set("isMainFaction", !faction.temporary);
+        }
         slate.Set("questDurationTicks", questParameter.questDurationTicks);
         if (questParameter.arrivalDelayTicks > 0)
         {
@@ -119,14 +124,15 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         questPart_RefugeeInteractions.pawns.AddRange(pawns);
         quest.AddPart(questPart_RefugeeInteractions);
 
-        SetQuestEndLetters(questPart_RefugeeInteractions);
+        if (questParameter.allowBadThought)
+        {
+            quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerDied, questPart_RefugeeInteractions.outSignalDestroyed_BadThought);
+            quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerArrested, questPart_RefugeeInteractions.outSignalArrested_BadThought);
+            quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerSurgicallyViolated, questPart_RefugeeInteractions.outSignalSurgeryViolation_BadThought);
+        }
 
-        quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerDied, questPart_RefugeeInteractions.outSignalDestroyed_LeaveColony);
-        quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerArrested, questPart_RefugeeInteractions.outSignalArrested_LeaveColony);
-        quest.AddMemoryThought(pawns, ThoughtDefOf.OtherTravelerSurgicallyViolated, questPart_RefugeeInteractions.outSignalSurgeryViolation_LeaveColony);
-
-        SetQuestEndCompCommon(questPart_RefugeeInteractions);
         SetPawnsLeaveComp(lodgerArrivalSignal, lodgerArrestedOrRecruited);
+        SetQuestEndCompCommon(questPart_RefugeeInteractions);
     }
 
     protected virtual void InitQuestParameter()
@@ -144,8 +150,9 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         Quest quest = QuestGen.quest;
         List<Pawn> pawns = [];
         int adultCount = questParameter.LodgerCount - questParameter.ChildCount;
-        ThoughtDef addMemory = questParameter.addMemory;
-        PawnKindDef fixedPawnKind = questParameter.fixedPawnKind;
+
+        PawnKindDef fixedPawnKind = FixedPawnKind ?? PawnKindDefOf.Refugee;
+        ThoughtDef thoughtToAdd = ThoughtToAdd;
         for (int i = 0; i < questParameter.LodgerCount; i++)
         {
             DevelopmentalStage developmentalStages = i < adultCount ? DevelopmentalStage.Adult : DevelopmentalStage.Child;
@@ -167,12 +174,13 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             pawns.Add(pawn);
 
             PostPawnGenerated(pawn);
-            if (addMemory is not null)
+            if (thoughtToAdd is not null)
             {
                 QuestPart_AddMemoryThought questPart_AddMemoryThought = new()
                 {
                     inSignal = QuestGen.slate.Get<string>("inSignal"),
                     pawn = pawn,
+                    def = thoughtToAdd
                 };
                 quest.AddPart(questPart_AddMemoryThought);
             }
@@ -393,13 +401,18 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         Quest quest = QuestGen.quest;
         Faction faction = questParameter.faction;
 
-        string failSignal = QuestGenUtility.HardcodedSignalWithQuestID("refugee.Fail");
-        string bigFailSignal = QuestGenUtility.HardcodedSignalWithQuestID("refugee.BigFail");
-        string successSignal = QuestGenUtility.HardcodedSignalWithQuestID("refugee.Success");
+        SetQuestEndLetters(questPart_RefugeeInteractions);
 
-        quest.AnySignal(inSignals: [questPart_RefugeeInteractions.outSignalLast_Destroyed, questPart_RefugeeInteractions.outSignalLast_Arrested], outSignals: [failSignal]);
+        string failSignal = QuestGenUtility.HardcodedSignalWithQuestID("RefugeeQuest_Fail");
+        string bigFailSignal = QuestGenUtility.HardcodedSignalWithQuestID("RefugeeQuest_BigFail");
+        string successSignal = QuestGenUtility.HardcodedSignalWithQuestID("RefugeeQuest_Success");
 
-        List<string> bigFailureSignals = [questPart_RefugeeInteractions.outSignalLast_Kidnapped, questPart_RefugeeInteractions.outSignalLast_Banished];
+        quest.AnySignal(inSignals: [questPart_RefugeeInteractions.outSignalLast_Destroyed,
+                                    questPart_RefugeeInteractions.outSignalLast_Arrested],
+                        outSignals: [failSignal]);
+
+        List<string> bigFailureSignals = [questPart_RefugeeInteractions.outSignalLast_Kidnapped,
+                                          questPart_RefugeeInteractions.outSignalLast_Banished];
         if (questParameter.allowAssaultColony)
         {
             bigFailureSignals.AddRange([questPart_RefugeeInteractions.outSignalDestroyed_AssaultColony,
