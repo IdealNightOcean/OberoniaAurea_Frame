@@ -87,4 +87,5 @@ public static class OAFrame_QuestUtility
             QuestUtility.SendLetterQuestAvailable(quest);
         }
     }
+
 }

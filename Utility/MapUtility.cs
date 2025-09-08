@@ -11,12 +11,6 @@ namespace OberoniaAurea_Frame;
 public static class OAFrame_MapUtility
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static MapComponent_SpecialBuildingManager GetSpecialBuildingManager(this Map map)
-    {
-        return map?.GetComponent<MapComponent_SpecialBuildingManager>();
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int AmountSendableSilver(this Map map)
     {
         return AmountSendableThing(map, ThingDefOf.Silver);
@@ -179,7 +173,7 @@ public static class OAFrame_MapUtility
     public static int DestoryThingsOfDef(this Map map, ThingDef thingDef, int count)
     {
         List<Thing> takeThings = TakeThingsOfDef(map, thingDef, count, out int actualDestoryCount);
-        for (int i = takeThings.Count; i >= 0; i--)
+        for (int i = takeThings.Count - 1; i >= 0; i--)
         {
             takeThings[i].Destroy();
         }
@@ -190,7 +184,7 @@ public static class OAFrame_MapUtility
     public static int DestoryThingsOfDef(this Map map, ThingDef thingDef, int count, Predicate<Thing> validator)
     {
         List<Thing> takeThings = TakeThingsOfDef(map, thingDef, count, validator, out int actualDestoryCount);
-        for (int i = takeThings.Count; i >= 0; i--)
+        for (int i = takeThings.Count - 1; i >= 0; i--)
         {
             takeThings[i].Destroy();
         }

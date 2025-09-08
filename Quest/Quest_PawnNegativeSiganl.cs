@@ -85,12 +85,14 @@ public class QuestNode_PawnNegativeSiganl : QuestNode
         addTag = addTag && !tagToAdd.NullOrEmpty();
 
         List<string> processedSignals = [
+                 ProcessSignal("Destroyed"),
                  ProcessSignal("Arrested"),
                  ProcessSignal("BecameMutant"),
                  ProcessSignal("SurgeryViolation"),
+                 ProcessSignal("PsychicRitualTarget"),
                  ProcessSignal("Kidnapped"),
+                 ProcessSignal("Banished"),
                  ProcessSignal("LeftBehind"),
-                 ProcessSignal("Destroyed"),
              ];
 
         return processedSignals;

@@ -65,11 +65,13 @@
     <Compile Include="Component\CooldownRecordManager.cs" />
     <Compile Include="Component\CooldownRecord.cs" />
     <Compile Include="Interface\ILordJobWithTalk.cs" />
+    <Compile Include="JobDriver_InteractWithThing.cs" />
     <Compile Include="JobDriver_InteractWithThingAtOnce.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
     <Compile Include="Interface\ILordFloatMenuProvider.cs" />
     <Compile Include="JobDriver_TalkWithAtOnce.cs" />
+    <Compile Include="JobExtension.cs" />
     <Compile Include="Lord\LordJob_VisitColonyTalkable.cs" />
     <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
     <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
@@ -80,12 +82,12 @@
     <Compile Include="Quest\Quest_TransToHardcodedSignalWithQuestID.cs" />
     <Compile Include="Thing\BulletBase.cs" />
     <Compile Include="Thing\CompDestoryAfterSwapMap.cs" />
-    <Compile Include="Thing\CompSpecialBuilding.cs" />
     <Compile Include="HarmonyPatch\MapParent_GetShuttleFloatMenuOptions_Patch.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
     <Compile Include="Interface\IPawnFloatMenuOptionProvider.cs" />
     <Compile Include="Utility\QuestUtility.cs" />
+    <Compile Include="WorkGiver_ThingRequestExtension.cs" />
     <Compile Include="WorldObject\CaravanArrivalAction_GenerateAndEnter.cs" />
     <Compile Include="Interface\IQuestAssociate.cs" />
     <Compile Include="Interface\IFixedCaravanAssociate.cs" />
@@ -95,7 +97,6 @@
     <Compile Include="Interface\ICaravanAssociate.cs" />
     <Compile Include="Interface\IPawnPreApplyDamage.cs" />
     <Compile Include="Interface\IPawnRetentionHolder.cs" />
-    <Compile Include="MapComponent_SpecialBuildingManager.cs" />
     <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />
     <Compile Include="Lord\LordJob_AssistColony_NeverFlee.cs" />
     <Compile Include="Incident\IncidentWorker_IsolatedTraderCaravanArrival.cs" />

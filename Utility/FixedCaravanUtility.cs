@@ -121,6 +121,8 @@ public static class OAFrame_FixedCaravanUtility
         {
             Find.WorldSelector.Select(caravan, playSound: false);
         }
+
+        fixedCaravan.PostConvertToCaravan(caravan);
         fixedCaravan.Destroy();
         TempPawns.Clear();
         return caravan;

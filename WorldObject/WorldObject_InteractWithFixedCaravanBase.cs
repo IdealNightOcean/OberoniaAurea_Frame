@@ -1,7 +1,6 @@
 ﻿using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -13,6 +12,7 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
 
     protected bool isWorking;
     protected int ticksRemaining;
+    [Unsaved] protected bool interrupt;
 
     protected FixedCaravan associatedFixedCaravan;
     public FixedCaravan AssociatedFixedCaravan => associatedFixedCaravan;
@@ -31,19 +31,18 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         }
     }
 
-    protected override void Tick()
+    protected override void TickInterval(int delta)
     {
-        base.Tick();
+        base.TickInterval(delta);
         if (isWorking)
         {
-            WorkTick();
+            WorkTickInterval(delta);
         }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    protected virtual void WorkTick()
+    protected virtual void WorkTickInterval(int delta)
     {
-        if (--ticksRemaining < 0)
+        if ((ticksRemaining -= delta) <= 0)
         {
             EndWork(interrupt: false, convertToCaravan: true);
         }
@@ -62,6 +61,7 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         Find.WorldSelector.Select(fixedCaravan);
 
         isWorking = true;
+        interrupt = false;
         ticksRemaining = TicksNeeded;
 
         return true;
@@ -72,6 +72,7 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         if (isWorking)
         {
             isWorking = false;
+            this.interrupt = interrupt;
             if (interrupt)
             {
                 InterruptWork();
@@ -103,6 +104,7 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
     {
         EndWork(interrupt: true, convertToCaravan: false);
     }
+    public virtual void PostConvertToCaravan(Caravan caravan) { }
 
     public virtual string FixedCaravanWorkDesc()
     {

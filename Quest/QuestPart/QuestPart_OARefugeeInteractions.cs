@@ -18,68 +18,52 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
     }
 
     public bool allowAssaultColony = true;
-
     public bool allowLeave = true;
-
     public bool allowBadThought = true;
 
-    public string inSignalDestroyed;
-
-    public string inSignalArrested;
-
-    public string inSignalSurgeryViolation;
-
-    public string inSignalPsychicRitualTarget;
-
     public string inSignalRecruited;
-
-    public string inSignalKidnapped;
-
-    public string inSignalAssaultColony;
-
     public string inSignalLeftMap;
 
+    public string inSignalDestroyed;
+    public string inSignalArrested;
+    public string inSignalSurgeryViolation;
+    public string inSignalPsychicRitualTarget;
+    public string inSignalKidnapped;
+    public string inSignalAssaultColony;
+    public string inSignalLeftBehind;
     public string inSignalBanished;
 
     public string outSignalDestroyed_AssaultColony;
-
     public string outSignalDestroyed_LeaveColony;
-
     public string outSignalDestroyed_BadThought;
 
     public string outSignalArrested_AssaultColony;
-
     public string outSignalArrested_LeaveColony;
-
     public string outSignalArrested_BadThought;
 
+    public string outSignalLeftBehind_LeaveColony;
+    public string outSignalLeftBehind_BadThought;
+
     public string outSignalSurgeryViolation_AssaultColony;
-
     public string outSignalSurgeryViolation_LeaveColony;
-
     public string outSignalSurgeryViolation_BadThought;
 
     public string outSignalPsychicRitualTarget_AssaultColony;
-
     public string outSignalPsychicRitualTarget_LeaveColony;
-
     public string outSignalPsychicRitualTarget_BadThought;
 
     public string outSignalLast_Arrested;
-
     public string outSignalLast_Destroyed;
-
     public string outSignalLast_Kidnapped;
-
     public string outSignalLast_Recruited;
+    public string outSignalLast_Banished;
+    public string outSignalLast_LeftBehind;
 
     public string outSignalLast_LeftMapAllHealthy;
-
     public string outSignalLast_LeftMapAllNotHealthy;
 
-    public string outSignalLast_Banished;
-
     public List<Pawn> pawns = [];
+    [Unsaved] private List<InteractionResponseType> availableInteractions;
 
     public Faction faction;
 
@@ -92,12 +76,21 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         this.allowAssaultColony = allowAssaultColony;
         this.allowLeave = allowLeave;
         this.allowBadThought = allowBadThought;
+        if (!allowAssaultColony && !allowLeave && !allowBadThought)
+        {
+            allowLeave = true;
+            Log.Error("No interaction available - enabling allowLeave as fallback");
+        }
+        InitAvailableInteractions();
+
+        inSignalAssaultColony = QuestGen.GenerateNewSignal("AssaultColony");
 
         inSignalDestroyed = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Destroyed");
         inSignalSurgeryViolation = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.SurgeryViolation");
+        inSignalPsychicRitualTarget = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.PsychicRitualTarget");
         inSignalKidnapped = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Kidnapped");
-        inSignalAssaultColony = QuestGen.GenerateNewSignal("AssaultColony");
         inSignalLeftMap = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.LeftMap");
+        inSignalLeftBehind = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.LeftBehind");
         inSignalBanished = QuestGenUtility.HardcodedSignalWithQuestID("lodgers.Banished");
 
         if (allowAssaultColony)
@@ -113,6 +106,7 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
             outSignalDestroyed_LeaveColony = QuestGen.GenerateNewSignal("LodgerDestroyed_LeaveColony");
             outSignalArrested_LeaveColony = QuestGen.GenerateNewSignal("LodgerArrested_LeaveColony");
             outSignalSurgeryViolation_LeaveColony = QuestGen.GenerateNewSignal("LodgerSurgeryViolation_LeaveColony");
+            outSignalLeftBehind_LeaveColony = QuestGen.GenerateNewSignal("LodgerLeftBehind_LeaveColony");
             outSignalPsychicRitualTarget_LeaveColony = QuestGen.GenerateNewSignal("LodgerPsychicRitualTarget_LeaveColony");
         }
 
@@ -121,6 +115,7 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
             outSignalDestroyed_BadThought = QuestGen.GenerateNewSignal("LodgerDestroyed_BadThought");
             outSignalArrested_BadThought = QuestGen.GenerateNewSignal("LodgerArrested_BadThought");
             outSignalSurgeryViolation_BadThought = QuestGen.GenerateNewSignal("LodgerSurgeryViolation_BadThought");
+            outSignalLeftBehind_BadThought = QuestGen.GenerateNewSignal("LodgerLeftBehind_BadThought");
             outSignalPsychicRitualTarget_BadThought = QuestGen.GenerateNewSignal("LodgerPsychicRitualTarget_BadThought");
         }
 
@@ -131,39 +126,55 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         outSignalLast_LeftMapAllHealthy = QuestGen.GenerateNewSignal("LastLodger_LeftMapAllHealthy");
         outSignalLast_LeftMapAllNotHealthy = QuestGen.GenerateNewSignal("LastLodger_LeftMapAllNotHealthy");
         outSignalLast_Banished = QuestGen.GenerateNewSignal("LastLodger_Banished");
+        outSignalLast_LeftBehind = QuestGen.GenerateNewSignal("LastLodger_LeftBehind");
     }
 
     protected override void ProcessQuestSignal(Signal signal)
     {
-        if (signal.tag == inSignalRecruited && signal.args.TryGetArg("SUBJECT", out Pawn arg) && pawns.Contains(arg))
+        if (inSignalAssaultColony is not null && signal.tag == inSignalAssaultColony)
         {
-            pawns.Remove(arg);
-            arg.apparel?.UnlockAll(); //解锁被招募人员的装备
+            AssaultColony(null);
+        }
+
+        if (!signal.args.TryGetArg("SUBJECT", out Pawn argPawn) || !pawns.Contains(argPawn))
+        {
+            return;
+        }
+
+        string signalTag = signal.tag;
+
+        if (signalTag == inSignalRecruited)
+        {
+            pawns.Remove(argPawn);
+            argPawn.apparel?.UnlockAll(); //解锁被招募人员的装备
             if (pawns.Count == 0)
             {
                 Find.SignalManager.SendSignal(new Signal(outSignalLast_Recruited, signal.args));
             }
         }
-        if (signal.tag == inSignalKidnapped && signal.args.TryGetArg("SUBJECT", out Pawn arg2) && pawns.Contains(arg2))
+
+        else if (signalTag == inSignalKidnapped)
         {
-            pawns.Remove(arg2);
+            pawns.Remove(argPawn);
             if (pawns.Count == 0)
             {
                 Find.SignalManager.SendSignal(new Signal(outSignalLast_Kidnapped, signal.args));
             }
         }
-        if (signal.tag == inSignalBanished && signal.args.TryGetArg("SUBJECT", out Pawn arg3) && pawns.Contains(arg3))
+
+        else if (signalTag == inSignalBanished)
         {
-            pawns.Remove(arg3);
+            pawns.Remove(argPawn);
             if (pawns.Count == 0)
             {
                 Find.SignalManager.SendSignal(new Signal(outSignalLast_Banished, signal.args));
             }
         }
-        if (signal.tag == inSignalLeftMap && signal.args.TryGetArg("SUBJECT", out Pawn arg4) && pawns.Contains(arg4))
+
+        else if (signalTag == inSignalLeftMap)
         {
-            pawns.Remove(arg4);
-            if (arg4.Destroyed || arg4.InMentalState || arg4.health.hediffSet.BleedRateTotal > 0.001f)
+            pawns.Remove(argPawn);
+            if (argPawn.Destroyed || argPawn.InMentalState || argPawn.health.hediffSet.BleedRateTotal > 0.001f)
             {
                 pawnsLeftUnhealthy++;
             }
@@ -182,10 +193,35 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
                 }
             }
         }
-        if (signal.tag == inSignalDestroyed && signal.args.TryGetArg("SUBJECT", out Pawn arg5) && pawns.Contains(arg5))
+
+        else if (signalTag == inSignalLeftBehind)
         {
-            pawns.Remove(arg5);
-            arg5.SetFaction(faction);
+            pawns.Remove(argPawn);
+            if (pawns.Count == 0)
+            {
+                Find.SignalManager.SendSignal(new Signal(outSignalLast_LeftBehind, signal.args));
+            }
+            else
+            {
+                signal.args.Add(pawns.Count.Named("PAWNSALIVECOUNT"));
+                switch (ChooseRandomInteraction())
+                {
+                    case InteractionResponseType.AssaultColony:
+                    case InteractionResponseType.Leave:
+                        LeavePlayer();
+                        Find.SignalManager.SendSignal(new Signal(outSignalLeftBehind_LeaveColony, signal.args));
+                        break;
+                    case InteractionResponseType.BadThought:
+                        Find.SignalManager.SendSignal(new Signal(outSignalLeftBehind_BadThought, signal.args));
+                        break;
+                }
+            }
+        }
+
+        else if (signalTag == inSignalDestroyed)
+        {
+            pawns.Remove(argPawn);
+            argPawn.SetFaction(faction);
             if (pawns.Count == 0)
             {
                 Find.SignalManager.SendSignal(new Signal(outSignalLast_Destroyed, signal.args));
@@ -209,10 +245,11 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
                 }
             }
         }
-        if (signal.tag == inSignalArrested && signal.args.TryGetArg("SUBJECT", out Pawn arg6) && pawns.Contains(arg6))
+
+        else if (signalTag == inSignalArrested)
         {
-            pawns.Remove(arg6);
-            bool inAggroMentalState = arg6.InAggroMentalState;
+            pawns.Remove(argPawn);
+            bool inAggroMentalState = argPawn.InAggroMentalState;
             if (pawns.Count == 0)
             {
                 Find.SignalManager.SendSignal(new Signal(outSignalLast_Arrested, signal.args));
@@ -236,7 +273,8 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
                 }
             }
         }
-        if (signal.tag == inSignalSurgeryViolation && signal.args.TryGetArg("SUBJECT", out Pawn arg7) && pawns.Contains(arg7))
+
+        else if (signalTag == inSignalSurgeryViolation)
         {
             signal.args.Add(pawns.Count.Named("PAWNSALIVECOUNT"));
             switch (ChooseRandomInteraction())
@@ -254,7 +292,8 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
                     break;
             }
         }
-        if (signal.tag == inSignalPsychicRitualTarget && signal.args.TryGetArg("SUBJECT", out Pawn arg8) && pawns.Contains(arg8))
+
+        else if (signalTag == inSignalPsychicRitualTarget)
         {
             signal.args.Add(pawns.Count.Named("PAWNSALIVECOUNT"));
             switch (ChooseRandomInteraction())
@@ -271,10 +310,6 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
                     Find.SignalManager.SendSignal(new Signal(outSignalPsychicRitualTarget_BadThought, signal.args));
                     break;
             }
-        }
-        if (inSignalAssaultColony is not null && signal.tag == inSignalAssaultColony)
-        {
-            AssaultColony(null);
         }
     }
 
@@ -313,41 +348,60 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
                 RestUtility.WakeUp(pawns[j]);
             }
         }
-        Lord lord = LordMaker.MakeNewLord(faction, new LordJob_AssaultColony(faction, canKidnap: true, canTimeoutOrFlee: true, sappers: false, useAvoidGridSmart: false, canSteal: true, breachers: false, canPickUpOpportunisticWeapons: true), mapParent.Map);
+        Dictionary<Map, Lord> dictionary = [];
         for (int k = 0; k < pawns.Count; k++)
         {
-            if (!pawns[k].Dead)
+            Pawn pawn = pawns[k];
+            Map mapHeld = pawn.MapHeld;
+            if (!pawn.Dead)
             {
-                lord.AddPawn(pawns[k]);
+                if (!dictionary.TryGetValue(mapHeld, out Lord mapLord))
+                {
+                    mapLord = dictionary[mapHeld] = LordMaker.MakeNewLord(faction,
+                                                                          new LordJob_AssaultColony(faction,
+                                                                                                    canKidnap: true,
+                                                                                                    canTimeoutOrFlee: true,
+                                                                                                    sappers: false,
+                                                                                                    useAvoidGridSmart: false,
+                                                                                                    canSteal: true,
+                                                                                                    breachers: false,
+                                                                                                    canPickUpOpportunisticWeapons: true),
+                                                                          mapHeld);
+                }
+                mapLord.AddPawn(pawn);
             }
         }
         Complete();
     }
 
-    private InteractionResponseType ChooseRandomInteraction()
+    private void InitAvailableInteractions()
     {
-        List<InteractionResponseType> interactionResponseTypes = [];
+        availableInteractions = [];
         if (allowAssaultColony)
         {
-            interactionResponseTypes.Add(InteractionResponseType.AssaultColony);
+            availableInteractions.Add(InteractionResponseType.AssaultColony);
         }
         if (allowLeave)
         {
-            interactionResponseTypes.Add(InteractionResponseType.Leave);
+            availableInteractions.Add(InteractionResponseType.Leave);
         }
         if (allowBadThought)
         {
-            interactionResponseTypes.Add(InteractionResponseType.BadThought);
+            availableInteractions.Add(InteractionResponseType.BadThought);
         }
+        if (availableInteractions.NullOrEmpty())
+        {
+            availableInteractions.Add(InteractionResponseType.Leave);
+        }
+    }
 
-        if (interactionResponseTypes.Any())
+    private InteractionResponseType ChooseRandomInteraction()
+    {
+        if (availableInteractions.NullOrEmpty())
         {
-            return interactionResponseTypes.RandomElement();
+            InitAvailableInteractions();
         }
-        else
-        {
-            return InteractionResponseType.Leave;
-        }
+        return availableInteractions.RandomElementWithFallback(InteractionResponseType.Leave);
     }
 
     public override void Notify_FactionRemoved(Faction f)
@@ -364,34 +418,49 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         Scribe_Values.Look(ref allowAssaultColony, "allowAssaultColony", defaultValue: true);
         Scribe_Values.Look(ref allowLeave, "allowLeave", defaultValue: true);
         Scribe_Values.Look(ref allowBadThought, "allowBadThought", defaultValue: true);
+
+        Scribe_Values.Look(ref inSignalRecruited, "inSignalRecruited");
+        Scribe_Values.Look(ref inSignalLeftMap, "inSignalLeftMap");
+
+        Scribe_Values.Look(ref inSignalAssaultColony, "inSignalAssaultColony");
+
         Scribe_Values.Look(ref inSignalDestroyed, "inSignalDestroyed");
         Scribe_Values.Look(ref inSignalArrested, "inSignalArrested");
         Scribe_Values.Look(ref inSignalSurgeryViolation, "inSignalSurgeryViolation");
         Scribe_Values.Look(ref inSignalPsychicRitualTarget, "inSignalPsychicRitualTarget");
-        Scribe_Values.Look(ref inSignalRecruited, "inSignalRecruited");
         Scribe_Values.Look(ref inSignalKidnapped, "inSignalKidnapped");
-        Scribe_Values.Look(ref inSignalAssaultColony, "inSignalAssaultColony");
-        Scribe_Values.Look(ref inSignalLeftMap, "inSignalLeftMap");
+        Scribe_Values.Look(ref inSignalLeftBehind, "inSignalLeftBehind");
         Scribe_Values.Look(ref inSignalBanished, "inSignalBanished");
+
         Scribe_Values.Look(ref outSignalDestroyed_AssaultColony, "outSignalDestroyed_AssaultColony");
         Scribe_Values.Look(ref outSignalDestroyed_LeaveColony, "outSignalDestroyed_LeaveColony");
         Scribe_Values.Look(ref outSignalDestroyed_BadThought, "outSignalDestroyed_BadThought");
+
         Scribe_Values.Look(ref outSignalArrested_AssaultColony, "outSignalArrested_AssaultColony");
         Scribe_Values.Look(ref outSignalArrested_LeaveColony, "outSignalArrested_LeaveColony");
         Scribe_Values.Look(ref outSignalArrested_BadThought, "outSignalArrested_BadThought");
+
+        Scribe_Values.Look(ref outSignalLeftBehind_LeaveColony, "outSignalLeftBehind_LeaveColony");
+        Scribe_Values.Look(ref outSignalLeftBehind_BadThought, "outSignalLeftBehind_BadThought");
+
         Scribe_Values.Look(ref outSignalSurgeryViolation_AssaultColony, "outSignalSurgeryViolation_AssaultColony");
         Scribe_Values.Look(ref outSignalSurgeryViolation_LeaveColony, "outSignalSurgeryViolation_LeaveColony");
         Scribe_Values.Look(ref outSignalSurgeryViolation_BadThought, "outSignalSurgeryViolation_BadThought");
+
         Scribe_Values.Look(ref outSignalPsychicRitualTarget_AssaultColony, "outSignalPsychicRitualTarget_AssaultColony");
         Scribe_Values.Look(ref outSignalPsychicRitualTarget_LeaveColony, "outSignalPsychicRitualTarget_LeaveColony");
         Scribe_Values.Look(ref outSignalPsychicRitualTarget_BadThought, "outSignalPsychicRitualTarget_BadThought");
+
         Scribe_Values.Look(ref outSignalLast_Arrested, "outSignalLastArrested");
         Scribe_Values.Look(ref outSignalLast_Destroyed, "outSignalLastDestroyed");
         Scribe_Values.Look(ref outSignalLast_Kidnapped, "outSignalLastKidnapped");
         Scribe_Values.Look(ref outSignalLast_Recruited, "outSignalLastRecruited");
+        Scribe_Values.Look(ref outSignalLast_Banished, "outSignalLast_Banished");
+        Scribe_Values.Look(ref outSignalLast_LeftBehind, "outSignalLast_LeftBehind");
+
         Scribe_Values.Look(ref outSignalLast_LeftMapAllHealthy, "outSignalLastLeftMapAllHealthy");
         Scribe_Values.Look(ref outSignalLast_LeftMapAllNotHealthy, "outSignalLastLeftMapAllNotHealthy");
-        Scribe_Values.Look(ref outSignalLast_Banished, "outSignalLast_Banished");
+
         Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
         Scribe_References.Look(ref faction, "faction");
         Scribe_References.Look(ref mapParent, "mapParent");
