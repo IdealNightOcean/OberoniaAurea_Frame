@@ -10,7 +10,9 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_MiscUtility
 {
-    //尝试立刻触发事件
+    /// <summary>
+    /// 尝试立刻触发事件
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool TryFireIncidentNow(IncidentDef incidentDef, IncidentParms parms, bool force = false)
     {
@@ -21,7 +23,9 @@ public static class OAFrame_MiscUtility
         return false;
     }
 
-    //添加队列事件
+    /// <summary>
+    /// 添加队列事件
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void AddNewQueuedIncident(IncidentDef incidentDef, int delayTicks, IncidentParms parms, int retryDurationTicks = 0)
     {
@@ -33,7 +37,9 @@ public static class OAFrame_MiscUtility
         Find.Storyteller.incidentQueue.Add(incidentDef, Find.TickManager.TicksGame + delayTicks, parms, retryDurationTicks);
     }
 
-    //创建物品
+    /// <summary>
+    /// 创建物品
+    /// </summary>
     public static List<Thing> TryGenerateThing(ThingDef def, int count)
     {
         List<Thing> list = [];

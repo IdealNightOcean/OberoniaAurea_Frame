@@ -7,7 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//初始化类型物品交易请求（有QuestPart）
+/// <summary>
+/// 初始化类型物品交易请求
+/// </summary>
 public class QuestNode_InitiateCategoryTradeRequest : QuestNode
 {
     [NoTranslate]

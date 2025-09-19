@@ -8,6 +8,7 @@ namespace OberoniaAurea_Frame;
 public static class OAFrame_DiaUtility
 {
     public static DiaOption DefaultCloseOption => new("Close".Translate()) { resolveTree = true };
+    public static DiaOption DefaultPostponeOption => new("PostponeLetter".Translate()) { resolveTree = true };
     public static DiaOption DefaultConfirmOption => new("Confirm".Translate()) { resolveTree = true };
 
 

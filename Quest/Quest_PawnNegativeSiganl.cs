@@ -50,7 +50,7 @@ public class QuestNode_PawnNegativeSiganl : QuestNode
 
         if (useCommonSiganls.GetValue(slate))
         {
-            inSignals.AddRangeUnique(GetCommonNegativeSiganls(addTag, tagToAdd));
+            inSignals.AddRangeUnique(OAFrame_QuestUtility.GetCommonPawnNegativeSiganls(addTag, tagToAdd));
         }
 
         return inSignals;
@@ -79,37 +79,6 @@ public class QuestNode_PawnNegativeSiganl : QuestNode
 
         return processedSignals;
     }
-
-    public static List<string> GetCommonNegativeSiganls(bool addTag, string tagToAdd = null)
-    {
-        addTag = addTag && !tagToAdd.NullOrEmpty();
-
-        List<string> processedSignals = [
-                 ProcessSignal("Destroyed"),
-                 ProcessSignal("Arrested"),
-                 ProcessSignal("BecameMutant"),
-                 ProcessSignal("SurgeryViolation"),
-                 ProcessSignal("PsychicRitualTarget"),
-                 ProcessSignal("Kidnapped"),
-                 ProcessSignal("Banished"),
-                 ProcessSignal("LeftBehind"),
-             ];
-
-        return processedSignals;
-
-        string ProcessSignal(string signalTag)
-        {
-            if (addTag)
-            {
-                return QuestGenUtility.HardcodedSignalWithQuestID((tagToAdd + "." + signalTag));
-            }
-            else
-            {
-                return QuestGenUtility.HardcodedSignalWithQuestID(signalTag);
-            }
-        }
-    }
-
 }
 
 public class QuestPart_PawnNegativeSiganl : QuestPart

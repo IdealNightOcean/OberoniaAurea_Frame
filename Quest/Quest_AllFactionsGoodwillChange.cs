@@ -5,7 +5,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//统一影响全部派系关系（有QuestPart）
+/// <summary>
+/// 统一影响全部派系关系
+/// </summary>
 public class QuestNode_AllFactionsGoodwillChange : QuestNode
 {
     [NoTranslate]
@@ -15,6 +17,10 @@ public class QuestNode_AllFactionsGoodwillChange : QuestNode
     public SlateRef<HistoryEventDef> historyEvent;
     public SlateRef<bool> canSendMessage = true;
     public SlateRef<bool> canSendHostilityLetter = true;
+
+    public SlateRef<bool> canApplyOnAlly = true;
+    public SlateRef<bool> canApplyOnNeutral = true;
+    public SlateRef<bool> canApplyOnHostile = true;
 
     protected override bool TestRunInt(Slate slate)
     {
@@ -30,7 +36,11 @@ public class QuestNode_AllFactionsGoodwillChange : QuestNode
             goodwillChange = goodwillChange.GetValue(slate),
             historyEvent = historyEvent.GetValue(slate),
             canSendMessage = canSendMessage.GetValue(slate),
-            canSendHostilityLetter = canSendHostilityLetter.GetValue(slate)
+            canSendHostilityLetter = canSendHostilityLetter.GetValue(slate),
+
+            canApplyOnAlly = canApplyOnAlly.GetValue(slate),
+            canApplyOnNeutral = canApplyOnNeutral.GetValue(slate),
+            canApplyOnHostile = canApplyOnHostile.GetValue(slate)
         };
         QuestGen.quest.AddPart(questPart_AllFactionsGoodwillChange);
     }
@@ -45,29 +55,23 @@ public class QuestPart_AllFactionsGoodwillChange : QuestPart
     public bool canSendMessage = true;
     public bool canSendHostilityLetter = true;
 
-    public override void Notify_QuestSignalReceived(Signal signal)
+    public bool canApplyOnAlly = true;
+    public bool canApplyOnNeutral = true;
+    public bool canApplyOnHostile = true;
+
+    public override void ExposeData()
     {
-        base.Notify_QuestSignalReceived(signal);
-        if (signal.tag == inSignal)
-        {
-            Faction player = Faction.OfPlayer;
-            foreach (Faction faction in Find.FactionManager.AllFactionsListForReading.Where(IsGoodFaction))
-            {
-                faction.TryAffectGoodwillWith(player, goodwillChange, canSendMessage, canSendHostilityLetter, historyEvent);
-            }
-        }
-    }
-    protected bool IsGoodFaction(Faction faction)
-    {
-        if (faction.defeated || !faction.HasGoodwill)
-        {
-            return false;
-        }
-        if (faction == Faction.OfPlayer)
-        {
-            return false;
-        }
-        return true;
+        base.ExposeData();
+        Scribe_Defs.Look(ref historyEvent, "historyEvent");
+        Scribe_Values.Look(ref inSignal, "inSignal");
+        Scribe_Values.Look(ref goodwillChange, "goodwillChange", 0);
+
+        Scribe_Values.Look(ref canSendMessage, "canSendMessage", defaultValue: true);
+        Scribe_Values.Look(ref canSendHostilityLetter, "canSendHostilityLetter", defaultValue: true);
+
+        Scribe_Values.Look(ref canApplyOnAlly, "canApplyOnAlly", defaultValue: true);
+        Scribe_Values.Look(ref canApplyOnNeutral, "canApplyOnNeutral", defaultValue: true);
+        Scribe_Values.Look(ref canApplyOnHostile, "canApplyOnHostile", defaultValue: true);
     }
 
     public override void Cleanup()
@@ -78,13 +82,34 @@ public class QuestPart_AllFactionsGoodwillChange : QuestPart
         goodwillChange = 0;
     }
 
-    public override void ExposeData()
+    public override void Notify_QuestSignalReceived(Signal signal)
     {
-        base.ExposeData();
-        Scribe_Defs.Look(ref historyEvent, "historyEvent");
-        Scribe_Values.Look(ref inSignal, "inSignal");
-        Scribe_Values.Look(ref goodwillChange, "goodwillChange", 0);
-        Scribe_Values.Look(ref canSendMessage, "canSendMessage", defaultValue: true);
-        Scribe_Values.Look(ref canSendHostilityLetter, "canSendHostilityLetter", defaultValue: true);
+        base.Notify_QuestSignalReceived(signal);
+        if (signal.tag == inSignal)
+        {
+            Faction player = Faction.OfPlayer;
+            foreach (Faction faction in Find.FactionManager.AllFactionsListForReading.Where(IsAvailableFaction))
+            {
+                faction.TryAffectGoodwillWith(player, goodwillChange, canSendMessage, canSendHostilityLetter, historyEvent);
+            }
+        }
+    }
+    protected virtual bool IsAvailableFaction(Faction faction)
+    {
+        if (faction.defeated || !faction.HasGoodwill)
+        {
+            return false;
+        }
+        if (faction == Faction.OfPlayer)
+        {
+            return false;
+        }
+        return faction.PlayerRelationKind switch
+        {
+            FactionRelationKind.Ally => canApplyOnAlly,
+            FactionRelationKind.Neutral => canApplyOnNeutral,
+            FactionRelationKind.Hostile => canApplyOnHostile,
+            _ => true,
+        };
     }
 }

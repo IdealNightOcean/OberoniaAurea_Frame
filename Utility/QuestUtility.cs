@@ -2,6 +2,7 @@
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Verse;
 
@@ -78,7 +79,9 @@ public static class OAFrame_QuestUtility
         return quest is not null && (quest.State == QuestState.NotYetAccepted || quest.State == QuestState.Ongoing);
     }
 
-    // 任务可用时发送信件
+    /// <summary>
+    /// 任务可用时发送信件
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SendLetterQuestAvailable(this Quest quest)
     {
@@ -88,4 +91,33 @@ public static class OAFrame_QuestUtility
         }
     }
 
+    public static List<string> GetCommonPawnNegativeSiganls(bool addTag, string tagToAdd = null)
+    {
+        addTag = addTag && !tagToAdd.NullOrEmpty();
+
+        List<string> processedSignals = [
+                 ProcessSignal("Destroyed"),
+                 ProcessSignal("Arrested"),
+                 ProcessSignal("BecameMutant"),
+                 ProcessSignal("SurgeryViolation"),
+                 ProcessSignal("PsychicRitualTarget"),
+                 ProcessSignal("Kidnapped"),
+                 ProcessSignal("Banished"),
+                 ProcessSignal("LeftBehind"),
+             ];
+
+        return processedSignals;
+
+        string ProcessSignal(string signalTag)
+        {
+            if (addTag)
+            {
+                return QuestGenUtility.HardcodedSignalWithQuestID((tagToAdd + "." + signalTag));
+            }
+            else
+            {
+                return QuestGenUtility.HardcodedSignalWithQuestID(signalTag);
+            }
+        }
+    }
 }

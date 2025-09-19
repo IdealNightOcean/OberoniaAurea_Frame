@@ -10,69 +10,39 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_FactionUtility
 {
-    //是否为鼠族派系
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsRatkinFaction(this Faction faction)
     {
-        return faction?.def?.categoryTag == "RatkinStory";
+        return faction?.def.GetModExtension<RatkinFactionFlag>() is not null;
     }
 
-    public static List<Faction> ValidFactionsOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false, bool allowNonHumanlike = false)
+    public static FactionValidationParams AllyNormalFactionParams => new() { AllowNeutral = false, AllyHostile = false };
+    public static FactionValidationParams NonHostileNormalFactionParams => new() { AllyHostile = false };
+    public static FactionValidationParams HostileNormalFactionParams => new() { AllowAlly = false, AllowNeutral = false };
+
+    public static IEnumerable<Faction> GetAvailableFactionsOfDef(FactionDef def, FactionValidationParams validationParams)
     {
-        return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).ToList();
-        bool ValidFaction(Faction tf)
-        {
-            if (tf is null)
-            {
-                return false;
-            }
-            if (tf.defeated && !allowDefeated)
-            {
-                return false;
-            }
-            if (!allowNonHumanlike && !tf.def.humanlikeFaction)
-            {
-                return false;
-            }
-            if (tf.temporary && !allowTemporary)
-            {
-                return false;
-            }
-            return true;
-        }
+        return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && validationParams.ValidateFaction(f));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Faction RandomFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowTemporary = false, bool allowNonHumanlike = false)
+    public static Faction RandomAvailableFactionOfDef(FactionDef def, FactionValidationParams validationParams)
     {
-        return ValidFactionsOfDef(def, allowDefeated, allowTemporary, allowNonHumanlike).RandomElementWithFallback(null);
+        return GetAvailableFactionsOfDef(def, validationParams).RandomElementWithFallback(null);
     }
 
-    public static List<Faction> ValidTempFactionsOfDef(FactionDef def, bool allowDefeated = false, bool allowNonHumanlike = false)
+    public static IEnumerable<Faction> GetAvailableTempFactionsOfDef(FactionDef def, FactionValidationParams validationParams)
     {
-        return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && ValidFaction(f)).ToList();
-        bool ValidFaction(Faction tf)
-        {
-            if (tf is null)
-            {
-                return false;
-            }
-            if (tf.defeated && !allowDefeated)
-            {
-                return false;
-            }
-            if (!allowNonHumanlike && !tf.def.humanlikeFaction)
-            {
-                return false;
-            }
-            return tf.temporary;
-        }
+        validationParams.AllTemporary = true;
+        return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def
+                                                                        && f.temporary
+                                                                        && validationParams.ValidateFaction(f));
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Faction RandomTempFactionOfDef(FactionDef def, bool allowDefeated = false, bool allowNonHumanlike = false)
+    public static Faction RandomAvailableTempFactionOfDef(FactionDef def, FactionValidationParams validationParams)
     {
-        return ValidTempFactionsOfDef(def, allowDefeated, allowNonHumanlike).RandomElementWithFallback(null);
+        return GetAvailableTempFactionsOfDef(def, validationParams).RandomElementWithFallback(null);
     }
 
     public static Faction GenerateTempFaction(FactionDef templateDef, FactionRelationKind relationKindWithPlayer = FactionRelationKind.Neutral)

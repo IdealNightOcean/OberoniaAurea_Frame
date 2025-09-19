@@ -64,14 +64,16 @@
   <ItemGroup>
     <Compile Include="Component\CooldownRecordManager.cs" />
     <Compile Include="Component\CooldownRecord.cs" />
+    <Compile Include="Component\FactionValidationParams.cs" />
+    <Compile Include="FactionTagsExtension.cs" />
     <Compile Include="Interface\ILordJobWithTalk.cs" />
-    <Compile Include="JobDriver_InteractWithThing.cs" />
-    <Compile Include="JobDriver_InteractWithThingAtOnce.cs" />
+    <Compile Include="Job\JobDriver_InteractWithThing.cs" />
+    <Compile Include="Job\JobDriver_InteractWithThingAtOnce.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
     <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
     <Compile Include="Interface\ILordFloatMenuProvider.cs" />
-    <Compile Include="JobDriver_TalkWithAtOnce.cs" />
-    <Compile Include="JobExtension.cs" />
+    <Compile Include="Job\JobDriver_TalkWithAtOnce.cs" />
+    <Compile Include="Job\JobExtension.cs" />
     <Compile Include="Lord\LordJob_VisitColonyTalkable.cs" />
     <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
     <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
@@ -86,6 +88,8 @@
     <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
     <Compile Include="Interface\IPawnFloatMenuOptionProvider.cs" />
+    <Compile Include="Thing\CompInteractWithThing.cs" />
+    <Compile Include="Utility\DropPodUtility.cs" />
     <Compile Include="Utility\QuestUtility.cs" />
     <Compile Include="WorkGiver_ThingRequestExtension.cs" />
     <Compile Include="WorldObject\CaravanArrivalAction_GenerateAndEnter.cs" />
