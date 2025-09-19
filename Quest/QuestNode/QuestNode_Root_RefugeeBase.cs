@@ -2,7 +2,6 @@
 using RimWorld.QuestGen;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
 
@@ -10,6 +9,10 @@ namespace OberoniaAurea_Frame;
 
 public class QuestNode_Root_RefugeeBase : QuestNode
 {
+    protected const string IsMainFactionSlate = "isMainFaction";
+    protected const string UniqueQuestDescSlate = "uniqueQuestDesc";
+    protected const string UniqueLeavingLetterSlate = "uniqueLeavingLetter";
+
     protected static readonly QuestGen_Pawns.GetPawnParms FactionOpponentPawnParams = new()
     {
         mustBeWorldPawn = true,
@@ -39,6 +42,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
         public Map map;
         public Faction faction;
+
         public List<Pawn> pawns;
 
         public QuestParameter()
@@ -53,6 +57,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
     }
 
     protected QuestParameter questParameter;
+
     public virtual PawnKindDef FixedPawnKind => PawnKindDefOf.Refugee;
     protected virtual ThoughtDef ThoughtToAdd => null;
 
@@ -74,9 +79,9 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         questParameter.faction = faction;
         slate.Set("map", questParameter.map);
         slate.Set("faction", faction);
-        if (!slate.TryGet("isMainFaction", out bool _))
+        if (!slate.TryGet(IsMainFactionSlate, out bool _))
         {
-            slate.Set("isMainFaction", !faction.temporary);
+            slate.Set(IsMainFactionSlate, !faction.temporary);
         }
         slate.Set("questDurationTicks", questParameter.questDurationTicks);
         if (questParameter.arrivalDelayTicks > 0)
@@ -156,20 +161,11 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         for (int i = 0; i < questParameter.LodgerCount; i++)
         {
             DevelopmentalStage developmentalStages = i < adultCount ? DevelopmentalStage.Adult : DevelopmentalStage.Child;
-            Pawn pawn = quest.GeneratePawn(fixedPawnKind,
-                                           questParameter.faction,
-                                           allowAddictions: true,
-                                           forcedTraits: null,
-                                           biocodeWeaponChance: 0f,
-                                           mustBeCapableOfViolence: true,
-                                           extraPawnForExtraRelationChance: null,
-                                           relationWithExtraPawnChanceFactor: 0f,
-                                           biocodeApparelChance: 0f,
-                                           ensureNonNumericName: false,
+            Pawn pawn = quest.GeneratePawn(kindDef: fixedPawnKind,
+                                           faction: questParameter.faction,
                                            forceGenerateNewPawn: true,
                                            developmentalStages: developmentalStages,
                                            allowPregnant: false);
-
 
             pawns.Add(pawn);
 
@@ -195,24 +191,16 @@ public class QuestNode_Root_RefugeeBase : QuestNode
                 delegate
                 {
                     quest.JoinPlayer(questParameter.map.Parent, Gen.YieldSingle(pawn), joinPlayer: true);
-                    quest.Letter(LetterDefOf.PositiveEvent,
-                                 inSignal: null,
-                                 chosenPawnSignal: null,
-                                 relatedFaction: null,
-                                 useColonistsOnMap: null,
-                                 useColonistsFromCaravanArg: false,
-                                 QuestPart.SignalListenMode.OngoingOnly,
-                                 lookTargets: null,
-                                 filterDeadPawnsFromLookTargets: false,
+                    quest.Letter(letterDef: LetterDefOf.PositiveEvent,
+                                 signalListenMode: QuestPart.SignalListenMode.OngoingOnly,
                                  label: "LetterLabelMessageRecruitSuccess".Translate() + ": " + pawn.LabelShortCap,
                                  text: "MessageRecruitJoinOfferAccepted".Translate(pawn.Named("RECRUITEE")));
-                    quest.SignalPass(null, null, lodgerRecruitedSignal);
+                    quest.SignalPass(outSignal: lodgerRecruitedSignal);
                 },
                 delegate
                 {
                     quest.RecordHistoryEvent(HistoryEventDefOf.CharityRefused_ThreatReward_Joiner);
                 },
-                inSignal: null, outSignalPawnAccepted: null, outSignalPawnRejected: null,
                 charity: true);
             }
         }
@@ -229,27 +217,19 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         {
             quest.Delay(questParameter.arrivalDelayTicks, delegate
             {
-                quest.PawnsArrive(questParameter.pawns,
-                                  inSignal: null,
-                                  questParameter.map.Parent,
-                                  arrivalMode: null,
+                quest.PawnsArrive(pawns: questParameter.pawns,
+                                  mapParent: questParameter.map.Parent,
                                   joinPlayer: true,
-                                  walkInSpot: null,
                                   customLetterLabel: "[lodgersArriveLetterLabel]",
                                   customLetterText: "[lodgersArriveLetterText]");
             },
-            inSignalEnable: null,
-            inSignalDisable: null,
             outSignalComplete: lodgerArrivalSignal);
         }
         else
         {
-            quest.PawnsArrive(questParameter.pawns,
-                              inSignal: null,
-                              questParameter.map.Parent,
-                              arrivalMode: null,
+            quest.PawnsArrive(pawns: questParameter.pawns,
+                              mapParent: questParameter.map.Parent,
                               joinPlayer: true,
-                              walkInSpot: null,
                               customLetterLabel: "[lodgersArriveLetterLabel]",
                               customLetterText: "[lodgersArriveLetterText]");
             quest.SendSignals(outSignals: [lodgerArrivalSignal]);
@@ -316,7 +296,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         return faction;
     }
 
-    protected virtual void SetQuestEndComp(QuestPart_OARefugeeInteractions questPart_Interactions, string failSignal, string bigFailSignal, string successSignal) { }
+    protected virtual void SetQuestEndComp(QuestPart_OARefugeeInteractions questPart_Interactions, string failSignal, string delayFailSignal, string successSignal) { }
 
     protected virtual void SetPawnsLeaveComp(string lodgerArrivalSignal, string inSignalRemovePawn)
     {
@@ -326,7 +306,6 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void DefaultDelayLeaveComp(string lodgerArrivalSignal, string inSignalDisable, string inSignalRemovePawn)
     {
         Quest quest = QuestGen.quest;
@@ -337,28 +316,12 @@ public class QuestNode_Root_RefugeeBase : QuestNode
                 quest.SignalPassWithFaction(questParameter.faction, action: null,
                     delegate
                     {
-                        quest.Letter(LetterDefOf.PositiveEvent,
-                                     inSignal: null,
-                                     chosenPawnSignal: null,
-                                     relatedFaction: null,
-                                     useColonistsOnMap: null,
-                                     useColonistsFromCaravanArg: false,
-                                     QuestPart.SignalListenMode.OngoingOnly,
-                                     lookTargets: null,
-                                     filterDeadPawnsFromLookTargets: false,
-                                     text: "[lodgersLeavingLetterText]",
-                                     textRules: null,
-                                     label: "[lodgersLeavingLetterLabel]");
+                        quest.Letter(letterDef: LetterDefOf.PositiveEvent, text: "[lodgersLeavingLetterText]", label: "[lodgersLeavingLetterLabel]");
                     });
-                quest.Leave(questParameter.pawns, inSignal: null, sendStandardLetter: false, leaveOnCleanup: false, inSignalRemovePawn, wakeUp: true);
+                quest.Leave(questParameter.pawns, sendStandardLetter: false, leaveOnCleanup: false, inSignalRemovePawn: inSignalRemovePawn, wakeUp: true);
             },
             inSignalEnable: lodgerArrivalSignal,
             inSignalDisable: inSignalDisable,
-            outSignalComplete: null,
-            reactivatable: false,
-            inspectStringTargets: null,
-            inspectString: null,
-            isQuestTimeout: false,
             expiryInfoPart: "GuestsDepartsIn".Translate(),
             expiryInfoPartTip: "GuestsDepartsOn".Translate(),
             debugLabel: "QuestDelay");
@@ -370,30 +333,30 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
         if (questParameter.allowAssaultColony)
         {
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalDestroyed_AssaultColony, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerDiedAttackPlayerLetterText]", null, "[lodgerDiedAttackPlayerLetterLabel]");
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalArrested_AssaultColony, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerArrestedAttackPlayerLetterText]", null, "[lodgerArrestedAttackPlayerLetterLabel]");
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalSurgeryViolation_AssaultColony, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerViolatedAttackPlayerLetterText]", null, "[lodgerViolatedAttackPlayerLetterLabel]");
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalPsychicRitualTarget_AssaultColony, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerPsychicRitualTargetAttackPlayerLetterText]", null, "[lodgerPsychicRitualTargetAttackPlayerLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalDestroyed_AssaultColony, text: "[lodgerDiedAttackPlayerLetterText]", label: "[lodgerDiedAttackPlayerLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalArrested_AssaultColony, text: "[lodgerArrestedAttackPlayerLetterText]", label: "[lodgerArrestedAttackPlayerLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalSurgeryViolation_AssaultColony, text: "[lodgerViolatedAttackPlayerLetterText]", label: "[lodgerViolatedAttackPlayerLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalPsychicRitualTarget_AssaultColony, text: "[lodgerPsychicRitualTargetAttackPlayerLetterText]", label: "[lodgerPsychicRitualTargetAttackPlayerLetterLabel]");
         }
 
         if (questParameter.allowLeave)
         {
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalDestroyed_LeaveColony, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerDiedLeaveMapLetterText]", null, "[lodgerDiedLeaveMapLetterLabel]");
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalArrested_LeaveColony, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerArrestedLeaveMapLetterText]", null, "[lodgerArrestedLeaveMapLetterLabel]");
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalSurgeryViolation_LeaveColony, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerViolatedLeaveMapLetterText]", null, "[lodgerViolatedLeaveMapLetterLabel]");
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalPsychicRitualTarget_LeaveColony, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerPsychicRitualTargetLeaveMapLetterText]", null, "[lodgerPsychicRitualTargetLeaveMapLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalDestroyed_LeaveColony, text: "[lodgerDiedLeaveMapLetterText]", label: "[lodgerDiedLeaveMapLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalArrested_LeaveColony, text: "[lodgerArrestedLeaveMapLetterText]", label: "[lodgerArrestedLeaveMapLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalSurgeryViolation_LeaveColony, text: "[lodgerViolatedLeaveMapLetterText]", label: "[lodgerViolatedLeaveMapLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalPsychicRitualTarget_LeaveColony, text: "[lodgerPsychicRitualTargetLeaveMapLetterText]", label: "[lodgerPsychicRitualTargetLeaveMapLetterLabel]");
         }
 
         if (questParameter.allowBadThought)
         {
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalDestroyed_BadThought, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerDiedMemoryThoughtLetterText]", null, "[lodgerDiedMemoryThoughtLetterLabel]");
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalArrested_BadThought, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerArrestedMemoryThoughtLetterText]", null, "[lodgerArrestedMemoryThoughtLetterLabel]");
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalSurgeryViolation_BadThought, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerViolatedMemoryThoughtLetterText]", null, "[lodgerViolatedMemoryThoughtLetterLabel]");
-            quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalPsychicRitualTarget_BadThought, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgerPsychicRitualTargetMemoryThoughtLetterText]", null, "[lodgerPsychicRitualTargetMemoryThoughtLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalDestroyed_BadThought, text: "[lodgerDiedMemoryThoughtLetterText]", label: "[lodgerDiedMemoryThoughtLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalArrested_BadThought, text: "[lodgerArrestedMemoryThoughtLetterText]", label: "[lodgerArrestedMemoryThoughtLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalSurgeryViolation_BadThought, text: "[lodgerViolatedMemoryThoughtLetterText]", label: "[lodgerViolatedMemoryThoughtLetterLabel]");
+            quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalPsychicRitualTarget_BadThought, text: "[lodgerPsychicRitualTargetMemoryThoughtLetterText]", label: "[lodgerPsychicRitualTargetMemoryThoughtLetterLabel]");
         }
 
-        quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalLast_Destroyed, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgersAllDiedLetterText]", null, "[lodgersAllDiedLetterLabel]");
-        quest.Letter(LetterDefOf.NegativeEvent, questPart_RefugeeInteractions.outSignalLast_Arrested, null, null, null, useColonistsFromCaravanArg: false, QuestPart.SignalListenMode.OngoingOnly, null, filterDeadPawnsFromLookTargets: false, "[lodgersAllArrestedLetterText]", null, "[lodgersAllArrestedLetterLabel]");
+        quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalLast_Destroyed, text: "[lodgersAllDiedLetterText]", label: "[lodgersAllDiedLetterLabel]");
+        quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalLast_Arrested, text: "[lodgersAllArrestedLetterText]", label: "[lodgersAllArrestedLetterLabel]");
     }
 
     protected void SetQuestEndCompCommon(QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)
@@ -404,39 +367,56 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         SetQuestEndLetters(questPart_RefugeeInteractions);
 
         string failSignal = QuestGenUtility.HardcodedSignalWithQuestID("RefugeeQuest_Fail");
-        string bigFailSignal = QuestGenUtility.HardcodedSignalWithQuestID("RefugeeQuest_BigFail");
+        string delayFailSignal = QuestGenUtility.HardcodedSignalWithQuestID("RefugeeQuest_DelayFail");
         string successSignal = QuestGenUtility.HardcodedSignalWithQuestID("RefugeeQuest_Success");
 
-        quest.AnySignal(inSignals: [questPart_RefugeeInteractions.outSignalLast_Destroyed,
-                                    questPart_RefugeeInteractions.outSignalLast_Arrested],
-                        outSignals: [failSignal]);
+        quest.AnySignal(inSignals:
+        [
+            questPart_RefugeeInteractions.outSignalLast_Destroyed,
+            questPart_RefugeeInteractions.outSignalLast_Arrested,
+            QuestGenUtility.HardcodedSignalWithQuestID("faction.BecameHostileToPlayer")
+        ], outSignals: [failSignal]);
 
-        List<string> bigFailureSignals = [questPart_RefugeeInteractions.outSignalLast_Kidnapped,
-                                          questPart_RefugeeInteractions.outSignalLast_Banished];
+        List<string> delayFailureSignals =
+        [
+            questPart_RefugeeInteractions.outSignalLast_Kidnapped,
+            questPart_RefugeeInteractions.outSignalLast_Banished
+        ];
         if (questParameter.allowAssaultColony)
         {
-            bigFailureSignals.AddRange([questPart_RefugeeInteractions.outSignalDestroyed_AssaultColony,
-                                        questPart_RefugeeInteractions.outSignalArrested_AssaultColony,
-                                        questPart_RefugeeInteractions.outSignalSurgeryViolation_AssaultColony,
-                                        questPart_RefugeeInteractions.outSignalPsychicRitualTarget_AssaultColony]);
+            delayFailureSignals.AddRange(
+            [
+                questPart_RefugeeInteractions.outSignalDestroyed_AssaultColony,
+                questPart_RefugeeInteractions.outSignalArrested_AssaultColony,
+                questPart_RefugeeInteractions.outSignalSurgeryViolation_AssaultColony,
+                questPart_RefugeeInteractions.outSignalPsychicRitualTarget_AssaultColony
+            ]);
         }
         if (questParameter.allowLeave)
         {
-            bigFailureSignals.AddRange([questPart_RefugeeInteractions.outSignalDestroyed_LeaveColony,
-                                        questPart_RefugeeInteractions.outSignalArrested_LeaveColony,
-                                        questPart_RefugeeInteractions.outSignalSurgeryViolation_LeaveColony,
-                                        questPart_RefugeeInteractions.outSignalPsychicRitualTarget_LeaveColony]);
+            delayFailureSignals.AddRange(
+            [
+                questPart_RefugeeInteractions.outSignalDestroyed_LeaveColony,
+                questPart_RefugeeInteractions.outSignalArrested_LeaveColony,
+                questPart_RefugeeInteractions.outSignalSurgeryViolation_LeaveColony,
+                questPart_RefugeeInteractions.outSignalPsychicRitualTarget_LeaveColony
+            ]);
         }
-        quest.AnySignal(inSignals: bigFailureSignals, outSignals: [bigFailSignal]);
-        quest.AnySignal(inSignals: [questPart_RefugeeInteractions.outSignalLast_Recruited, questPart_RefugeeInteractions.outSignalLast_LeftMapAllNotHealthy, questPart_RefugeeInteractions.outSignalLast_LeftMapAllHealthy], outSignals: [successSignal]);
+        quest.AnySignal(inSignals: delayFailureSignals, outSignals: [delayFailSignal]);
+        quest.AnySignal(inSignals:
+        [
+            questPart_RefugeeInteractions.outSignalLast_Recruited,
+            questPart_RefugeeInteractions.outSignalLast_LeftMapAllNotHealthy,
+            questPart_RefugeeInteractions.outSignalLast_LeftMapAllHealthy
+        ], outSignals: [successSignal]);
 
-        SetQuestEndComp(questPart_RefugeeInteractions, failSignal, bigFailSignal, successSignal);
+        SetQuestEndComp(questPart_RefugeeInteractions, failSignal, delayFailSignal, successSignal);
 
-        quest.End(QuestEndOutcome.Fail, questParameter.goodwillFailure, faction, failSignal);
-        quest.End(QuestEndOutcome.Fail, questParameter.goodwillFailure, faction, bigFailSignal, QuestPart.SignalListenMode.OngoingOnly, sendStandardLetter: true);
+        quest.End(QuestEndOutcome.Fail, questParameter.goodwillFailure, faction, failSignal, sendStandardLetter: true);
+        quest.End(QuestEndOutcome.Fail, questParameter.goodwillFailure, faction, delayFailSignal, sendStandardLetter: true);
 
-        quest.End(QuestEndOutcome.Success, 0, null, questPart_RefugeeInteractions.outSignalLast_Recruited, QuestPart.SignalListenMode.OngoingOnly, sendStandardLetter: true);
-        quest.End(QuestEndOutcome.Success, questParameter.goodwillSuccess / 2, faction, questPart_RefugeeInteractions.outSignalLast_LeftMapAllNotHealthy, QuestPart.SignalListenMode.OngoingOnly, sendStandardLetter: true);
+        quest.End(QuestEndOutcome.Success, inSignal: questPart_RefugeeInteractions.outSignalLast_Recruited, sendStandardLetter: true);
+        quest.End(QuestEndOutcome.Success, questParameter.goodwillSuccess / 2, faction, questPart_RefugeeInteractions.outSignalLast_LeftMapAllNotHealthy, sendStandardLetter: true);
 
         quest.SignalPass(delegate
         {
@@ -445,7 +425,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
                 FloatRange marketValueRange = questParameter.rewardValueRange * Find.Storyteller.difficulty.EffectiveQuestRewardValueFactor;
                 quest.AddQuestRefugeeDelayedReward(quest.AccepterPawn, faction, questParameter.pawns, marketValueRange);
             }
-            quest.End(QuestEndOutcome.Success, questParameter.goodwillSuccess, faction, null, QuestPart.SignalListenMode.OngoingOnly, sendStandardLetter: true);
+            quest.End(QuestEndOutcome.Success, questParameter.goodwillSuccess, faction, sendStandardLetter: true);
         }, inSignal: questPart_RefugeeInteractions.outSignalLast_LeftMapAllHealthy);
     }
 

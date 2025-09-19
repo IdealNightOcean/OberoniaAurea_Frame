@@ -13,7 +13,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
     [NoTranslate]
     public SlateRef<string> storeAs;
 
-    public SlateRef<bool> ignoreConditionsIfNecessary; //必要时忽视一切条件
+    public SlateRef<bool> ignoreConditionsIfNecessary = true; //必要时忽视一切条件
 
     public SlateRef<int> originTile = Tile.Invalid; //搜索起点Tile，-1时默认为玩家派系基地
     public SlateRef<float> maxTileDistance; //距离originTile最大距离

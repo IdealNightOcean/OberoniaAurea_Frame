@@ -73,6 +73,10 @@ public class QuestNode_GetFaction : QuestNode
 
     protected virtual bool GetValidFaction(Slate slate, out Faction faction)
     {
+        if (slate.TryGet(storeAs.GetValue(slate), out faction) && IsGoodFaction(faction, slate))
+        {
+            return true;
+        }
         if (factionDef.GetValue(slate) is not null)
         {
             return SetFaction(out faction, slate);
