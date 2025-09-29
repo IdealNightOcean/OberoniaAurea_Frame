@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -6,26 +7,58 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-
 [StaticConstructorOnStartup]
 public static class OAFrame_FactionUtility
 {
+    /// <summary>
+    /// 是否为鼠族派系
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsRatkinFaction(this Faction faction)
     {
         return faction?.def.GetModExtension<RatkinFactionFlag>() is not null;
     }
 
-    public static FactionValidationParams AllyNormalFactionParams => new() { AllowNeutral = false, AllyHostile = false };
-    public static FactionValidationParams NonHostileNormalFactionParams => new() { AllyHostile = false };
-    public static FactionValidationParams HostileNormalFactionParams => new() { AllowAlly = false, AllowNeutral = false };
+    /// <summary>
+    /// 是否为鼠族王国类型派系
+    /// </summary>
+    public static bool IsRatkinKindomFaction(this Faction faction)
+    {
+        return faction?.def.GetModExtension<FactionTagsExtension>()?.HasTag("RatkinKindom") ?? false;
+    }
+
+    public static IEnumerable<Faction> GetAvailableFactionsOf(FactionValidationParams validationParams, Predicate<Faction> predicater = null)
+    {
+        if (predicater is null)
+        {
+            return Find.FactionManager.AllFactionsListForReading.Where(validationParams.ValidateFaction);
+        }
+        else
+        {
+            return Find.FactionManager.AllFactionsListForReading.Where(f => validationParams.ValidateFaction(f) && predicater(f));
+        }
+    }
+
+    public static Faction FirstAvailableFactionOf(FactionValidationParams validationParams, Predicate<Faction> predicater = null)
+    {
+        return GetAvailableFactionsOf(validationParams, predicater).FirstOrFallback(null);
+    }
+
+    public static Faction RandomAvailableFactionOf(FactionValidationParams validationParams, Predicate<Faction> predicater = null)
+    {
+        return GetAvailableFactionsOf(validationParams, predicater).RandomElementWithFallback(null);
+    }
 
     public static IEnumerable<Faction> GetAvailableFactionsOfDef(FactionDef def, FactionValidationParams validationParams)
     {
         return Find.FactionManager.AllFactionsListForReading.Where(f => f.def == def && validationParams.ValidateFaction(f));
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Faction FirstAvailableFactionOfDef(FactionDef def, FactionValidationParams validationParams)
+    {
+        return GetAvailableFactionsOfDef(def, validationParams).FirstOrFallback(null);
+    }
+
     public static Faction RandomAvailableFactionOfDef(FactionDef def, FactionValidationParams validationParams)
     {
         return GetAvailableFactionsOfDef(def, validationParams).RandomElementWithFallback(null);
@@ -39,7 +72,11 @@ public static class OAFrame_FactionUtility
                                                                         && validationParams.ValidateFaction(f));
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Faction FirstAvailableTempFactionOfDef(FactionDef def, FactionValidationParams validationParams)
+    {
+        return GetAvailableTempFactionsOfDef(def, validationParams).FirstOrFallback(null);
+    }
+
     public static Faction RandomAvailableTempFactionOfDef(FactionDef def, FactionValidationParams validationParams)
     {
         return GetAvailableTempFactionsOfDef(def, validationParams).RandomElementWithFallback(null);

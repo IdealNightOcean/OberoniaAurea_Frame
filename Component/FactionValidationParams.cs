@@ -18,25 +18,30 @@ public struct FactionValidationParams
 
     public FactionValidationParams() { }
 
+    public static FactionValidationParams DefaultFaction => new();
+    public static FactionValidationParams AllyNormalFaction => new() { AllowNeutral = false, AllyHostile = false };
+    public static FactionValidationParams NonHostileNormalFaction => new() { AllyHostile = false };
+    public static FactionValidationParams HostileNormalFaction => new() { AllowAlly = false, AllowNeutral = false };
+
     public readonly bool ValidateFaction(Faction faction)
     {
-        if (faction is null)
+        if (faction is null || faction == Faction.OfPlayer)
         {
             return false;
         }
-        if (faction.defeated && !AllDefeated)
+        if (!AllDefeated && faction.defeated)
         {
             return false;
         }
-        if (faction.Hidden && !AllHidden)
+        if (!AllHidden && faction.Hidden)
         {
             return false;
         }
-        if (faction.temporary && !AllTemporary)
+        if (!AllTemporary && faction.temporary)
         {
             return false;
         }
-        if (!faction.def.humanlikeFaction && !AllowNonHumanlike)
+        if (!AllowNonHumanlike && !faction.def.humanlikeFaction)
         {
             return false;
         }
@@ -44,7 +49,7 @@ public struct FactionValidationParams
         {
             return false;
         }
-        if (MaxTechLevel != TechLevel.Undefined && faction.def.techLevel > MinTechLevel)
+        if (MaxTechLevel != TechLevel.Undefined && faction.def.techLevel > MaxTechLevel)
         {
             return false;
         }
