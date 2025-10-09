@@ -64,7 +64,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
         }
         PawnGroupMakerParms groupMakerParms = IncidentParmsUtility.GetDefaultPawnGroupMakerParms(PawnGroupKindDef, parms, ensureCanGenerateAtLeastOnePawn: true);
         groupMakerParms.tile = PlanetTile.Invalid;
-        if (!OAFrame_PawnGenerateUtility.TryGetRandomPawnGroupMaker(PawnGroupKindDef, PawnGroupMakerDef, out PawnGroupMaker groupMaker))
+        if (!PawnGroupMakerDef.TryGetRandomPawnGroupMaker(PawnGroupKindDef, out PawnGroupMaker groupMaker))
         {
             return false;
         }

@@ -64,6 +64,13 @@ public static class OAFrame_PawnUtility
         return pawn.jobs?.curDriver?.asleep ?? false;
     }
 
+    private static IEnumerable<BodyPartRecord> HittablePartsViolence(HediffSet bodyModel)
+    {
+        return from p in bodyModel.GetNotMissingParts()
+               where p.depth == BodyPartDepth.Outside || (p.depth == BodyPartDepth.Inside && p.def.IsSolid(p, bodyModel.hediffs))
+               select p;
+    }
+
     /// <summary>
     /// 造成不致命、不残疾的伤害
     /// </summary>
@@ -74,26 +81,35 @@ public static class OAFrame_PawnUtility
             return;
         }
 
-        IEnumerable<BodyPartRecord> source = HittablePartsViolence();
+        pawn.health.forceDowned = true;
+        IEnumerable<BodyPartRecord> source = from p in HittablePartsViolence(pawn.health.hediffSet)
+                                             where !pawn.health.hediffSet.hediffs.Any(h => h.Part == p && h.CurStage != null && h.CurStage.partEfficiencyOffset < 0f)
+                                             select p;
 
         int curInjuryNum = 0;
-        while (curInjuryNum < injuriesCount)
+        while (curInjuryNum < injuriesCount && source.Any())
         {
-            if (!source.Any())
-            {
-                break;
-            }
-
             curInjuryNum++;
-            BodyPartRecord bodyPartRecord = source.RandomElement();
+            BodyPartRecord bodyPartRecord = source.RandomElementByWeight(p => p.coverageAbs);
             float maxHealth = bodyPartRecord.def.GetMaxHealth(pawn);
             float partHealth = pawn.health.hediffSet.GetPartHealth(bodyPartRecord);
+            float statValue = pawn.GetStatValue(StatDefOf.IncomingDamageFactor);
+            if (statValue > 0f)
+            {
+                maxHealth = (int)((float)maxHealth / statValue);
+            }
+            maxHealth -= 3f;
+            if (maxHealth <= 0f)
+            {
+                continue;
+            }
+
             int min = Mathf.Min(Mathf.RoundToInt(maxHealth * 0.3f), (int)partHealth - 1);
             int max = Mathf.Min(Mathf.RoundToInt(maxHealth * 0.8f), (int)partHealth - 1);
             int severity = Rand.RangeInclusive(min, max);
             DamageDef damageDef = fixedDamageDef ?? HealthUtility.RandomViolenceDamageType();
             HediffDef hediffDefFromDamage = HealthUtility.GetHediffDefFromDamage(damageDef, pawn, bodyPartRecord);
-            if (pawn.health.WouldDieAfterAddingHediff(hediffDefFromDamage, bodyPartRecord, severity))
+            if (pawn.health.WouldDieAfterAddingHediff(hediffDefFromDamage, bodyPartRecord, statValue * severity))
             {
                 break;
             }
@@ -111,15 +127,7 @@ public static class OAFrame_PawnUtility
             }
             Log.Error(stringBuilder.ToString());
         }
-
-        IEnumerable<BodyPartRecord> HittablePartsViolence()
-        {
-            HediffSet hediffSet = pawn.health.hediffSet;
-            return from x in hediffSet.GetNotMissingParts()
-                   where x.depth == BodyPartDepth.Outside || (x.depth == BodyPartDepth.Inside && x.def.IsSolid(x, hediffSet.hediffs))
-                   where !pawn.health.hediffSet.hediffs.Any(y => y.Part == x && y.CurStage is not null && y.CurStage.partEfficiencyOffset < 0f)
-                   select x;
-        }
+        pawn.health.forceDowned = false;
     }
 
     public static int GetMaxSkillLevelOfPawns(IEnumerable<Pawn> pawns, SkillDef skill)

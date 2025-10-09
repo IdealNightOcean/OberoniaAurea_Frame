@@ -3,6 +3,7 @@ using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Verse;
 
@@ -11,6 +12,19 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_QuestUtility
 {
+    public static QuestPart_InvolvedFactions AddInvolvedFaction(Quest quest, Faction faction)
+    {
+        QuestPart_InvolvedFactions questPart_InvolvedFactions = quest.PartsListForReading.OfType<QuestPart_InvolvedFactions>().FirstOrFallback(null);
+        if (questPart_InvolvedFactions is null)
+        {
+            questPart_InvolvedFactions = new();
+            quest.AddPart(questPart_InvolvedFactions);
+        }
+
+        questPart_InvolvedFactions.factions.AddDistinct(faction);
+        return questPart_InvolvedFactions;
+    }
+
     public static MapParent GetAvailableMapParent(this Quest quest, MapParent originParent)
     {
         if (originParent is not null && originParent.HasMap && quest.IsParentSuitableForQuest(originParent))

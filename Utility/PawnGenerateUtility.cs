@@ -1,14 +1,15 @@
 ﻿using RimWorld;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
 public static class OAFrame_PawnGenerateUtility
 {
-    public static PawnGenerationRequest CommonPawnGenerationRequest(PawnKindDef kindDef, Faction faction = null, bool forceNew = false, bool allowChild = false)
+    public static PawnGenerationRequest CommonPawnGenerationRequest(PawnKindDef kindDef, Faction faction = null, PlanetTile? tile = null, bool forceNew = false, bool allowChild = false)
     {
         PawnGenerationRequest request = new(kindDef, faction)
         {
@@ -20,30 +21,27 @@ public static class OAFrame_PawnGenerateUtility
             RelationWithExtraPawnChanceFactor = 0f,
             AllowedDevelopmentalStages = DevelopmentalStage.Adult,
         };
+        if (tile.HasValue)
+        {
+            request.Tile = tile.Value;
+        }
         if (allowChild && Find.Storyteller.difficulty.ChildrenAllowed)
         {
             request.AllowedDevelopmentalStages |= DevelopmentalStage.Child;
         }
         return request;
     }
-    public static bool TryGetRandomPawnGroupMaker(PawnGroupMakerParms parms, IsolatedPawnGroupMakerDef pawnGroupMakerDef, out PawnGroupMaker pawnGroupMaker)
-    {
-        if (parms.seed.HasValue)
-        {
-            Rand.PushState(parms.seed.Value);
-        }
-        bool result = pawnGroupMakerDef.pawnGroupMakers.Where(gm => gm.kindDef == parms.groupKind && gm.CanGenerateFrom(parms)).TryRandomElementByWeight(gm => gm.commonality, out pawnGroupMaker);
-        if (parms.seed.HasValue)
-        {
-            Rand.PopState();
-        }
-        return result;
-    }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool TryGetRandomPawnGroupMaker(PawnGroupKindDef pawnGroupKindDef, IsolatedPawnGroupMakerDef pawnGroupMakerDef, out PawnGroupMaker pawnGroupMaker)
+    public static PawnGroupMaker GetRandomPawnGroupMakerOfFaction(Faction faction, PawnGroupKindDef groupKindDef, Predicate<PawnGroupMaker> predicater = null)
     {
-        return pawnGroupMakerDef.pawnGroupMakers.Where(gm => gm.kindDef == pawnGroupKindDef).TryRandomElementByWeight(gm => gm.commonality, out pawnGroupMaker);
+        if (predicater is null)
+        {
+            return faction?.def.pawnGroupMakers?.Where(g => g.kindDef == groupKindDef).RandomElementByWeightWithFallback(g => g.commonality, fallback: null);
+        }
+        else
+        {
+            return faction?.def.pawnGroupMakers?.Where(g => g.kindDef == groupKindDef && predicater(g)).RandomElementByWeightWithFallback(g => g.commonality, fallback: null);
+        }
     }
 
     public static IEnumerable<Pawn> GeneratePawns(PawnGroupMakerParms parms, PawnGroupMaker pawnGroupMaker, bool needFaction = true, bool warnOnZeroResults = true)

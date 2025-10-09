@@ -7,7 +7,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 //大地图简单商店
-public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable, IPawnRetentionHolder
+public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolder
 {
     protected static readonly List<string> TempExtantNames = [];
 
@@ -18,6 +18,8 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
     protected ThingOwner things;
     protected List<Pawn> tmpSavedPawns = [];
     protected WorldObject associateWorldObject;
+    protected int refreshInterval = -1;
+    protected int lastRefreshTick = -1;
     protected int randomPriceFactorSeed = -1;
 
     public Faction Faction => faction;
@@ -25,7 +27,11 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
     public TraderKindDef TraderKind => traderKind;
     public int Silver => CountHeldOf(ThingDefOf.Silver);
     public int RandomPriceFactorSeed => randomPriceFactorSeed;
-    public string TraderName => traderName;
+    public string TraderName
+    {
+        get => traderName;
+        set => traderName = value;
+    }
     public bool CanTradeNow => associateWorldObject is not null;
     public float TradePriceImprovementOffsetForPlayer => 0f;
     public TradeCurrency TradeCurrency => traderKind.tradeCurrency;
@@ -57,11 +63,12 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
 
     public SiteTrader() { }
 
-    public SiteTrader(TraderKindDef traderKind, WorldObject worldObject, Faction faction = null)
+    public SiteTrader(TraderKindDef traderKind, WorldObject worldObject, Faction faction = null, int refreshInterval = -1)
     {
         this.traderKind = traderKind;
-        this.associateWorldObject = worldObject;
+        associateWorldObject = worldObject;
         this.faction = faction;
+        this.refreshInterval = refreshInterval;
 
         things = new ThingOwner<Thing>(this);
         TempExtantNames.Clear();
@@ -77,6 +84,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
         }
         randomPriceFactorSeed = Rand.RangeInclusive(1, 10000000);
         loadID = Find.UniqueIDsManager.GetNextPassingShipID();
+        this.refreshInterval = refreshInterval;
     }
 
     public IEnumerable<Thing> ColonyThingsWillingToBuy(Pawn playerNegotiator)
@@ -96,7 +104,15 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
         }
     }
 
-    public void GenerateThings(int tile)
+    public void TickInterval(int delta)
+    {
+        if (refreshInterval > 0 && Find.TickManager.TicksGame > lastRefreshTick)
+        {
+            RefreshThings(associateWorldObject?.Tile ?? PlanetTile.Invalid);
+        }
+    }
+
+    public void GenerateThings(PlanetTile tile)
     {
         ThingSetMakerParams parms = default;
         parms.traderDef = traderKind;
@@ -109,21 +125,15 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
                 Find.WorldPawns.PassToWorld(pawn);
             }
         }
+        lastRefreshTick = Find.TickManager.TicksGame;
     }
 
-    public void Traderick()
+    public void RefreshThings(PlanetTile tile)
     {
-        for (int i = 0; i < things.Count; i++)
-        {
-            if (things[i] is Pawn pawn)
-            {
-                pawn.DoTick();
-                if (pawn.Dead)
-                {
-                    things.Remove(pawn);
-                }
-            }
-        }
+        lastRefreshTick = Find.TickManager.TicksGame;
+        things.ClearAndDestroyContentsOrPassToWorld();
+        tmpSavedPawns.Clear();
+        GenerateThings(tile);
     }
 
     public void Destory()
@@ -245,6 +255,8 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
         Scribe_References.Look(ref faction, "faction");
         Scribe_Deep.Look(ref things, "things", this);
         Scribe_Collections.Look(ref tmpSavedPawns, "tmpSavedPawns", LookMode.Reference);
+        Scribe_Values.Look(ref refreshInterval, "refreshInterval", -1);
+        Scribe_Values.Look(ref lastRefreshTick, "lastRefreshTick", -1);
         Scribe_Values.Look(ref randomPriceFactorSeed, "randomPriceFactorSeed", 0);
         if (Scribe.mode == LoadSaveMode.PostLoadInit || Scribe.mode == LoadSaveMode.Saving)
         {
@@ -256,9 +268,4 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, ILoadReferenceable,
             tmpSavedPawns.Clear();
         }
     }
-    public string GetUniqueLoadID()
-    {
-        return "OAFrame_SiteTrader_" + loadID;
-    }
-
 }

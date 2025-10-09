@@ -64,9 +64,7 @@ public class QuestNode_GetFaction : QuestNode
             slate.Set(storeAs.GetValue(slate), faction);
             if (!faction.Hidden)
             {
-                QuestPart_InvolvedFactions questPart_InvolvedFactions = new();
-                questPart_InvolvedFactions.factions.Add(faction);
-                QuestGen.quest.AddPart(questPart_InvolvedFactions);
+                OAFrame_QuestUtility.AddInvolvedFaction(QuestGen.quest, faction);
             }
         }
     }
