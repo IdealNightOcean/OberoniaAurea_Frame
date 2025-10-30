@@ -2,7 +2,6 @@
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
-using System.Linq;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -16,30 +15,27 @@ public class QuestNode_InitiateCategoryTradeRequest : QuestNode
     public SlateRef<string> inSignal;
 
     public SlateRef<ThingCategoryDef> requestedCategoryDef;
-    public SlateRef<int> requestedThingCount;
-    public SlateRef<int> requestQuality = -1;
-    public SlateRef<Settlement> settlement;
+    public SlateRef<int> requestedCount;
+    public SlateRef<WorldObject> worldObject;
     public SlateRef<int> duration;
-    public SlateRef<bool> requestIsMeat = false;
-    public SlateRef<bool> requestAllowInsectMeat = false;
-    public SlateRef<bool> requestAllowHumanlikeMeat = false;
+    public SlateRef<bool> allowInsectMeat = false;
+    public SlateRef<bool> allowHumanlikeMeat = false;
 
     protected override bool TestRunInt(Slate slate)
     {
-        return settlement.GetValue(slate) is not null && requestedThingCount.GetValue(slate) > 0 && requestedCategoryDef.GetValue(slate) is not null && duration.GetValue(slate) > 0;
+        return requestedCount.GetValue(slate) > 0 && requestedCategoryDef.GetValue(slate) is not null && duration.GetValue(slate) > 0;
     }
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
         QuestPart_InitiateCategoryTradeRequest questPart_InitiateCategoryTradeRequest = new()
         {
-            settlement = settlement.GetValue(slate),
+            worldObject = worldObject.GetValue(slate),
             requestedCategoryDef = requestedCategoryDef.GetValue(slate),
-            requestedCount = requestedThingCount.GetValue(slate),
+            requestedCount = requestedCount.GetValue(slate),
             requestDuration = duration.GetValue(slate),
-            requestIsMeat = requestIsMeat.GetValue(slate),
-            requestAllowInsectMeat = requestAllowInsectMeat.GetValue(slate),
-            requestAllowHumanlikeMeat = requestAllowHumanlikeMeat.GetValue(slate),
+            requestAllowInsectMeat = allowInsectMeat.GetValue(slate),
+            requestAllowHumanlikeMeat = allowHumanlikeMeat.GetValue(slate),
             inSignal = QuestGenUtility.HardcodedSignalWithQuestID(inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal")
         };
         QuestGen.quest.AddPart(questPart_InitiateCategoryTradeRequest);
@@ -51,11 +47,10 @@ public class QuestNode_InitiateCategoryTradeRequest : QuestNode
 public class QuestPart_InitiateCategoryTradeRequest : QuestPart
 {
     public string inSignal;
-    public Settlement settlement;
+    public WorldObject worldObject;
     public ThingCategoryDef requestedCategoryDef;
     public int requestedCount;
     public int requestDuration;
-    public bool requestIsMeat;
     public bool requestAllowInsectMeat;
     public bool requestAllowHumanlikeMeat;
 
@@ -67,9 +62,9 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
             {
                 yield return questLookTarget;
             }
-            if (settlement is not null)
+            if (worldObject is not null)
             {
-                yield return settlement;
+                yield return worldObject;
             }
         }
     }
@@ -82,9 +77,9 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
             {
                 yield return involvedFaction;
             }
-            if (settlement.Faction is not null)
+            if (worldObject.Faction is not null)
             {
-                yield return settlement.Faction;
+                yield return worldObject.Faction;
             }
         }
     }
@@ -106,15 +101,15 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
         base.Notify_QuestSignalReceived(signal);
         if (signal.tag == inSignal)
         {
-            CategoryTradeRequestComp component = settlement.GetComponent<CategoryTradeRequestComp>();
-            if (component is not null)
+            CategoryTradeRequestComp requestComp = worldObject.GetComponent<CategoryTradeRequestComp>();
+            if (requestComp is not null)
             {
-                if (component.ActiveRequest)
+                if (requestComp.ActiveRequest)
                 {
-                    Log.Error("Settlement " + settlement.Label + " already has an active category trade request.");
+                    Log.Error("WorldObject " + worldObject.Label + " already has an active category trade request.");
                     return;
                 }
-                component.InitTradeRequest(requestedCategoryDef, requestedCount, requestDuration, requestIsMeat, requestAllowInsectMeat, requestAllowHumanlikeMeat);
+                requestComp.InitTradeRequest(requestedCategoryDef, requestedCount, requestDuration, requestAllowInsectMeat, requestAllowHumanlikeMeat);
             }
         }
     }
@@ -123,7 +118,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
     {
         base.Cleanup();
         inSignal = null;
-        settlement?.GetComponent<CategoryTradeRequestComp>()?.Disable();
+        worldObject?.GetComponent<CategoryTradeRequestComp>()?.Disable();
         requestedCategoryDef = null;
         requestedCount = 0;
         requestDuration = 0;
@@ -133,30 +128,11 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
     {
         base.ExposeData();
         Scribe_Values.Look(ref inSignal, "inSignal");
-        Scribe_References.Look(ref settlement, "settlement");
+        Scribe_References.Look(ref worldObject, "worldObject");
         Scribe_Defs.Look(ref requestedCategoryDef, "requestedCategoryDef");
         Scribe_Values.Look(ref requestedCount, "requestedCount", 0);
         Scribe_Values.Look(ref requestDuration, "requestDuration", 0);
-        Scribe_Values.Look(ref requestIsMeat, "requestIsMeat", defaultValue: false);
         Scribe_Values.Look(ref requestAllowInsectMeat, "requestAllowInsectMeat", defaultValue: false);
         Scribe_Values.Look(ref requestAllowHumanlikeMeat, "requestAllowHumanlikeMeat", defaultValue: false);
-    }
-
-    public override void AssignDebugData()
-    {
-        base.AssignDebugData();
-        inSignal = "DebugSignal" + Rand.Int;
-        settlement = Find.WorldObjects.Settlements.Where(delegate (Settlement x)
-        {
-            CategoryTradeRequestComp component = x.GetComponent<CategoryTradeRequestComp>();
-            return component is not null && !component.ActiveRequest && x.Faction != Faction.OfPlayer;
-        }).RandomElementWithFallback();
-        settlement ??= Find.WorldObjects.Settlements.RandomElementWithFallback();
-        requestedCategoryDef = ThingCategoryDefOf.StoneBlocks;
-        requestedCount = 100;
-        requestDuration = 60000;
-        requestIsMeat = false;
-        requestAllowInsectMeat = false;
-        requestAllowHumanlikeMeat = false;
     }
 }

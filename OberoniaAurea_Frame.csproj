@@ -78,6 +78,7 @@
     <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
     <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
     <Compile Include="Lord\LordJob_VisitColonyBase.cs" />
+    <Compile Include="Quest\Quest_InitiateTradeRequest.cs" />
     <Compile Include="Quest\Quest_DestroyWorldObject.cs" />
     <Compile Include="Quest\Quest_PawnNegativeSiganl.cs" />
     <Compile Include="Quest\Quest_MultiSignalCount.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
     <Compile Include="Interface\IPawnFloatMenuOptionProvider.cs" />
     <Compile Include="Thing\CompInteractWithThing.cs" />
+    <Compile Include="Utility\CollectionUtility.cs" />
     <Compile Include="Utility\DropPodUtility.cs" />
     <Compile Include="Utility\QuestUtility.cs" />
     <Compile Include="WorkGiver_ThingRequestExtension.cs" />

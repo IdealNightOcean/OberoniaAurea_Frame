@@ -110,7 +110,7 @@ public class QuestNode_QuestUnique : QuestNode
 
     private static string GetProcessedTag(string tag, Faction faction)
     {
-        if (faction == null)
+        if (faction is null)
         {
             return tag;
         }

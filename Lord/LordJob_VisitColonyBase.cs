@@ -119,7 +119,7 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
         stateGraph.AddTransition(transition9);
 
         Transition transition10 = new(lordToil_DefendTargetPoint, exitMapTravelToil);
-        int tickLimit = (!DebugSettings.instantVisitorsGift || faction == null) ? (durationTicks ?? Rand.Range(8000, 22000)) : 0;
+        int tickLimit = (!DebugSettings.instantVisitorsGift || faction is null) ? (durationTicks ?? Rand.Range(8000, 22000)) : 0;
         transition10.AddTrigger(new Trigger_TicksPassed(tickLimit));
         if (faction is not null)
         {

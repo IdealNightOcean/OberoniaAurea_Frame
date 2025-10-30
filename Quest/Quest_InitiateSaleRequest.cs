@@ -2,7 +2,6 @@
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
-using System.Linq;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -16,23 +15,23 @@ public class QuestNode_InitiateSaleRequest : QuestNode
     public SlateRef<string> inSignal;
 
     public SlateRef<ThingDef> requestedThingDef;
-    public SlateRef<int> requestedThingCount;
-    public SlateRef<Settlement> settlement;
+    public SlateRef<int> requestedCount;
+    public SlateRef<WorldObject> worldObject;
     public SlateRef<int> duration;
 
     protected override bool TestRunInt(Slate slate)
     {
-        return settlement.GetValue(slate) is not null && requestedThingCount.GetValue(slate) > 0 && requestedThingDef.GetValue(slate) is not null && duration.GetValue(slate) > 0;
+        return requestedCount.GetValue(slate) > 0 && requestedThingDef.GetValue(slate) is not null && duration.GetValue(slate) > 0;
     }
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
         QuestPart_InitiateSaleRequest questPart_InitSaleRequest = new()
         {
-            settlement = settlement.GetValue(slate),
+            worldObject = worldObject.GetValue(slate),
             requestedThingDef = requestedThingDef.GetValue(slate),
-            requestedCount = requestedThingCount.GetValue(slate),
-            requestDuration = duration.GetValue(slate),
+            requestedCount = requestedCount.GetValue(slate),
+            requestedDuration = duration.GetValue(slate),
             inSignal = QuestGenUtility.HardcodedSignalWithQuestID(inSignal.GetValue(slate)) ?? slate.Get<string>("inSignal")
         };
         QuestGen.quest.AddPart(questPart_InitSaleRequest);
@@ -44,10 +43,10 @@ public class QuestNode_InitiateSaleRequest : QuestNode
 public class QuestPart_InitiateSaleRequest : QuestPart
 {
     public string inSignal;
-    public Settlement settlement;
+    public WorldObject worldObject;
     public ThingDef requestedThingDef;
     public int requestedCount;
-    public int requestDuration;
+    public int requestedDuration;
 
     public override IEnumerable<GlobalTargetInfo> QuestLookTargets
     {
@@ -57,9 +56,9 @@ public class QuestPart_InitiateSaleRequest : QuestPart
             {
                 yield return questLookTarget;
             }
-            if (settlement is not null)
+            if (worldObject is not null)
             {
-                yield return settlement;
+                yield return worldObject;
             }
         }
     }
@@ -72,9 +71,9 @@ public class QuestPart_InitiateSaleRequest : QuestPart
             {
                 yield return involvedFaction;
             }
-            if (settlement.Faction is not null)
+            if (worldObject.Faction is not null)
             {
-                yield return settlement.Faction;
+                yield return worldObject.Faction;
             }
         }
     }
@@ -96,15 +95,15 @@ public class QuestPart_InitiateSaleRequest : QuestPart
         base.Notify_QuestSignalReceived(signal);
         if (signal.tag == inSignal)
         {
-            SaleRequestComp component = settlement.GetComponent<SaleRequestComp>();
-            if (component is not null)
+            SaleRequestComp requestComp = worldObject.GetComponent<SaleRequestComp>();
+            if (requestComp is not null)
             {
-                if (component.ActiveRequest)
+                if (requestComp.ActiveRequest)
                 {
-                    Log.Error("Settlement " + settlement.Label + " already has an active sale request.");
+                    Log.Error("WorldObject " + worldObject.Label + " already has an active sale request.");
                     return;
                 }
-                component.InitSaleRequest(requestedThingDef, requestedCount, requestDuration);
+                requestComp.InitSaleRequest(requestedThingDef, requestedCount, requestedDuration);
             }
         }
     }
@@ -113,35 +112,20 @@ public class QuestPart_InitiateSaleRequest : QuestPart
     {
         base.Cleanup();
         inSignal = null;
-        settlement?.GetComponent<SaleRequestComp>()?.Disable();
-        settlement = null;
+        worldObject?.GetComponent<SaleRequestComp>()?.Disable();
+        worldObject = null;
         requestedThingDef = null;
         requestedCount = 0;
-        requestDuration = 0;
+        requestedDuration = 0;
     }
 
     public override void ExposeData()
     {
         base.ExposeData();
         Scribe_Values.Look(ref inSignal, "inSignal");
-        Scribe_References.Look(ref settlement, "settlement");
+        Scribe_References.Look(ref worldObject, "worldObject");
         Scribe_Defs.Look(ref requestedThingDef, "requestedThingDef");
         Scribe_Values.Look(ref requestedCount, "requestedCount", 0);
-        Scribe_Values.Look(ref requestDuration, "requestDuration", 0);
-    }
-
-    public override void AssignDebugData()
-    {
-        base.AssignDebugData();
-        inSignal = "DebugSignal" + Rand.Int;
-        settlement = Find.WorldObjects.Settlements.Where(delegate (Settlement x)
-        {
-            SaleRequestComp component = x.GetComponent<SaleRequestComp>();
-            return component is not null && !component.ActiveRequest && x.Faction != Faction.OfPlayer;
-        }).RandomElementWithFallback();
-        settlement ??= Find.WorldObjects.Settlements.RandomElementWithFallback();
-        requestedThingDef = ThingDefOf.Silver;
-        requestedCount = 100;
-        requestDuration = 60000;
+        Scribe_Values.Look(ref requestedDuration, "requestedDuration", 0);
     }
 }

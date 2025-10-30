@@ -13,7 +13,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
     [NoTranslate]
     public SlateRef<string> storeAs;
 
-    public SlateRef<bool> ignoreConditionsIfNecessary; //必要时忽视一切条件
+    public SlateRef<bool> ignoreConditionsIfNecessary = true; //必要时忽视一切条件
 
     public SlateRef<PlanetTile> originTile = PlanetTile.Invalid; //搜索起点Tile，-1时默认为玩家派系基地
     public SlateRef<float> maxTileDistance; //距离originTile最大距离
@@ -90,8 +90,7 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
         {
             if (preferCloser.GetValue(slate))
             {
-                potentialSettle.OrderBy(sd => sd.Item2);
-                return potentialSettle.First().Item1;
+                return potentialSettle.MinBy(sd => sd.Item2).Item1;
             }
             else
             {

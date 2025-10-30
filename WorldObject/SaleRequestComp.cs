@@ -16,19 +16,20 @@ public class WorldObjectCompProperties_SaleRequestComp : WorldObjectCompProperti
 
 public class SaleRequestComp : WorldObjectComp
 {
-    protected bool activeSaleRQ;
-    public ThingDef saleRQ_ThingDef;
-    public int saleRQ_Count;
-    public int saleRQ_Expiration = -1;
-    public string outSignal_SaleRQGived;
+    protected const string loadPrefix = "saleRQ_";
 
-    public bool ActiveRequest => activeSaleRQ && saleRQ_Expiration > Find.TickManager.TicksGame;
+    protected bool active;
+    public ThingDef thingDef;
+    public int count;
+    public int expiration = -1;
+
+    public bool ActiveRequest => active && expiration > Find.TickManager.TicksGame;
 
     public override string CompInspectStringExtra()
     {
         if (ActiveRequest)
         {
-            return "CaravanRequestInfo".Translate(TradeRequestUtility.RequestedThingLabel(saleRQ_ThingDef, saleRQ_Count).CapitalizeFirst(), (saleRQ_Expiration - Find.TickManager.TicksGame).ToStringTicksToDays(), (saleRQ_ThingDef.GetStatValueAbstract(StatDefOf.MarketValue) * saleRQ_Count).ToStringMoney());
+            return "CaravanRequestInfo".Translate(TradeRequestUtility.RequestedThingLabel(thingDef, count).CapitalizeFirst(), (expiration - Find.TickManager.TicksGame).ToStringTicksToDays(), (thingDef.GetStatValueAbstract(StatDefOf.MarketValue) * count).ToStringMoney());
         }
         return null;
     }
@@ -42,17 +43,17 @@ public class SaleRequestComp : WorldObjectComp
     }
     public void InitSaleRequest(ThingDef thingDef, int thingCount, int expirationDelay)
     {
-        saleRQ_ThingDef = thingDef;
-        saleRQ_Count = thingCount;
-        saleRQ_Expiration = Find.TickManager.TicksGame + expirationDelay;
-        activeSaleRQ = true;
+        this.thingDef = thingDef;
+        count = thingCount;
+        expiration = Find.TickManager.TicksGame + expirationDelay;
+        active = true;
     }
     public void Disable()
     {
-        activeSaleRQ = false;
-        saleRQ_Expiration = -1;
-        saleRQ_ThingDef = null;
-        saleRQ_Count = 0;
+        active = false;
+        expiration = -1;
+        thingDef = null;
+        count = 0;
     }
 
     private Command_Action FulfillRequestCommand(Caravan caravan)
@@ -64,7 +65,7 @@ public class SaleRequestComp : WorldObjectComp
             icon = OAFrame_IconUtility.TradeCommandIcon,
             action = delegate
             {
-                Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillSaleRQConfirm".Translate(GenLabel.ThingLabel(saleRQ_ThingDef, null, saleRQ_Count)), delegate
+                Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillSaleRQConfirm".Translate(GenLabel.ThingLabel(thingDef, null, count)), delegate
                 {
                     Fulfill(caravan);
                 }));
@@ -72,28 +73,24 @@ public class SaleRequestComp : WorldObjectComp
         };
         return command_Action;
     }
+
     private void Fulfill(Caravan caravan)
     {
-        List<Thing> things = OAFrame_MiscUtility.TryGenerateThing(saleRQ_ThingDef, saleRQ_Count);
+        List<Thing> things = OAFrame_MiscUtility.TryGenerateThing(thingDef, count);
         foreach (Thing t in things)
         {
             CaravanInventoryUtility.GiveThing(caravan, t);
         }
-        /*
-        if (parent.Faction is not null)
-        {
-            Faction.OfPlayer.TryAffectGoodwillWith(parent.Faction, 12, canSendMessage: true, canSendHostilityLetter: true, HistoryEventDefOf.QuestGoodwillReward);
-        }
-        */
-        QuestUtility.SendQuestTargetSignals(parent.questTags, "OAFrame_SaleRequestFulfilled", parent.Named("SUBJECT"), caravan.Named("CARAVAN"));
+        QuestUtility.SendQuestTargetSignals(parent.questTags, "SaleTradeRequestFulfilled", parent.Named("SUBJECT"), caravan.Named("CARAVAN"));
         Disable();
     }
+
     public override void PostExposeData()
     {
         base.PostExposeData();
-        Scribe_Values.Look(ref activeSaleRQ, "activeSaleRQ", defaultValue: false);
-        Scribe_Values.Look(ref saleRQ_Expiration, "saleRQ_Expiration", -1);
-        Scribe_Defs.Look(ref saleRQ_ThingDef, "saleRQ_ThingDef");
-        Scribe_Values.Look(ref saleRQ_Count, "saleRQ_Count", 0);
+        Scribe_Values.Look(ref active, loadPrefix + "active", defaultValue: false);
+        Scribe_Values.Look(ref expiration, loadPrefix + "expiration", -1);
+        Scribe_Defs.Look(ref thingDef, loadPrefix + "thingDef");
+        Scribe_Values.Look(ref count, loadPrefix + "count", 0);
     }
 }

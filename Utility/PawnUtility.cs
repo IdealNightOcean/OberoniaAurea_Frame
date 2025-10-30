@@ -83,7 +83,7 @@ public static class OAFrame_PawnUtility
 
         pawn.health.forceDowned = true;
         IEnumerable<BodyPartRecord> source = from p in HittablePartsViolence(pawn.health.hediffSet)
-                                             where !pawn.health.hediffSet.hediffs.Any(h => h.Part == p && h.CurStage != null && h.CurStage.partEfficiencyOffset < 0f)
+                                             where !pawn.health.hediffSet.hediffs.Any(h => h.Part == p && h.CurStage is not null && h.CurStage.partEfficiencyOffset < 0f)
                                              select p;
 
         int curInjuryNum = 0;

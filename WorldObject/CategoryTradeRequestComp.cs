@@ -15,38 +15,36 @@ public class WorldObjectCompProperties_CategoryTradeRequestComp : WorldObjectCom
     }
 }
 
-[StaticConstructorOnStartup]
 public class CategoryTradeRequestComp : WorldObjectComp
 {
-    protected bool activeCategoryRQ;
-    protected ThingCategoryDef categoryRQ_Def;
-    protected int categoryRQ_Count;
-    protected int categoryRQ_Left;
-    protected bool categoryRQ_IsMeat;
-    protected bool categoryRQ_AllowInsectMeat;
-    protected bool categoryRQ_AllowHumanlikeMeat;
-    protected int categoryRQ_Expiration = -1;
-    public string outSignal_CategoryRQFulfilled;
+    protected const string loadPrefix = "categoryRQ_";
 
-    public bool ActiveRequest => activeCategoryRQ && categoryRQ_Expiration > Find.TickManager.TicksGame;
+    protected bool active;
+    protected ThingCategoryDef category;
+    protected int count;
+    protected int countLeft;
+    protected bool allowInsectMeat;
+    protected bool allowHumanlikeMeat;
+    protected int expiration = -1;
 
-    public virtual void InitTradeRequest(ThingCategoryDef requestedCategoryDef, int requestCount, int requestDuration, bool isMeat = false, bool allowInsectMeat = false, bool allowHumanlikeMeat = false)
+    public bool ActiveRequest => active && expiration > Find.TickManager.TicksGame;
+
+    public virtual void InitTradeRequest(ThingCategoryDef requestedCategoryDef, int requestedCount, int requestedDuration, bool allowInsectMeat = false, bool allowHumanlikeMeat = false)
     {
-        categoryRQ_Def = requestedCategoryDef;
-        categoryRQ_Count = requestCount;
-        categoryRQ_Left = requestCount;
-        categoryRQ_IsMeat = isMeat;
-        categoryRQ_AllowInsectMeat = allowInsectMeat;
-        categoryRQ_AllowHumanlikeMeat = allowHumanlikeMeat;
-        categoryRQ_Expiration = Find.TickManager.TicksGame + requestDuration;
-        activeCategoryRQ = true;
+        category = requestedCategoryDef;
+        count = requestedCount;
+        countLeft = requestedCount;
+        this.allowInsectMeat = allowInsectMeat;
+        this.allowHumanlikeMeat = allowHumanlikeMeat;
+        expiration = Find.TickManager.TicksGame + requestedDuration;
+        active = true;
     }
 
     public override string CompInspectStringExtra()
     {
         if (ActiveRequest)
         {
-            return "OAFrame_CaravanCategoryRequestInfo".Translate(RequestedThingCategoryLabel(categoryRQ_Def, categoryRQ_Left, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat).CapitalizeFirst(), (categoryRQ_Expiration - Find.TickManager.TicksGame).ToStringTicksToDays());
+            return "OAFrame_CaravanCategoryRequestInfo".Translate(RequestedThingCategoryLabel(category, countLeft, allowInsectMeat, allowHumanlikeMeat).CapitalizeFirst(), (expiration - Find.TickManager.TicksGame).ToStringTicksToDays());
         }
         return null;
     }
@@ -61,14 +59,13 @@ public class CategoryTradeRequestComp : WorldObjectComp
 
     public void Disable()
     {
-        activeCategoryRQ = false;
-        categoryRQ_Expiration = -1;
-        categoryRQ_Def = null;
-        categoryRQ_Count = 0;
-        categoryRQ_Left = 0;
-        categoryRQ_IsMeat = false;
-        categoryRQ_AllowInsectMeat = false;
-        categoryRQ_AllowHumanlikeMeat = false;
+        active = false;
+        expiration = -1;
+        category = null;
+        count = 0;
+        countLeft = 0;
+        allowInsectMeat = false;
+        allowHumanlikeMeat = false;
     }
 
     private Command_Action FulfillRequestCommand(Caravan caravan)
@@ -80,15 +77,15 @@ public class CategoryTradeRequestComp : WorldObjectComp
             icon = OAFrame_IconUtility.TradeCommandIcon,
             action = delegate
             {
-                Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillCategoryTradeConfirm".Translate(categoryRQ_Def), delegate
+                Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillCategoryTradeConfirm".Translate(category), delegate
                 {
                     Fulfill(caravan);
                 }));
             }
         };
-        if (!caravan.HasAnyThingOfCategory(categoryRQ_Def, PlayerCanGive))
+        if (!caravan.HasAnyThingOfCategory(category, PlayerCanGive))
         {
-            cmmand_Action.Disable("OAFrame_CommandFulfillCategoryTradeFailInsufficient".Translate(RequestedThingCategoryLabel(categoryRQ_Def, 1, categoryRQ_IsMeat, categoryRQ_AllowInsectMeat, categoryRQ_AllowHumanlikeMeat)));
+            cmmand_Action.Disable("OAFrame_CommandFulfillCategoryTradeFailInsufficient".Translate(RequestedThingCategoryLabel(category, 1, allowInsectMeat, allowHumanlikeMeat)));
         }
         return cmmand_Action;
     }
@@ -97,7 +94,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
     {
         List<Thing> list = CaravanInventoryUtility.TakeThings(caravan, delegate (Thing thing)
         {
-            if (!thing.def.IsWithinCategory(categoryRQ_Def))
+            if (!thing.def.IsWithinCategory(category))
             {
                 return 0;
             }
@@ -105,49 +102,47 @@ public class CategoryTradeRequestComp : WorldObjectComp
             {
                 return 0;
             }
-            int num = Mathf.Min(categoryRQ_Left, thing.stackCount);
-            categoryRQ_Left -= num;
+            int num = Mathf.Min(countLeft, thing.stackCount);
+            countLeft -= num;
             return num;
         });
         for (int i = 0; i < list.Count; i++)
         {
             list[i].Destroy();
         }
-        if (categoryRQ_Left <= 0)
+        if (countLeft <= 0)
         {
-            QuestUtility.SendQuestTargetSignals(parent.questTags, "OAFrame_CategoryRQFulfilled", parent.Named("SUBJECT"), caravan.Named("CARAVAN"));
+            QuestUtility.SendQuestTargetSignals(parent.questTags, "CategoryTradeRequestFulfilled", parent.Named("SUBJECT"), caravan.Named("CARAVAN"));
             Disable();
         }
         else
         {
-            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_FulfillCategoryTradePartComplete".Translate(categoryRQ_Def, categoryRQ_Count - categoryRQ_Left, categoryRQ_Left), null));
+            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_FulfillCategoryTradePartComplete".Translate(category, count - countLeft, countLeft), null));
         }
     }
 
     private bool PlayerCanGive(Thing thing)
     {
-        if (thing.GetRotStage() != RotStage.Fresh)
+        if (thing.def.rotatable && thing.GetRotStage() != RotStage.Fresh)
         {
             return false;
         }
-        if (categoryRQ_IsMeat)
+
+        if (category == ThingCategoryDefOf.MeatRaw)
         {
-            if (FoodUtility.GetFoodKind(thing.def) == FoodKind.Meat)
-            {
-                MeatSourceCategory meatSource = FoodUtility.GetMeatSourceCategory(thing.def);
-                if (!categoryRQ_AllowInsectMeat && meatSource == MeatSourceCategory.Insect)
-                {
-                    return false;
-                }
-                if (!categoryRQ_AllowHumanlikeMeat && meatSource == MeatSourceCategory.Humanlike)
-                {
-                    return false;
-                }
-            }
-            else
+            if (!thing.def.IsMeat)
             {
                 return false;
             }
+            MeatSourceCategory meatSource = FoodUtility.GetMeatSourceCategory(thing.def);
+            return meatSource switch
+            {
+                MeatSourceCategory.NotMeat => false,
+                MeatSourceCategory.Undefined => true,
+                MeatSourceCategory.Insect => allowInsectMeat,
+                MeatSourceCategory.Humanlike => allowHumanlikeMeat,
+                _ => true,
+            };
         }
         return true;
     }
@@ -155,20 +150,19 @@ public class CategoryTradeRequestComp : WorldObjectComp
     public override void PostExposeData()
     {
         base.PostExposeData();
-        Scribe_Values.Look(ref activeCategoryRQ, "activeCategoryRQ", defaultValue: false);
-        Scribe_Values.Look(ref categoryRQ_Expiration, "categoryRQ_Expiration", 0);
-        Scribe_Defs.Look(ref categoryRQ_Def, "categoryRQ_Def");
-        Scribe_Values.Look(ref categoryRQ_Count, "categoryRQ_Count", 0);
-        Scribe_Values.Look(ref categoryRQ_Left, "categoryRQ_Left", 0);
-        Scribe_Values.Look(ref categoryRQ_IsMeat, "categoryRQ_IsMeat", defaultValue: false);
-        Scribe_Values.Look(ref categoryRQ_AllowInsectMeat, "categoryRQ_AllowInsectMeat", defaultValue: false);
-        Scribe_Values.Look(ref categoryRQ_AllowHumanlikeMeat, "categoryRQ_AllowHumanlikeMeat", defaultValue: false);
+        Scribe_Values.Look(ref active, loadPrefix + "active", defaultValue: false);
+        Scribe_Values.Look(ref expiration, loadPrefix + "expiration", 0);
+        Scribe_Defs.Look(ref category, loadPrefix + "category");
+        Scribe_Values.Look(ref count, loadPrefix + "count", 0);
+        Scribe_Values.Look(ref countLeft, loadPrefix + "countLeft", 0);
+        Scribe_Values.Look(ref allowInsectMeat, loadPrefix + "allowInsectMeat", defaultValue: false);
+        Scribe_Values.Look(ref allowHumanlikeMeat, loadPrefix + "allowHumanlikeMeat", defaultValue: false);
     }
 
-    public static string RequestedThingCategoryLabel(ThingCategoryDef def, int count, bool isMeat, bool allowInsectMeat, bool allowHumanlikeMeat)
+    public static string RequestedThingCategoryLabel(ThingCategoryDef categoryDef, int count, bool allowInsectMeat, bool allowHumanlikeMeat)
     {
-        string text = "OAFrame_RequestedThingCategoryLabel".Translate(def.label, count);
-        if (isMeat)
+        string text = "OAFrame_RequestedThingCategoryLabel".Translate(categoryDef.label, count);
+        if (categoryDef == ThingCategoryDefOf.MeatRaw)
         {
             if (!allowInsectMeat)
             {
