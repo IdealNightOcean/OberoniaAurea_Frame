@@ -47,7 +47,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
         public QuestParameter()
         {
-            map = QuestGen_Get.GetMap();
+            map = QuestGen.slate.Get<Map>("map") ?? QuestGen_Get.GetMap();
         }
 
         public QuestParameter(Map map)
@@ -73,7 +73,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         Faction faction = GetOrGenerateFaction();
         if (faction is null || faction.HostileTo(Faction.OfPlayer))
         {
-            quest.End(QuestEndOutcome.Unknown, sendLetter: true, playSound: false);
+            QuestGen_End.End(quest, QuestEndOutcome.Unknown, sendStandardLetter: false, playSound: false);
             return;
         }
         questParameter.faction = faction;
@@ -98,7 +98,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         List<Pawn> pawns = GeneratePawns(lodgerRecruitedSignal);
         if (pawns.NullOrEmpty())
         {
-            quest.End(QuestEndOutcome.Unknown, sendLetter: true, playSound: false);
+            QuestGen_End.End(quest, QuestEndOutcome.Unknown, sendStandardLetter: false, playSound: false);
             return;
         }
         questParameter.pawns = pawns;
@@ -140,15 +140,9 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         SetQuestEndCompCommon(questPart_RefugeeInteractions);
     }
 
-    protected virtual void InitQuestParameter()
-    {
-        questParameter = new QuestParameter();
-    }
+    protected virtual void InitQuestParameter() => questParameter = new QuestParameter();
 
-    protected virtual void ClearQuestParameter()
-    {
-        questParameter = null;
-    }
+    protected virtual void ClearQuestParameter() => questParameter = null;
 
     protected virtual List<Pawn> GeneratePawns(string lodgerRecruitedSignal = null)
     {
