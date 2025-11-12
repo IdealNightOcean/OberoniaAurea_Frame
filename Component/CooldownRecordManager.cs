@@ -25,7 +25,7 @@ public class CooldownRecordManager : IExposable
         return records.ContainsKey(key);
     }
 
-    public void RegisterRecord(string key, int cdTicks, bool shouldRemoveWhenExpired = false)
+    public void RegisterRecord(string key, int cdTicks, bool removeWhenExpired = false)
     {
         if (key.NullOrEmpty())
         {
@@ -33,7 +33,7 @@ public class CooldownRecordManager : IExposable
             return;
         }
 
-        records[key] = new CooldownRecord(cdTicks, shouldRemoveWhenExpired);
+        records[key] = new CooldownRecord(cdTicks, removeWhenExpired);
     }
 
     public void DeregisterRecord(string key)

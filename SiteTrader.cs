@@ -63,7 +63,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
 
     public SiteTrader() { }
 
-    public SiteTrader(TraderKindDef traderKind, WorldObject worldObject, Faction faction = null, int refreshInterval = -1)
+    public SiteTrader(TraderKindDef traderKind, WorldObject worldObject, Faction faction = null, RulePackDef rulePack = null, int refreshInterval = -1)
     {
         this.traderKind = traderKind;
         associateWorldObject = worldObject;
@@ -77,7 +77,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         {
             TempExtantNames.AddRange(maps[i].passingShipManager.passingShips.Select(x => x.name));
         }
-        traderName = NameGenerator.GenerateName(RulePackDefOf.NamerTraderGeneral, TempExtantNames);
+        traderName = NameGenerator.GenerateName(rulePack ?? RulePackDefOf.NamerTraderGeneral, TempExtantNames);
         if (faction is not null)
         {
             traderName = string.Format("{0} {1} {2}", traderName, "OfLower".Translate(), faction.Name);
@@ -112,6 +112,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         }
     }
 
+    public void GenerateThings() => GenerateThings(associateWorldObject?.Tile ?? PlanetTile.Invalid);
     public void GenerateThings(PlanetTile tile)
     {
         ThingSetMakerParams parms = default;
@@ -128,6 +129,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         lastRefreshTick = Find.TickManager.TicksGame;
     }
 
+    public void RefreshThings() => RefreshThings(associateWorldObject?.Tile ?? PlanetTile.Invalid);
     public void RefreshThings(PlanetTile tile)
     {
         lastRefreshTick = Find.TickManager.TicksGame;
@@ -260,7 +262,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         Scribe_Values.Look(ref randomPriceFactorSeed, "randomPriceFactorSeed", 0);
         if (Scribe.mode == LoadSaveMode.PostLoadInit || Scribe.mode == LoadSaveMode.Saving)
         {
-            tmpSavedPawns.RemoveAll(x => x is null);
+            tmpSavedPawns.RemoveAll(p => p is null);
             for (int i = 0; i < tmpSavedPawns.Count; i++)
             {
                 things.TryAdd(tmpSavedPawns[i], canMergeWithExistingStacks: false);

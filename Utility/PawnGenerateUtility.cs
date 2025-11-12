@@ -11,25 +11,23 @@ public static class OAFrame_PawnGenerateUtility
 {
     public static PawnGenerationRequest CommonPawnGenerationRequest(PawnKindDef kindDef, Faction faction = null, PlanetTile? tile = null, bool forceNew = false, bool allowChild = false)
     {
-        PawnGenerationRequest request = new(kindDef, faction)
-        {
-            Context = PawnGenerationContext.NonPlayer,
-            AllowDead = false,
-            AllowDowned = false,
-            ForceGenerateNewPawn = forceNew,
-            CanGeneratePawnRelations = false,
-            RelationWithExtraPawnChanceFactor = 0f,
-            AllowedDevelopmentalStages = DevelopmentalStage.Adult,
-        };
-        if (tile.HasValue)
-        {
-            request.Tile = tile.Value;
-        }
+        DevelopmentalStage developmentalStages = DevelopmentalStage.Adult;
         if (allowChild && Find.Storyteller.difficulty.ChildrenAllowed)
         {
-            request.AllowedDevelopmentalStages |= DevelopmentalStage.Child;
+            developmentalStages |= DevelopmentalStage.Child;
         }
-        return request;
+
+        return new PawnGenerationRequest(
+            kind: kindDef,
+            faction: faction,
+            context: PawnGenerationContext.NonPlayer,
+            tile: tile,
+            allowDead: false,
+            allowDowned: false,
+            forceGenerateNewPawn: forceNew,
+            canGeneratePawnRelations: false,
+            relationWithExtraPawnChanceFactor: 0f,
+            developmentalStages: developmentalStages);
     }
 
     public static PawnGroupMaker GetRandomPawnGroupMakerOfFaction(Faction faction, PawnGroupKindDef groupKindDef, Predicate<PawnGroupMaker> predicater = null)

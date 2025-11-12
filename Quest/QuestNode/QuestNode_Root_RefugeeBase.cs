@@ -59,14 +59,19 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
     protected QuestParameter questParameter;
 
-    public virtual PawnKindDef FixedPawnKind => PawnKindDefOf.Refugee;
+    protected virtual PawnKindDef FixedPawnKind => PawnKindDefOf.Refugee;
     protected virtual ThoughtDef ThoughtToAdd => null;
 
     protected override void RunInt()
     {
-        InitQuestParameter();
         Quest quest = QuestGen.quest;
         Slate slate = QuestGen.slate;
+
+        if (!InitQuestParameter())
+        {
+            quest.End(QuestEndOutcome.Unknown, sendLetter: false, playSound: false);
+            return;
+        }
 
         slate.Set("allowFutureReward", questParameter.allowFutureReward);
         slate.Set("allowJoinOffer", questParameter.allowJoinOffer);
@@ -74,7 +79,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         Faction faction = GetOrGenerateFaction();
         if (faction is null || faction.HostileTo(Faction.OfPlayer))
         {
-            quest.End(QuestEndOutcome.Unknown, sendLetter: true, playSound: false);
+            quest.End(QuestEndOutcome.Unknown, sendLetter: false, playSound: false);
             return;
         }
         questParameter.faction = faction;
@@ -99,7 +104,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         List<Pawn> pawns = GeneratePawns(lodgerRecruitedSignal);
         if (pawns.NullOrEmpty())
         {
-            quest.End(QuestEndOutcome.Unknown, sendLetter: true, playSound: false);
+            quest.End(QuestEndOutcome.Unknown, sendLetter: false, playSound: false);
             return;
         }
         questParameter.pawns = pawns;
@@ -142,9 +147,10 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         SetQuestEndCompCommon(questPart_RefugeeInteractions);
     }
 
-    protected virtual void InitQuestParameter()
+    protected virtual bool InitQuestParameter()
     {
         questParameter = new QuestParameter();
+        return true;
     }
 
     protected virtual void ClearQuestParameter()
@@ -159,7 +165,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         int adultCount = questParameter.LodgerCount - questParameter.ChildCount;
 
         PawnKindDef fixedPawnKind = FixedPawnKind ?? PawnKindDefOf.Refugee;
-        ThoughtDef thoughtToAdd = ThoughtToAdd;
+
         for (int i = 0; i < questParameter.LodgerCount; i++)
         {
             DevelopmentalStage developmentalStages = i < adultCount ? DevelopmentalStage.Adult : DevelopmentalStage.Child;
@@ -171,45 +177,49 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
             pawns.Add(pawn);
 
-            PostPawnGenerated(pawn);
-            if (thoughtToAdd is not null)
-            {
-                QuestPart_AddMemoryThought questPart_AddMemoryThought = new()
-                {
-                    inSignal = QuestGen.slate.Get<string>("inSignal"),
-                    pawn = pawn,
-                    def = thoughtToAdd
-                };
-                quest.AddPart(questPart_AddMemoryThought);
-            }
-
-            if (questParameter.allowJoinOffer)
-            {
-                quest.PawnJoinOffer(pawn,
-                "LetterJoinOfferLabel".Translate(pawn.Named("PAWN")),
-                "LetterJoinOfferTitle".Translate(pawn.Named("PAWN")),
-                "LetterJoinOfferText".Translate(pawn.Named("PAWN"),
-                questParameter.map.Parent.Named("MAP")),
-                delegate
-                {
-                    quest.JoinPlayer(questParameter.map.Parent, Gen.YieldSingle(pawn), joinPlayer: true);
-                    quest.Letter(letterDef: LetterDefOf.PositiveEvent,
-                                 signalListenMode: QuestPart.SignalListenMode.OngoingOnly,
-                                 label: "LetterLabelMessageRecruitSuccess".Translate() + ": " + pawn.LabelShortCap,
-                                 text: "MessageRecruitJoinOfferAccepted".Translate(pawn.Named("RECRUITEE")));
-                    quest.SignalPass(outSignal: lodgerRecruitedSignal);
-                },
-                delegate
-                {
-                    quest.RecordHistoryEvent(HistoryEventDefOf.CharityRefused_ThreatReward_Joiner);
-                },
-                charity: true);
-            }
+            PostPawnGenerated(pawn, lodgerRecruitedSignal);
         }
+
         return pawns;
     }
 
-    protected virtual void PostPawnGenerated(Pawn pawn) { }
+    protected virtual void PostPawnGenerated(Pawn pawn, string lodgerRecruitedSignal)
+    {
+        Quest quest = QuestGen.quest;
+        if (ThoughtToAdd is not null)
+        {
+            QuestPart_AddMemoryThought questPart_AddMemoryThought = new()
+            {
+                inSignal = QuestGen.slate.Get<string>("inSignal"),
+                pawn = pawn,
+                def = ThoughtToAdd
+            };
+            quest.AddPart(questPart_AddMemoryThought);
+        }
+
+        if (questParameter.allowJoinOffer)
+        {
+            quest.PawnJoinOffer(pawn,
+            "LetterJoinOfferLabel".Translate(pawn.Named("PAWN")),
+            "LetterJoinOfferTitle".Translate(pawn.Named("PAWN")),
+            "LetterJoinOfferText".Translate(pawn.Named("PAWN"),
+            questParameter.map.Parent.Named("MAP")),
+            delegate
+            {
+                quest.JoinPlayer(questParameter.map.Parent, Gen.YieldSingle(pawn), joinPlayer: true);
+                quest.Letter(letterDef: LetterDefOf.PositiveEvent,
+                             signalListenMode: QuestPart.SignalListenMode.OngoingOnly,
+                             label: "LetterLabelMessageRecruitSuccess".Translate() + ": " + pawn.LabelShortCap,
+                             text: "MessageRecruitJoinOfferAccepted".Translate(pawn.Named("RECRUITEE")));
+                quest.SignalPass(outSignal: lodgerRecruitedSignal);
+            },
+            delegate
+            {
+                quest.RecordHistoryEvent(HistoryEventDefOf.CharityRefused_ThreatReward_Joiner);
+            },
+            charity: true);
+        }
+    }
 
     protected virtual void PawnArrival(string lodgerArrivalSignal)
     {

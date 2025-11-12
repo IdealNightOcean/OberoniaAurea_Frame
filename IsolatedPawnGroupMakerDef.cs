@@ -1,7 +1,6 @@
 ﻿using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Xml;
 using Verse;
 
@@ -46,7 +45,6 @@ public class PawnGroupWithTagMakerDef : Def
 {
     public List<PawnGroupOption> groupOptions;
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetRandomPawnGroupOption(PawnGroupKindDef pawnGroupKindDef, out PawnGroupOption pawnGroupOption)
     {
         if (groupOptions is null)
@@ -66,9 +64,21 @@ public class PawnGroupOption
 
     public List<PawnGenGroupWithTag> groups;
 
-    public IReadOnlyList<PawnGenOption> GetOptionsWithTag(string tag)
+    public IReadOnlyList<PawnGenOption> GetRandomGroupOptionsIgnoreTag() => groups?.RandomElementWithFallback(null)?.options;
+
+    public IReadOnlyList<PawnGenOption> GetRandomGroupOptionsWithTag(string tag)
     {
-        if (groups.NullOrEmpty() || tag.NullOrEmpty())
+        if (groups.NullOrEmpty() || string.IsNullOrEmpty(tag))
+        {
+            return null;
+        }
+
+        return groups.Where(g => g.tag == tag).RandomElementWithFallback(null)?.options;
+    }
+
+    public IReadOnlyList<PawnGenOption> GetFirstGroupOptionsWithTag(string tag)
+    {
+        if (groups.NullOrEmpty() || string.IsNullOrEmpty(tag))
         {
             return null;
         }
@@ -91,7 +101,7 @@ public class PawnGenGroupWithTag
 
     public void LoadDataFromXmlCustom(XmlNode xmlRoot)
     {
-        DirectXmlCrossRefLoader.RegisterObjectWantsCrossRef(this, "tag", xmlRoot.Name);
+        tag = ParseHelper.FromString<string>(xmlRoot.Name);
         options = DirectXmlToObject.ObjectFromXml<List<PawnGenOption>>(xmlRoot, doPostLoad: true);
     }
 }

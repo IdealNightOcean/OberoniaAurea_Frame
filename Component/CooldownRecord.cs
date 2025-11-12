@@ -6,7 +6,7 @@ public struct CooldownRecord : IExposable
 {
     public int lastActiveTick;
     public int nextAvailableTick;
-    private bool shouldRemoveWhenExpired;
+    private bool removeWhenExpired;
     public readonly bool ShouldRemove
     {
         get
@@ -15,7 +15,7 @@ public struct CooldownRecord : IExposable
             {
                 return true;
             }
-            if (shouldRemoveWhenExpired && !IsInCooldown)
+            if (removeWhenExpired && !IsInCooldown)
             {
                 return true;
             }
@@ -27,21 +27,21 @@ public struct CooldownRecord : IExposable
     {
         lastActiveTick = -1;
         nextAvailableTick = -1;
-        shouldRemoveWhenExpired = true;
+        removeWhenExpired = true;
     }
 
-    public CooldownRecord(int cooldownTicks, bool shouldRemoveWhenExpired)
+    public CooldownRecord(int cooldownTicks, bool removeWhenExpired)
     {
         lastActiveTick = Find.TickManager.TicksGame;
         nextAvailableTick = lastActiveTick + cooldownTicks;
-        this.shouldRemoveWhenExpired = shouldRemoveWhenExpired;
+        this.removeWhenExpired = removeWhenExpired;
     }
 
     public void ExposeData()
     {
         Scribe_Values.Look(ref lastActiveTick, "lastActiveTick", -1);
         Scribe_Values.Look(ref nextAvailableTick, "nextAvailableTick", -1);
-        Scribe_Values.Look(ref shouldRemoveWhenExpired, "shouldRemoveWhenExpired", defaultValue: false);
+        Scribe_Values.Look(ref removeWhenExpired, "removeWhenExpired", defaultValue: false);
     }
 
     public readonly int CooldownTicksLeft => lastActiveTick < 0 ? -1 : nextAvailableTick - Find.TickManager.TicksGame;

@@ -10,7 +10,7 @@ public class CaravanArrivalAction_VisitInteractiveObject : CaravanArrivalAction
 {
     protected WorldObject_InteractiveBase worldObject;
 
-    public override string Label => "OAFrame_Visit".Translate(worldObject.Label);
+    public override string Label => "OAFrame_VisitObject".Translate(worldObject.Label);
     public override string ReportString => "CaravanVisiting".Translate(worldObject.Label);
     public CaravanArrivalAction_VisitInteractiveObject()
     { }
@@ -44,11 +44,11 @@ public class CaravanArrivalAction_VisitInteractiveObject : CaravanArrivalAction
     }
     public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, WorldObject_InteractiveBase worldObject, string label = null)
     {
-        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => CanVisit(worldObject), () => new CaravanArrivalAction_VisitInteractiveObject(worldObject), (label ?? "OAFrame_Visit").Translate(worldObject.Label), caravan, worldObject.Tile, worldObject);
+        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => CanVisit(worldObject), () => new CaravanArrivalAction_VisitInteractiveObject(worldObject), (label ?? "OAFrame_VisitObject").Translate(worldObject.Label), caravan, worldObject.Tile, worldObject);
     }
     public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, WorldObject_InteractiveBase worldObject, FloatMenuAcceptanceReport acceptanceReport, string label = null)
     {
-        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => acceptanceReport, () => new CaravanArrivalAction_VisitInteractiveObject(worldObject), (label ?? "OAFrame_Visit").Translate(worldObject.Label), caravan, worldObject.Tile, worldObject);
+        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => acceptanceReport, () => new CaravanArrivalAction_VisitInteractiveObject(worldObject), (label ?? "OAFrame_VisitObject").Translate(worldObject.Label), caravan, worldObject.Tile, worldObject);
     }
     public override void ExposeData()
     {
@@ -61,7 +61,7 @@ public class CaravanArrivalAction_VisitInteractiveObject_Muti : CaravanArrivalAc
 {
     protected WorldObject_MutiInteractiveBase worldObject;
     protected int visitType;
-    public override string Label => "OAFrame_Visit".Translate(worldObject.Label);
+    public override string Label => "OAFrame_VisitObject".Translate(worldObject.Label);
     public override string ReportString => "CaravanVisiting".Translate(worldObject.Label);
 
     public CaravanArrivalAction_VisitInteractiveObject_Muti() { }
@@ -96,11 +96,11 @@ public class CaravanArrivalAction_VisitInteractiveObject_Muti : CaravanArrivalAc
     }
     public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, WorldObject_MutiInteractiveBase worldObject, int visitTypeInt, string label = null)
     {
-        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => CanVisit(worldObject), () => new CaravanArrivalAction_VisitInteractiveObject_Muti(worldObject, visitTypeInt), label ?? "OAFrame_Visit".Translate(worldObject.Label), caravan, worldObject.Tile, worldObject);
+        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => CanVisit(worldObject), () => new CaravanArrivalAction_VisitInteractiveObject_Muti(worldObject, visitTypeInt), label ?? "OAFrame_VisitObject".Translate(worldObject.Label), caravan, worldObject.Tile, worldObject);
     }
     public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, WorldObject_MutiInteractiveBase worldObject, int visitTypeInt, FloatMenuAcceptanceReport acceptanceReport, string label = null)
     {
-        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => acceptanceReport, () => new CaravanArrivalAction_VisitInteractiveObject_Muti(worldObject, visitTypeInt), label ?? "OAFrame_Visit".Translate(worldObject.Label), caravan, worldObject.Tile, worldObject);
+        return CaravanArrivalActionUtility.GetFloatMenuOptions(() => acceptanceReport, () => new CaravanArrivalAction_VisitInteractiveObject_Muti(worldObject, visitTypeInt), label ?? "OAFrame_VisitObject".Translate(worldObject.Label), caravan, worldObject.Tile, worldObject);
     }
 
     public override void ExposeData()
