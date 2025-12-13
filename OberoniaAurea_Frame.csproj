@@ -83,6 +83,7 @@
     <Compile Include="Lord\LordJob_VisitColonyBase.cs" />
     <Compile Include="Quest\Quest_InitiateTradeRequest.cs" />
     <Compile Include="Quest\Quest_DestroyWorldObject.cs" />
+    <Compile Include="Quest\Quest_ChoiceLetter.cs" />
     <Compile Include="Quest\Quest_PawnNegativeSiganl.cs" />
     <Compile Include="Quest\Quest_MultiSignalCount.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_QuestUnique.cs" />

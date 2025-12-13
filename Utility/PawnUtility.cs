@@ -64,6 +64,34 @@ public static class OAFrame_PawnUtility
         return pawn.jobs?.curDriver?.asleep ?? false;
     }
 
+    /// <summary>
+    /// 使<see cref="Pawn"/> 加入玩家派系
+    /// </summary>
+    /// <param name="makePrisoner">是否作为囚服加入</param>
+    public static void MakePawnJoinPlayer(Pawn pawn, bool makePrisoner = false)
+    {
+        if (pawn.IsColonist || pawn.IsPrisonerOfColony || pawn.IsSlaveOfColony)
+        {
+            RecruitUtility.Recruit(pawn, Faction.OfPlayer);
+        }
+        else if (pawn.Faction != Faction.OfPlayer)
+        {
+            pawn.SetFaction(Faction.OfPlayer);
+        }
+
+        if (makePrisoner)
+        {
+            if (pawn.RaceProps.Humanlike)
+            {
+                if (!pawn.IsPrisonerOfColony)
+                {
+                    pawn.guest.SetGuestStatus(Faction.OfPlayer, GuestStatus.Prisoner);
+                }
+                HealthUtility.TryAnesthetize(pawn);
+            }
+        }
+    }
+
     private static IEnumerable<BodyPartRecord> HittablePartsViolence(HediffSet bodyModel)
     {
         return from p in bodyModel.GetNotMissingParts()

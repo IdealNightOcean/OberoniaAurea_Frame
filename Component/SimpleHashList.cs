@@ -155,9 +155,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
 
     public void ExposeData()
     {
-        Scribe_Values.Look(ref innerListLookMode, "innerListLookMode", defaultValue: LookMode.Deep);
+        Scribe_Values.Look(ref innerListLookMode, nameof(innerListLookMode), defaultValue: LookMode.Deep);
 
-        Scribe_Collections.Look(ref innerList, "innerList", lookMode: innerListLookMode);
+        Scribe_Collections.Look(ref innerList, nameof(innerList), lookMode: innerListLookMode);
 
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {

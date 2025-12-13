@@ -39,9 +39,9 @@ public struct CooldownRecord : IExposable
 
     public void ExposeData()
     {
-        Scribe_Values.Look(ref lastActiveTick, "lastActiveTick", -1);
-        Scribe_Values.Look(ref nextAvailableTick, "nextAvailableTick", -1);
-        Scribe_Values.Look(ref removeWhenExpired, "removeWhenExpired", defaultValue: false);
+        Scribe_Values.Look(ref lastActiveTick, nameof(lastActiveTick), -1);
+        Scribe_Values.Look(ref nextAvailableTick, nameof(nextAvailableTick), -1);
+        Scribe_Values.Look(ref removeWhenExpired, nameof(removeWhenExpired), defaultValue: false);
     }
 
     public readonly int CooldownTicksLeft => lastActiveTick < 0 ? -1 : nextAvailableTick - Find.TickManager.TicksGame;
