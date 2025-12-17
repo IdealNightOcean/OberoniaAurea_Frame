@@ -9,7 +9,7 @@ namespace OberoniaAurea_Frame;
 
 public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssociate, IQuestAssociate
 {
-    protected virtual string VisitLabel => null;
+    protected virtual string VisitLabel => "OAFrame_VisitObject";
     protected Quest quest;
     public Quest AssociatedQuest => quest;
 
@@ -28,7 +28,7 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
         this.quest = quest;
     }
 
-    public virtual void Notify_CaravanArrived(Caravan caravan) { }
+    public abstract void Notify_CaravanArrived(Caravan caravan);
 
     public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
     {
