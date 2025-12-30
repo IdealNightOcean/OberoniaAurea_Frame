@@ -69,7 +69,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
 
         if (!InitQuestParameter())
         {
-            quest.End(QuestEndOutcome.Unknown, sendLetter: false, playSound: false);
+            QuestGen_End.End(quest, QuestEndOutcome.Unknown, sendStandardLetter: false, playSound: false);
             return;
         }
 
@@ -79,7 +79,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         Faction faction = GetOrGenerateFaction();
         if (faction is null || faction.HostileTo(Faction.OfPlayer))
         {
-            quest.End(QuestEndOutcome.Unknown, sendLetter: false, playSound: false);
+            QuestGen_End.End(quest, QuestEndOutcome.Unknown, sendStandardLetter: false, playSound: false);
             return;
         }
         questParameter.faction = faction;
@@ -104,7 +104,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         List<Pawn> pawns = GeneratePawns(lodgerRecruitedSignal);
         if (pawns.NullOrEmpty())
         {
-            quest.End(QuestEndOutcome.Unknown, sendLetter: false, playSound: false);
+            QuestGen_End.End(quest, QuestEndOutcome.Unknown, sendStandardLetter: false, playSound: false);
             return;
         }
         questParameter.pawns = pawns;
@@ -433,7 +433,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         quest.End(QuestEndOutcome.Fail, questParameter.goodwillFailure, faction, delayFailSignal, sendStandardLetter: true);
 
         quest.End(QuestEndOutcome.Success, inSignal: questPart_RefugeeInteractions.outSignalLast_Recruited, sendStandardLetter: true);
-        quest.End(QuestEndOutcome.Success, questParameter.goodwillSuccess / 2, faction, questPart_RefugeeInteractions.outSignalLast_LeftMapAllNotHealthy, sendStandardLetter: true);
+        quest.End(QuestEndOutcome.Success, questParameter.goodwillSuccess / 2, faction, inSignal: questPart_RefugeeInteractions.outSignalLast_LeftMapAllNotHealthy, sendStandardLetter: true);
 
         quest.SignalPass(delegate
         {
