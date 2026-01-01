@@ -31,7 +31,12 @@ public static class OAFrame_MiscUtility
     {
         if (parms is null)
         {
-            Log.Error("Try add a new queued incident,but IncidentParms is NULL.");
+            Log.Error($"Try add a new queued incident,but {nameof(IncidentParms)} is NULL.");
+            return;
+        }
+        if (parms.target is null)
+        {
+            Log.Error($"Try add a new queued incident,but {nameof(IncidentParms)}.{nameof(IncidentParms.target)} is NULL.");
             return;
         }
         Find.Storyteller.incidentQueue.Add(incidentDef, Find.TickManager.TicksGame + delayTicks, parms, retryDurationTicks);

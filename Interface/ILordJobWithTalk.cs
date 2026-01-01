@@ -9,5 +9,5 @@ public interface ILordJobWithTalk
 
     bool CanTalkWith(Pawn p);
     void EnableTalk(Pawn p);
-    void DisableTalk();
+    void DisableTalk(bool dismiss);
 }

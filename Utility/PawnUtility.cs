@@ -67,7 +67,7 @@ public static class OAFrame_PawnUtility
     /// <summary>
     /// 使<see cref="Pawn"/> 加入玩家派系
     /// </summary>
-    /// <param name="makePrisoner">是否作为囚服加入</param>
+    /// <param name="makePrisoner">是否作为囚犯加入</param>
     public static void MakePawnJoinPlayer(Pawn pawn, bool makePrisoner = false)
     {
         if (pawn.IsColonist || pawn.IsPrisonerOfColony || pawn.IsSlaveOfColony)
@@ -79,7 +79,11 @@ public static class OAFrame_PawnUtility
             pawn.SetFaction(Faction.OfPlayer);
         }
 
-        if (makePrisoner)
+        if (!makePrisoner)
+        {
+            QuestUtility.SendQuestTargetSignals(pawn.questTags, "Recruited", pawn.Named("SUBJECT"));
+        }
+        else
         {
             if (pawn.RaceProps.Humanlike)
             {
@@ -89,14 +93,8 @@ public static class OAFrame_PawnUtility
                 }
                 HealthUtility.TryAnesthetize(pawn);
             }
+            QuestUtility.SendQuestTargetSignals(pawn.questTags, "Arrested", pawn.Named("SUBJECT"));
         }
-    }
-
-    private static IEnumerable<BodyPartRecord> HittablePartsViolence(HediffSet bodyModel)
-    {
-        return from p in bodyModel.GetNotMissingParts()
-               where p.depth == BodyPartDepth.Outside || (p.depth == BodyPartDepth.Inside && p.def.IsSolid(p, bodyModel.hediffs))
-               select p;
     }
 
     /// <summary>
@@ -156,6 +154,13 @@ public static class OAFrame_PawnUtility
             Log.Error(stringBuilder.ToString());
         }
         pawn.health.forceDowned = false;
+
+        static IEnumerable<BodyPartRecord> HittablePartsViolence(HediffSet bodyModel)
+        {
+            return from innerP in bodyModel.GetNotMissingParts()
+                   where innerP.depth == BodyPartDepth.Outside || (innerP.depth == BodyPartDepth.Inside && innerP.def.IsSolid(innerP, bodyModel.hediffs))
+                   select innerP;
+        }
     }
 
     public static int GetMaxSkillLevelOfPawns(IEnumerable<Pawn> pawns, SkillDef skill)

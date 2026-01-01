@@ -39,18 +39,41 @@ public static class OAFrame_CaravanUtility
     {
         int num = 0;
         List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravan);
-        for (int i = 0; i < list.Count; i++)
+        if (validator is null)
         {
-            Thing thing = list[i];
-            if (thing.def.thingCategories.Contains(thingCategoryDef) && (validator is null || validator(thing)))
+            foreach (Thing thing in list)
             {
-                num += thing.stackCount;
-                if (num >= count)
+                ThingDef thingDef = thing.def;
+                if (thingDef.thingCategories is not null && thingDef.thingCategories.Contains(thingCategoryDef))
                 {
-                    return true;
+                    num += thing.stackCount;
+                    if (num >= count)
+                    {
+                        return true;
+                    }
                 }
             }
         }
+        else
+        {
+            foreach (Thing thing in list)
+            {
+                ThingDef thingDef = thing.def;
+                if (thingDef.thingCategories is null)
+                {
+                    continue;
+                }
+                if (thingDef.thingCategories.Contains(thingCategoryDef) && validator(thing))
+                {
+                    num += thing.stackCount;
+                    if (num >= count)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
     }
 

@@ -14,47 +14,61 @@
 ](https://steamcommunity.com/sharedfiles/filedetails/?id=3381392312)
 
 
+---
 
-# 许可协议
+# 许可证
 
-## 署名—非商业性使用—相同方式共享 4.0 协议国际版 (CC BY-NC-SA 4.0)
+[![License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE) [![No Commercial Use](https://img.shields.io/badge/Commercial-Forbidden-red.svg)](#许可证)
 
-[![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-blue)](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
+本项目的使用权限严格分为以下两种模式，使用者需根据场景遵守对应规则：
+1.  **非商业用途**：遵循 **GNU Affero General Public License v3.0 (AGPL-3.0)** 协议，享有完整的自由使用/修改/分发权利；
+2.  **商业用途**：**严禁任何形式的使用、修改、分发及衍生**。
 
-<a href="https://github.com/IdealNightOcean/OberoniaAurea_Frame">OberoniaAurea_Frame</a> © 2024 by <a href="https://github.com/IdealNightOcean">NightOcean</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+## 非商业用途许可条款（AGPL-3.0 适用）
+### 协议文本与效力
+- AGPL-3.0 完整协议文本：[LICENSE-AGPL](LICENSE)
+- 官方中文概要（非替代原文）：<https://www.gnu.org/licenses/agpl-3.0.zh-cn.html>
+- 免责声明：<https://www.gnu.org/licenses/agpl-3.0.html#disclaimer>
 
-<img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
+### 合法使用场景（**仅限非商业用途**）
+个人学习研究、非盈利组织内部运维、开源社区技术交流、免费分享修改后的非商业版本，且使用过程中**不产生任何直接/间接经济收益**。
 
-你可以通过下列链接访问相关协议证书和法律文本：
-- [协议证书](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans)
-- [法律文本](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.zh-hans)
+### 你可以自由行使的权利
+- **使用**：免费运行本软件及衍生版本，无功能限制；
+- **共享**：复制、分发本软件完整副本（含源代码），分发时需附带本许可声明；
+- **演绎**：修改、转换或以本软件为基础创作衍生作品，衍生作品必须以 AGPL-3.0 协议开源，且保留原始版权与修改记录。
 
+### 必须遵守的强制义务
+- **源代码公开**：
+  1.  分发原版/修改版软件时，必须提供完整对应源代码；
+  2.  将修改后的软件用于网络服务（如免费在线 Mod 管理工具）时，需向所有用户提供修改版完整源代码的下载链接；
+- **署名保留**：不得删除或篡改软件内的版权声明、许可协议文本；分发或提供服务时，需以合理方式标注原始版权归属；
+- **相同方式共享**：衍生作品必须采用 AGPL-3.0 协议分发，不得附加任何限制性条款；
+- **无技术限制**：不得通过加密、功能锁定等技术手段，限制他人行使本协议赋予的合法权利。
 
+## 商业用途条款
+### 明确禁止的商业场景（**包含但不限于**）
+- 将本软件或其衍生作品 **嵌入付费软件/服务** 中分发（如游戏付费插件、付费工具箱）；
+- 企业/团队将本软件用于 **生产经营、商业管理** 等盈利相关活动；
+- 向第三方提供 **基于本软件的付费 Mod 管理服务**（如收费代配置、收费技术支持）；
+- 以本软件为基础开发商业产品并销售，或通过广告、流量分成等方式获取经济收益；
+- 利用本软件的功能或代码，为商业主体节省成本、提升效率的任何使用行为。
 
-## CC BY-NC-SA 4.0 协议简要介绍：
+### 禁止声明
+**本项目不提供任何商业授权渠道，任何未经允许的商业使用行为，均视为侵犯本项目的知识产权，项目组保留追究其法律责任的权利。**
 
-### 您可以自由地：
-------
+## 通用声明
+1.  本软件按 **原样提供**，不提供任何形式的担保（包括适销性、特定用途适用性），项目组不对软件使用效果、稳定性及可能产生的损失承担责任；
+2.  若本项目包含第三方开源代码，该部分代码将单独标注其许可协议，遵循对应条款；
+3.  非商业用途的衍生作品，**同样禁止任何商业转化行为**；
+4.  本许可协议的最终解释权归本项目组所有。
 
-- **共享** — 在任何媒介以任何形式复制、发行本作品
+---
 
-- **演绎** — 修改、转换或以本作品为基础进行创作
-
-只要你遵守许可协议条款，许可人就无法收回你的这些权利。
-
-
-### 惟须遵守下列条件：
-------
-
-- **署名** — 您必须给出[适当的署名](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans#ref-appropriate-credit)，提供指向本许可协议的链接，同时[标明是否（对原始作品）作了修改](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans#ref-indicate-changes)。您可以用任何合理的方式来署名，但是不得以任何方式暗示许可人为您或您的使用背书。
-- **非商业性使用** — 您不得将本作品用于[商业目的](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans#ref-commercial-purposes)。
-- **相同方式共享** — 如果您再混合、转换或者基于本作品进行创作，您必须基于[与原许可协议相同的许可协议](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans#ref-same-license) 分发您贡献的作品。
-
-- **没有附加限制** — 您不得适用法律术语或者[技术措施](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans#ref-technological-measures) 从而限制其他人做许可协议允许的事情。
-
-
-### 声明：
-------
-
-- 您不必因为公共领域的作品要素而遵守许可协议，或者您的使用被可适用的[例外或限制](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans#ref-exception-or-limitation)所允许。
-- **不提供担保** — 许可协议可能不会给与您意图使用的所必须的所有许可。例如，其他权利比如（[形象权、隐私权或人格权等](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans#ref-publicity-privacy-or-moral-rights)）依然可能限制您如何使用作品。
+# 贡献者须知
+所有向本项目提交 Pull Request 的代码贡献者，**提交行为即视为同意以下条款**：
+1.  贡献者拥有所提交代码的完整版权，且未侵犯任何第三方知识产权；
+2.  授予项目组 **永久、全球、非独占、免费、不可撤销的使用权**；
+3.  允许项目组将贡献代码纳入本许可体系，仅用于非商业场景的分发与修改，且禁止任何商业用途；
+4.  项目组有权对贡献代码进行修改、整合、分发，无需另行通知；
+5.  若不同意以上条款，请勿提交代码。

@@ -14,18 +14,29 @@ public static class OAFrame_FactionUtility
     /// 是否为鼠族派系
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsRatkinFaction(this Faction faction)
+    public static bool IsRatkinFaction(this FactionDef factionDef)
     {
-        return faction?.def.GetModExtension<RatkinFactionFlag>() is not null;
+        return factionDef?.GetModExtension<RatkinFactionFlag>() is not null;
     }
+    /// <summary>
+    /// 是否为鼠族派系
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsRatkinFaction(this Faction faction) => IsRatkinFaction(faction?.def);
 
     /// <summary>
     /// 是否为鼠族王国类型派系
     /// </summary>
-    public static bool IsRatkinKindomFaction(this Faction faction)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsRatkinKindomFaction(this FactionDef factionDef)
     {
-        return faction?.def.GetModExtension<FactionTagsExtension>()?.HasTag("RatkinKindom") ?? false;
+        return factionDef?.GetModExtension<FactionTagsExtension>()?.HasTag("RatkinKindom") ?? false;
     }
+    /// <summary>
+    /// 是否为鼠族王国类型派系
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsRatkinKindomFaction(this Faction faction) => IsRatkinKindomFaction(faction?.def);
 
     public static IEnumerable<Faction> GetAvailableFactionsOf(FactionValidationParams validationParams, Predicate<Faction> predicater = null)
     {

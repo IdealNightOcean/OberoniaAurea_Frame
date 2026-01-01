@@ -40,11 +40,11 @@ public abstract class JobDriver_TalkWithAtOnce : JobDriver
         }
     }
 
-    public static void DisableLordJobTalk(Pawn talkWith)
+    public static void DisableLordJobTalk(Pawn talkWith, bool dismiss)
     {
         if (talkWith.GetLord()?.LordJob is LordJob_VisitColonyTalkable talkLordJob && talkLordJob.CanTalkWith(talkWith))
         {
-            talkLordJob.DisableTalk();
+            talkLordJob.DisableTalk(dismiss);
         }
     }
 }

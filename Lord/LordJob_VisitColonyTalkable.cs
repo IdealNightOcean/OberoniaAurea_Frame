@@ -14,7 +14,7 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
     protected bool canTalkNow;
 
     public Pawn TalkablePawn => talkablePawn;
-    public bool CanTalkNow => canTalkNow;
+    public bool CanTalkNow => canTalkNow && !dismissed;
 
     public LordJob_VisitColonyTalkable() : base() { }
     public LordJob_VisitColonyTalkable(Faction faction, IntVec3 chillSpot, int? durationTicks = null) : base(faction, chillSpot, durationTicks)
@@ -57,7 +57,22 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
     }
     public void EnableTalk() => EnableTalk(talkablePawn);
 
-    public void DisableTalk() => canTalkNow = false;
+    public void DisableTalk(bool dismiss)
+    {
+        canTalkNow = false;
+        if (!this.dismissed && dismiss)
+
+        {
+            this.dismissed = true;
+            if (lord is not null && !lord.ownedPawns.NullOrEmpty())
+            {
+                foreach (Pawn p in lord.ownedPawns)
+                {
+                    p.pather?.ResetToCurrentPosition();
+                }
+            }
+        }
+    }
 
     public bool IsAssociateJobToPawn(JobDef jobDef, Pawn talkWith)
     {
@@ -87,7 +102,7 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
         base.Notify_PawnLost(p, condition);
         if (p == talkablePawn)
         {
-            DisableTalk();
+            DisableTalk(dismiss: true);
         }
     }
 

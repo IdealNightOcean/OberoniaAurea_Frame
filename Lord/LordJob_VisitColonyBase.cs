@@ -13,7 +13,8 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
     protected IntVec3 chillSpot;
     protected int? durationTicks;
     public List<Thing> gifts;
-    public StateGraph exitSubgraph;
+
+    protected bool dismissed;
 
     public override bool ShouldExistWithoutPawns => true;
 
@@ -55,13 +56,10 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
         LordToil_TakeWoundedGuest lordToil_TakeWoundedGuest = new();
         stateGraph.AddToil(lordToil_TakeWoundedGuest);
 
-        exitSubgraph = new LordJob_TravelAndExit(IntVec3.Invalid).CreateGraph();
-        LordToil exitMapTravelToil = stateGraph.AttachSubgraph(exitSubgraph).StartingToil;
-        LordToil exitMapToil = exitSubgraph.lordToils[1];
-        LordToil_ExitMap lordToil_ExitMap = new(LocomotionUrgency.Walk, canDig: true);
+        LordToil_ExitMap lordToil_ExitMap = new(LocomotionUrgency.Sprint, canDig: true);
         stateGraph.AddToil(lordToil_ExitMap);
 
-        Transition transition3 = new(lordToil_Travel, exitMapTravelToil);
+        Transition transition3 = new(lordToil_Travel, lordToil_ExitMap);
         transition3.AddSources(lordToil_DefendTargetPoint);
         transition3.AddTrigger(new Trigger_PawnExperiencingDangerousTemperatures());
         if (faction is not null)
@@ -72,7 +70,7 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
         transition3.AddPostAction(new TransitionAction_EndAllJobs());
         stateGraph.AddTransition(transition3);
 
-        Transition transition4 = new(lordToil_Travel, exitMapTravelToil);
+        Transition transition4 = new(lordToil_Travel, lordToil_ExitMap);
         transition4.AddSources(lordToil_DefendTargetPoint);
         transition4.AddTrigger(new Trigger_PawnExperiencingAnomalousWeather());
         if (faction is not null)
@@ -85,7 +83,6 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
 
         Transition transition5 = new(lordToil_Travel, lordToil_ExitMap);
         transition5.AddSources(lordToil_DefendTargetPoint, lordToil_TakeWoundedGuest);
-        transition5.AddSources(exitSubgraph.lordToils);
         transition5.AddTrigger(new Trigger_PawnCannotReachMapEdge());
         if (faction is not null)
         {
@@ -93,32 +90,33 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
         }
         stateGraph.AddTransition(transition5);
 
-        Transition transition6 = new(lordToil_ExitMap, exitMapTravelToil);
-        transition6.AddTrigger(new Trigger_PawnCanReachMapEdge());
-        transition6.AddPreAction(new TransitionAction_EnsureHaveExitDestination());
-        transition6.AddPostAction(new TransitionAction_EndAllJobs());
+        Transition transition6 = new(lordToil_Travel, lordToil_DefendTargetPoint);
+        transition6.AddTrigger(new Trigger_Memo("TravelArrived"));
         stateGraph.AddTransition(transition6);
-
-        Transition transition7 = new(lordToil_Travel, lordToil_DefendTargetPoint);
-        transition7.AddTrigger(new Trigger_Memo("TravelArrived"));
-        stateGraph.AddTransition(transition7);
         if (faction is not null)
         {
-            Transition transition8 = new(lordToil_DefendTargetPoint, lordToil_TakeWoundedGuest);
-            transition8.AddTrigger(new Trigger_WoundedGuestPresent());
-            transition8.AddPreAction(new TransitionAction_Message("MessageVisitorsTakingWounded".Translate(faction.def.pawnsPlural.CapitalizeFirst(), faction.Name)));
-            stateGraph.AddTransition(transition8);
+            Transition transition7 = new(lordToil_DefendTargetPoint, lordToil_TakeWoundedGuest);
+            transition7.AddTrigger(new Trigger_WoundedGuestPresent());
+            transition7.AddPreAction(new TransitionAction_Message("MessageVisitorsTakingWounded".Translate(faction.def.pawnsPlural.CapitalizeFirst(), faction.Name)));
+            stateGraph.AddTransition(transition7);
         }
 
-        Transition transition9 = new(lordToil_DefendTargetPoint, exitMapToil);
+        Transition transition8 = new(lordToil_DefendTargetPoint, lordToil_ExitMap);
+        transition8.AddSources(lordToil_TakeWoundedGuest, lordToil_Travel);
+        transition8.AddTrigger(new Trigger_BecamePlayerEnemy());
+        transition8.AddPreAction(new TransitionAction_SetDefendLocalGroup());
+        transition8.AddPostAction(new TransitionAction_WakeAll());
+        transition8.AddPostAction(new TransitionAction_EndAllJobs());
+        stateGraph.AddTransition(transition8);
+
+        Transition transition9 = new(lordToil_DefendTargetPoint, lordToil_ExitMap);
         transition9.AddSources(lordToil_TakeWoundedGuest, lordToil_Travel);
-        transition9.AddTrigger(new Trigger_BecamePlayerEnemy());
-        transition9.AddPreAction(new TransitionAction_SetDefendLocalGroup());
+        transition9.AddTrigger(new Trigger_Custom(s => s.type == TriggerSignalType.Tick && dismissed));
         transition9.AddPostAction(new TransitionAction_WakeAll());
         transition9.AddPostAction(new TransitionAction_EndAllJobs());
         stateGraph.AddTransition(transition9);
 
-        Transition transition10 = new(lordToil_DefendTargetPoint, exitMapTravelToil);
+        Transition transition10 = new(lordToil_DefendTargetPoint, lordToil_ExitMap);
         int tickLimit = (!DebugSettings.instantVisitorsGift || faction is null) ? (durationTicks ?? Rand.Range(8000, 22000)) : 0;
         transition10.AddTrigger(new Trigger_TicksPassed(tickLimit));
         if (faction is not null)
@@ -145,10 +143,11 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
 
     public override void ExposeData()
     {
-        Scribe_References.Look(ref faction, "faction");
-        Scribe_Values.Look(ref chillSpot, "chillSpot");
-        Scribe_Values.Look(ref durationTicks, "durationTicks");
-        Scribe_Collections.Look(ref gifts, "gifts", LookMode.Deep);
+        Scribe_References.Look(ref faction, nameof(faction));
+        Scribe_Values.Look(ref chillSpot, nameof(chillSpot));
+        Scribe_Values.Look(ref durationTicks, nameof(durationTicks));
+        Scribe_Values.Look(ref dismissed, nameof(dismissed));
+        Scribe_Collections.Look(ref gifts, nameof(gifts), LookMode.Deep);
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {
             gifts?.RemoveAll(t => t is null);
