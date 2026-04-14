@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Verse;
@@ -96,6 +96,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         }
     }
 
+    /// <summary>
+    /// 批量添加元素。
+    /// </summary>
     public void AddRange(IEnumerable<T> collection)
     {
         if (collection is null)
@@ -135,6 +138,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         return innerList.RemoveAll(match);
     }
 
+    /// <summary>
+    /// 确保列表元素唯一性。
+    /// </summary>
     public void EnsureUnique()
     {
         innerList.Clear();

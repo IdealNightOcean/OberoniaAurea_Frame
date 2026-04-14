@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -43,7 +43,7 @@ public static class OAFrame_MiscUtility
     }
 
     /// <summary>
-    /// 创建物品
+    /// 创建物品。
     /// </summary>
     public static List<Thing> TryGenerateThing(ThingDef def, int count)
     {
@@ -60,6 +60,9 @@ public static class OAFrame_MiscUtility
         return list;
     }
 
+    /// <summary>
+    /// 验证单例是否为空。
+    /// </summary>
     public static void ValidateSingleton<T>(T instance, string instanceName) where T : class
     {
         if (instance is not null)

@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 
 namespace OberoniaAurea_Frame;
 
@@ -23,6 +23,9 @@ public struct FactionValidationParams
     public static FactionValidationParams NonHostileNormalFaction => new() { AllyHostile = false };
     public static FactionValidationParams HostileNormalFaction => new() { AllowAlly = false, AllowNeutral = false };
 
+    /// <summary>
+    /// 验证派系是否符合条件。
+    /// </summary>
     public readonly bool ValidateFaction(Faction faction)
     {
         if (faction is null || faction == Faction.OfPlayer)

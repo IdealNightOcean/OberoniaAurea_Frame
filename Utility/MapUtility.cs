@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +10,18 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_MapUtility
 {
+    /// <summary>
+    /// 获取地图可发送白银数量。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int AmountSendableSilver(this Map map)
     {
         return AmountSendableThing(map, ThingDefOf.Silver);
     }
 
+    /// <summary>
+    /// 获取地图可发送物品数量。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int AmountSendableThing(this Map map, ThingDef thingDef)
     {
@@ -24,6 +30,9 @@ public static class OAFrame_MapUtility
                 select t).Sum(t => t.stackCount);
     }
 
+    /// <summary>
+    /// 获取地图中指定def物品的数量。
+    /// </summary>
     public static int GetCountOfThingDef(this Map map, ThingDef thingDef, int count, Predicate<Thing> validator = null)
     {
         if (map is null || thingDef is null)
@@ -60,6 +69,9 @@ public static class OAFrame_MapUtility
         return totalCount;
     }
 
+    /// <summary>
+    /// 检查地图是否有足够数量的指定物品。
+    /// </summary>
     public static bool HasEnoughThingsOfDef(this Map map, ThingDef thingDef, int count, Predicate<Thing> validator = null)
     {
         if (map is null || thingDef is null)
@@ -103,6 +115,9 @@ public static class OAFrame_MapUtility
         return false;
     }
 
+    /// <summary>
+    /// 从地图取出指定def物品的物品。
+    /// </summary>
     public static List<Thing> TakeThingsOfDef(Map map, ThingDef thingDef, int count, out int actualTakeCount, Predicate<Thing> validator = null)
     {
         List<Thing> takeThings = [];
@@ -173,6 +188,9 @@ public static class OAFrame_MapUtility
         return takeThings;
     }
 
+    /// <summary>
+    /// 销毁地图中指定def物品的物品。
+    /// </summary>
     /// <returns>实际销毁数</returns>
     public static int DestoryThingsOfDef(this Map map, ThingDef thingDef, int count, Predicate<Thing> validator = null)
     {

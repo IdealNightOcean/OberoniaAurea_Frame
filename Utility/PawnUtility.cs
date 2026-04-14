@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,6 +11,9 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_PawnUtility
 {
+    /// <summary>
+    /// 检查<see cref="Pawn"/>的容器是否为持久保有者（<see cref="IPawnRetentionHolder"/>)。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsChildOfRetentionHolder(this Pawn p)
     {
@@ -42,7 +45,7 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 移除第一个相关Def的健康状态
+    /// 移除第一个相关Def的健康状态。
     /// </summary>
     public static void RemoveFirstHediffOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
     {
@@ -58,6 +61,9 @@ public static class OAFrame_PawnUtility
         }
     }
 
+    /// <summary>
+    /// 检查<see cref="Pawn"/>是否正在睡眠。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool SleepNow(this Pawn pawn)
     {
@@ -65,7 +71,7 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 使<see cref="Pawn"/> 加入玩家派系
+    /// 使<see cref="Pawn"/>加入玩家派系。
     /// </summary>
     /// <param name="makePrisoner">是否作为囚犯加入</param>
     public static void MakePawnJoinPlayer(Pawn pawn, bool makePrisoner = false)
@@ -98,7 +104,7 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 造成不致命、不残疾的伤害
+    /// 造成不致命、不残疾的伤害。
     /// </summary>
     public static void TakeNonLethalDamage(Pawn pawn, int injuriesCount, DamageDef fixedDamageDef = null)
     {
@@ -163,6 +169,9 @@ public static class OAFrame_PawnUtility
         }
     }
 
+    /// <summary>
+    /// 获取<see cref="Pawn"/>群体的最高技能等级。
+    /// </summary>
     public static int GetMaxSkillLevelOfPawns(IEnumerable<Pawn> pawns, SkillDef skill)
     {
         if (pawns is null)
@@ -182,6 +191,9 @@ public static class OAFrame_PawnUtility
         return maxSkillLevel;
     }
 
+    /// <summary>
+    /// 获取<see cref="Pawn"/>群体中最高技能等级的<see cref="Pawn"/>和对应技能等级。
+    /// </summary>
     public static (Pawn, int) GetMaxSkillLevelPawn(IEnumerable<Pawn> pawns, SkillDef skill)
     {
         if (pawns is null)
@@ -208,6 +220,9 @@ public static class OAFrame_PawnUtility
         return (maxSkillPawn, maxSkillLevel);
     }
 
+    /// <summary>
+    /// 获取<see cref="Pawn"/>群体的最大属性值。
+    /// </summary>
     public static float GetMaxStatOfPawns(IEnumerable<Pawn> pawns, StatDef statDef)
     {
         if (pawns is null)
@@ -227,6 +242,9 @@ public static class OAFrame_PawnUtility
         return maxStatValue;
     }
 
+    /// <summary>
+    /// 获取<see cref="Pawn"/>群体中最高属性值的<see cref="Pawn"/>和对应属性值。
+    /// </summary>
     public static (Pawn, float) GetMaxStatPawn(IEnumerable<Pawn> pawns, StatDef statDef)
     {
         if (pawns is null)

@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
@@ -6,12 +6,18 @@ namespace OberoniaAurea_Frame;
 
 public static class OAFrame_DropPodUtility
 {
+    /// <summary>
+    /// 默认空投指定def物品。
+    /// </summary>
     public static IntVec3 DefaultDropThingOfDef(ThingDef def, int count, Map map, Faction faction = null, bool sendLetter = true)
     {
         List<Thing> things = OAFrame_MiscUtility.TryGenerateThing(def, count);
         return DefaultDropThing(things, map, faction, sendLetter);
     }
 
+    /// <summary>
+    /// 默认空投物品。
+    /// </summary>
     public static IntVec3 DefaultDropThing(IEnumerable<Thing> things, Map map, Faction faction = null, bool sendLetter = true)
     {
         IntVec3 dropCell = DropCellFinder.TradeDropSpot(map);
@@ -23,6 +29,9 @@ public static class OAFrame_DropPodUtility
         return dropCell;
     }
 
+    /// <summary>
+    /// 默认空投物品组。
+    /// </summary>
     public static IntVec3 DefaultDropThingGroups(List<List<Thing>> thingGroups, Map map, Faction faction = null)
     {
         IntVec3 dropCell = DropCellFinder.TradeDropSpot(map);
@@ -30,11 +39,17 @@ public static class OAFrame_DropPodUtility
         return dropCell;
     }
 
+    /// <summary>
+    /// 默认空投单个指定def物品。
+    /// </summary>
     public static IntVec3 DefaultDropSingleThingOfDef(ThingDef def, Map map, Faction faction = null, bool sendLetter = true)
     {
         return DefaultDropSingleThing(ThingMaker.MakeThing(def), map, faction, sendLetter);
     }
 
+    /// <summary>
+    /// 默认空投单个物品。
+    /// </summary>
     public static IntVec3 DefaultDropSingleThing(Thing thing, Map map, Faction faction = null, bool sendLetter = true)
     {
         thing.stackCount = 1;

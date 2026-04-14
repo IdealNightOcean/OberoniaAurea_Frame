@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using Verse;
@@ -48,6 +48,9 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         }
     }
 
+    /// <summary>
+    /// 开始工作。
+    /// </summary>
     public virtual bool StartWork(Caravan caravan)
     {
         FixedCaravan fixedCaravan = OAFrame_FixedCaravanUtility.CreateFixedCaravan(caravan, FixedCaravanDef, this);
@@ -67,6 +70,9 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         return true;
     }
 
+    /// <summary>
+    /// 结束工作。
+    /// </summary>
     public void EndWork(bool interrupt = false, bool convertToCaravan = true)
     {
         if (isWorking)
@@ -99,11 +105,11 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         ticksRemaining = TicksNeeded;
         associatedFixedCaravan = null;
     }
-
     public virtual void PreConvertToCaravanByPlayer()
     {
         EndWork(interrupt: true, convertToCaravan: false);
     }
+
     public virtual void PostConvertToCaravan(Caravan caravan) { }
 
     public virtual string FixedCaravanWorkDesc()

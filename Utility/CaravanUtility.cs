@@ -1,4 +1,4 @@
-﻿using RimWorld.Planet;
+using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -9,6 +9,9 @@ namespace OberoniaAurea_Frame;
 
 public static class OAFrame_CaravanUtility
 {
+    /// <summary>
+    /// 检查是否为精确类型的远行队。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsExactTypeCaravan<T>(this T caravan) where T : Caravan
     {
@@ -21,6 +24,9 @@ public static class OAFrame_CaravanUtility
         return false;
     }
 
+    /// <summary>
+    /// 检查远行队是否有指定类别(thingCategoryDef)的物品。
+    /// </summary>
     public static bool HasAnyThingOfCategory(this Caravan caravan, ThingCategoryDef thingCategoryDef, Predicate<Thing> validator = null)
     {
         List<Thing> list = CaravanInventoryUtility.AllInventoryItems(caravan);
@@ -35,6 +41,9 @@ public static class OAFrame_CaravanUtility
         return false;
     }
 
+    /// <summary>
+    /// 检查远行队是否有足够数量的指定类别(thingCategoryDef)物品。
+    /// </summary>
     public static bool HasEnoughThingsOfCategory(this Caravan caravan, ThingCategoryDef thingCategoryDef, int count, Predicate<Thing> validator = null)
     {
         int num = 0;
@@ -77,6 +86,9 @@ public static class OAFrame_CaravanUtility
         return false;
     }
 
+    /// <summary>
+    /// 获取远行队中指定def的数量。
+    /// </summary>
     public static int GetCountOfThingDef(this Caravan caravan, ThingDef thingDef, Predicate<Thing> validator = null)
     {
         int totalCount = 0;
@@ -108,6 +120,9 @@ public static class OAFrame_CaravanUtility
         return totalCount;
     }
 
+    /// <summary>
+    /// 从远行队取出指定def的物品。
+    /// </summary>
     public static List<Thing> TakeThingsOfDef(Caravan caravan, ThingDef thingDef, int count, out int actualTakeCount, Predicate<Thing> validator = null)
     {
         actualTakeCount = 0;
@@ -163,6 +178,9 @@ public static class OAFrame_CaravanUtility
         return takeThings;
     }
 
+    /// <summary>
+    /// 移除远行队中指定物品def的物品。
+    /// </summary>
     /// <returns>实际移除数</returns>
     public static int RemoveThingsOfDef(this Caravan caravan, ThingDef thingDef, int count, Predicate<Thing> validator = null)
     {

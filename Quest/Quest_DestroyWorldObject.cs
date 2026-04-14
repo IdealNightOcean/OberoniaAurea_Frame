@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
@@ -90,6 +90,9 @@ public class QuestPart_DestroyWorldObject : QuestPart
         }
     }
 
+    /// <summary>
+    /// 初始化世界对象（<see cref="WorldObject"/>）列表
+    /// </summary>
     public void InitWorldObjects(IEnumerable<WorldObject> worldObjects)
     {
         if (worldObjects is null)
@@ -134,6 +137,9 @@ public class QuestPart_DestroyWorldObject : QuestPart
         }
     }
 
+    /// <summary>
+    /// 尝试移除世界对象（<see cref="WorldObject"/>）
+    /// </summary>
     public static void TryRemove(WorldObject worldObject)
     {
         if (worldObject is not null && worldObject.Spawned)

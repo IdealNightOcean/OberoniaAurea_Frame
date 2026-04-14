@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Text;
@@ -40,6 +40,9 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         pawns = new ThingOwner<Pawn>(this, oneStackOnly: false, LookMode.Reference);
     }
 
+    /// <summary>
+    /// 添加<see cref="Pawn"/>到固定远行队。
+    /// </summary>
     public void AddPawn(Pawn pawn, bool addCarriedPawnToWorldPawnsIfAny = true)
     {
         if (pawn is null)
@@ -82,18 +85,30 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
             Log.Error(string.Concat("Couldn't add pawn ", pawn, " to caravan."));
         }
     }
+    /// <summary>
+    /// 从固定远行队移除<see cref="Pawn"/>。
+    /// </summary>
     public void RemovePawn(Pawn pawn)
     {
         pawns.Remove(pawn);
     }
+    /// <summary>
+    /// 移除所有<see cref="Pawn"/>。
+    /// </summary>
     public void RemoveAllPawns()
     {
         pawns.Clear();
     }
+    /// <summary>
+    /// 检查是否包含指定<see cref="Pawn"/>。
+    /// </summary>
     public bool ContainsPawn(Pawn pawn)
     {
         return pawns.Contains(pawn);
     }
+    /// <summary>
+    /// 添加<see cref="Pawn"/>或物品。
+    /// </summary>
     public void AddPawnOrItem(Thing thing, bool addCarriedPawnToWorldPawnsIfAny = true)
     {
         if (thing is null)
@@ -110,6 +125,9 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         }
     }
 
+    /// <summary>
+    /// 设置关联的世界对象（<see cref="WorldObject"/>）。
+    /// </summary>
     public void SetAssociatedWorldObject(WorldObject worldObject)
     {
         if (worldObject is null)
@@ -139,6 +157,9 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         associatedInterface?.PreConvertToCaravanByPlayer();
     }
 
+    /// <summary>
+    /// 转换为远行队（<see cref="Caravan"/>）后的处理。
+    /// </summary>
     public virtual void PostConvertToCaravan(Caravan caravan)
     {
         associatedInterface?.PostConvertToCaravan(caravan);
@@ -180,14 +201,10 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         }
     }
 
-    public ThingOwner GetDirectlyHeldThings()
-    {
-        return pawns;
-    }
-    public virtual void GetChildHolders(List<IThingHolder> outChildren)
-    {
-        ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
-    }
+    public ThingOwner GetDirectlyHeldThings()=>pawns;
+
+    public virtual void GetChildHolders(List<IThingHolder> outChildren)=>ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
+
     public override void ExposeData()
     {
         base.ExposeData();

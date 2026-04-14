@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -12,11 +12,17 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
     protected Quest quest;
     public Quest AssociatedQuest => quest;
 
+    /// <summary>
+    /// 设置关联任务。
+    /// </summary>
     public void SetAssociatedQuest(Quest quest)
     {
         this.quest = quest;
     }
 
+    /// <summary>
+    /// 检查是否可以进入地图。
+    /// </summary>
     public virtual FloatMenuAcceptanceReport CanEnterMap(IEnumerable<IThingHolder> pods)
     {
         if (this.EnterCooldownBlocksEntering())
@@ -26,6 +32,9 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         return true;
     }
 
+    /// <summary>
+    /// 检查远行队是否可以进入地图。
+    /// </summary>
     public virtual FloatMenuAcceptanceReport CanEnterMap(Caravan caravan)
     {
         if (this.EnterCooldownBlocksEntering())

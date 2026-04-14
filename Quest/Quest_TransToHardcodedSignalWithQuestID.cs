@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using Verse;
 
@@ -54,6 +54,9 @@ public class QuestPart_TransToHardcodedSignalWithQuestID : QuestPart
         SetSignalTrans(originalSignal, resultSignal);
     }
 
+    /// <summary>
+    /// 设置信号转换
+    /// </summary>
     public void SetSignalTrans(string originalSignal, string resultSignal)
     {
         inSignal = originalSignal;

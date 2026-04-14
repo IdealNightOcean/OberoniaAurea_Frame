@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Verse;
@@ -79,6 +79,9 @@ public class SimpleUniqueList<T> : IList<T>, IExposable, IDisposable
     public void CopyTo(T[] array, int arrayIndex) => innerList.CopyTo(array, arrayIndex);
 
     public void Add(T item) => innerList.AddUnique(item);
+    /// <summary>
+    /// 批量添加元素。
+    /// </summary>
     public void AddRange(IEnumerable<T> collection)
     {
         if (collection is null)
@@ -101,6 +104,9 @@ public class SimpleUniqueList<T> : IList<T>, IExposable, IDisposable
     public void Clear() => innerList.Clear();
     public void Dispose() => innerList = null;
 
+    /// <summary>
+    /// 确保列表元素唯一性。
+    /// </summary>
     public void EnsureUnique()
     {
         HashSet<T> uniqueSet = [.. innerList];

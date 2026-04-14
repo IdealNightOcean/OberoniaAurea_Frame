@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -33,12 +33,18 @@ public struct SimpleValueCache<T> where T : unmanaged
         this.checker = checker ?? throw new ArgumentNullException(nameof(checker));
     }
 
+    /// <summary>
+    /// 重置缓存。
+    /// </summary>
     public void Reset()
     {
         cachedResult = defaultValue;
         nextCheckTick = -1;
     }
 
+    /// <summary>
+    /// 获取缓存结果。
+    /// </summary>
     public T GetCachedResult()
     {
         if (Find.TickManager.TicksGame > nextCheckTick)

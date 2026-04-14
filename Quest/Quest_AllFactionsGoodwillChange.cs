@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using System.Linq;
 using Verse;
@@ -22,10 +22,7 @@ public class QuestNode_AllFactionsGoodwillChange : QuestNode
     public SlateRef<bool> canApplyOnNeutral = true;
     public SlateRef<bool> canApplyOnHostile = true;
 
-    protected override bool TestRunInt(Slate slate)
-    {
-        return true;
-    }
+    protected override bool TestRunInt(Slate slate) => true;
 
     protected override void RunInt()
     {
@@ -74,6 +71,9 @@ public class QuestPart_AllFactionsGoodwillChange : QuestPart
         Scribe_Values.Look(ref canApplyOnHostile, "canApplyOnHostile", defaultValue: true);
     }
 
+    /// <summary>
+    /// 清理任务部件数据
+    /// </summary>
     public override void Cleanup()
     {
         base.Cleanup();
@@ -82,6 +82,9 @@ public class QuestPart_AllFactionsGoodwillChange : QuestPart
         goodwillChange = 0;
     }
 
+    /// <summary>
+    /// 处理任务信号，统一影响全部派系关系
+    /// </summary>
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         base.Notify_QuestSignalReceived(signal);
@@ -94,6 +97,10 @@ public class QuestPart_AllFactionsGoodwillChange : QuestPart
             }
         }
     }
+    
+    /// <summary>
+    /// 判断派系是否可用于关系变更
+    /// </summary>
     protected virtual bool IsAvailableFaction(Faction faction)
     {
         if (faction.defeated || !faction.HasGoodwill)

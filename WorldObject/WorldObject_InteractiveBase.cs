@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -23,11 +23,17 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
         }
     }
 
+    /// <summary>
+    /// 设置关联任务。
+    /// </summary>
     public void SetAssociatedQuest(Quest quest)
     {
         this.quest = quest;
     }
 
+    /// <summary>
+    /// 通知远行队（<see cref="Caravan"/>）到达。
+    /// </summary>
     public abstract void Notify_CaravanArrived(Caravan caravan);
 
     public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
@@ -41,6 +47,9 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
             yield return floatMenuOption2;
         }
     }
+    /// <summary>
+    /// 获取特定的浮动菜单选项。
+    /// </summary>
     public virtual IEnumerable<FloatMenuOption> GetSpecificFloatMenuOptions(Caravan caravan)
     {
         return CaravanArrivalAction_VisitInteractiveObject.GetFloatMenuOptions(caravan, this, VisitLabel);

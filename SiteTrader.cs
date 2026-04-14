@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//大地图简单商店
+/// <summary>
+/// 大地图简单商店。
+/// </summary>
 public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolder
 {
     protected static readonly List<string> TempExtantNames = [];
@@ -46,6 +48,9 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
             return Find.World;
         }
     }
+    /// <summary>
+    /// 获取信息文本。
+    /// </summary>
     public string GetInfoText()
     {
         return FullTitle;
@@ -87,6 +92,9 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         this.refreshInterval = refreshInterval;
     }
 
+    /// <summary>
+    /// 获取商人愿意购买的殖民地物品。
+    /// </summary>
     public IEnumerable<Thing> ColonyThingsWillingToBuy(Pawn playerNegotiator)
     {
         Caravan caravan = playerNegotiator.GetCaravan();
@@ -104,6 +112,9 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         }
     }
 
+    /// <summary>
+    /// 每隔指定时间间隔执行刷新检查。
+    /// </summary>
     public void TickInterval(int delta)
     {
         if (refreshInterval > 0 && Find.TickManager.TicksGame > lastRefreshTick)
@@ -112,7 +123,14 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         }
     }
 
+    /// <summary>
+    /// 生成商店物品。
+    /// </summary>
     public void GenerateThings() => GenerateThings(associateWorldObject?.Tile ?? PlanetTile.Invalid);
+
+    /// <summary>
+    /// 在指定地块生成商店物品。
+    /// </summary>
     public void GenerateThings(PlanetTile tile)
     {
         ThingSetMakerParams parms = default;
@@ -129,7 +147,14 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         lastRefreshTick = Find.TickManager.TicksGame;
     }
 
+    /// <summary>
+    /// 刷新商店物品。
+    /// </summary>
     public void RefreshThings() => RefreshThings(associateWorldObject?.Tile ?? PlanetTile.Invalid);
+
+    /// <summary>
+    /// 在指定地块刷新商店物品。
+    /// </summary>
     public void RefreshThings(PlanetTile tile)
     {
         lastRefreshTick = Find.TickManager.TicksGame;
@@ -138,27 +163,30 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         GenerateThings(tile);
     }
 
+    /// <summary>
+    /// 销毁商店并清理物品。
+    /// </summary>
     public void Destory()
     {
         things.ClearAndDestroyContentsOrPassToWorld();
         tmpSavedPawns.Clear();
     }
 
-    public string GetCallLabel()
-    {
-        return traderName + " (" + traderKind.label + ")";
-    }
+    /// <summary>
+    /// 获取呼叫标签。
+    /// </summary>
+    public string GetCallLabel() => traderName + " (" + traderKind.label + ")";
 
-    protected AcceptanceReport CanCommunicateWith(Pawn negotiator)
-    {
-        return negotiator.CanTradeWith(faction, TraderKind).Accepted;
-    }
+    protected AcceptanceReport CanCommunicateWith(Pawn negotiator) => negotiator.CanTradeWith(faction, TraderKind).Accepted;
 
-    public int CountHeldOf(ThingDef thingDef, ThingDef stuffDef = null)
-    {
-        return HeldThingMatching(thingDef, stuffDef)?.stackCount ?? 0;
-    }
+    /// <summary>
+    /// 计算持有指定物品的数量。
+    /// </summary>
+    public int CountHeldOf(ThingDef thingDef, ThingDef stuffDef = null)=>HeldThingMatching(thingDef, stuffDef)?.stackCount ?? 0;
 
+    /// <summary>
+    /// 将物品出售给商人。
+    /// </summary>
     public void GiveSoldThingToTrader(Thing toGive, int countToGive, Pawn playerNegotiator)
     {
         Caravan caravan = playerNegotiator.GetCaravan();
@@ -175,6 +203,9 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         }
     }
 
+    /// <summary>
+    /// 将物品出售给玩家。
+    /// </summary>
     public void GiveSoldThingToPlayer(Thing toGive, int countToGive, Pawn playerNegotiator)
     {
         Caravan caravan = playerNegotiator.GetCaravan();
@@ -210,6 +241,9 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         return null;
     }
 
+    /// <summary>
+    /// 修改持有物品的数量。
+    /// </summary>
     public void ChangeCountHeldOf(ThingDef thingDef, ThingDef stuffDef, int count)
     {
         Thing thing = HeldThingMatching(thingDef, stuffDef);
@@ -220,19 +254,12 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         thing.stackCount += count;
     }
 
-    public override string ToString()
-    {
-        return FullTitle;
-    }
+    public override string ToString()=>FullTitle;
 
-    public ThingOwner GetDirectlyHeldThings()
-    {
-        return things;
-    }
-    public void GetChildHolders(List<IThingHolder> outChildren)
-    {
-        ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
-    }
+    public ThingOwner GetDirectlyHeldThings()=>things;
+
+    public void GetChildHolders(List<IThingHolder> outChildren)=>ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
+
     public void ExposeData()
     {
         if (Scribe.mode == LoadSaveMode.Saving)

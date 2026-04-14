@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -40,6 +40,9 @@ public struct SimpleMapCahce<T> where T : unmanaged
         this.checker = checker ?? throw new ArgumentNullException(nameof(checker)); ;
     }
 
+    /// <summary>
+    /// 重置缓存。
+    /// </summary>
     public void Reset()
     {
         cachedMap = null;
@@ -47,6 +50,9 @@ public struct SimpleMapCahce<T> where T : unmanaged
         nextCheckTick = -1;
     }
 
+    /// <summary>
+    /// 获取地图的缓存结果。
+    /// </summary>
     public T GetCachedResult(Map map)
     {
         if (map is null || (onlyPlayerHome && !map.IsPlayerHome))

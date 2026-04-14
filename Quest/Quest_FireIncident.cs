@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
@@ -37,12 +37,14 @@ public class QuestNode_FireIncident : QuestNode
         }
         return true;
     }
+
     protected virtual IncidentParms ResolveParms(Slate slate)
     {
         IncidentParms parms = this.parms.GetValue(slate);
         parms ??= new IncidentParms();
         return parms;
     }
+    
     protected bool ResolveIncidentTarget(Slate slate)
     {
         if (!worldIncident.GetValue(slate))
@@ -158,6 +160,10 @@ public class QuestPart_FireIncident : QuestPart
         }
         incidentParms.points = points;
     }
+    
+    /// <summary>
+    /// 解析世界事件参数
+    /// </summary>
     protected void ResolveParms_World()
     {
         incidentParms.forced = true;
@@ -176,6 +182,9 @@ public class QuestPart_FireIncident : QuestPart
         incidentParms.points = points;
     }
 
+    /// <summary>
+    /// 设置地图类型事件参数
+    /// </summary>
     public void SetIncidentParms_MapParent(IncidentParms parms, MapParent mapParent = null)
     {
         incidentParms = parms;
@@ -190,6 +199,10 @@ public class QuestPart_FireIncident : QuestPart
         }
         worldIncident = false;
     }
+    
+    /// <summary>
+    /// 设置世界类型事件参数
+    /// </summary>
     public void SetIncidentParms_World(IncidentParms parms)
     {
         incidentParms = parms;

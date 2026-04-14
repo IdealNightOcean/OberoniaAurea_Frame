@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// Pawn浮动菜单选项提供者接口。
+/// </summary>
 public interface IPawnFloatMenuOptionProvider
 {
     bool IsSelectedPawnValid(Pawn selPawn);
@@ -52,6 +55,9 @@ public class CompPawnFloatMenuOptionHandler : ThingComp
     }
 
 
+    /// <summary>
+    /// 注册菜单选项提供者。
+    /// </summary>
     public void RegisterProvider(IPawnFloatMenuOptionProvider provider)
     {
         if (providers is null)
@@ -64,6 +70,9 @@ public class CompPawnFloatMenuOptionHandler : ThingComp
         }
     }
 
+    /// <summary>
+    /// 注销菜单选项提供者。
+    /// </summary>
     public void DeregisterProvider(IPawnFloatMenuOptionProvider provider)
     {
         if (providers is not null && providers.Remove(provider))

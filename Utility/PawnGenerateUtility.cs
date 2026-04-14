@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -9,6 +9,9 @@ namespace OberoniaAurea_Frame;
 
 public static class OAFrame_PawnGenerateUtility
 {
+    /// <summary>
+    /// 创建通用的Pawn生成请求。
+    /// </summary>
     public static PawnGenerationRequest CommonPawnGenerationRequest(PawnKindDef kindDef, Faction faction = null, PlanetTile? tile = null, bool forceNew = false, bool allowChild = false)
     {
         DevelopmentalStage developmentalStages = DevelopmentalStage.Adult;
@@ -30,6 +33,9 @@ public static class OAFrame_PawnGenerateUtility
             developmentalStages: developmentalStages);
     }
 
+    /// <summary>
+    /// 获取派系的随机PawnGroupMaker。
+    /// </summary>
     public static PawnGroupMaker GetRandomPawnGroupMakerOfFaction(Faction faction, PawnGroupKindDef groupKindDef, Predicate<PawnGroupMaker> predicater = null)
     {
         if (predicater is null)
@@ -42,6 +48,9 @@ public static class OAFrame_PawnGenerateUtility
         }
     }
 
+    /// <summary>
+    /// 生成Pawn。
+    /// </summary>
     public static IEnumerable<Pawn> GeneratePawns(PawnGroupMakerParms parms, PawnGroupMaker pawnGroupMaker, bool needFaction = true, bool warnOnZeroResults = true)
     {
         if (parms.groupKind is null)

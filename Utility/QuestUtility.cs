@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System;
@@ -12,6 +12,9 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_QuestUtility
 {
+    /// <summary>
+    /// 添加关联派系到任务。
+    /// </summary>
     public static QuestPart_InvolvedFactions AddInvolvedFaction(Quest quest, Faction faction)
     {
         QuestPart_InvolvedFactions questPart_InvolvedFactions = quest.PartsListForReading.OfType<QuestPart_InvolvedFactions>().FirstOrFallback(null);
@@ -25,6 +28,9 @@ public static class OAFrame_QuestUtility
         return questPart_InvolvedFactions;
     }
 
+    /// <summary>
+    /// 获取任务可用的Map世界对象（<see cref="MapParent"/>）。
+    /// </summary>
     public static MapParent GetAvailableMapParent(this Quest quest, MapParent originParent)
     {
         if (originParent is not null && originParent.HasMap && quest.IsParentSuitableForQuest(originParent))
@@ -42,6 +48,9 @@ public static class OAFrame_QuestUtility
         }
     }
 
+    /// <summary>
+    /// 尝试生成任务并使其可用。
+    /// </summary>
     public static bool TryGenerateQuestAndMakeAvailable(out Quest quest, QuestScriptDef scriptDef, float points, bool forced = false, IIncidentTarget target = null, bool sendAvailableLetter = true)
     {
         Slate slate = new();
@@ -49,6 +58,9 @@ public static class OAFrame_QuestUtility
         return TryGenerateQuestAndMakeAvailable(out quest, scriptDef, slate, forced, target, sendAvailableLetter);
     }
 
+    /// <summary>
+    /// 尝试生成任务并使其可用（带<see cref="Slate"/>参数）。
+    /// </summary>
     public static bool TryGenerateQuestAndMakeAvailable(out Quest quest, QuestScriptDef scriptDef, Slate slate, bool forced = false, IIncidentTarget target = null, bool sendAvailableLetter = true)
     {
         quest = null;
@@ -87,6 +99,9 @@ public static class OAFrame_QuestUtility
         }
     }
 
+    /// <summary>
+    /// 检查任务是否可用。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsQuestAvailable(this Quest quest)
     {
@@ -105,6 +120,9 @@ public static class OAFrame_QuestUtility
         }
     }
 
+    /// <summary>
+    /// 获取常见的<see cref="Pawn"/>负面信号列表。
+    /// </summary>
     public static List<string> GetCommonPawnNegativeSiganls(bool addTag, string tagToAdd = null)
     {
         addTag = addTag && !tagToAdd.NullOrEmpty();

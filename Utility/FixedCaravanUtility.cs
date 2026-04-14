@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -15,12 +15,18 @@ public static class OAFrame_FixedCaravanUtility
     private static readonly List<Thing> TempAddedItems = [];
     private static readonly List<Pawn> TempPawns = [];
 
+    /// <summary>
+    /// 获取Pawn所在的固定远行队。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static FixedCaravan GetFixedCaravan(this Pawn pawn)
     {
         return pawn.ParentHolder as FixedCaravan;
     }
 
+    /// <summary>
+    /// 获取固定远行队的所有库存物品。
+    /// </summary>
     public static List<Thing> AllInventoryItems(FixedCaravan fixedCaravan)
     {
         TempInventoryItems.Clear();
@@ -37,12 +43,18 @@ public static class OAFrame_FixedCaravanUtility
         return TempInventoryItems;
     }
 
+    /// <summary>
+    /// 从远行队创建固定远行队。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static FixedCaravan CreateFixedCaravan(Caravan caravan)
     {
         return CreateFixedCaravan(caravan, OAFrameDefOf.OAFrame_FixedCaravan);
     }
 
+    /// <summary>
+    /// 从远行队创建指定def的固定远行队。
+    /// </summary>
     public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObjectDef def)
     {
         FixedCaravan fixedCaravan = (FixedCaravan)WorldObjectMaker.MakeWorldObject(def);
@@ -64,12 +76,18 @@ public static class OAFrame_FixedCaravanUtility
         return fixedCaravan;
     }
 
+    /// <summary>
+    /// 从远行队创建关联世界对象的固定远行队。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObject worldObject)
     {
         return CreateFixedCaravan(caravan, OAFrameDefOf.OAFrame_FixedCaravan, worldObject);
     }
 
+    /// <summary>
+    /// 从远行队创建指定def并关联世界对象的固定远行队。
+    /// </summary>
     public static FixedCaravan CreateFixedCaravan(Caravan caravan, WorldObjectDef def, WorldObject worldObject)
     {
         if (worldObject is null)
@@ -111,6 +129,9 @@ public static class OAFrame_FixedCaravanUtility
 
     }
 
+    /// <summary>
+    /// 将固定远行队转换为远行队。
+    /// </summary>
     public static Caravan ConvertToCaravan(FixedCaravan fixedCaravan)
     {
         TempPawns.Clear();
@@ -128,6 +149,9 @@ public static class OAFrame_FixedCaravanUtility
         return caravan;
     }
 
+    /// <summary>
+    /// 给固定远行队添加物品。
+    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void GiveThings(FixedCaravan fixedCaravan, IEnumerable<Thing> things)
     {
@@ -137,6 +161,9 @@ public static class OAFrame_FixedCaravanUtility
         }
     }
 
+    /// <summary>
+    /// 给固定远行队添加单个物品。
+    /// </summary>
     public static void GiveThing(FixedCaravan fixedCaravan, Thing thing)
     {
         if (AllInventoryItems(fixedCaravan).Contains(thing))
@@ -157,6 +184,9 @@ public static class OAFrame_FixedCaravanUtility
         }
     }
 
+    /// <summary>
+    /// 给固定远行队添加Pawn或物品。
+    /// </summary>
     public static void GivePawnsOrThings(FixedCaravan fixedCaravan, List<Thing> things)
     {
         TempAddedItems.Clear();
@@ -168,6 +198,9 @@ public static class OAFrame_FixedCaravanUtility
         TempAddedItems.Clear();
     }
 
+    /// <summary>
+    /// 获取固定远行队中指定def物品的数量。
+    /// </summary>
     public static int GetCountOfThingDef(this FixedCaravan fixedCaravan, ThingDef thingDef, Predicate<Thing> validator = null)
     {
         int totalCount = 0;
@@ -199,6 +232,9 @@ public static class OAFrame_FixedCaravanUtility
         return totalCount;
     }
 
+    /// <summary>
+    /// 从固定远行队取出指定def物品的物品。
+    /// </summary>
     public static List<Thing> TakeThingsOfDef(FixedCaravan fixedCaravan, ThingDef thingDef, int count, out int actualTakeCount, Predicate<Thing> validator = null)
     {
         actualTakeCount = 0;
@@ -255,6 +291,9 @@ public static class OAFrame_FixedCaravanUtility
         return takeThings;
     }
 
+    /// <summary>
+    /// 移除固定远行队中指定def物品的物品。
+    /// </summary>
     /// <returns>实际移除数</returns>
     public static int RemoveThingsOfDef(this FixedCaravan fixedCaravan, ThingDef thingDef, int count, Predicate<Thing> validator = null)
     {

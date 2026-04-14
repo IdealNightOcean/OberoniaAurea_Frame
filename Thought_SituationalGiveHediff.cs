@@ -1,5 +1,4 @@
-﻿using RimWorld;
-using Verse;
+using RimWorld;
 
 namespace OberoniaAurea_Frame;
 
@@ -14,16 +13,6 @@ public class Thought_SituationalGiveHediff : Thought_Situational
     protected override void Notify_BecameInactive()
     {
         base.Notify_BecameInactive();
-        RemoveHediff(pawn, def.hediff);
+        pawn.RemoveFirstHediffOfDef(def.hediff);
     }
-
-    public static void RemoveHediff(Pawn pawn, HediffDef hediffDef)
-    {
-        Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
-        if (firstHediffOfDef is not null)
-        {
-            pawn.health.RemoveHediff(firstHediffOfDef);
-        }
-    }
-
 }

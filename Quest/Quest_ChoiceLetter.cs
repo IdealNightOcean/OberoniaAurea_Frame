@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System;
@@ -63,6 +63,9 @@ public class QuestNode_ChoiceLetter : QuestNode
         QuestGen.quest.AddPart(questPart_ChoiceLetter);
     }
 
+    /// <summary>
+    /// 生成任务部件后的回调
+    /// </summary>
     protected virtual void PostGeneratePart(QuestPart_ChoiceLetter questPart_ChoiceLetter) { }
 }
 
@@ -84,6 +87,9 @@ public class QuestPart_ChoiceLetter : QuestPart
 
     public bool FilterDeadPawnsFromLookTargets;
 
+    /// <summary>
+    /// 初始化信件文本请求
+    /// </summary>
     public void InitLetterTextRequest(string label, string text, RulePack labelRules = null, RulePack textRules = null)
     {
         Slate slate = QuestGen.slate;

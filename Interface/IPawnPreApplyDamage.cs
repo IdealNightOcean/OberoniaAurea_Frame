@@ -1,10 +1,13 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// <see cref="Pawn"/>预伤害处理接口。
+/// </summary>
 public interface IPawnPreApplyDamage
 {
     int Priority { get; }
@@ -21,7 +24,6 @@ public class CompProperties_PawnPreApplyDamage : CompProperties
 
 public class CompPawnPreApplyDamageHandler : ThingComp
 {
-
     [Unsaved] private List<IPawnPreApplyDamage> pawnPreApplyDamages;
 
     public override void PostPreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
@@ -50,6 +52,9 @@ public class CompPawnPreApplyDamageHandler : ThingComp
         }
     }
 
+    /// <summary>
+    /// 注册伤害处理器。
+    /// </summary>
     public bool RegisterDamageProcessor(IPawnPreApplyDamage damageProcessor)
     {
         if (pawnPreApplyDamages is null)
@@ -75,6 +80,9 @@ public class CompPawnPreApplyDamageHandler : ThingComp
         return false;
     }
 
+    /// <summary>
+    /// 注销伤害处理器。
+    /// </summary>
     public bool DeregisterDamageProcessor(IPawnPreApplyDamage damageProcessor)
     {
         if (pawnPreApplyDamages is not null && pawnPreApplyDamages.Remove(damageProcessor))

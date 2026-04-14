@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 using Verse;
 
@@ -20,11 +20,17 @@ public class CooldownRecordManager : IExposable
         }
     }
 
+    /// <summary>
+    /// 检查冷却记录是否存在。
+    /// </summary>
     public bool HasRecordOfKey(string key)
     {
         return records.ContainsKey(key);
     }
 
+    /// <summary>
+    /// 注册冷却记录。
+    /// </summary>
     public void RegisterRecord(string key, int cdTicks, bool removeWhenExpired = false)
     {
         if (key.NullOrEmpty())
@@ -36,11 +42,17 @@ public class CooldownRecordManager : IExposable
         records[key] = new CooldownRecord(cdTicks, removeWhenExpired);
     }
 
+    /// <summary>
+    /// 注销冷却记录。
+    /// </summary>
     public void DeregisterRecord(string key)
     {
         records.Remove(key);
     }
 
+    /// <summary>
+    /// 检查指定冷却记录是否处于冷却中。
+    /// </summary>
     public bool IsInCooldown(string key)
     {
         if (records.TryGetValue(key, out CooldownRecord record))
@@ -50,6 +62,9 @@ public class CooldownRecordManager : IExposable
         return false;
     }
 
+    /// <summary>
+    /// 获取剩余冷却时间。
+    /// </summary>
     public int GetCooldownTicksLeft(string key)
     {
         if (records.TryGetValue(key, out CooldownRecord record))
@@ -59,6 +74,9 @@ public class CooldownRecordManager : IExposable
         return -1;
     }
 
+    /// <summary>
+    /// 获取距上次激活的时间。
+    /// </summary>
     public int GetTicksSinceLastActive(string key)
     {
         if (records.TryGetValue(key, out CooldownRecord record))
@@ -68,6 +86,9 @@ public class CooldownRecordManager : IExposable
         return -1;
     }
 
+    /// <summary>
+    /// 获取冷却记录详情信息。
+    /// </summary>
     public string GetCDRecordsDetailInfo()
     {
         if (records.NullOrEmpty())

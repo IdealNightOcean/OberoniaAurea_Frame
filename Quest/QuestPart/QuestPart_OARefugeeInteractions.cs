@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
@@ -71,6 +71,9 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
 
     public int pawnsLeftUnhealthy;
 
+    /// <summary>
+    /// 使用默认信号初始化交互设置
+    /// </summary>
     public void InitWithDefaultSingals(bool allowAssaultColony, bool allowLeave, bool allowBadThought)
     {
         this.allowAssaultColony = allowAssaultColony;
