@@ -10,6 +10,9 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_MiscUtility
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsSameDefNonNullable<T>(this T def, T other) where T : Def => def is not null && def == other;
+
     /// <summary>
     /// 尝试立刻触发事件
     /// </summary>

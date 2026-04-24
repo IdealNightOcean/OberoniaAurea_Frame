@@ -44,7 +44,7 @@ public class QuestNode_FireIncident : QuestNode
         parms ??= new IncidentParms();
         return parms;
     }
-    
+
     protected bool ResolveIncidentTarget(Slate slate)
     {
         if (!worldIncident.GetValue(slate))
@@ -160,7 +160,7 @@ public class QuestPart_FireIncident : QuestPart
         }
         incidentParms.points = points;
     }
-    
+
     /// <summary>
     /// 解析世界事件参数
     /// </summary>
@@ -199,7 +199,7 @@ public class QuestPart_FireIncident : QuestPart
         }
         worldIncident = false;
     }
-    
+
     /// <summary>
     /// 设置世界类型事件参数
     /// </summary>

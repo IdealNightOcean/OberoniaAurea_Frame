@@ -14,12 +14,12 @@ public interface ILordJobWithTalk
     /// 检查是否可与指定<see cref="Pawn"/>对话。
     /// </summary>
     bool CanTalkWith(Pawn p);
-    
+
     /// <summary>
     /// 启用对话。
     /// </summary>
     void EnableTalk(Pawn p);
-    
+
     /// <summary>
     /// 禁用对话。
     /// </summary>

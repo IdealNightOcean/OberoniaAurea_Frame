@@ -182,7 +182,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
     /// <summary>
     /// 计算持有指定物品的数量。
     /// </summary>
-    public int CountHeldOf(ThingDef thingDef, ThingDef stuffDef = null)=>HeldThingMatching(thingDef, stuffDef)?.stackCount ?? 0;
+    public int CountHeldOf(ThingDef thingDef, ThingDef stuffDef = null) => HeldThingMatching(thingDef, stuffDef)?.stackCount ?? 0;
 
     /// <summary>
     /// 将物品出售给商人。
@@ -254,11 +254,11 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         thing.stackCount += count;
     }
 
-    public override string ToString()=>FullTitle;
+    public override string ToString() => FullTitle;
 
-    public ThingOwner GetDirectlyHeldThings()=>things;
+    public ThingOwner GetDirectlyHeldThings() => things;
 
-    public void GetChildHolders(List<IThingHolder> outChildren)=>ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
+    public void GetChildHolders(List<IThingHolder> outChildren) => ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 
     public void ExposeData()
     {

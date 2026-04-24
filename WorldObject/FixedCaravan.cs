@@ -201,9 +201,9 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         }
     }
 
-    public ThingOwner GetDirectlyHeldThings()=>pawns;
+    public ThingOwner GetDirectlyHeldThings() => pawns;
 
-    public virtual void GetChildHolders(List<IThingHolder> outChildren)=>ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
+    public virtual void GetChildHolders(List<IThingHolder> outChildren) => ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 
     public override void ExposeData()
     {

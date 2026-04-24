@@ -1,17 +1,17 @@
 
 # 介绍
 
-该仓库是个人库 **金鸢尾兰系列框架（OberoniaAurea_Frame）** 的C#源代码文件，是部分游戏RimWorld模组的内置（后会改为前置）框架。
+该仓库是个人库 **金鸢尾兰系列框架（OberoniaAurea_Frame）** 的C#源代码文件，是部分游戏RimWorld模组的前置框架架。
 
 
-本框架应用于以下模组
 
-+ [OA]鼠族派系扩展：金鸢尾兰  [![Steam Downloads](https://img.shields.io/steam/downloads/3159926804?style=flat&logo=steam&label=Steam%20Workshop&color=yellow)](https://steamcommunity.com/sharedfiles/filedetails/?id=3159926804)
+本框架已应用于以下模组：
 
-+ [OA]鼠族基因扩展  [![Steam Downloads](https://img.shields.io/steam/downloads/3300291918?style=flat&logo=steam&label=Steam%20Workshop)](https://steamcommunity.com/sharedfiles/filedetails/?id=3300291918)
-
-+ [OA]鼠族剧本扩展：风雪的遗孤  [![Steam Downloads](https://img.shields.io/steam/downloads/3381392312?style=flat&logo=steam&label=Steam%20Workshop&color=blue)
-](https://steamcommunity.com/sharedfiles/filedetails/?id=3381392312)
+| 模组名称 | 链接 |
+| -------- | ---- |
+| [OA]鼠族派系扩展：金鸢尾兰 | [![Steam Downloads](https://img.shields.io/steam/downloads/3159926804?style=flat&logo=steam&label=Steam%20Workshop&color=yellow)](https://steamcommunity.com/sharedfiles/filedetails/?id=3159926804) |
+| [OA]鼠族基因扩展 | [![Steam Downloads](https://img.shields.io/steam/downloads/3300291918?style=flat&logo=steam&label=Steam%20Workshop)](https://steamcommunity.com/sharedfiles/filedetails/?id=3300291918) |
+| [OA]鼠族剧本扩展：风雪的遗孤 | [![Steam Downloads](https://img.shields.io/steam/downloads/3381392312?style=flat&logo=steam&label=Steam%20Workshop&color=blue)](https://steamcommunity.com/sharedfiles/filedetails/?id=3381392312) |
 
 
 ---

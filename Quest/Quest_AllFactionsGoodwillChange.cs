@@ -97,7 +97,7 @@ public class QuestPart_AllFactionsGoodwillChange : QuestPart
             }
         }
     }
-    
+
     /// <summary>
     /// 判断派系是否可用于关系变更
     /// </summary>
