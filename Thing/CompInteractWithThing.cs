@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
@@ -44,6 +44,9 @@ public abstract class CompInteractWithThing : ThingComp
         pawn.jobs.TryTakeOrderedJob(JobMaker.MakeJob(InteractJob, parent), JobTag.Misc);
     }
 
+    /// <summary>
+    /// 处理交互结果。
+    /// </summary>
     public abstract void InteractionResult(Pawn pawn);
 
     protected virtual AcceptanceReport CanInteractNow(Pawn pawn)

@@ -10,6 +10,9 @@ namespace OberoniaAurea_Frame;
 public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
 {
     protected List<Faction> participantFactions = [];
+    /// <summary>
+    /// 获取参与派系列表。
+    /// </summary>
     public List<Faction> ParticipantFactions => participantFactions;
 
     /// <summary>
@@ -47,6 +50,6 @@ public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Collections.Look(ref participantFactions, "participantFactions", LookMode.Reference);
+        Scribe_Collections.Look(ref participantFactions, nameof(participantFactions), LookMode.Reference);
     }
 }

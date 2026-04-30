@@ -5,14 +5,23 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 /// <summary>
-/// Pawn浮动菜单选项提供者接口。
+/// <see cref="Pawn"/>浮动菜单选项提供者接口。
 /// </summary>
 public interface IPawnFloatMenuOptionProvider
 {
+    /// <summary>
+    /// 检查选中的<see cref="Pawn"/>是否有效。
+    /// </summary>
     bool IsSelectedPawnValid(Pawn selPawn);
+    /// <summary>
+    /// 获取浮动菜单选项。
+    /// </summary>
     FloatMenuOption GetFloatMenuOption(Pawn selPawn);
 }
 
+/// <summary>
+/// <see cref="Pawn"/>浮动菜单选项处理器组件属性。
+/// </summary>
 public class CompProperties_PawnFloatMenuOptionHandler : CompProperties
 {
     public CompProperties_PawnFloatMenuOptionHandler()
@@ -21,6 +30,9 @@ public class CompProperties_PawnFloatMenuOptionHandler : CompProperties
     }
 }
 
+/// <summary>
+/// <see cref="Pawn"/>浮动菜单选项处理器组件。
+/// </summary>
 public class CompPawnFloatMenuOptionHandler : ThingComp
 {
     [Unsaved] private List<IPawnFloatMenuOptionProvider> providers;
@@ -53,7 +65,6 @@ public class CompPawnFloatMenuOptionHandler : ThingComp
             yield return options[i];
         }
     }
-
 
     /// <summary>
     /// 注册菜单选项提供者。

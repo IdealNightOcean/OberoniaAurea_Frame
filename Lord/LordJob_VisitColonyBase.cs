@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -20,6 +20,9 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
 
     public LordJob_VisitColonyBase() { }
 
+    /// <summary>
+    /// 初始化访问职责。
+    /// </summary>
     public LordJob_VisitColonyBase(Faction faction, IntVec3 chillSpot, int? durationTicks = null)
     {
         this.faction = faction;
@@ -27,6 +30,9 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
         this.durationTicks = durationTicks;
     }
 
+    /// <summary>
+    /// 获取额外的浮动菜单选项。
+    /// </summary>
     public virtual IEnumerable<FloatMenuOption> ExtraFloatMenuOptions(Pawn target, Pawn forPawn)
     {
         return Enumerable.Empty<FloatMenuOption>();

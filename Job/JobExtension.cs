@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -17,12 +17,12 @@ public class JobExtensionRecord : IExposable
 
     public void ExposeData()
     {
-        Scribe_Defs.Look(ref jobSkill, "jobSkill");
-        Scribe_Values.Look(ref skillXpPerTick, "skillXpPerTick", 0f);
-        Scribe_Values.Look(ref defaultWorkAmount, "defaultWorkAmount", 0);
-        Scribe_Defs.Look(ref jobStat, "jobStat");
-        Scribe_Values.Look(ref statFactorForTickAmount, "statFactorForTickAmount", 1f);
-        Scribe_Defs.Look(ref jobEffecter, "jobEffecter");
+        Scribe_Defs.Look(ref jobSkill, nameof(jobSkill));
+        Scribe_Values.Look(ref skillXpPerTick, nameof(skillXpPerTick), 0f);
+        Scribe_Values.Look(ref defaultWorkAmount, nameof(defaultWorkAmount), 0);
+        Scribe_Defs.Look(ref jobStat, nameof(jobStat));
+        Scribe_Values.Look(ref statFactorForTickAmount, nameof(statFactorForTickAmount), 1f);
+        Scribe_Defs.Look(ref jobEffecter, nameof(jobEffecter));
     }
 }
 

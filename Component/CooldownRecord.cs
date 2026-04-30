@@ -30,6 +30,9 @@ public struct CooldownRecord : IExposable
         removeWhenExpired = true;
     }
 
+    /// <summary>
+    /// 使用冷却时间和过期移除标志初始化冷却记录。
+    /// </summary>
     public CooldownRecord(int cooldownTicks, bool removeWhenExpired)
     {
         lastActiveTick = Find.TickManager.TicksGame;

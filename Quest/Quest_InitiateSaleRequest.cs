@@ -122,10 +122,10 @@ public class QuestPart_InitiateSaleRequest : QuestPart
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Values.Look(ref inSignal, "inSignal");
-        Scribe_References.Look(ref worldObject, "worldObject");
-        Scribe_Defs.Look(ref requestedThingDef, "requestedThingDef");
-        Scribe_Values.Look(ref requestedCount, "requestedCount", 0);
-        Scribe_Values.Look(ref requestedDuration, "requestedDuration", 0);
+        Scribe_Values.Look(ref inSignal, nameof(inSignal));
+        Scribe_References.Look(ref worldObject, nameof(worldObject));
+        Scribe_Defs.Look(ref requestedThingDef, nameof(requestedThingDef));
+        Scribe_Values.Look(ref requestedCount, nameof(requestedCount), 0);
+        Scribe_Values.Look(ref requestedDuration, nameof(requestedDuration), 0);
     }
 }

@@ -13,6 +13,9 @@ public struct SimpleValueCache<T> where T : unmanaged
 
     private readonly Func<T> checker;
 
+    /// <summary>
+    /// 使用缓存间隔和检查器初始化值缓存。
+    /// </summary>
     public SimpleValueCache(int cacheInterval, Func<T> checker)
     {
         defaultValue = default;
@@ -23,6 +26,9 @@ public struct SimpleValueCache<T> where T : unmanaged
         this.checker = checker ?? throw new ArgumentNullException(nameof(checker));
     }
 
+    /// <summary>
+    /// 使用缓存间隔、默认值和检查器初始化值缓存。
+    /// </summary>
     public SimpleValueCache(int cacheInterval, T defaultValue, Func<T> checker)
     {
         this.defaultValue = defaultValue;

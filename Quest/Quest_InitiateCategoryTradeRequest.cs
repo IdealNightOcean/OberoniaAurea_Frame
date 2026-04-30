@@ -127,12 +127,12 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Values.Look(ref inSignal, "inSignal");
-        Scribe_References.Look(ref worldObject, "worldObject");
-        Scribe_Defs.Look(ref requestedCategoryDef, "requestedCategoryDef");
-        Scribe_Values.Look(ref requestedCount, "requestedCount", 0);
-        Scribe_Values.Look(ref requestDuration, "requestDuration", 0);
-        Scribe_Values.Look(ref requestAllowInsectMeat, "requestAllowInsectMeat", defaultValue: false);
-        Scribe_Values.Look(ref requestAllowHumanlikeMeat, "requestAllowHumanlikeMeat", defaultValue: false);
+        Scribe_Values.Look(ref inSignal, nameof(inSignal));
+        Scribe_References.Look(ref worldObject, nameof(worldObject));
+        Scribe_Defs.Look(ref requestedCategoryDef, nameof(requestedCategoryDef));
+        Scribe_Values.Look(ref requestedCount, nameof(requestedCount), 0);
+        Scribe_Values.Look(ref requestDuration, nameof(requestDuration), 0);
+        Scribe_Values.Look(ref requestAllowInsectMeat, nameof(requestAllowInsectMeat), defaultValue: false);
+        Scribe_Values.Look(ref requestAllowHumanlikeMeat, nameof(requestAllowHumanlikeMeat), defaultValue: false);
     }
 }

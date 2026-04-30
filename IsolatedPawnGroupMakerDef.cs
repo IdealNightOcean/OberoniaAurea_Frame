@@ -51,6 +51,9 @@ public class PawnGroupWithTagMakerDef : Def
 {
     public List<PawnGroupOption> groupOptions;
 
+    /// <summary>
+    /// 尝试获取指定类型的随机<see cref="PawnGroupOption"/>。
+    /// </summary>
     public bool TryGetRandomPawnGroupOption(PawnGroupKindDef pawnGroupKindDef, out PawnGroupOption pawnGroupOption)
     {
         if (groupOptions is null)
@@ -76,7 +79,7 @@ public class PawnGroupOption
     public IReadOnlyList<PawnGenOption> GetRandomGroupOptionsIgnoreTag() => groups?.RandomElementWithFallback(null)?.options;
 
     /// <summary>
-    /// 获取指定标签的随机PawnGenOption生成组。
+    /// 获取指定标签的随机<see cref="PawnGroupOption"/>生成组。
     /// </summary>
     public IReadOnlyList<PawnGenOption> GetRandomGroupOptionsWithTag(string tag)
     {
@@ -89,7 +92,7 @@ public class PawnGroupOption
     }
 
     /// <summary>
-    /// 获取指定标签的首个PawnGenOption生成组。
+    /// 获取指定标签的首个<see cref="PawnGroupOption"/>生成组。
     /// </summary>
     public IReadOnlyList<PawnGenOption> GetFirstGroupOptionsWithTag(string tag)
     {

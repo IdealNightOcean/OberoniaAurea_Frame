@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using Verse;
@@ -23,6 +23,9 @@ public class SaleRequestComp : WorldObjectComp
     public int count;
     public int expiration = -1;
 
+    /// <summary>
+    /// 获取当前是否有活跃的销售请求。
+    /// </summary>
     public bool ActiveRequest => active && expiration > Find.TickManager.TicksGame;
 
     public override string CompInspectStringExtra()
@@ -41,6 +44,10 @@ public class SaleRequestComp : WorldObjectComp
             yield return FulfillRequestCommand(caravan);
         }
     }
+
+    /// <summary>
+    /// 初始化销售请求。
+    /// </summary>
     public void InitSaleRequest(ThingDef thingDef, int thingCount, int expirationDelay)
     {
         this.thingDef = thingDef;
@@ -48,6 +55,10 @@ public class SaleRequestComp : WorldObjectComp
         expiration = Find.TickManager.TicksGame + expirationDelay;
         active = true;
     }
+
+    /// <summary>
+    /// 禁用销售请求。
+    /// </summary>
     public void Disable()
     {
         active = false;
@@ -88,9 +99,9 @@ public class SaleRequestComp : WorldObjectComp
     public override void PostExposeData()
     {
         base.PostExposeData();
-        Scribe_Values.Look(ref active, loadPrefix + "active", defaultValue: false);
-        Scribe_Values.Look(ref expiration, loadPrefix + "expiration", -1);
-        Scribe_Defs.Look(ref thingDef, loadPrefix + "thingDef");
-        Scribe_Values.Look(ref count, loadPrefix + "count", 0);
+        Scribe_Values.Look(ref active, loadPrefix + nameof(active), defaultValue: false);
+        Scribe_Values.Look(ref expiration, loadPrefix + nameof(expiration), -1);
+        Scribe_Defs.Look(ref thingDef, loadPrefix + nameof(thingDef));
+        Scribe_Values.Look(ref count, loadPrefix + nameof(count), 0);
     }
 }

@@ -3,11 +3,18 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 /// <summary>
-/// 可对话LordJob接口。
+/// 可对话<see cref="Verse.AI.Group.LordJob"/>接口。
 /// </summary>
 public interface ILordJobWithTalk
 {
+    /// <summary>
+    /// 获取可对话的<see cref="Pawn"/>。
+    /// </summary>
     Pawn TalkablePawn { get; }
+
+    /// <summary>
+    /// 当前是否可以对话。
+    /// </summary>
     bool CanTalkNow { get; }
 
     /// <summary>

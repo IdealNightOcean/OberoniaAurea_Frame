@@ -13,6 +13,9 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
     protected virtual IsolatedPawnGroupMakerDef PawnGroupMakerDef => null;
     protected override PawnGroupKindDef PawnGroupKindDef => PawnGroupKindDefOf.Trader;
 
+    /// <summary>
+    /// 检查派系是否可以作为事件来源。
+    /// </summary>
     public override bool FactionCanBeGroupSource(Faction f, IncidentParms parms, bool desperate = false)
     {
         return !f.HostileTo(Faction.OfPlayer);
@@ -108,7 +111,6 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
         }
         return pawns;
     }
-
 
     protected virtual void SendLetter(IncidentParms parms, List<Pawn> pawns)
     {

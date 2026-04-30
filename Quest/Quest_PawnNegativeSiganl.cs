@@ -94,11 +94,11 @@ public class QuestPart_PawnNegativeSiganl : QuestPart
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Values.Look(ref outSignal, "outSignal");
-        Scribe_Values.Look(ref outOnlyOnce, "outOnlyOnce", defaultValue: false);
-        Scribe_Values.Look(ref outOnce, "outOnce", defaultValue: false);
+        Scribe_Values.Look(ref outSignal, nameof(outSignal));
+        Scribe_Values.Look(ref outOnlyOnce, nameof(outOnlyOnce), defaultValue: false);
+        Scribe_Values.Look(ref outOnce, nameof(outOnce), defaultValue: false);
 
-        Scribe_Collections.Look(ref negativeSiganls, "negativeSiganls", LookMode.Value);
+        Scribe_Collections.Look(ref negativeSiganls, nameof(negativeSiganls), LookMode.Value);
     }
 
     public override void Cleanup()

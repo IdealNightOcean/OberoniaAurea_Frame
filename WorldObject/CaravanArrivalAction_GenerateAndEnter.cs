@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using Verse;
@@ -13,6 +13,9 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
 
     public CaravanArrivalAction_GenerateAndEnter() { }
 
+    /// <summary>
+    /// 使用可直接进入的<see cref="MapParent"/>初始化远行队到达动作。
+    /// </summary>
     public CaravanArrivalAction_GenerateAndEnter(MapParent_Enterable mapParent)
     {
         this.mapParent = mapParent;
@@ -64,9 +67,12 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_References.Look(ref mapParent, "mapParent");
+        Scribe_References.Look(ref mapParent, nameof(mapParent));
     }
 
+    /// <summary>
+    /// 检查远行队是否可以访问可进入地图父对象。
+    /// </summary>
     public static FloatMenuAcceptanceReport CanVisit(Caravan caravan, MapParent_Enterable mapParent)
     {
         if (mapParent is null || !mapParent.Spawned || mapParent.HasMap)
@@ -82,6 +88,9 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
         return mapParent.CanEnterMap(caravan);
     }
 
+    /// <summary>
+    /// 获取浮动菜单选项。
+    /// </summary>
     public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan, MapParent_Enterable mapParent)
     {
         return CaravanArrivalActionUtility.GetFloatMenuOptions(() => CanVisit(caravan, mapParent), () => new CaravanArrivalAction_GenerateAndEnter(mapParent), "EnterMap".Translate(mapParent.Label), caravan, mapParent.Tile, mapParent);

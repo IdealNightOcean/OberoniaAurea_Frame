@@ -7,9 +7,24 @@ namespace OberoniaAurea_Frame;
 
 public static class OAFrame_DiaUtility
 {
+    /// <summary>
+    /// 获取默认确认选项。
+    /// </summary>
     public static DiaOption DefaultConfirmOption => new("Confirm".Translate()) { resolveTree = true };
+
+    /// <summary>
+    /// 获取默认取消选项。
+    /// </summary>
     public static DiaOption DefaultCancelOption => new("Cancel".Translate()) { resolveTree = true };
+
+    /// <summary>
+    /// 获取默认关闭选项。
+    /// </summary>
     public static DiaOption DefaultCloseOption => new("Close".Translate()) { resolveTree = true };
+
+    /// <summary>
+    /// 获取默认推迟选项。
+    /// </summary>
     public static DiaOption DefaultPostponeOption => new("PostponeLetter".Translate()) { resolveTree = true };
 
     /// <summary>

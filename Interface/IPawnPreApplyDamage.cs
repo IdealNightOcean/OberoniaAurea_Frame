@@ -10,10 +10,19 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public interface IPawnPreApplyDamage
 {
+    /// <summary>
+    /// 获取处理优先级。
+    /// </summary>
     int Priority { get; }
+    /// <summary>
+    /// <see cref="Pawn"/>预伤害处理。
+    /// </summary>
     void PawnPreApplyDamage(ref DamageInfo dinfo, out bool absorbed);
 }
 
+/// <summary>
+/// <see cref="Pawn"/>预伤害处理器组件属性。
+/// </summary>
 public class CompProperties_PawnPreApplyDamage : CompProperties
 {
     public CompProperties_PawnPreApplyDamage()
@@ -22,6 +31,9 @@ public class CompProperties_PawnPreApplyDamage : CompProperties
     }
 }
 
+/// <summary>
+/// <see cref="Pawn"/>预伤害处理器组件。
+/// </summary>
 public class CompPawnPreApplyDamageHandler : ThingComp
 {
     [Unsaved] private List<IPawnPreApplyDamage> pawnPreApplyDamages;

@@ -1,4 +1,4 @@
-﻿using OberoniaAurea_Frame;
+using OberoniaAurea_Frame;
 using RimWorld;
 using RimWorld.Planet;
 using System;
@@ -18,11 +18,17 @@ public class TransportersArrivalAction_VisitInteractiveObject : TransportersArri
 
     public TransportersArrivalAction_VisitInteractiveObject() { }
 
+    /// <summary>
+    /// 使用交互世界对象初始化运输器到达动作。
+    /// </summary>
     public TransportersArrivalAction_VisitInteractiveObject(WorldObject_InteractiveBase worldObject)
     {
         this.worldObject = worldObject;
     }
 
+    /// <summary>
+    /// 使用交互世界对象和到达消息键初始化运输器到达动作。
+    /// </summary>
     public TransportersArrivalAction_VisitInteractiveObject(WorldObject_InteractiveBase worldObject, string arrivalMessageKey)
     {
         this.worldObject = worldObject;
@@ -90,6 +96,9 @@ public class TransportersArrivalAction_VisitInteractiveObject : TransportersArri
     }
 
 
+    /// <summary>
+    /// 获取浮动菜单选项。
+    /// </summary>
     public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Action<PlanetTile, TransportersArrivalAction> launchAction, IEnumerable<IThingHolder> pods, WorldObject_InteractiveBase worldObject)
     {
         foreach (FloatMenuOption floatMenuOption in TransportersArrivalActionUtility.GetFloatMenuOptions(acceptanceReportGetter: () => CanFormCaravanAt(pods, worldObject.Tile),
@@ -105,7 +114,7 @@ public class TransportersArrivalAction_VisitInteractiveObject : TransportersArri
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_References.Look(ref worldObject, "worldObject");
-        Scribe_Values.Look(ref arrivalMessageKey, "arrivalMessageKey", "MessageTransportPodsArrived");
+        Scribe_References.Look(ref worldObject, nameof(worldObject));
+        Scribe_Values.Look(ref arrivalMessageKey, nameof(arrivalMessageKey), "MessageTransportPodsArrived");
     }
 }

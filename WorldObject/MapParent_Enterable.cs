@@ -10,6 +10,9 @@ namespace OberoniaAurea_Frame;
 public class MapParent_Enterable : MapParent, IQuestAssociate
 {
     protected Quest quest;
+    /// <summary>
+    /// 获取关联任务。
+    /// </summary>
     public Quest AssociatedQuest => quest;
 
     /// <summary>
@@ -121,7 +124,7 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_References.Look(ref quest, "quest");
+        Scribe_References.Look(ref quest, nameof(quest));
     }
 }
 

@@ -10,7 +10,6 @@ public class CooldownRecordManager : IExposable
 
     public void ExposeData()
     {
-
         Scribe_Collections.Look(ref records, nameof(records), LookMode.Value, LookMode.Deep);
 
         if (Scribe.mode == LoadSaveMode.PostLoadInit)

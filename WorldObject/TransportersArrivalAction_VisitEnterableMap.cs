@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,9 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
 
     public TransportersArrivalAction_VisitEnterableMap() { }
 
+    /// <summary>
+    /// 使用可直接进入的<see cref="MapParent"/>和到达模式初始化运输器到达动作。
+    /// </summary>
     public TransportersArrivalAction_VisitEnterableMap(MapParent_Enterable mapParent, PawnsArrivalModeDef arrivalMode)
     {
         this.mapParent = mapParent;
@@ -25,8 +28,8 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_References.Look(ref mapParent, "mapParent");
-        Scribe_Defs.Look(ref arrivalMode, "arrivalMode");
+        Scribe_References.Look(ref mapParent, nameof(mapParent));
+        Scribe_Defs.Look(ref arrivalMode, nameof(arrivalMode));
     }
 
     public override FloatMenuAcceptanceReport StillValid(IEnumerable<IThingHolder> pods, PlanetTile destinationTile)
@@ -39,10 +42,8 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
         return CanVisit(pods, mapParent);
     }
 
-    public override bool ShouldUseLongEvent(List<ActiveTransporterInfo> pods, PlanetTile tile)
-    {
-        return !mapParent.HasMap;
-    }
+    public override bool ShouldUseLongEvent(List<ActiveTransporterInfo> pods, PlanetTile tile) => !mapParent.HasMap;
+
 
     public override void Arrived(List<ActiveTransporterInfo> transporters, PlanetTile tile)
     {
@@ -65,6 +66,9 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
         arrivalMode.Worker.TravellingTransportersArrived(transporters, orGenerateMap);
     }
 
+    /// <summary>
+    /// 检查是否可以访问可进入地图父对象。
+    /// </summary>
     public static FloatMenuAcceptanceReport CanVisit(IEnumerable<IThingHolder> pods, MapParent_Enterable mapParent)
     {
         if (mapParent is null || !mapParent.Spawned)
@@ -83,6 +87,9 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
         return mapParent.CanEnterMap(pods);
     }
 
+    /// <summary>
+    /// 获取浮动菜单选项。
+    /// </summary>
     public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Action<PlanetTile, TransportersArrivalAction> launchAction, IEnumerable<IThingHolder> pods, MapParent_Enterable mapParent)
     {
         foreach (FloatMenuOption edgeMenuOption in TransportersArrivalActionUtility.GetFloatMenuOptions(acceptanceReportGetter: () => CanVisit(pods, mapParent),

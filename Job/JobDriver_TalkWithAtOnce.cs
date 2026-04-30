@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 using Verse.AI.Group;
@@ -32,6 +32,9 @@ public abstract class JobDriver_TalkWithAtOnce : JobDriver
 
     protected abstract void TalkAction(Pawn talker, Pawn talkWith);
 
+    /// <summary>
+    /// 启用职责中的对话功能。
+    /// </summary>
     public static void EnableLordJobTalk(Pawn talkWith)
     {
         if (talkWith.GetLord()?.LordJob is LordJob_VisitColonyTalkable talkLordJob)
@@ -40,6 +43,9 @@ public abstract class JobDriver_TalkWithAtOnce : JobDriver
         }
     }
 
+    /// <summary>
+    /// 禁用职责中的对话功能。
+    /// </summary>
     public static void DisableLordJobTalk(Pawn talkWith, bool dismiss)
     {
         if (talkWith.GetLord()?.LordJob is LordJob_VisitColonyTalkable talkLordJob && talkLordJob.CanTalkWith(talkWith))

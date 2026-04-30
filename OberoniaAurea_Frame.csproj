@@ -26,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Release\</OutputPath>
+    <OutputPath>E:\ProgramFiles\Steam\steamapps\common\RimWorld\Mods\[OA]Oberonia Aurea Framework\1.6\Assemblies\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -97,6 +97,7 @@
     <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
     <Compile Include="Interface\IPawnFloatMenuOptionProvider.cs" />
+    <Compile Include="Thing\CompForceColor.cs" />
     <Compile Include="Thing\CompInteractWithThing.cs" />
     <Compile Include="Utility\CollectionUtility.cs" />
     <Compile Include="Utility\DropPodUtility.cs" />

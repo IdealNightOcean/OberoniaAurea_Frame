@@ -73,12 +73,12 @@ public class QuestPart_InitiateTradeRequest : QuestPart
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Values.Look(ref inSignal, "inSignal");
-        Scribe_References.Look(ref worldObject, "worldObject");
-        Scribe_Defs.Look(ref requestedThingDef, "requestedThingDef");
-        Scribe_Values.Look(ref requestedCount, "requestedCount", 0);
-        Scribe_Values.Look(ref requestDuration, "requestDuration", 0);
-        Scribe_Values.Look(ref keepAfterQuestEnds, "keepAfterQuestEnds", defaultValue: false);
+        Scribe_Values.Look(ref inSignal, nameof(inSignal));
+        Scribe_References.Look(ref worldObject, nameof(worldObject));
+        Scribe_Defs.Look(ref requestedThingDef, nameof(requestedThingDef));
+        Scribe_Values.Look(ref requestedCount, nameof(requestedCount), 0);
+        Scribe_Values.Look(ref requestDuration, nameof(requestDuration), 0);
+        Scribe_Values.Look(ref keepAfterQuestEnds, nameof(keepAfterQuestEnds), defaultValue: false);
     }
 
     public override IEnumerable<GlobalTargetInfo> QuestLookTargets

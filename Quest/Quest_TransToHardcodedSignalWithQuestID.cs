@@ -82,7 +82,7 @@ public class QuestPart_TransToHardcodedSignalWithQuestID : QuestPart
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Values.Look(ref inSignal, "inSignal");
-        Scribe_Values.Look(ref outSignal, "outSignal");
+        Scribe_Values.Look(ref inSignal, nameof(inSignal));
+        Scribe_Values.Look(ref outSignal, nameof(outSignal));
     }
 }

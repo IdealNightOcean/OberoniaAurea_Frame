@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI;
@@ -20,12 +20,18 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
     public LordJob_VisitColonyTalkable(Faction faction, IntVec3 chillSpot, int? durationTicks = null) : base(faction, chillSpot, durationTicks)
     { }
 
+    /// <summary>
+    /// 初始化可对话的访问殖民地职责。
+    /// </summary>
     public LordJob_VisitColonyTalkable(Pawn talkablePawn, JobDef talkJob, Faction faction, IntVec3 chillSpot, string talkLabel = "OAFrame_TalkWith", int? durationTicks = null) : this(faction, chillSpot, durationTicks)
     {
         this.talkablePawn = talkablePawn;
         SetTalkAction(talkablePawn, talkJob, talkLabel);
     }
 
+    /// <summary>
+    /// 设置对话行为。
+    /// </summary>
     public void SetTalkAction(Pawn talkablePawn, JobDef talkJob, string talkLabel = "OAFrame_TalkWith", bool initTalkActive = true)
     {
         this.talkJob = talkJob;
@@ -40,11 +46,17 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
         }
     }
 
+    /// <summary>
+    /// 检查是否可以与指定<see cref="Pawn"/>对话。
+    /// </summary>
     public bool CanTalkWith(Pawn p)
     {
         return canTalkNow && talkablePawn == p;
     }
 
+    /// <summary>
+    /// 启用与指定<see cref="Pawn"/>的对话功能。
+    /// </summary>
     public void EnableTalk(Pawn p)
     {
         if (p is null)
@@ -55,8 +67,14 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
         talkablePawn = p;
         canTalkNow = true;
     }
+    /// <summary>
+    /// 启用对话功能。
+    /// </summary>
     public void EnableTalk() => EnableTalk(talkablePawn);
 
+    /// <summary>
+    /// 禁用对话功能。
+    /// </summary>
     public void DisableTalk(bool dismiss)
     {
         canTalkNow = false;
@@ -74,6 +92,9 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
         }
     }
 
+    /// <summary>
+    /// 检查指定工作是否与目标<see cref="Pawn"/>关联。
+    /// </summary>
     public bool IsAssociateJobToPawn(JobDef jobDef, Pawn talkWith)
     {
         return talkWith == talkablePawn && jobDef == talkJob;
@@ -82,10 +103,10 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_References.Look(ref talkablePawn, "talkablePawn");
-        Scribe_Defs.Look(ref talkJob, "talkJob");
-        Scribe_Values.Look(ref talkLabel, "talkLabel", "OAFrame_TalkWith");
-        Scribe_Values.Look(ref canTalkNow, "canTalkNow", defaultValue: false);
+        Scribe_References.Look(ref talkablePawn, nameof(talkablePawn));
+        Scribe_Defs.Look(ref talkJob, nameof(talkJob));
+        Scribe_Values.Look(ref talkLabel, nameof(talkLabel), "OAFrame_TalkWith");
+        Scribe_Values.Look(ref canTalkNow, nameof(canTalkNow), defaultValue: false);
     }
 
     public override void Cleanup()

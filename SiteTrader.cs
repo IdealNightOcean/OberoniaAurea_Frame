@@ -68,6 +68,9 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
 
     public SiteTrader() { }
 
+    /// <summary>
+    /// 使用商人类型（<see cref="TraderKindDef"/>）、关联世界对象（<see cref="WorldObject"/>）和派系（<see cref="RimWorld.Faction"/>）初始化商店。
+    /// </summary>
     public SiteTrader(TraderKindDef traderKind, WorldObject worldObject, Faction faction = null, RulePackDef rulePack = null, int refreshInterval = -1)
     {
         this.traderKind = traderKind;
@@ -277,16 +280,16 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
                 }
             }
         }
-        Scribe_Values.Look(ref traderName, "traderName");
-        Scribe_Values.Look(ref loadID, "loadID", 0);
-        Scribe_Defs.Look(ref traderKind, "traderKind");
-        Scribe_References.Look(ref associateWorldObject, "associateWorldObject");
-        Scribe_References.Look(ref faction, "faction");
-        Scribe_Deep.Look(ref things, "things", this);
-        Scribe_Collections.Look(ref tmpSavedPawns, "tmpSavedPawns", LookMode.Reference);
-        Scribe_Values.Look(ref refreshInterval, "refreshInterval", -1);
-        Scribe_Values.Look(ref lastRefreshTick, "lastRefreshTick", -1);
-        Scribe_Values.Look(ref randomPriceFactorSeed, "randomPriceFactorSeed", 0);
+        Scribe_Values.Look(ref traderName, nameof(traderName));
+        Scribe_Values.Look(ref loadID, nameof(loadID), 0);
+        Scribe_Defs.Look(ref traderKind, nameof(traderKind));
+        Scribe_References.Look(ref associateWorldObject, nameof(associateWorldObject));
+        Scribe_References.Look(ref faction, nameof(faction));
+        Scribe_Deep.Look(ref things, nameof(things), this);
+        Scribe_Collections.Look(ref tmpSavedPawns, nameof(tmpSavedPawns), LookMode.Reference);
+        Scribe_Values.Look(ref refreshInterval, nameof(refreshInterval), -1);
+        Scribe_Values.Look(ref lastRefreshTick, nameof(lastRefreshTick), -1);
+        Scribe_Values.Look(ref randomPriceFactorSeed, nameof(randomPriceFactorSeed), 0);
         if (Scribe.mode == LoadSaveMode.PostLoadInit || Scribe.mode == LoadSaveMode.Saving)
         {
             tmpSavedPawns.RemoveAll(p => p is null);

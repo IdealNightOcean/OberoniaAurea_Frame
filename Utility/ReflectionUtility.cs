@@ -7,6 +7,9 @@ namespace OberoniaAurea_Frame;
 [StaticConstructorOnStartup]
 public static class OAFrame_ReflectionUtility
 {
+    /// <summary>
+    /// 实例绑定标志，用于反射获取实例成员。
+    /// </summary>
     public static BindingFlags InstanceAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
     /// <summary>
     /// 获取对象字段值。

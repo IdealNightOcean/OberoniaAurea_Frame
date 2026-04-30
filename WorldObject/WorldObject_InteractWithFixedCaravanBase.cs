@@ -15,7 +15,13 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
     [Unsaved] protected bool interrupt;
 
     protected FixedCaravan associatedFixedCaravan;
+    /// <summary>
+    /// 获取关联的固定远行队（<see cref="FixedCaravan"/>）。
+    /// </summary>
     public FixedCaravan AssociatedFixedCaravan => associatedFixedCaravan;
+    /// <summary>
+    /// 获取所需时间。
+    /// </summary>
     public virtual int TicksNeeded => 30000;
 
     public override void Notify_CaravanArrived(Caravan caravan)
@@ -105,13 +111,22 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         ticksRemaining = TicksNeeded;
         associatedFixedCaravan = null;
     }
+    /// <summary>
+    /// 玩家主动将固定远行队转换为远行队的预处理。
+    /// </summary>
     public virtual void PreConvertToCaravanByPlayer()
     {
         EndWork(interrupt: true, convertToCaravan: false);
     }
 
+    /// <summary>
+    /// 固定远行队转换为远行队后的处理。
+    /// </summary>
     public virtual void PostConvertToCaravan(Caravan caravan) { }
 
+    /// <summary>
+    /// 获取固定远行队工作描述。
+    /// </summary>
     public virtual string FixedCaravanWorkDesc()
     {
         return "OAFrame_FixedCaravanWork_TimeLeft".Translate(ticksRemaining.ToStringTicksToPeriod());
@@ -145,9 +160,9 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Values.Look(ref isWorking, "isWorking", defaultValue: false);
-        Scribe_Values.Look(ref ticksRemaining, "ticksRemaining", 0);
+        Scribe_Values.Look(ref isWorking, nameof(isWorking), defaultValue: false);
+        Scribe_Values.Look(ref ticksRemaining, nameof(ticksRemaining), 0);
 
-        Scribe_References.Look(ref associatedFixedCaravan, "associatedFixedCaravan");
+        Scribe_References.Look(ref associatedFixedCaravan, nameof(associatedFixedCaravan));
     }
 }

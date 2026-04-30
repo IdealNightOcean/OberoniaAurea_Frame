@@ -18,9 +18,21 @@ public struct FactionValidationParams
 
     public FactionValidationParams() { }
 
+    /// <summary>
+    /// 获取默认派系验证参数。
+    /// </summary>
     public static FactionValidationParams DefaultFaction => new();
+    /// <summary>
+    /// 获取盟友普通派系验证参数。
+    /// </summary>
     public static FactionValidationParams AllyNormalFaction => new() { AllowNeutral = false, AllyHostile = false };
+    /// <summary>
+    /// 获取非敌对普通派系验证参数。
+    /// </summary>
     public static FactionValidationParams NonHostileNormalFaction => new() { AllyHostile = false };
+    /// <summary>
+    /// 获取敌对普通派系验证参数。
+    /// </summary>
     public static FactionValidationParams HostileNormalFaction => new() { AllowAlly = false, AllowNeutral = false };
 
     /// <summary>

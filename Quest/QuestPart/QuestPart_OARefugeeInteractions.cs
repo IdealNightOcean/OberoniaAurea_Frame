@@ -418,41 +418,41 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Values.Look(ref allowAssaultColony, "allowAssaultColony", defaultValue: true);
-        Scribe_Values.Look(ref allowLeave, "allowLeave", defaultValue: true);
-        Scribe_Values.Look(ref allowBadThought, "allowBadThought", defaultValue: true);
+        Scribe_Values.Look(ref allowAssaultColony, nameof(allowAssaultColony), defaultValue: true);
+        Scribe_Values.Look(ref allowLeave, nameof(allowLeave), defaultValue: true);
+        Scribe_Values.Look(ref allowBadThought, nameof(allowBadThought), defaultValue: true);
 
-        Scribe_Values.Look(ref inSignalRecruited, "inSignalRecruited");
-        Scribe_Values.Look(ref inSignalLeftMap, "inSignalLeftMap");
+        Scribe_Values.Look(ref inSignalRecruited, nameof(inSignalRecruited));
+        Scribe_Values.Look(ref inSignalLeftMap, nameof(inSignalLeftMap));
 
-        Scribe_Values.Look(ref inSignalAssaultColony, "inSignalAssaultColony");
+        Scribe_Values.Look(ref inSignalAssaultColony, nameof(inSignalAssaultColony));
 
-        Scribe_Values.Look(ref inSignalDestroyed, "inSignalDestroyed");
-        Scribe_Values.Look(ref inSignalArrested, "inSignalArrested");
-        Scribe_Values.Look(ref inSignalSurgeryViolation, "inSignalSurgeryViolation");
-        Scribe_Values.Look(ref inSignalPsychicRitualTarget, "inSignalPsychicRitualTarget");
-        Scribe_Values.Look(ref inSignalKidnapped, "inSignalKidnapped");
-        Scribe_Values.Look(ref inSignalLeftBehind, "inSignalLeftBehind");
-        Scribe_Values.Look(ref inSignalBanished, "inSignalBanished");
+        Scribe_Values.Look(ref inSignalDestroyed, nameof(inSignalDestroyed));
+        Scribe_Values.Look(ref inSignalArrested, nameof(inSignalArrested));
+        Scribe_Values.Look(ref inSignalSurgeryViolation, nameof(inSignalSurgeryViolation));
+        Scribe_Values.Look(ref inSignalPsychicRitualTarget, nameof(inSignalPsychicRitualTarget));
+        Scribe_Values.Look(ref inSignalKidnapped, nameof(inSignalKidnapped));
+        Scribe_Values.Look(ref inSignalLeftBehind, nameof(inSignalLeftBehind));
+        Scribe_Values.Look(ref inSignalBanished, nameof(inSignalBanished));
 
-        Scribe_Values.Look(ref outSignalDestroyed_AssaultColony, "outSignalDestroyed_AssaultColony");
-        Scribe_Values.Look(ref outSignalDestroyed_LeaveColony, "outSignalDestroyed_LeaveColony");
-        Scribe_Values.Look(ref outSignalDestroyed_BadThought, "outSignalDestroyed_BadThought");
+        Scribe_Values.Look(ref outSignalDestroyed_AssaultColony, nameof(outSignalDestroyed_AssaultColony));
+        Scribe_Values.Look(ref outSignalDestroyed_LeaveColony, nameof(outSignalDestroyed_LeaveColony));
+        Scribe_Values.Look(ref outSignalDestroyed_BadThought, nameof(outSignalDestroyed_BadThought));
 
-        Scribe_Values.Look(ref outSignalArrested_AssaultColony, "outSignalArrested_AssaultColony");
-        Scribe_Values.Look(ref outSignalArrested_LeaveColony, "outSignalArrested_LeaveColony");
-        Scribe_Values.Look(ref outSignalArrested_BadThought, "outSignalArrested_BadThought");
+        Scribe_Values.Look(ref outSignalArrested_AssaultColony, nameof(outSignalArrested_AssaultColony));
+        Scribe_Values.Look(ref outSignalArrested_LeaveColony, nameof(outSignalArrested_LeaveColony));
+        Scribe_Values.Look(ref outSignalArrested_BadThought, nameof(outSignalArrested_BadThought));
 
-        Scribe_Values.Look(ref outSignalLeftBehind_LeaveColony, "outSignalLeftBehind_LeaveColony");
-        Scribe_Values.Look(ref outSignalLeftBehind_BadThought, "outSignalLeftBehind_BadThought");
+        Scribe_Values.Look(ref outSignalLeftBehind_LeaveColony, nameof(outSignalLeftBehind_LeaveColony));
+        Scribe_Values.Look(ref outSignalLeftBehind_BadThought, nameof(outSignalLeftBehind_BadThought));
 
-        Scribe_Values.Look(ref outSignalSurgeryViolation_AssaultColony, "outSignalSurgeryViolation_AssaultColony");
-        Scribe_Values.Look(ref outSignalSurgeryViolation_LeaveColony, "outSignalSurgeryViolation_LeaveColony");
-        Scribe_Values.Look(ref outSignalSurgeryViolation_BadThought, "outSignalSurgeryViolation_BadThought");
+        Scribe_Values.Look(ref outSignalSurgeryViolation_AssaultColony, nameof(outSignalSurgeryViolation_AssaultColony));
+        Scribe_Values.Look(ref outSignalSurgeryViolation_LeaveColony, nameof(outSignalSurgeryViolation_LeaveColony));
+        Scribe_Values.Look(ref outSignalSurgeryViolation_BadThought, nameof(outSignalSurgeryViolation_BadThought));
 
-        Scribe_Values.Look(ref outSignalPsychicRitualTarget_AssaultColony, "outSignalPsychicRitualTarget_AssaultColony");
-        Scribe_Values.Look(ref outSignalPsychicRitualTarget_LeaveColony, "outSignalPsychicRitualTarget_LeaveColony");
-        Scribe_Values.Look(ref outSignalPsychicRitualTarget_BadThought, "outSignalPsychicRitualTarget_BadThought");
+        Scribe_Values.Look(ref outSignalPsychicRitualTarget_AssaultColony, nameof(outSignalPsychicRitualTarget_AssaultColony));
+        Scribe_Values.Look(ref outSignalPsychicRitualTarget_LeaveColony, nameof(outSignalPsychicRitualTarget_LeaveColony));
+        Scribe_Values.Look(ref outSignalPsychicRitualTarget_BadThought, nameof(outSignalPsychicRitualTarget_BadThought));
 
         Scribe_Values.Look(ref outSignalLast_Arrested, "outSignalLastArrested");
         Scribe_Values.Look(ref outSignalLast_Destroyed, "outSignalLastDestroyed");
@@ -464,10 +464,10 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         Scribe_Values.Look(ref outSignalLast_LeftMapAllHealthy, "outSignalLastLeftMapAllHealthy");
         Scribe_Values.Look(ref outSignalLast_LeftMapAllNotHealthy, "outSignalLastLeftMapAllNotHealthy");
 
-        Scribe_Collections.Look(ref pawns, "pawns", LookMode.Reference);
-        Scribe_References.Look(ref faction, "faction");
-        Scribe_References.Look(ref mapParent, "mapParent");
-        Scribe_Values.Look(ref pawnsLeftUnhealthy, "pawnsLeftUnhealthy", 0);
+        Scribe_Collections.Look(ref pawns, nameof(pawns), LookMode.Reference);
+        Scribe_References.Look(ref faction, nameof(faction));
+        Scribe_References.Look(ref mapParent, nameof(mapParent));
+        Scribe_Values.Look(ref pawnsLeftUnhealthy, nameof(pawnsLeftUnhealthy), 0);
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {
             pawns.RemoveAll(p => p is null);

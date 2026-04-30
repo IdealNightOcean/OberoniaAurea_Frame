@@ -59,16 +59,16 @@ public class QuestPart_AllFactionsGoodwillChange : QuestPart
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Defs.Look(ref historyEvent, "historyEvent");
-        Scribe_Values.Look(ref inSignal, "inSignal");
-        Scribe_Values.Look(ref goodwillChange, "goodwillChange", 0);
+        Scribe_Defs.Look(ref historyEvent, nameof(historyEvent));
+        Scribe_Values.Look(ref inSignal, nameof(inSignal));
+        Scribe_Values.Look(ref goodwillChange, nameof(goodwillChange), 0);
 
-        Scribe_Values.Look(ref canSendMessage, "canSendMessage", defaultValue: true);
-        Scribe_Values.Look(ref canSendHostilityLetter, "canSendHostilityLetter", defaultValue: true);
+        Scribe_Values.Look(ref canSendMessage, nameof(canSendMessage), defaultValue: true);
+        Scribe_Values.Look(ref canSendHostilityLetter, nameof(canSendHostilityLetter), defaultValue: true);
 
-        Scribe_Values.Look(ref canApplyOnAlly, "canApplyOnAlly", defaultValue: true);
-        Scribe_Values.Look(ref canApplyOnNeutral, "canApplyOnNeutral", defaultValue: true);
-        Scribe_Values.Look(ref canApplyOnHostile, "canApplyOnHostile", defaultValue: true);
+        Scribe_Values.Look(ref canApplyOnAlly, nameof(canApplyOnAlly), defaultValue: true);
+        Scribe_Values.Look(ref canApplyOnNeutral, nameof(canApplyOnNeutral), defaultValue: true);
+        Scribe_Values.Look(ref canApplyOnHostile, nameof(canApplyOnHostile), defaultValue: true);
     }
 
     /// <summary>

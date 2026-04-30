@@ -5,7 +5,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
+public class SimpleHashList<T> : IList<T>, IExposable
 {
     private LookMode innerListLookMode;
     private List<T> innerList;
@@ -20,6 +20,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         innerList = [];
         innerHashSet = [];
     }
+    /// <summary>
+    /// 使用指定的保存模式初始化列表。
+    /// </summary>
     public SimpleHashList(LookMode innerListLookMode)
     {
         this.innerListLookMode = innerListLookMode;
@@ -27,6 +30,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         innerHashSet = [];
     }
 
+    /// <summary>
+    /// 使用指定容量和保存模式初始化列表。
+    /// </summary>
     public SimpleHashList(int count, LookMode innerListLookMode)
     {
         this.innerListLookMode = innerListLookMode;
@@ -34,6 +40,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         innerHashSet = new HashSet<T>(count);
     }
 
+    /// <summary>
+    /// 使用集合和保存模式初始化列表。
+    /// </summary>
     public SimpleHashList(IEnumerable<T> collection, LookMode innerListLookMode)
     {
         this.innerListLookMode = innerListLookMode;
@@ -63,6 +72,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         }
     }
 
+    /// <summary>
+    /// 获取列表的枚举器。
+    /// </summary>
     public IEnumerator<T> GetEnumerator()
     {
         return innerList.GetEnumerator();
@@ -73,7 +85,14 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         return GetEnumerator();
     }
 
+    /// <summary>
+    /// 获取指定元素的索引。
+    /// </summary>
     public int IndexOf(T item) => innerList.IndexOf(item);
+
+    /// <summary>
+    /// 在指定索引处插入元素。
+    /// </summary>
     public void Insert(int index, T item)
     {
         if (index < 0 || index > innerList.Count)
@@ -85,9 +104,20 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
             innerList.Insert(index, item);
         }
     }
+
+    /// <summary>
+    /// 确定列表是否包含指定元素。
+    /// </summary>
     public bool Contains(T item) => innerHashSet.Contains(item);
+
+    /// <summary>
+    /// 将列表元素复制到数组。
+    /// </summary>
     public void CopyTo(T[] array, int arrayIndex) => innerList.CopyTo(array, arrayIndex);
 
+    /// <summary>
+    /// 添加元素到列表。
+    /// </summary>
     public void Add(T item)
     {
         if (innerHashSet.Add(item))
@@ -115,6 +145,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         }
     }
 
+    /// <summary>
+    /// 从列表中移除指定元素。
+    /// </summary>
     public bool Remove(T item)
     {
         if (innerHashSet.Remove(item))
@@ -125,6 +158,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         return false;
     }
 
+    /// <summary>
+    /// 移除指定索引处的元素。
+    /// </summary>
     public void RemoveAt(int index)
     {
         T toRemove = innerList[index];
@@ -132,6 +168,9 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         innerHashSet.Remove(toRemove);
     }
 
+    /// <summary>
+    /// 移除所有匹配指定谓词的元素。
+    /// </summary>
     public int RemoveAll(Predicate<T> match)
     {
         innerHashSet.RemoveWhere(match);
@@ -147,18 +186,18 @@ public class SimpleHashList<T> : IList<T>, IExposable, IDisposable
         innerList.AddRange(innerHashSet);
     }
 
+    /// <summary>
+    /// 清空列表中的所有元素。
+    /// </summary>
     public void Clear()
     {
         innerList.Clear();
         innerHashSet.Clear();
     }
 
-    public void Dispose()
-    {
-        innerList = null;
-        innerHashSet = null;
-    }
-
+    /// <summary>
+    /// 暴露数据以进行存档保存和加载。
+    /// </summary>
     public void ExposeData()
     {
         Scribe_Values.Look(ref innerListLookMode, nameof(innerListLookMode), defaultValue: LookMode.Deep);

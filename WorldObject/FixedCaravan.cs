@@ -25,7 +25,13 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
     public override bool HasName => !curName.NullOrEmpty();
 
     protected ThingOwner<Pawn> pawns;
+    /// <summary>
+    /// 获取<see cref="Pawn"/>列表。
+    /// </summary>
     public List<Pawn> PawnsListForReading => pawns.InnerListForReading;
+    /// <summary>
+    /// 获取<see cref="Pawn"/>数量。
+    /// </summary>
     public int PawnsCount => pawns.Count;
     protected IEnumerable<Thing> AllItems => OAFrame_FixedCaravanUtility.AllInventoryItems(this);
 
@@ -208,9 +214,9 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Deep.Look(ref pawns, "pawns", this);
-        Scribe_Values.Look(ref curName, "curName");
-        Scribe_References.Look(ref associatedWorldObject, "associatedWorldObject");
+        Scribe_Deep.Look(ref pawns, nameof(pawns), this);
+        Scribe_Values.Look(ref curName, nameof(curName));
+        Scribe_References.Look(ref associatedWorldObject, nameof(associatedWorldObject));
 
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {

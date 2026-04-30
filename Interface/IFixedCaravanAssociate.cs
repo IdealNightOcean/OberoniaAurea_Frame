@@ -7,7 +7,14 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public interface IFixedCaravanAssociate
 {
+    /// <summary>
+    /// 获取关联的<see cref="FixedCaravan"/>。
+    /// </summary>
     FixedCaravan AssociatedFixedCaravan { get; }
+
+    /// <summary>
+    /// 获取<see cref="FixedCaravan"/>名称。
+    /// </summary>
     string FixedCaravanName { get; }
 
     /// <summary>

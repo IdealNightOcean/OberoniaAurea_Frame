@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,8 +27,14 @@ public class CategoryTradeRequestComp : WorldObjectComp
     protected bool allowHumanlikeMeat;
     protected int expiration = -1;
 
+    /// <summary>
+    /// 获取当前是否有活跃的交易请求。
+    /// </summary>
     public bool ActiveRequest => active && expiration > Find.TickManager.TicksGame;
 
+    /// <summary>
+    /// 初始化类型化物品交易请求。
+    /// </summary>
     public virtual void InitTradeRequest(ThingCategoryDef requestedCategoryDef, int requestedCount, int requestedDuration, bool allowInsectMeat = false, bool allowHumanlikeMeat = false)
     {
         category = requestedCategoryDef;
@@ -57,6 +63,9 @@ public class CategoryTradeRequestComp : WorldObjectComp
         }
     }
 
+    /// <summary>
+    /// 禁用交易请求。
+    /// </summary>
     public void Disable()
     {
         active = false;
@@ -150,15 +159,18 @@ public class CategoryTradeRequestComp : WorldObjectComp
     public override void PostExposeData()
     {
         base.PostExposeData();
-        Scribe_Values.Look(ref active, loadPrefix + "active", defaultValue: false);
-        Scribe_Values.Look(ref expiration, loadPrefix + "expiration", 0);
-        Scribe_Defs.Look(ref category, loadPrefix + "category");
-        Scribe_Values.Look(ref count, loadPrefix + "count", 0);
-        Scribe_Values.Look(ref countLeft, loadPrefix + "countLeft", 0);
-        Scribe_Values.Look(ref allowInsectMeat, loadPrefix + "allowInsectMeat", defaultValue: false);
-        Scribe_Values.Look(ref allowHumanlikeMeat, loadPrefix + "allowHumanlikeMeat", defaultValue: false);
+        Scribe_Values.Look(ref active, loadPrefix + nameof(active), defaultValue: false);
+        Scribe_Values.Look(ref expiration, loadPrefix + nameof(expiration), 0);
+        Scribe_Defs.Look(ref category, loadPrefix + nameof(category));
+        Scribe_Values.Look(ref count, loadPrefix + nameof(count), 0);
+        Scribe_Values.Look(ref countLeft, loadPrefix + nameof(countLeft), 0);
+        Scribe_Values.Look(ref allowInsectMeat, loadPrefix + nameof(allowInsectMeat), defaultValue: false);
+        Scribe_Values.Look(ref allowHumanlikeMeat, loadPrefix + nameof(allowHumanlikeMeat), defaultValue: false);
     }
 
+    /// <summary>
+    /// 获取请求物品类别的标签文本。
+    /// </summary>
     public static string RequestedThingCategoryLabel(ThingCategoryDef categoryDef, int count, bool allowInsectMeat, bool allowHumanlikeMeat)
     {
         string text = "OAFrame_RequestedThingCategoryLabel".Translate(categoryDef.label, count);

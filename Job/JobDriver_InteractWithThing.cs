@@ -99,10 +99,10 @@ public abstract class JobDriver_InteractWithThing : JobDriver
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Deep.Look(ref jobExtensionRecord, "jobExtensionRecord");
-        Scribe_Values.Look(ref tickWorkAmount, "tickWorkAmount", 0);
-        Scribe_Values.Look(ref curWorkAmount, "curWorkAmount", 0);
-        Scribe_Values.Look(ref totalWorkAmount, "totalWorkAmount", 0);
+        Scribe_Deep.Look(ref jobExtensionRecord, nameof(jobExtensionRecord));
+        Scribe_Values.Look(ref tickWorkAmount, nameof(tickWorkAmount), 0);
+        Scribe_Values.Look(ref curWorkAmount, nameof(curWorkAmount), 0);
+        Scribe_Values.Look(ref totalWorkAmount, nameof(totalWorkAmount), 0);
     }
 
 }

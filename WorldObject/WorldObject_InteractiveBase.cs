@@ -11,6 +11,9 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
 {
     protected virtual string VisitLabel => "OAFrame_VisitObject";
     protected Quest quest;
+    /// <summary>
+    /// 获取关联任务。
+    /// </summary>
     public Quest AssociatedQuest => quest;
 
     private Material cachedMat;
@@ -82,6 +85,6 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_References.Look(ref quest, "quest");
+        Scribe_References.Look(ref quest, nameof(quest));
     }
 }

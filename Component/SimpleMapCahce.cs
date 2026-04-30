@@ -16,6 +16,9 @@ public struct SimpleMapCahce<T> where T : unmanaged
 
     private readonly Func<Map, T> checker;
 
+    /// <summary>
+    /// 使用缓存间隔和检查器初始化地图缓存。
+    /// </summary>
     public SimpleMapCahce(int cacheInterval, bool onlyPlayerHome, Func<Map, T> checker)
     {
         cachedMap = null;
@@ -28,6 +31,9 @@ public struct SimpleMapCahce<T> where T : unmanaged
         this.checker = checker ?? throw new ArgumentNullException(nameof(checker)); ;
     }
 
+    /// <summary>
+    /// 使用缓存间隔、默认值和检查器初始化地图缓存。
+    /// </summary>
     public SimpleMapCahce(int cacheInterval, T defaultValue, bool onlyPlayerHome, Func<Map, T> checker)
     {
         cachedMap = null;

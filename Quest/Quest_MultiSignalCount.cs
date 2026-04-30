@@ -47,13 +47,13 @@ public class QuestPart_MultiSignalCount : QuestPart
     public override void ExposeData()
     {
         base.ExposeData();
-        Scribe_Values.Look(ref inSignal, "inSignal");
-        Scribe_Values.Look(ref outSignalAchieved, "outSignalAchieved");
+        Scribe_Values.Look(ref inSignal, nameof(inSignal));
+        Scribe_Values.Look(ref outSignalAchieved, nameof(outSignalAchieved));
 
-        Scribe_Values.Look(ref targetCount, "targetCount", 1);
-        Scribe_Values.Look(ref receivedCount, "receivedCount", 0);
-        Scribe_Values.Look(ref oneTimeSignal, "oneTimeSignal", defaultValue: false);
-        Scribe_Values.Look(ref sentOnce, "sentOnce", defaultValue: false);
+        Scribe_Values.Look(ref targetCount, nameof(targetCount), 1);
+        Scribe_Values.Look(ref receivedCount, nameof(receivedCount), 0);
+        Scribe_Values.Look(ref oneTimeSignal, nameof(oneTimeSignal), defaultValue: false);
+        Scribe_Values.Look(ref sentOnce, nameof(sentOnce), defaultValue: false);
     }
 
     public override void Cleanup()

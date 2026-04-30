@@ -4,7 +4,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 /// <summary>
-/// Lord浮动菜单选项提供者接口。
+/// <see cref="Verse.AI.Group.Lord"/>浮动菜单选项提供者接口。
 /// </summary>
 public interface ILordFloatMenuProvider
 {
