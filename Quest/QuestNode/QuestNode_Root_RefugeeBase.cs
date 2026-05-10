@@ -2,7 +2,6 @@
 using RimWorld.QuestGen;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
 
@@ -318,7 +317,6 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         }
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     protected void DefaultDelayLeaveComp(string lodgerArrivalSignal, string inSignalDisable, string inSignalRemovePawn)
     {
         Quest quest = QuestGen.quest;
@@ -337,7 +335,7 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             inSignalDisable: inSignalDisable,
             expiryInfoPart: "GuestsDepartsIn".Translate(),
             expiryInfoPartTip: "GuestsDepartsOn".Translate(),
-            debugLabel: "QuestDelay");
+            debugLabel: "GuestsDepartsDelay");
     }
 
     protected void SetQuestEndLetters(QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)

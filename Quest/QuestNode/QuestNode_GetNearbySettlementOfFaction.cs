@@ -21,24 +21,28 @@ public class QuestNode_GetNearbySettlementOfFaction : QuestNode
 
     public SlateRef<Faction> faction;
 
-    protected override void RunInt()
-    {
-        SetVars(QuestGen.slate);
-    }
+    protected override void RunInt() => SetVars(QuestGen.slate);
 
-    protected override bool TestRunInt(Slate slate)
-    {
-        return SetVars(slate);
-    }
+    protected override bool TestRunInt(Slate slate) => SetVars(slate);
 
     protected bool SetVars(Slate slate)
     {
         if (!ResolveOriginTile(slate, out PlanetTile centerTile))
-        {
             return false;
+
+        Settlement settlement = slate.Get<Settlement>((storeAs.GetValue(slate)));
+
+        if (settlement is not null)
+        {
+            Faction faction = this.faction.GetValue(slate);
+            float maxDistance = maxTileDistance.GetValue(slate);
+            if (IsGoodSettlement(settlement, faction, centerTile, maxDistance, out _))
+            {
+                return true;
+            }
         }
 
-        Settlement settlement = RandomNearbySettlement(centerTile, slate);
+        settlement = RandomNearbySettlement(centerTile, slate);
         if (settlement is not null)
         {
             slate.Set(storeAs.GetValue(slate), settlement);

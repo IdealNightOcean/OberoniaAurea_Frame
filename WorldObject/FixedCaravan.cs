@@ -33,6 +33,38 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
     /// 获取<see cref="Pawn"/>数量。
     /// </summary>
     public int PawnsCount => pawns.Count;
+    /// <summary>
+    /// 获取智力水平为Humanlike的<see cref="Pawn"/>枚举
+    /// </summary>
+    public IEnumerable<Pawn> HuamnlikePawns
+    {
+        get
+        {
+            foreach (Pawn pawn in PawnsListForReading)
+            {
+                if (pawn.RaceProps.Humanlike)
+                    yield return pawn;
+            }
+        }
+    }
+    /// <summary>
+    /// 获取智力水平为Humanlike的<see cref="Pawn"/>数量
+    /// </summary>
+    public int HuamnlikePawnsCount
+    {
+        get
+        {
+            int count = 0;
+            foreach (Pawn pawn in PawnsListForReading)
+            {
+                if (pawn.RaceProps.Humanlike)
+                    count++;
+            }
+            return count;
+        }
+    }
+
+
     protected IEnumerable<Thing> AllItems => OAFrame_FixedCaravanUtility.AllInventoryItems(this);
 
     protected bool skillsDirty = true;

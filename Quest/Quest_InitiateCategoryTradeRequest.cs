@@ -23,8 +23,17 @@ public class QuestNode_InitiateCategoryTradeRequest : QuestNode
 
     protected override bool TestRunInt(Slate slate)
     {
-        return requestedCount.GetValue(slate) > 0 && requestedCategoryDef.GetValue(slate) is not null && duration.GetValue(slate) > 0;
+        if (requestedCount.GetValue(slate) <= 0 || requestedCategoryDef.GetValue(slate) is null)
+            return false;
+        if (duration.GetValue(slate) <= 0)
+            return false;
+        CategoryTradeRequestComp categoryTradeRequestComp = worldObject.GetValue(slate)?.GetComponent<CategoryTradeRequestComp>();
+        if (categoryTradeRequestComp is null || categoryTradeRequestComp.ActiveRequest)
+            return false;
+
+        return true;
     }
+
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
