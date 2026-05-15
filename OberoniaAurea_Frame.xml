@@ -1341,6 +1341,16 @@
             获取<see cref="T:Verse.Pawn"/>数量。
             </summary>
         </member>
+        <member name="P:OberoniaAurea_Frame.FixedCaravan.HuamnlikePawns">
+            <summary>
+            获取智力水平为Humanlike的<see cref="T:Verse.Pawn"/>枚举
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.FixedCaravan.HuamnlikePawnsCount">
+            <summary>
+            获取智力水平为Humanlike的<see cref="T:Verse.Pawn"/>数量
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.FixedCaravan.AddPawn(Verse.Pawn,System.Boolean)">
             <summary>
             添加<see cref="T:Verse.Pawn"/>到固定远行队。

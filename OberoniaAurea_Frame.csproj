@@ -80,6 +80,7 @@
     <Compile Include="Interface\ILordFloatMenuProvider.cs" />
     <Compile Include="Job\JobDriver_TalkWithAtOnce.cs" />
     <Compile Include="Job\JobExtension.cs" />
+    <Compile Include="Lord\LordJob_TravelWithInteraction.cs" />
     <Compile Include="Lord\LordJob_VisitColonyTalkable.cs" />
     <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
     <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
