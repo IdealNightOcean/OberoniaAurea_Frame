@@ -1,12 +1,16 @@
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+
 /// <summary>
 /// 大地图事件点：关联多个派系的事件点。
 /// </summary>
+/// <remarks>此类已废弃，功能已合并至 WorldObject_InteractiveBase</remarks>
+[Obsolete("此类已废弃，功能已合并至 WorldObject_InteractiveBase")]
 public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
 {
     protected List<Faction> participantFactions = [];

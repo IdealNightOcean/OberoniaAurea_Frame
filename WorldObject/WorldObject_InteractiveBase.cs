@@ -10,6 +10,10 @@ namespace OberoniaAurea_Frame;
 public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssociate, IQuestAssociate
 {
     protected virtual string VisitLabel => "OAFrame_VisitObject";
+
+    protected SimpleHashList<Faction> participantFactions = new(LookMode.Reference);
+    public SimpleHashList<Faction> ParticipantFactions => participantFactions;
+
     protected Quest quest;
     /// <summary>
     /// 获取关联任务。
@@ -85,6 +89,13 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
     public override void ExposeData()
     {
         base.ExposeData();
+
         Scribe_References.Look(ref quest, nameof(quest));
+        Scribe_Deep.Look(ref participantFactions, nameof(participantFactions));
+
+        if (Scribe.mode == LoadSaveMode.PostLoadInit)
+        {
+            participantFactions.RemoveAll(f => f is null);
+        }
     }
 }

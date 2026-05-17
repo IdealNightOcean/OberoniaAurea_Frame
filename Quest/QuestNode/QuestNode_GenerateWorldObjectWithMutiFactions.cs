@@ -11,12 +11,12 @@ public class QuestNode_GenerateWorldObjectWithMutiFactions : QuestNode_GenerateI
 
     protected override WorldObject_InteractiveBase GenerateWorldObject(Slate slate)
     {
-        WorldObject_WithMutiFactions worldObject = (WorldObject_WithMutiFactions)WorldObjectMaker.MakeWorldObject(def.GetValue(slate));
+        WorldObject_InteractiveBase worldObject = (WorldObject_InteractiveBase)WorldObjectMaker.MakeWorldObject(def.GetValue(slate));
 
         IEnumerable<Faction> participantFactions = this.participantFactions.GetValue(slate);
         if (participantFactions is not null)
         {
-            worldObject.AddParticipantFactions(participantFactions);
+            worldObject.ParticipantFactions.AddRange(participantFactions);
         }
 
         return worldObject;

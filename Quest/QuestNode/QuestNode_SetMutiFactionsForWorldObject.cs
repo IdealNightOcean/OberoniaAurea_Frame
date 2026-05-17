@@ -17,12 +17,12 @@ public class QuestNode_SetMutiFactionsForWorldObject : QuestNode
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
-        if (worldObject.GetValue(slate) is WorldObject_WithMutiFactions mutiFactions)
+        if (worldObject.GetValue(slate) is WorldObject_InteractiveBase mutiFactionsObj)
         {
             IEnumerable<Faction> participantFactions = this.participantFactions.GetValue(slate);
             if (participantFactions is not null)
             {
-                mutiFactions.AddParticipantFactions(participantFactions);
+                mutiFactionsObj.ParticipantFactions.AddRange(participantFactions);
             }
         }
     }
