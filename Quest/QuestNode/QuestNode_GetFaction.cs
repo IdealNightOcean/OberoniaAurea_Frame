@@ -2,7 +2,6 @@
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
-using System.Linq;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -43,6 +42,38 @@ public class QuestNode_GetFaction : QuestNode
 
     public SlateRef<IEnumerable<Faction>> exclude;
 
+    protected FactionValidator FactionValidatorInt { get; set; }
+
+    protected void InitFactionValidator(Slate slate)
+    {
+        FactionValidatorInt = new()
+        {
+            FactionDef = factionDef.GetValue(slate),
+            AllowEnemy = allowEnemy.GetValue(slate),
+            AllowNeutral = allowNeutral.GetValue(slate),
+            AllowAlly = allowAlly.GetValue(slate),
+            AllowPermanentEnemy = allowPermanentEnemy.GetValue(slate),
+            AllowHiddenFactions = allowHiddenFactions.GetValue(slate),
+            AllowDefeatedFactions = allowDefeatedFactions.GetValue(slate),
+            AllowNonHumanlikeFactions = allowNonHumanlikeFactions.GetValue(slate),
+            MustBePermanentEnemy = mustBePermanentEnemy.GetValue(slate),
+            PlayerCantBeAttackingCurrently = playerCantBeAttackingCurrently.GetValue(slate),
+            LeaderMustBeSafe = leaderMustBeSafe.GetValue(slate),
+            MustHaveGoodwillRewardsEnabled = mustHaveGoodwillRewardsEnabled.GetValue(slate),
+            OfPawn = ofPawn.GetValue(slate),
+            MustBeHostileToFaction = mustBeHostileToFaction.GetValue(slate),
+        };
+
+        IEnumerable<Faction> excludeEnumer = exclude.GetValue(slate);
+        if (excludeEnumer is not null)
+        {
+            foreach (var faction in excludeEnumer)
+            {
+                FactionValidatorInt.Exclude.Add(faction);
+            }
+        }
+    }
+
     protected override bool TestRunInt(Slate slate)
     {
         if (GetValidFaction(slate, out Faction faction))
@@ -71,105 +102,106 @@ public class QuestNode_GetFaction : QuestNode
 
     protected virtual bool GetValidFaction(Slate slate, out Faction faction)
     {
-        if (slate.TryGet(storeAs.GetValue(slate), out faction) && IsGoodFaction(faction, slate))
-        {
-            return true;
-        }
-        if (factionDef.GetValue(slate) is not null)
-        {
-            return SetFaction(out faction, slate);
-        }
-        if (TryFindFaction(out faction, slate))
-        {
-            return true;
-        }
-        faction = null;
-        return false;
-    }
+        InitFactionValidator(slate);
 
-    protected bool SetFaction(out Faction faction, Slate slate)
-    {
-        FactionDef fDef = factionDef.GetValue(slate);
-        if (fDef is not null)
+        if (slate.TryGet(storeAs.GetValue(slate), out faction) && IsGoodFaction(faction, slate))
+            return true;
+
+        List<Faction> potentialFactions = [];
+        foreach (Faction f in Find.FactionManager.AllFactions)
         {
-            faction = Find.FactionManager.AllFactionsListForReading.Where(f => f.def == fDef && IsGoodFaction(f, slate)).RandomElementWithFallback(null);
-            return faction is not null;
+            if (IsGoodFaction(f, slate))
+                potentialFactions.Add(f);
         }
-        else
+
+        if (potentialFactions.Count == 0)
         {
             faction = null;
             return false;
         }
+        else
+        {
+            faction = potentialFactions.RandomElement();
+            return true;
+        }
     }
 
-    protected bool TryFindFaction(out Faction faction, Slate slate)
-    {
-        return (from x in Find.FactionManager.GetFactions(allowHiddenFactions.GetValue(slate), allowDefeatedFactions.GetValue(slate), allowNonHumanlikeFactions.GetValue(slate))
-                where IsGoodFaction(x, slate)
-                select x).TryRandomElement(out faction);
-    }
+    protected virtual bool IsGoodFaction(Faction faction, Slate slate) => FactionValidatorInt.IsValid(faction);
 
-    protected virtual bool IsGoodFaction(Faction faction, Slate slate)
+    protected struct FactionValidator
     {
-        if (ofPawn.GetValue(slate) is not null && faction != ofPawn.GetValue(slate).Faction)
+        public FactionDef FactionDef { get; set; }
+        public bool AllowEnemy { get; set; }
+        public bool AllowNeutral { get; set; } = true;
+        public bool AllowAlly { get; set; } = true;
+        public bool AllowPermanentEnemy { get; set; }
+        public bool AllowHiddenFactions { get; set; }
+        public bool AllowDefeatedFactions { get; set; }
+        public bool AllowNonHumanlikeFactions { get; set; }
+
+        public bool MustBePermanentEnemy { get; set; }
+        public bool PlayerCantBeAttackingCurrently { get; set; }
+        public bool LeaderMustBeSafe { get; set; }
+        public bool MustHaveGoodwillRewardsEnabled { get; set; }
+        public Pawn OfPawn { get; set; }
+        public Faction MustBeHostileToFaction { get; set; }
+
+        private HashSet<Faction> exclude;
+        public HashSet<Faction> Exclude => exclude ??= [];
+
+        public FactionValidator() { }
+
+        public bool IsValid(Faction faction)
         {
-            return false;
-        }
-        if (exclude.GetValue(slate) is not null && exclude.GetValue(slate).Contains(faction))
-        {
-            return false;
-        }
-        if (faction.def.permanentEnemy)
-        {
-            if (!allowPermanentEnemy.GetValue(slate))
-            {
+            if (faction is null)
                 return false;
+
+            if (FactionDef is not null && faction.def != FactionDef)
+                return false;
+
+            if (OfPawn is not null && faction != OfPawn.Faction)
+                return false;
+
+            if (Exclude.Contains(faction))
+                return false;
+
+            if (faction.def.permanentEnemy)
+            {
+                if (!AllowPermanentEnemy)
+                    return false;
             }
-        }
-        else if (mustBePermanentEnemy.GetValue(slate))
-        {
-            return false;
-        }
-        FactionRelationKind playerRelationKind = faction.PlayerRelationKind;
-        if (!allowEnemy.GetValue(slate) && playerRelationKind == FactionRelationKind.Hostile)
-        {
-            return false;
-        }
-        if (!allowNeutral.GetValue(slate) && playerRelationKind == FactionRelationKind.Neutral)
-        {
-            return false;
-        }
-        if (!allowAlly.GetValue(slate) && playerRelationKind == FactionRelationKind.Ally)
-        {
-            return false;
+            else if (MustBePermanentEnemy)
+                return false;
+
+            switch (faction.PlayerRelationKind)
+            {
+                case FactionRelationKind.Hostile:
+                    if (!AllowEnemy) return false;
+                    break;
+                case FactionRelationKind.Neutral:
+                    if (!AllowNeutral) return false;
+                    break;
+                case FactionRelationKind.Ally:
+                    if (!AllowAlly) return false;
+                    break;
+                default: break;
+            }
+
+            if (MustHaveGoodwillRewardsEnabled && !faction.allowGoodwillRewards)
+                return false;
+
+            if (PlayerCantBeAttackingCurrently && SettlementUtility.IsPlayerAttackingAnySettlementOf(faction))
+                return false;
+
+            if (LeaderMustBeSafe && !IsLeaderSafe(faction.leader))
+                return false;
+
+            if (MustBeHostileToFaction is not null && !faction.HostileTo(MustBeHostileToFaction))
+                return false;
+
+            return true;
         }
 
-        if (playerCantBeAttackingCurrently.GetValue(slate) && SettlementUtility.IsPlayerAttackingAnySettlementOf(faction))
-        {
-            return false;
-        }
-        if (mustHaveGoodwillRewardsEnabled.GetValue(slate) && !faction.allowGoodwillRewards)
-        {
-            return false;
-        }
-        if (leaderMustBeSafe.GetValue(slate) && !IsLeaderSafe(faction.leader))
-        {
-            return false;
-        }
-        Faction hostileFaction = mustBeHostileToFaction.GetValue(slate);
-        if (hostileFaction is not null && !faction.HostileTo(hostileFaction))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    private static bool IsLeaderSafe(Pawn leader)
-    {
-        if (leader is null || leader.Spawned || leader.IsPrisoner)
-        {
-            return false;
-        }
-        return true;
+        private static bool IsLeaderSafe(Pawn leader) => leader is not null && !leader.Spawned && !leader.IsPrisoner;
     }
 }

@@ -1,35 +1,27 @@
 using RimWorld;
 using System;
 using System.Collections.Generic;
-using Verse;
 
 namespace OberoniaAurea_Frame;
-
 
 /// <summary>
 /// 大地图事件点：关联多个派系的事件点。
 /// </summary>
-/// <remarks>此类已废弃，功能已合并至 WorldObject_InteractiveBase</remarks>
+/// <remarks>此类已废弃，功能已合并至 <see cref="WorldObject_InteractiveBase"></see></remarks>
 [Obsolete("此类已废弃，功能已合并至 WorldObject_InteractiveBase")]
 public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
 {
-    protected List<Faction> participantFactions = [];
     /// <summary>
-    /// 获取参与派系列表。
-    /// </summary>
-    public List<Faction> ParticipantFactions => participantFactions;
-
-    /// <summary>
-    /// 设置参与派系。
+    /// 设置参与派系
     /// </summary>
     public void SetParticipantFactions(IEnumerable<Faction> newPaFactions)
     {
-        participantFactions.Clear();
-        AddParticipantFactions(newPaFactions);
+        if (newPaFactions is not null)
+            participantFactions.AddRange(newPaFactions);
     }
 
     /// <summary>
-    /// 添加参与派系。
+    /// 添加参与派系
     /// </summary>
     public void AddParticipantFaction(Faction newPaFaction)
     {
@@ -40,20 +32,12 @@ public abstract class WorldObject_WithMutiFactions : WorldObject_InteractiveBase
     }
 
     /// <summary>
-    /// 批量添加参与派系。
+    /// 批量添加参与派系
     /// </summary>
     public void AddParticipantFactions(IEnumerable<Faction> newPaFactions)
     {
-        participantFactions ??= [];
-        foreach (Faction faction in newPaFactions)
-        {
-            participantFactions.AddUnique(faction);
-        }
+        if (newPaFactions is not null)
+            participantFactions.AddRange(newPaFactions);
     }
 
-    public override void ExposeData()
-    {
-        base.ExposeData();
-        Scribe_Collections.Look(ref participantFactions, nameof(participantFactions), LookMode.Reference);
-    }
 }

@@ -12,11 +12,14 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
     protected virtual string VisitLabel => "OAFrame_VisitObject";
 
     protected SimpleHashList<Faction> participantFactions = new(LookMode.Reference);
+    /// <summary>
+    /// 额外参与派系
+    /// </summary>
     public SimpleHashList<Faction> ParticipantFactions => participantFactions;
 
     protected Quest quest;
     /// <summary>
-    /// 获取关联任务。
+    /// 关联任务
     /// </summary>
     public Quest AssociatedQuest => quest;
 

@@ -2,6 +2,7 @@
 using RimWorld.QuestGen;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -48,9 +49,33 @@ public class QuestNode_GetMutiFactions : QuestNode_GetFaction
         }
     }
 
-    private bool TryFindFactions(out List<Faction> factions, IntRange factionCount, Slate slate)
+    private bool TryFindFactions(out List<Faction> factions, IntRange factionCountRange, Slate slate)
     {
-        factions = Find.FactionManager.GetFactions(allowHiddenFactions.GetValue(slate), allowDefeatedFactions.GetValue(slate), allowNonHumanlikeFactions.GetValue(slate)).Where(f => IsGoodFaction(f, slate)).InRandomOrder().Take(factionCount.RandomInRange).ToList();
-        return factions.Count > 0 && (ignoreMinCountIfNessary.GetValue(slate) || factions.Count >= factionCount.min);
+        InitFactionValidator(slate);
+
+        factions = slate.Get<List<Faction>>(storeAs.GetValue(slate));
+        factions ??= [];
+
+        if (!factions.NullOrEmpty())
+            factions.RemoveAll(f => !IsGoodFaction(f, slate));
+
+        if (factions.Count >= factionCountRange.min)
+            return true;
+
+        List<Faction> potentialFactions = [];
+        foreach (Faction f in Find.FactionManager.AllFactions)
+        {
+            if (IsGoodFaction(f, slate))
+            {
+                potentialFactions.Add(f);
+            }
+        }
+
+        if (potentialFactions.Count == 0)
+            return false;
+
+        int takeCount = Mathf.Min(factionCountRange.RandomInRange, potentialFactions.Count);
+        factions = potentialFactions.TakeRandomElements(factionCountRange.RandomInRange).ToList();
+        return ignoreMinCountIfNessary.GetValue(slate) || factions.Count >= factionCountRange.min;
     }
 }

@@ -4,17 +4,17 @@ namespace OberoniaAurea_Frame;
 
 public struct FactionValidationParams
 {
-    public bool AllowAlly = true;
-    public bool AllowNeutral = true;
-    public bool AllyHostile = true;
+    public bool AllowAlly { get; set; } = true;
+    public bool AllowNeutral { get; set; } = true;
+    public bool AllyHostile { get; set; } = true;
 
-    public bool AllDefeated = false;
-    public bool AllHidden = false;
-    public bool AllTemporary = false;
-    public bool AllowNonHumanlike = false;
+    public bool AllDefeated { get; set; } = false;
+    public bool AllHidden { get; set; } = false;
+    public bool AllTemporary { get; set; } = false;
+    public bool AllowNonHumanlike { get; set; } = false;
 
-    public TechLevel MinTechLevel = TechLevel.Undefined;
-    public TechLevel MaxTechLevel = TechLevel.Undefined;
+    public TechLevel MinTechLevel { get; set; } = TechLevel.Undefined;
+    public TechLevel MaxTechLevel { get; set; } = TechLevel.Undefined;
 
     public FactionValidationParams() { }
 
