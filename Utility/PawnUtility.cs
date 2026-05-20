@@ -221,7 +221,7 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 获取<see cref="Pawn"/>群体的最大属性值。
+    /// 获取<see cref="Pawn"/>集合的最大属性值。
     /// </summary>
     public static float GetMaxStatOfPawns(IEnumerable<Pawn> pawns, StatDef statDef)
     {
@@ -235,15 +235,18 @@ public static class OAFrame_PawnUtility
         {
             if (!statDef.Worker.IsDisabledFor(pawn))
             {
-                continue;
+                float statValue = pawn.GetStatValue(statDef);
+                if (statValue > maxStatValue)
+                {
+                    maxStatValue = statValue;
+                }
             }
-            maxStatValue = Mathf.Max(maxStatValue, pawn.GetStatValue(statDef));
         }
         return maxStatValue;
     }
 
     /// <summary>
-    /// 获取<see cref="Pawn"/>群体中最高属性值的<see cref="Pawn"/>和对应属性值。
+    /// 获取<see cref="Pawn"/>集合中最高属性值的<see cref="Pawn"/>和对应属性值。
     /// </summary>
     public static (Pawn, float) GetMaxStatPawn(IEnumerable<Pawn> pawns, StatDef statDef)
     {
@@ -259,13 +262,12 @@ public static class OAFrame_PawnUtility
         {
             if (!statDef.Worker.IsDisabledFor(pawn))
             {
-                continue;
-            }
-            statValue = pawn.GetStatValue(statDef);
-            if (statValue > maxStatValue)
-            {
-                maxStatValue = statValue;
-                maxStatPawn = pawn;
+                statValue = pawn.GetStatValue(statDef);
+                if (statValue > maxStatValue)
+                {
+                    maxStatValue = statValue;
+                    maxStatPawn = pawn;
+                }
             }
         }
         return (maxStatPawn, maxStatValue);

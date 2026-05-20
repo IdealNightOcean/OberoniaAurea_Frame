@@ -11,21 +11,61 @@ public static class OAFrame_DiaUtility
     /// 获取默认确认选项。
     /// </summary>
     public static DiaOption DefaultConfirmOption => new("Confirm".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认确认选项。
+    /// </summary>
+    public static void AddDefaultConfirmOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("Confirm".Translate()) { resolveTree = true });
+    }
 
     /// <summary>
-    /// 获取默认取消选项。
+    /// 为<see cref="DiaNode"/>添加默认取消选项。
     /// </summary>
     public static DiaOption DefaultCancelOption => new("Cancel".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认取消选项。
+    /// </summary>
+    public static void AddDefaultCancelOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("Cancel".Translate()) { resolveTree = true });
+    }
 
     /// <summary>
     /// 获取默认关闭选项。
     /// </summary>
     public static DiaOption DefaultCloseOption => new("Close".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认关闭选项。
+    /// </summary>
+    public static void AddDefaultCloseOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("Close".Translate()) { resolveTree = true });
+    }
 
     /// <summary>
     /// 获取默认推迟选项。
     /// </summary>
     public static DiaOption DefaultPostponeOption => new("PostponeLetter".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认推迟选项。
+    /// </summary>
+    public static void AddDefaultPostponeOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("PostponeLetter".Translate()) { resolveTree = true });
+    }
+
+    /// <summary>
+    /// 添加默认的返回选项，点击后会跳转到由 <paramref name="linkLateBind"/> 提供的节点。
+    /// </summary>
+    public static void AddDefaultGoBackOption(this DiaNode diaNode, Func<DiaNode> linkLateBind, Action action = null)
+    {
+        diaNode.options.Add(new DiaOption("GoBack".Translate())
+        {
+            action = action,
+            linkLateBind = linkLateBind
+        });
+    }
 
     /// <summary>
     /// 创建默认确认对话框。
