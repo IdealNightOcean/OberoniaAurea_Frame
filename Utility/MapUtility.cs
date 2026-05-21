@@ -192,14 +192,20 @@ public static class OAFrame_MapUtility
     /// 销毁地图中指定def物品的物品。
     /// </summary>
     /// <returns>实际销毁数</returns>
-    public static int DestoryThingsOfDef(this Map map, ThingDef thingDef, int count, Predicate<Thing> validator = null)
+    public static int DestroyThingsOfDef(this Map map, ThingDef thingDef, int count, Predicate<Thing> validator = null)
     {
-        List<Thing> takeThings = TakeThingsOfDef(map, thingDef, count, out int actualDestoryCount, validator);
+        List<Thing> takeThings = TakeThingsOfDef(map, thingDef, count, out int actualDestroyCount, validator);
         for (int i = takeThings.Count - 1; i >= 0; i--)
         {
             takeThings[i].Destroy();
         }
-        return actualDestoryCount;
+        return actualDestroyCount;
+    }
+
+    [Obsolete("曾经错误的命名，应使用 DestroyThingsOfDef")]
+    public static int DestoryThingsOfDef(this Map map, ThingDef thingDef, int count, Predicate<Thing> validator = null)
+    {
+        return DestroyThingsOfDef(map, thingDef, count, validator);
     }
 
     /// <summary>

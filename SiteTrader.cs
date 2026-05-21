@@ -1,5 +1,6 @@
 using RimWorld;
 using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -166,10 +167,13 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         GenerateThings(tile);
     }
 
+    [Obsolete("曾经错误的命名，应使用 Destroy()")]
+    public void Destory() => Destroy();
+
     /// <summary>
     /// 销毁商店并清理物品。
     /// </summary>
-    public void Destory()
+    public void Destroy()
     {
         things.ClearAndDestroyContentsOrPassToWorld();
         tmpSavedPawns.Clear();

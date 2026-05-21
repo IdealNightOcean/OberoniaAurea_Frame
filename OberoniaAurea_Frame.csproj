@@ -93,7 +93,7 @@
     <Compile Include="Quest\QuestNode\QuestNode_QuestUnique.cs" />
     <Compile Include="Quest\Quest_TransToHardcodedSignalWithQuestID.cs" />
     <Compile Include="Thing\BulletBase.cs" />
-    <Compile Include="Thing\CompDestoryAfterSwapMap.cs" />
+    <Compile Include="Thing\CompDestroyAfterSwapMap.cs" />
     <Compile Include="HarmonyPatch\MapParent_GetShuttleFloatMenuOptions_Patch.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
