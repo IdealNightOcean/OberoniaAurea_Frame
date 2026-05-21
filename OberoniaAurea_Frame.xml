@@ -302,6 +302,42 @@
             获取常见的<see cref="T:Verse.Pawn"/>负面信号列表。
             </summary>
         </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntString(System.Int32,System.Boolean)">
+            <summary>
+            创建带颜色和符号的整数字符串。默认正数显示绿色，负数显示红色。
+            </summary>
+            <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntNamedArgument(System.Int32,System.String,System.Boolean)">
+            <summary>
+            创建带颜色和符号的整数命名参数。默认正数显示绿色，负数显示红色。
+            </summary>
+            <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatString(System.Single,System.String,System.Boolean)">
+            <summary>
+            创建带颜色和符号的浮点数字符串。默认正数显示绿色，负数显示红色。
+            </summary>
+            <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatNamedArgument(System.Single,System.String,System.String,System.Boolean)">
+            <summary>
+            创建带颜色和符号的浮点数命名参数。默认正数显示绿色，负数显示红色。
+            </summary>
+            <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentString(System.Single,System.String,System.Boolean)">
+            <summary>
+            创建带颜色和符号的浮点数字符串。默认正数显示绿色，负数显示红色。
+            </summary>
+            <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentNamedArgument(System.Single,System.String,System.String,System.Boolean)">
+            <summary>
+            创建带颜色和符号的百分比数命名参数。默认正数显示绿色，负数显示红色。
+            </summary>
+            <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
+        </member>
         <member name="M:OberoniaAurea_Frame.CaravanArrivalAction_GenerateAndEnter.#ctor(OberoniaAurea_Frame.MapParent_Enterable)">
             <summary>
             使用可直接进入的<see cref="T:RimWorld.Planet.MapParent"/>初始化远行队到达动作。
@@ -737,7 +773,7 @@
             在指定地块刷新商店物品。
             </summary>
         </member>
-        <member name="M:OberoniaAurea_Frame.SiteTrader.Destory">
+        <member name="M:OberoniaAurea_Frame.SiteTrader.Destroy">
             <summary>
             销毁商店并清理物品。
             </summary>
@@ -792,9 +828,19 @@
             获取默认确认选项。
             </summary>
         </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_DiaUtility.AddDefaultConfirmOption(Verse.DiaNode)">
+            <summary>
+            为<see cref="T:Verse.DiaNode"/>添加默认确认选项。
+            </summary>
+        </member>
         <member name="P:OberoniaAurea_Frame.OAFrame_DiaUtility.DefaultCancelOption">
             <summary>
-            获取默认取消选项。
+            为<see cref="T:Verse.DiaNode"/>添加默认取消选项。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_DiaUtility.AddDefaultCancelOption(Verse.DiaNode)">
+            <summary>
+            为<see cref="T:Verse.DiaNode"/>添加默认取消选项。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.OAFrame_DiaUtility.DefaultCloseOption">
@@ -802,9 +848,24 @@
             获取默认关闭选项。
             </summary>
         </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_DiaUtility.AddDefaultCloseOption(Verse.DiaNode)">
+            <summary>
+            为<see cref="T:Verse.DiaNode"/>添加默认关闭选项。
+            </summary>
+        </member>
         <member name="P:OberoniaAurea_Frame.OAFrame_DiaUtility.DefaultPostponeOption">
             <summary>
             获取默认推迟选项。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_DiaUtility.AddDefaultPostponeOption(Verse.DiaNode)">
+            <summary>
+            为<see cref="T:Verse.DiaNode"/>添加默认推迟选项。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_DiaUtility.AddDefaultGoBackOption(Verse.DiaNode,System.Func{Verse.DiaNode},System.Action)">
+            <summary>
+            添加默认的返回选项，点击后会跳转到由 <paramref name="linkLateBind"/> 提供的节点。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_DiaUtility.DefaultConfirmDiaNodeTree(Verse.TaggedString,System.Action,System.Action)">
@@ -973,7 +1034,7 @@
             从地图取出指定def物品的物品。
             </summary>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_MapUtility.DestoryThingsOfDef(Verse.Map,Verse.ThingDef,System.Int32,System.Predicate{Verse.Thing})">
+        <member name="M:OberoniaAurea_Frame.OAFrame_MapUtility.DestroyThingsOfDef(Verse.Map,Verse.ThingDef,System.Int32,System.Predicate{Verse.Thing})">
             <summary>
             销毁地图中指定def物品的物品。
             </summary>
@@ -1062,12 +1123,12 @@
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetMaxStatOfPawns(System.Collections.Generic.IEnumerable{Verse.Pawn},RimWorld.StatDef)">
             <summary>
-            获取<see cref="T:Verse.Pawn"/>群体的最大属性值。
+            获取<see cref="T:Verse.Pawn"/>集合的最大属性值。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetMaxStatPawn(System.Collections.Generic.IEnumerable{Verse.Pawn},RimWorld.StatDef)">
             <summary>
-            获取<see cref="T:Verse.Pawn"/>群体中最高属性值的<see cref="T:Verse.Pawn"/>和对应属性值。
+            获取<see cref="T:Verse.Pawn"/>集合中最高属性值的<see cref="T:Verse.Pawn"/>和对应属性值。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_TileFinderUtility.GetAvailableNeighborTile(RimWorld.Planet.PlanetTile,RimWorld.Planet.PlanetTile@,System.Boolean)">
@@ -1184,30 +1245,31 @@
             <summary>
             大地图事件点：关联多个派系的事件点。
             </summary>
-        </member>
-        <member name="P:OberoniaAurea_Frame.WorldObject_WithMutiFactions.ParticipantFactions">
-            <summary>
-            获取参与派系列表。
-            </summary>
+            <remarks>此类已废弃，功能已合并至 <see cref="T:OberoniaAurea_Frame.WorldObject_InteractiveBase"></see></remarks>
         </member>
         <member name="M:OberoniaAurea_Frame.WorldObject_WithMutiFactions.SetParticipantFactions(System.Collections.Generic.IEnumerable{RimWorld.Faction})">
             <summary>
-            设置参与派系。
+            设置参与派系
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.WorldObject_WithMutiFactions.AddParticipantFaction(RimWorld.Faction)">
             <summary>
-            添加参与派系。
+            添加参与派系
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.WorldObject_WithMutiFactions.AddParticipantFactions(System.Collections.Generic.IEnumerable{RimWorld.Faction})">
             <summary>
-            批量添加参与派系。
+            批量添加参与派系
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.WorldObject_InteractiveBase.ParticipantFactions">
+            <summary>
+            额外参与派系
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.WorldObject_InteractiveBase.AssociatedQuest">
             <summary>
-            获取关联任务。
+            关联任务
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.WorldObject_InteractiveBase.SetAssociatedQuest(RimWorld.Quest)">
