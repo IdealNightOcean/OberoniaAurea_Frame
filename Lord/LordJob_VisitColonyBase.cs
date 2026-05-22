@@ -45,7 +45,7 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
         LordToil lordToil_TravelWithInteraction = travelSubgraph.StartingToil;
         stateGraph.StartingToil = lordToil_TravelWithInteraction;
 
-        LordToil_DefendPoint lordToil_DefendPoint = new(chillSpot);
+        LordToil_DefendPointWithInteraction lordToil_DefendPoint = new(chillSpot);
         stateGraph.AddToil(lordToil_DefendPoint);
         LordToil_TakeWoundedGuest lordToil_TakeWoundedGuest = new();
         stateGraph.AddToil(lordToil_TakeWoundedGuest);

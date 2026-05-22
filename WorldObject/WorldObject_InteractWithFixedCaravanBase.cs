@@ -11,6 +11,11 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
     public virtual string FixedCaravanName => null;
 
     protected bool isWorking;
+    /// <summary>
+    /// 是否正在进行交互工作。
+    /// </summary>
+    public bool IsWorking => isWorking;
+
     protected int ticksRemaining;
     [Unsaved] protected bool interrupt;
 

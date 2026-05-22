@@ -1468,6 +1468,11 @@
             禁用销售请求。
             </summary>
         </member>
+        <member name="P:OberoniaAurea_Frame.WorldObject_InteractWithFixedCaravanBase.IsWorking">
+            <summary>
+            是否正在进行交互工作。
+            </summary>
+        </member>
         <member name="P:OberoniaAurea_Frame.WorldObject_InteractWithFixedCaravanBase.AssociatedFixedCaravan">
             <summary>
             获取关联的固定远行队（<see cref="T:OberoniaAurea_Frame.FixedCaravan"/>）。

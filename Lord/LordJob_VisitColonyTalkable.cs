@@ -29,6 +29,15 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
         SetTalkAction(talkablePawn, talkJob, talkLabel);
     }
 
+    public override void ExposeData()
+    {
+        base.ExposeData();
+        Scribe_References.Look(ref talkablePawn, nameof(talkablePawn));
+        Scribe_Defs.Look(ref talkJob, nameof(talkJob));
+        Scribe_Values.Look(ref talkLabel, nameof(talkLabel), "OAFrame_TalkWith");
+        Scribe_Values.Look(ref canTalkNow, nameof(canTalkNow), defaultValue: false);
+    }
+
     /// <summary>
     /// 设置对话行为。
     /// </summary>
@@ -98,15 +107,6 @@ public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWith
     public bool IsAssociateJobToPawn(JobDef jobDef, Pawn talkWith)
     {
         return talkWith == talkablePawn && jobDef == talkJob;
-    }
-
-    public override void ExposeData()
-    {
-        base.ExposeData();
-        Scribe_References.Look(ref talkablePawn, nameof(talkablePawn));
-        Scribe_Defs.Look(ref talkJob, nameof(talkJob));
-        Scribe_Values.Look(ref talkLabel, nameof(talkLabel), "OAFrame_TalkWith");
-        Scribe_Values.Look(ref canTalkNow, nameof(canTalkNow), defaultValue: false);
     }
 
     public override void Cleanup()
