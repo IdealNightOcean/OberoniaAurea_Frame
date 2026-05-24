@@ -44,6 +44,56 @@
             使用冷却时间和过期移除标志初始化冷却记录。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.FactionValidationParams">
+            <summary>
+            派系验证参数。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllowAlly">
+            <summary>
+            允许同盟关系。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllowNeutral">
+            <summary>
+            允许中立关系。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllyHostile">
+            <summary>
+            允许敌对关系。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllDefeated">
+            <summary>
+            允许已击败派系。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllHidden">
+            <summary>
+            允许隐藏派系。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllTemporary">
+            <summary>
+            允许临时派系。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllowNonHumanlike">
+            <summary>
+            允许非人派系。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.MinTechLevel">
+            <summary>
+            最小科技等级。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.MaxTechLevel">
+            <summary>
+            最大科技等级。
+            </summary>
+        </member>
         <member name="P:OberoniaAurea_Frame.FactionValidationParams.DefaultFaction">
             <summary>
             获取默认派系验证参数。
@@ -1285,6 +1335,11 @@
         <member name="M:OberoniaAurea_Frame.WorldObject_InteractiveBase.GetSpecificFloatMenuOptions(RimWorld.Planet.Caravan)">
             <summary>
             获取特定的浮动菜单选项。
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.OAFrame_MiscUtility.GodMode">
+            <summary>
+            是否处于上帝模式
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_MiscUtility.IsSameDefNonNullable``1(``0,``0)">

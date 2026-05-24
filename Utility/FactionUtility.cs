@@ -14,10 +14,7 @@ public static class OAFrame_FactionUtility
     /// 是否为鼠族派系
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsRatkinFaction(this FactionDef factionDef)
-    {
-        return factionDef?.GetModExtension<RatkinFactionFlag>() is not null;
-    }
+    public static bool IsRatkinFaction(this FactionDef factionDef) => factionDef?.GetModExtension<RatkinFactionFlag>() is not null;
     /// <summary>
     /// 是否为鼠族派系
     /// </summary>
@@ -28,10 +25,7 @@ public static class OAFrame_FactionUtility
     /// 是否为鼠族王国类型派系
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsRatkinKindomFaction(this FactionDef factionDef)
-    {
-        return factionDef?.GetModExtension<FactionTagsExtension>()?.HasTag("RatkinKindom") ?? false;
-    }
+    public static bool IsRatkinKindomFaction(this FactionDef factionDef) => factionDef?.GetModExtension<FactionTagsExtension>()?.HasTag("RatkinKindom") ?? false;
     /// <summary>
     /// 是否为鼠族王国类型派系
     /// </summary>

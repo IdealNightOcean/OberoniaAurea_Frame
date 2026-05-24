@@ -12,16 +12,12 @@ public class CaravanArrivalAction_VisitInteractiveObject : CaravanArrivalAction
 
     public override string Label => "OAFrame_VisitObject".Translate(worldObject.Label);
     public override string ReportString => "CaravanVisiting".Translate(worldObject.Label);
-    public CaravanArrivalAction_VisitInteractiveObject()
-    { }
+    public CaravanArrivalAction_VisitInteractiveObject() { }
 
     /// <summary>
     /// 使用交互世界对象初始化远行队到达动作。
     /// </summary>
-    public CaravanArrivalAction_VisitInteractiveObject(WorldObject_InteractiveBase worldObject)
-    {
-        this.worldObject = worldObject;
-    }
+    public CaravanArrivalAction_VisitInteractiveObject(WorldObject_InteractiveBase worldObject) => this.worldObject = worldObject;
 
     public override FloatMenuAcceptanceReport StillValid(Caravan caravan, PlanetTile destinationTile)
     {

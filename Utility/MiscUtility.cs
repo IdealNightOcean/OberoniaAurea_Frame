@@ -11,6 +11,11 @@ namespace OberoniaAurea_Frame;
 public static class OAFrame_MiscUtility
 {
     /// <summary>
+    /// 是否处于上帝模式
+    /// </summary>
+    public static bool GodMode => DebugSettings.godMode && Prefs.DevMode;
+
+    /// <summary>
     /// 检查两个<see cref="Def"/>是否相同且非空。
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -69,6 +74,7 @@ public static class OAFrame_MiscUtility
     /// <summary>
     /// 验证单例是否为空。
     /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ValidateSingleton<T>(T instance, string instanceName) where T : class
     {
         if (instance is not null)

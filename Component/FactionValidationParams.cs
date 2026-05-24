@@ -1,22 +1,69 @@
 using RimWorld;
+using Verse;
 
 namespace OberoniaAurea_Frame;
 
-public struct FactionValidationParams
+/// <summary>
+/// 派系验证参数。
+/// </summary>
+public struct FactionValidationParams : IExposable
 {
-    public bool AllowAlly { get; set; } = true;
-    public bool AllowNeutral { get; set; } = true;
-    public bool AllyHostile { get; set; } = true;
+    /// <summary>
+    /// 允许同盟关系。
+    /// </summary>
+    public bool AllowAlly = true;
+    /// <summary>
+    /// 允许中立关系。
+    /// </summary>
+    public bool AllowNeutral = true;
+    /// <summary>
+    /// 允许敌对关系。
+    /// </summary>
+    public bool AllyHostile = true;
 
-    public bool AllDefeated { get; set; } = false;
-    public bool AllHidden { get; set; } = false;
-    public bool AllTemporary { get; set; } = false;
-    public bool AllowNonHumanlike { get; set; } = false;
+    /// <summary>
+    /// 允许已击败派系。
+    /// </summary>
+    public bool AllDefeated = false;
+    /// <summary>
+    /// 允许隐藏派系。
+    /// </summary>
+    public bool AllHidden = false;
+    /// <summary>
+    /// 允许临时派系。
+    /// </summary>
+    public bool AllTemporary = false;
+    /// <summary>
+    /// 允许非人派系。
+    /// </summary>
+    public bool AllowNonHumanlike = false;
 
-    public TechLevel MinTechLevel { get; set; } = TechLevel.Undefined;
-    public TechLevel MaxTechLevel { get; set; } = TechLevel.Undefined;
+    /// <summary>
+    /// 最小科技等级。
+    /// </summary>
+    public TechLevel MinTechLevel = TechLevel.Undefined;
+    /// <summary>
+    /// 最大科技等级。
+    /// </summary>
+    public TechLevel MaxTechLevel = TechLevel.Undefined;
 
     public FactionValidationParams() { }
+
+    public void ExposeData()
+    {
+        Scribe_Values.Look(ref AllowAlly, nameof(AllowAlly), defaultValue: true);
+        Scribe_Values.Look(ref AllowNeutral, nameof(AllowNeutral), defaultValue: true);
+        Scribe_Values.Look(ref AllyHostile, nameof(AllyHostile), defaultValue: true);
+
+        Scribe_Values.Look(ref AllDefeated, nameof(AllDefeated), defaultValue: false);
+        Scribe_Values.Look(ref AllHidden, nameof(AllHidden), defaultValue: false);
+        Scribe_Values.Look(ref AllTemporary, nameof(AllTemporary), defaultValue: false);
+        Scribe_Values.Look(ref AllowNonHumanlike, nameof(AllowNonHumanlike), defaultValue: false);
+
+        Scribe_Values.Look(ref MinTechLevel, nameof(MinTechLevel), defaultValue: TechLevel.Undefined);
+        Scribe_Values.Look(ref MaxTechLevel, nameof(MaxTechLevel), defaultValue: TechLevel.Undefined);
+    }
+
 
     /// <summary>
     /// 获取默认派系验证参数。
@@ -77,5 +124,4 @@ public struct FactionValidationParams
             _ => true
         };
     }
-
 }
