@@ -17,7 +17,7 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
     public TransportersArrivalAction_VisitEnterableMap() { }
 
     /// <summary>
-    /// 使用可直接进入的<see cref="MapParent"/>和到达模式初始化运输器到达动作。
+    /// 使用可直接进入的<see cref="MapParent"/>和到达模式初始化载具到达动作。
     /// </summary>
     public TransportersArrivalAction_VisitEnterableMap(MapParent_Enterable mapParent, PawnsArrivalModeDef arrivalMode)
     {
@@ -101,6 +101,7 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
         {
             yield return edgeMenuOption;
         }
+
         foreach (FloatMenuOption centerMenuOption in TransportersArrivalActionUtility.GetFloatMenuOptions(acceptanceReportGetter: () => CanVisit(pods, mapParent),
                                                                                                           arrivalActionGetter: () => new TransportersArrivalAction_VisitEnterableMap(mapParent, PawnsArrivalModeDefOf.CenterDrop),
                                                                                                           label: "DropInCenter".Translate(),
@@ -110,6 +111,7 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
         {
             yield return centerMenuOption;
         }
+
         void UIConfirmationCallback(Action action)
         {
             if (ModsConfig.OdysseyActive && mapParent.Tile.LayerDef == PlanetLayerDefOf.Orbit)

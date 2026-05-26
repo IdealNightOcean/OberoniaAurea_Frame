@@ -54,8 +54,9 @@ public static class OAFrame_MiscUtility
     }
 
     /// <summary>
-    /// 创建物品。
+    /// 生成物品并按堆叠上限自动拆分，直接返回拆分后的物品列表
     /// </summary>
+    [Obsolete("使用OAFrame_ThingUtility.GenerateThingListSplitByStack")]
     public static List<Thing> TryGenerateThing(ThingDef def, int count)
     {
         List<Thing> list = [];

@@ -150,7 +150,7 @@ public static class OAFrame_FixedCaravanUtility
     }
 
     /// <summary>
-    /// 给固定远行队添加物品。
+    /// 向固定远行队批量添加物品。
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void GiveThings(FixedCaravan fixedCaravan, IEnumerable<Thing> things)
@@ -162,7 +162,7 @@ public static class OAFrame_FixedCaravanUtility
     }
 
     /// <summary>
-    /// 给固定远行队添加单个物品。
+    /// 向固定远行队添加单个物品。
     /// </summary>
     public static void GiveThing(FixedCaravan fixedCaravan, Thing thing)
     {
@@ -185,9 +185,9 @@ public static class OAFrame_FixedCaravanUtility
     }
 
     /// <summary>
-    /// 给固定远行队添加Pawn或物品。
+    /// 向固定远行队批量添加<see cref="Pawn"/>或物品。
     /// </summary>
-    public static void GivePawnsOrThings(FixedCaravan fixedCaravan, List<Thing> things)
+    public static void GivePawnsOrThings(FixedCaravan fixedCaravan, IEnumerable<Thing> things)
     {
         TempAddedItems.Clear();
         TempAddedItems.AddRange(things);

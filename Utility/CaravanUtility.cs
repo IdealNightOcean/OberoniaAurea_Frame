@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 远行队工具类
+/// </summary>
 public static class OAFrame_CaravanUtility
 {
     /// <summary>
@@ -16,12 +19,24 @@ public static class OAFrame_CaravanUtility
     public static bool IsExactTypeCaravan<T>(this T caravan) where T : Caravan
     {
         if (caravan is not null && caravan.GetType() == typeof(Caravan))
-        {
             return true;
-        }
 
-        Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_WarningAbnormalCaravan".Translate(), null, destructive: false, title: "OAFrame_WarningAbnormalCaravanTitle".Translate()));
+        Find.WindowStack.Add(window: Dialog_MessageBox.CreateConfirmation(text: "OAFrame_WarningAbnormalCaravan".Translate(),
+                                                                          confirmedAct: null,
+                                                                          destructive: false,
+                                                                          title: "OAFrame_WarningAbnormalCaravanTitle".Translate()));
         return false;
+    }
+
+    /// <summary>
+    /// 向远行队批量添加物品
+    /// </summary>
+    public static void GiveThings(Caravan caravan, IEnumerable<Thing> things)
+    {
+        foreach (Thing thing in things)
+        {
+            CaravanInventoryUtility.GiveThing(caravan, thing);
+        }
     }
 
     /// <summary>

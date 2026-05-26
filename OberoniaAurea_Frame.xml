@@ -119,6 +119,51 @@
             验证派系是否符合条件。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.ThingMakeInfo">
+            <summary>
+            物品制作信息，记录要制作的物品及其数量、品质和材料。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.ThingMakeInfo.ThingDef">
+            <summary>
+            物品定义
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.ThingMakeInfo.Count">
+            <summary>
+            物品数量
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.ThingMakeInfo.Quality">
+            <summary>
+            品质（可为 <see langword="null"/>）
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.ThingMakeInfo.StuffDef">
+            <summary>
+            材料定义（可为 <see langword="null"/>）
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.ThingMakeInfo.#ctor">
+            <summary>
+            默认构造。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.ThingMakeInfo.#ctor(Verse.ThingDef,System.Int32)">
+            <summary>
+            构造，指定物品定义和数量。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.ThingMakeInfo.#ctor(Verse.ThingDef,System.Int32,RimWorld.QualityCategory,Verse.ThingDef)">
+            <summary>
+            构造，指定物品定义、数量、品质和材料。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.ThingMakeInfo.ExposeData">
+            <summary>
+            数据的保存与读取。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.FactionTagsExtension.HasTag(System.String)">
             <summary>
             检查是否包含指定标签。
@@ -387,6 +432,43 @@
             创建带颜色和符号的百分比数命名参数。默认正数显示绿色，负数显示红色。
             </summary>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_ThingUtility">
+            <summary>
+            物品工具类
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.GenerateThing(OberoniaAurea_Frame.ThingMakeInfo)">
+            <summary>
+            生成物品
+            </summary>
+            <remarks>堆叠超上限不拆分</remarks>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.GenerateThing(Verse.ThingDef,System.Int32,System.Nullable{RimWorld.QualityCategory},Verse.ThingDef)">
+            <summary>
+            生成物品
+            </summary>
+            <remarks>堆叠超上限不拆分</remarks>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.GenerateThingsSplitByStack(OberoniaAurea_Frame.ThingMakeInfo)">
+            <summary>
+            生成物品并按堆叠上限自动拆分，以迭代形式返回物品序列
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.GenerateThingsSplitByStack(Verse.ThingDef,System.Int32,System.Nullable{RimWorld.QualityCategory},Verse.ThingDef)">
+            <summary>
+            生成物品并按堆叠上限自动拆分，以迭代形式返回物品序列
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.GenerateThingListSplitByStack(OberoniaAurea_Frame.ThingMakeInfo)">
+            <summary>
+            生成物品并按堆叠上限自动拆分，直接返回拆分后的物品列表
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.GenerateThingListSplitByStack(Verse.ThingDef,System.Int32,System.Nullable{RimWorld.QualityCategory},Verse.ThingDef)">
+            <summary>
+            生成物品并按堆叠上限自动拆分，直接返回拆分后的物品列表
+            </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.CaravanArrivalAction_GenerateAndEnter.#ctor(OberoniaAurea_Frame.MapParent_Enterable)">
             <summary>
@@ -1013,9 +1095,19 @@
             生成临时派系。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_CaravanUtility">
+            <summary>
+            远行队工具类
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_CaravanUtility.IsExactTypeCaravan``1(``0)">
             <summary>
             检查是否为精确类型的远行队。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_CaravanUtility.GiveThings(RimWorld.Planet.Caravan,System.Collections.Generic.IEnumerable{Verse.Thing})">
+            <summary>
+            向远行队批量添加物品
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_CaravanUtility.HasAnyThingOfCategory(RimWorld.Planet.Caravan,Verse.ThingCategoryDef,System.Predicate{Verse.Thing})">
@@ -1258,7 +1350,7 @@
         </member>
         <member name="M:OberoniaAurea_Frame.TransportersArrivalAction_VisitEnterableMap.#ctor(OberoniaAurea_Frame.MapParent_Enterable,RimWorld.PawnsArrivalModeDef)">
             <summary>
-            使用可直接进入的<see cref="T:RimWorld.Planet.MapParent"/>和到达模式初始化运输器到达动作。
+            使用可直接进入的<see cref="T:RimWorld.Planet.MapParent"/>和到达模式初始化载具到达动作。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.TransportersArrivalAction_VisitEnterableMap.CanVisit(System.Collections.Generic.IEnumerable{Verse.IThingHolder},OberoniaAurea_Frame.MapParent_Enterable)">
@@ -1359,7 +1451,7 @@
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_MiscUtility.TryGenerateThing(Verse.ThingDef,System.Int32)">
             <summary>
-            创建物品。
+            生成物品并按堆叠上限自动拆分，直接返回拆分后的物品列表
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_MiscUtility.ValidateSingleton``1(``0,System.String)">
@@ -1419,17 +1511,17 @@
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_FixedCaravanUtility.GiveThings(OberoniaAurea_Frame.FixedCaravan,System.Collections.Generic.IEnumerable{Verse.Thing})">
             <summary>
-            给固定远行队添加物品。
+            向固定远行队批量添加物品。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_FixedCaravanUtility.GiveThing(OberoniaAurea_Frame.FixedCaravan,Verse.Thing)">
             <summary>
-            给固定远行队添加单个物品。
+            向固定远行队添加单个物品。
             </summary>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_FixedCaravanUtility.GivePawnsOrThings(OberoniaAurea_Frame.FixedCaravan,System.Collections.Generic.List{Verse.Thing})">
+        <member name="M:OberoniaAurea_Frame.OAFrame_FixedCaravanUtility.GivePawnsOrThings(OberoniaAurea_Frame.FixedCaravan,System.Collections.Generic.IEnumerable{Verse.Thing})">
             <summary>
-            给固定远行队添加Pawn或物品。
+            向固定远行队批量添加<see cref="T:Verse.Pawn"/>或物品。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_FixedCaravanUtility.GetCountOfThingDef(OberoniaAurea_Frame.FixedCaravan,Verse.ThingDef,System.Predicate{Verse.Thing})">
@@ -1565,12 +1657,12 @@
         </member>
         <member name="M:TransportersArrivalAction_VisitInteractiveObject.#ctor(OberoniaAurea_Frame.WorldObject_InteractiveBase)">
             <summary>
-            使用交互世界对象初始化运输器到达动作。
+            使用交互世界对象初始化载具到达动作。
             </summary>
         </member>
         <member name="M:TransportersArrivalAction_VisitInteractiveObject.#ctor(OberoniaAurea_Frame.WorldObject_InteractiveBase,System.String)">
             <summary>
-            使用交互世界对象和到达消息键初始化运输器到达动作。
+            使用交互世界对象和到达消息键初始化载具到达动作。
             </summary>
         </member>
         <member name="M:TransportersArrivalAction_VisitInteractiveObject.GetFloatMenuOptions(System.Action{RimWorld.Planet.PlanetTile,RimWorld.Planet.TransportersArrivalAction},System.Collections.Generic.IEnumerable{Verse.IThingHolder},OberoniaAurea_Frame.WorldObject_InteractiveBase)">

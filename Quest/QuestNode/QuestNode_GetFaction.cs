@@ -67,7 +67,7 @@ public class QuestNode_GetFaction : QuestNode
         IEnumerable<Faction> excludeEnumer = exclude.GetValue(slate);
         if (excludeEnumer is not null)
         {
-            foreach (var faction in excludeEnumer)
+            foreach (Faction faction in excludeEnumer)
             {
                 FactionValidatorInt.Exclude.Add(faction);
             }
@@ -128,7 +128,7 @@ public class QuestNode_GetFaction : QuestNode
 
     protected virtual bool IsGoodFaction(Faction faction, Slate slate) => FactionValidatorInt.IsValid(faction);
 
-    protected struct FactionValidator
+    protected class FactionValidator
     {
         public FactionDef FactionDef { get; set; }
         public bool AllowEnemy { get; set; }
@@ -153,7 +153,7 @@ public class QuestNode_GetFaction : QuestNode
 
         public bool IsValid(Faction faction)
         {
-            if (faction is null)
+            if (faction is null || faction.IsPlayerSafe())
                 return false;
 
             if (FactionDef is not null && faction.def != FactionDef)

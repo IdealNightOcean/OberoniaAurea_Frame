@@ -70,6 +70,7 @@
     <Compile Include="Component\CooldownRecordManager.cs" />
     <Compile Include="Component\CooldownRecord.cs" />
     <Compile Include="Component\FactionValidationParams.cs" />
+    <Compile Include="Component\ThingMakeInfo.cs" />
     <Compile Include="FactionTagsExtension.cs" />
     <Compile Include="Interface\ILordJobWithTalk.cs" />
     <Compile Include="Job\JobDriver_InteractWithThing.cs" />
@@ -103,8 +104,9 @@
     <Compile Include="Utility\DropPodUtility.cs" />
     <Compile Include="Utility\QuestUtility.cs" />
     <Compile Include="Utility\TextUtility.cs" />
+    <Compile Include="Utility\ThingUtility.cs" />
     <Compile Include="WorkGiver_ThingRequestExtension.cs" />
-    <Compile Include="WorldObject\CaravanArrivalAction_GenerateAndEnter.cs" />
+    <Compile Include="WorldObject\ArrivalAction\CaravanArrivalAction_GenerateAndEnter.cs" />
     <Compile Include="Interface\IQuestAssociate.cs" />
     <Compile Include="Interface\IFixedCaravanAssociate.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
@@ -149,7 +151,7 @@
     <Compile Include="Utility\IconUtility.cs" />
     <Compile Include="Utility\PawnUtility.cs" />
     <Compile Include="Utility\TileFinderUtility.cs" />
-    <Compile Include="WorldObject\CaravanArrivalAction_VisitInteractiveObject.cs" />
+    <Compile Include="WorldObject\ArrivalAction\CaravanArrivalAction_VisitInteractiveObject.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_SeasonalRestriction.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_EarliestDayPassed.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_GetWorldObjectTile.cs" />
@@ -159,8 +161,8 @@
     <Compile Include="Quest\QuestNode\QuestNode_GetFaction.cs" />
     <Compile Include="WorldObject\CategoryTradeRequestComp.cs" />
     <Compile Include="Lord\LordJob_AssaultColony_NeverFlee.cs" />
-    <Compile Include="WorldObject\TransportersArrivalAction_VisitInteractiveObject.cs" />
-    <Compile Include="WorldObject\TransportersArrivalAction_VisitEnterableMap.cs" />
+    <Compile Include="WorldObject\ArrivalAction\TransportersArrivalAction_VisitInteractiveObject.cs" />
+    <Compile Include="WorldObject\ArrivalAction\TransportersArrivalAction_VisitEnterableMap.cs" />
     <Compile Include="WorldObject\MapParent_Enterable.cs" />
     <Compile Include="WorldObject\WorldObject_WithMutiFactions.cs" />
     <Compile Include="WorldObject\WorldObject_InteractiveBase.cs" />
