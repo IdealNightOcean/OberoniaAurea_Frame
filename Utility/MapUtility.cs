@@ -33,7 +33,7 @@ public static class OAFrame_MapUtility
     /// <summary>
     /// 获取地图中指定def物品的数量。
     /// </summary>
-    public static int GetCountOfThingDef(this Map map, ThingDef thingDef, int count, Predicate<Thing> validator = null)
+    public static int GetCountOfThingDef(this Map map, ThingDef thingDef, Predicate<Thing> validator = null)
     {
         if (map is null || thingDef is null)
         {

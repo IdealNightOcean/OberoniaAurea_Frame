@@ -1,3 +1,4 @@
+using RimWorld;
 using RimWorld.Planet;
 using System;
 using System.Collections.Generic;
@@ -206,5 +207,20 @@ public static class OAFrame_CaravanUtility
         }
 
         return actualTakeCount;
+    }
+
+    /// <summary>
+    /// 获取指定地图格子上的玩家远行队
+    /// </summary>
+    /// <returns>找到的玩家远行队；若不存在则返回 <see langword="null"/></returns>
+    public static Caravan GetPlayerCaravanOnTile(PlanetTile tile)
+    {
+        foreach (Caravan caravan in Find.WorldObjects.Caravans)
+        {
+            if (caravan.Faction.IsPlayerSafe() && caravan.Tile == tile)
+                return caravan;
+        }
+
+        return null;
     }
 }

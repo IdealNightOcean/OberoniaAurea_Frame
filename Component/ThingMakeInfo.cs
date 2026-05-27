@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -8,25 +9,45 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class ThingMakeInfo : IExposable
 {
+    private ThingDef thingDef;
     /// <summary>
     /// 物品定义
     /// </summary>
-    public ThingDef ThingDef;
+    public ThingDef ThingDef
+    {
+        get => thingDef;
+        set => thingDef = value;
+    }
 
+    private int count;
     /// <summary>
     /// 物品数量
     /// </summary>
-    public int Count;
+    public int Count
+    {
+        get => count;
+        set => count = Mathf.Max(0, value);
+    }
 
+    private QualityCategory? quality;
     /// <summary>
     /// 品质（可为 <see langword="null"/>）
     /// </summary>
-    public QualityCategory? Quality;
+    public QualityCategory? Quality
+    {
+        get => quality;
+        set => quality = value;
+    }
 
+    private ThingDef stuffDef;
     /// <summary>
     /// 材料定义（可为 <see langword="null"/>）
     /// </summary>
-    public ThingDef StuffDef;
+    public ThingDef StuffDef
+    {
+        get => stuffDef;
+        set => stuffDef = value;
+    }
 
     /// <summary>
     /// 默认构造。
@@ -58,9 +79,9 @@ public class ThingMakeInfo : IExposable
     /// </summary>
     public void ExposeData()
     {
-        Scribe_Defs.Look(ref ThingDef, nameof(ThingDef));
-        Scribe_Values.Look(ref Count, nameof(Count), defaultValue: 0);
-        Scribe_Values.Look(ref Quality, nameof(Quality));
-        Scribe_Defs.Look(ref StuffDef, nameof(StuffDef));
+        Scribe_Defs.Look(ref thingDef, nameof(thingDef));
+        Scribe_Values.Look(ref count, nameof(count), defaultValue: 0);
+        Scribe_Values.Look(ref quality, nameof(quality));
+        Scribe_Defs.Look(ref stuffDef, nameof(stuffDef));
     }
 }

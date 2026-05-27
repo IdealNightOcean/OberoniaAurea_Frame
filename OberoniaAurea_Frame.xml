@@ -124,22 +124,22 @@
             物品制作信息，记录要制作的物品及其数量、品质和材料。
             </summary>
         </member>
-        <member name="F:OberoniaAurea_Frame.ThingMakeInfo.ThingDef">
+        <member name="P:OberoniaAurea_Frame.ThingMakeInfo.ThingDef">
             <summary>
             物品定义
             </summary>
         </member>
-        <member name="F:OberoniaAurea_Frame.ThingMakeInfo.Count">
+        <member name="P:OberoniaAurea_Frame.ThingMakeInfo.Count">
             <summary>
             物品数量
             </summary>
         </member>
-        <member name="F:OberoniaAurea_Frame.ThingMakeInfo.Quality">
+        <member name="P:OberoniaAurea_Frame.ThingMakeInfo.Quality">
             <summary>
             品质（可为 <see langword="null"/>）
             </summary>
         </member>
-        <member name="F:OberoniaAurea_Frame.ThingMakeInfo.StuffDef">
+        <member name="P:OberoniaAurea_Frame.ThingMakeInfo.StuffDef">
             <summary>
             材料定义（可为 <see langword="null"/>）
             </summary>
@@ -995,6 +995,16 @@
             为<see cref="T:Verse.DiaNode"/>添加默认推迟选项。
             </summary>
         </member>
+        <member name="P:OberoniaAurea_Frame.OAFrame_DiaUtility.DefaultIngnoreOption">
+            <summary>
+            获取默认忽略选项。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_DiaUtility.AddDefaultIngnoreOption(Verse.DiaNode)">
+            <summary>
+            为<see cref="T:Verse.DiaNode"/>添加默认忽略选项。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_DiaUtility.AddDefaultGoBackOption(Verse.DiaNode,System.Func{Verse.DiaNode},System.Action)">
             <summary>
             添加默认的返回选项，点击后会跳转到由 <paramref name="linkLateBind"/> 提供的节点。
@@ -1136,6 +1146,12 @@
             </summary>
             <returns>实际移除数</returns>
         </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_CaravanUtility.GetPlayerCaravanOnTile(RimWorld.Planet.PlanetTile)">
+            <summary>
+            获取指定地图格子上的玩家远行队
+            </summary>
+            <returns>找到的玩家远行队；若不存在则返回 <see langword="null"/></returns>
+        </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnGenerateUtility.CommonPawnGenerationRequest(Verse.PawnKindDef,RimWorld.Faction,System.Nullable{RimWorld.Planet.PlanetTile},System.Boolean,System.Boolean)">
             <summary>
             创建通用的Pawn生成请求。
@@ -1161,7 +1177,7 @@
             获取地图可发送物品数量。
             </summary>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_MapUtility.GetCountOfThingDef(Verse.Map,Verse.ThingDef,System.Int32,System.Predicate{Verse.Thing})">
+        <member name="M:OberoniaAurea_Frame.OAFrame_MapUtility.GetCountOfThingDef(Verse.Map,Verse.ThingDef,System.Predicate{Verse.Thing})">
             <summary>
             获取地图中指定def物品的数量。
             </summary>
@@ -1539,6 +1555,16 @@
             移除固定远行队中指定def物品的物品。
             </summary>
             <returns>实际移除数</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_FixedCaravanUtility.TryGiveThingsToPlayer(OberoniaAurea_Frame.WorldObject_InteractWithFixedCaravanBase,System.Collections.Generic.IEnumerable{Verse.Thing},System.Nullable{RimWorld.Planet.PlanetTile},System.Boolean)">
+            <summary>
+            尝试以多种安全方式向玩家方发放物品（优先目标：固定远行队 → 地图上玩家远行队 → 随机玩家基地 → 任意玩家远行队）
+            </summary>
+            <param name="worldObject">用于定位固定远行队的世界对象</param>
+            <param name="things">需要发放的物品集合</param>
+            <param name="oriTile">优先查找远行队的目标地图格子（为空则使用 worldObject.Tile）</param>
+            <param name="errorOnFailed">发放失败时是否记录错误日志</param>
+            <returns>是否成功发放物品</returns>
         </member>
         <member name="P:OberoniaAurea_Frame.FixedCaravan.PawnsListForReading">
             <summary>

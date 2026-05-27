@@ -307,4 +307,50 @@ public static class OAFrame_FixedCaravanUtility
         return actualTakeCount;
     }
 
+    /// <summary>
+    /// 尝试以多种安全方式向玩家方发放物品（优先目标：固定远行队 → 地图上玩家远行队 → 随机玩家基地 → 任意玩家远行队）
+    /// </summary>
+    /// <param name="worldObject">用于定位固定远行队的世界对象</param>
+    /// <param name="things">需要发放的物品集合</param>
+    /// <param name="oriTile">优先查找远行队的目标地图格子（为空则使用 worldObject.Tile）</param>
+    /// <param name="errorOnFailed">发放失败时是否记录错误日志</param>
+    /// <returns>是否成功发放物品</returns>
+    public static bool TryGiveThingsToPlayer(WorldObject_InteractWithFixedCaravanBase worldObject, IEnumerable<Thing> things, PlanetTile? oriTile = null, bool errorOnFailed = false)
+    {
+        FixedCaravan fixedCaravan = worldObject.AssociatedFixedCaravan;
+        if (fixedCaravan is not null && fixedCaravan.Spawned)
+        {
+            OAFrame_FixedCaravanUtility.GiveThings(fixedCaravan, things);
+            return true;
+        }
+
+        Caravan caravan = OAFrame_CaravanUtility.GetPlayerCaravanOnTile(oriTile ?? worldObject.Tile);
+        if (caravan is not null && caravan.Spawned)
+        {
+            OAFrame_CaravanUtility.GiveThings(caravan, things);
+            return true;
+        }
+
+        Map map = Find.RandomPlayerHomeMap;
+        if (map is not null)
+        {
+            OAFrame_DropPodUtility.DefaultDropThing(things, map);
+            return true;
+        }
+
+        caravan = Find.WorldObjects.Caravans.Where(c => c.Faction.IsPlayerSafe() && c.Spawned).RandomElementWithFallback();
+        if (caravan is not null)
+        {
+            OAFrame_CaravanUtility.GiveThings(caravan, things);
+            return true;
+        }
+
+        if (errorOnFailed)
+        {
+            Log.Error("[OAFrame] 无法通过任何一般方法向给予玩家物品。");
+        }
+
+        return false;
+    }
+
 }

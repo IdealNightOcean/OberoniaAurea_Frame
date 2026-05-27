@@ -56,6 +56,18 @@ public static class OAFrame_DiaUtility
     }
 
     /// <summary>
+    /// 获取默认忽略选项。
+    /// </summary>
+    public static DiaOption DefaultIngnoreOption => new("OAFrame_Ingnore".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认忽略选项。
+    /// </summary>
+    public static void AddDefaultIngnoreOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("OAFrame_Ingnore".Translate()) { resolveTree = true });
+    }
+
+    /// <summary>
     /// 添加默认的返回选项，点击后会跳转到由 <paramref name="linkLateBind"/> 提供的节点。
     /// </summary>
     public static void AddDefaultGoBackOption(this DiaNode diaNode, Func<DiaNode> linkLateBind, Action action = null)
@@ -109,7 +121,10 @@ public static class OAFrame_DiaUtility
     public static DiaNode ConfirmDiaNode(TaggedString text, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
     {
         DiaNode diaNode = new(text);
-        if (acceptText is not null)
+        if (string.IsNullOrEmpty(acceptText))
+            acceptText = "Confirm".Translate();
+
+        if (!string.IsNullOrEmpty(acceptText))
         {
             DiaOption accept = new(acceptText)
             {
@@ -118,7 +133,7 @@ public static class OAFrame_DiaUtility
             };
             diaNode.options.Add(accept);
         }
-        if (rejectText is not null)
+        if (!string.IsNullOrEmpty(rejectText))
         {
             DiaOption reject = new(rejectText)
             {
