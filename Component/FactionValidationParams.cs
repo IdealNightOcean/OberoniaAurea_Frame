@@ -39,6 +39,11 @@ public struct FactionValidationParams : IExposable
     public bool AllowNonHumanlike = false;
 
     /// <summary>
+    /// 必须具有（玩家）好感度。
+    /// </summary>
+    public bool MustHasGoodwill = false;
+
+    /// <summary>
     /// 最小科技等级。
     /// </summary>
     public TechLevel MinTechLevel = TechLevel.Undefined;
@@ -59,6 +64,8 @@ public struct FactionValidationParams : IExposable
         Scribe_Values.Look(ref AllHidden, nameof(AllHidden), defaultValue: false);
         Scribe_Values.Look(ref AllTemporary, nameof(AllTemporary), defaultValue: false);
         Scribe_Values.Look(ref AllowNonHumanlike, nameof(AllowNonHumanlike), defaultValue: false);
+
+        Scribe_Values.Look(ref MustHasGoodwill, nameof(MustHasGoodwill), defaultValue: false);
 
         Scribe_Values.Look(ref MinTechLevel, nameof(MinTechLevel), defaultValue: TechLevel.Undefined);
         Scribe_Values.Look(ref MaxTechLevel, nameof(MaxTechLevel), defaultValue: TechLevel.Undefined);
@@ -88,33 +95,32 @@ public struct FactionValidationParams : IExposable
     public readonly bool ValidateFaction(Faction faction)
     {
         if (faction is null || faction == Faction.OfPlayer)
-        {
             return false;
-        }
+
+
         if (!AllDefeated && faction.defeated)
-        {
             return false;
-        }
+
         if (!AllHidden && faction.Hidden)
-        {
             return false;
-        }
+
         if (!AllTemporary && faction.temporary)
-        {
             return false;
-        }
+
         if (!AllowNonHumanlike && !faction.def.humanlikeFaction)
-        {
             return false;
-        }
+
+
+        if (MustHasGoodwill && !faction.HasGoodwill)
+            return false;
+
+
         if (MinTechLevel != TechLevel.Undefined && faction.def.techLevel < MinTechLevel)
-        {
             return false;
-        }
+
         if (MaxTechLevel != TechLevel.Undefined && faction.def.techLevel > MaxTechLevel)
-        {
             return false;
-        }
+
 
         return faction.PlayerRelationKind switch
         {

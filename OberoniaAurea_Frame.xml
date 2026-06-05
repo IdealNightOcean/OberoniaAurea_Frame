@@ -84,6 +84,11 @@
             允许非人派系。
             </summary>
         </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.MustHasGoodwill">
+            <summary>
+            必须具有（玩家）好感度。
+            </summary>
+        </member>
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.MinTechLevel">
             <summary>
             最小科技等级。
