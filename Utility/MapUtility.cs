@@ -134,54 +134,27 @@ public static class OAFrame_MapUtility
 
         List<Thing> things = map.listerThings.ThingsOfDef(thingDef);
         int remaining = count;
+        bool hasValidator = validator is not null;
 
-        if (validator is null)
+        for (int i = 0; i < things.Count; i++)
         {
-            for (int i = 0; i < things.Count; i++)
+            if (hasValidator && !validator(things[i]))
+                continue;
+
+            if (remaining >= things[i].stackCount)
             {
-                if (remaining >= things[i].stackCount)
-                {
-                    remaining -= things[i].stackCount;
-                    takeThings.Add(things[i]);
+                remaining -= things[i].stackCount;
+                takeThings.Add(things[i]);
 
-                }
-                else
-                {
-                    takeThings.Add(things[i].SplitOff(remaining));
-                    remaining = 0;
-                }
-
-                if (remaining <= 0)
-                {
-                    break;
-                }
             }
-        }
-        else
-        {
-            for (int i = 0; i < things.Count; i++)
+            else
             {
-                if (!validator(things[i]))
-                {
-                    continue;
-                }
-                if (remaining >= things[i].stackCount)
-                {
-                    remaining -= things[i].stackCount;
-                    takeThings.Add(things[i]);
-
-                }
-                else
-                {
-                    takeThings.Add(things[i].SplitOff(remaining));
-                    remaining = 0;
-                }
-
-                if (remaining <= 0)
-                {
-                    break;
-                }
+                takeThings.Add(things[i].SplitOff(remaining));
+                remaining = 0;
             }
+
+            if (remaining <= 0)
+                break;
         }
 
         actualTakeCount = count - remaining;

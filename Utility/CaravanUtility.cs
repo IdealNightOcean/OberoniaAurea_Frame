@@ -150,44 +150,19 @@ public static class OAFrame_CaravanUtility
         List<Thing> caravanInventory = CaravanInventoryUtility.AllInventoryItems(caravan);
 
         int remaining = count;
-        int takeCount;
         List<Thing> takeThings = [];
-        Thing item;
-        if (validator is null)
-        {
-            for (int i = caravanInventory.Count - 1; i >= 0; i--)
-            {
-                item = caravanInventory[i];
-                if (item.def != thingDef)
-                {
-                    continue;
-                }
+        bool hasValidator = validator is not null;
 
-                takeCount = Mathf.Min(remaining, item.stackCount);
-                takeThings.Add(item.holdingOwner.Take(item, takeCount));
-                if ((remaining -= takeCount) <= 0)
-                {
-                    break;
-                }
-            }
-        }
-        else
+        for (int i = caravanInventory.Count - 1; i >= 0; i--)
         {
-            for (int i = caravanInventory.Count - 1; i >= 0; i--)
-            {
-                item = caravanInventory[i];
-                if (item.def != thingDef || !validator(item))
-                {
-                    continue;
-                }
+            Thing item = caravanInventory[i];
+            if (item.def != thingDef || (hasValidator && !validator(item)))
+                continue;
 
-                takeCount = Mathf.Min(remaining, item.stackCount);
-                takeThings.Add(item.holdingOwner.Take(item, takeCount));
-                if ((remaining -= takeCount) <= 0)
-                {
-                    break;
-                }
-            }
+            int takeCount = Mathf.Min(remaining, item.stackCount);
+            takeThings.Add(item.holdingOwner.Take(item, takeCount));
+            if ((remaining -= takeCount) <= 0)
+                break;
         }
 
         actualTakeCount = count - remaining;

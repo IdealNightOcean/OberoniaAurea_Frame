@@ -205,31 +205,27 @@ public static class OAFrame_FixedCaravanUtility
     {
         int totalCount = 0;
         List<Thing> caravanInventory = AllInventoryItems(fixedCaravan);
-
+        bool hasValidator = validator is not null;
         Thing item;
-        if (validator is null)
+
+        for (int i = 0; i < caravanInventory.Count; i++)
         {
-            for (int i = 0; i < caravanInventory.Count; i++)
+            item = caravanInventory[i];
+            if (item.def == thingDef && (!hasValidator || validator(item)))
             {
-                item = caravanInventory[i];
-                if (item.def == thingDef)
-                {
-                    totalCount += item.stackCount;
-                }
+                totalCount += item.stackCount;
             }
         }
-        else
-        {
-            for (int i = 0; i < caravanInventory.Count; i++)
-            {
-                item = caravanInventory[i];
-                if (item.def == thingDef && validator(item))
-                {
-                    totalCount += item.stackCount;
-                }
-            }
-        }
+
         return totalCount;
+    }
+
+    public static bool HasThingsOfDef(this FixedCaravan fixedCaravan, ThingDef thingDef, int count, Predicate<Thing> validator = null)
+    {
+        if (count <= 0)
+            return true;
+        else
+            return GetCountOfThingDef(fixedCaravan, thingDef, validator) >= count;
     }
 
     /// <summary>
@@ -238,53 +234,25 @@ public static class OAFrame_FixedCaravanUtility
     public static List<Thing> TakeThingsOfDef(FixedCaravan fixedCaravan, ThingDef thingDef, int count, out int actualTakeCount, Predicate<Thing> validator = null)
     {
         actualTakeCount = 0;
-        if (fixedCaravan is null || thingDef is null || count <= 0)
-        {
+        if (count <= 0 || fixedCaravan is null || thingDef is null)
             return [];
-        }
 
         List<Thing> caravanInventory = AllInventoryItems(fixedCaravan);
 
         int remaining = count;
-        int takeCount;
         List<Thing> takeThings = [];
-        Thing item;
+        bool hasValidator = validator is not null;
 
-        if (validator is null)
+        for (int i = caravanInventory.Count - 1; i >= 0; i--)
         {
-            for (int i = caravanInventory.Count - 1; i >= 0; i--)
-            {
-                item = caravanInventory[i];
-                if (item.def != thingDef)
-                {
-                    continue;
-                }
+            Thing item = caravanInventory[i];
+            if (item.def != thingDef || (hasValidator && !validator(item)))
+                continue;
 
-                takeCount = Mathf.Min(remaining, item.stackCount);
-                takeThings.Add(item.holdingOwner.Take(item, takeCount));
-                if ((remaining -= takeCount) <= 0)
-                {
-                    break;
-                }
-            }
-        }
-        else
-        {
-            for (int i = caravanInventory.Count - 1; i >= 0; i--)
-            {
-                item = caravanInventory[i];
-                if (item.def != thingDef || !validator(item))
-                {
-                    continue;
-                }
-
-                takeCount = Mathf.Min(remaining, item.stackCount);
-                takeThings.Add(item.holdingOwner.Take(item, takeCount));
-                if ((remaining -= takeCount) <= 0)
-                {
-                    break;
-                }
-            }
+            int takeCount = Mathf.Min(remaining, item.stackCount);
+            takeThings.Add(item.holdingOwner.Take(item, takeCount));
+            if ((remaining -= takeCount) <= 0)
+                break;
         }
 
         actualTakeCount = count - remaining;
@@ -297,7 +265,6 @@ public static class OAFrame_FixedCaravanUtility
     /// <returns>实际移除数</returns>
     public static int RemoveThingsOfDef(this FixedCaravan fixedCaravan, ThingDef thingDef, int count, Predicate<Thing> validator = null)
     {
-
         List<Thing> takeThings = TakeThingsOfDef(fixedCaravan, thingDef, count, out int actualTakeCount, validator);
         for (int i = takeThings.Count - 1; i >= 0; i--)
         {
@@ -346,9 +313,7 @@ public static class OAFrame_FixedCaravanUtility
         }
 
         if (errorOnFailed)
-        {
             Log.Error("[OAFrame] 无法通过任何一般方法向给予玩家物品。");
-        }
 
         return false;
     }
