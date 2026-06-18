@@ -475,6 +475,36 @@
             生成物品并按堆叠上限自动拆分，直接返回拆分后的物品列表
             </summary>
         </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.GiveThingToPlayer(Verse.Thing,Verse.IThingHolder)">
+            <summary>
+            给予玩家单个物品
+            </summary>
+            <returns>是否成功给予</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.GiveThingsToPlayer(System.Collections.Generic.IEnumerable{Verse.Thing},Verse.IThingHolder)">
+            <summary>
+            给予玩家多个物品
+            </summary>
+            <returns>是否成功给予</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.HasEnoughThingsOfDef(Verse.IThingHolder,Verse.ThingDef,System.Int32,System.Predicate{Verse.Thing})">
+            <summary>
+            检查容器中是否有足够数量的指定物品
+            </summary>
+            <returns>是否有足够数量的物品</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.TakeThingsOfDef(Verse.IThingHolder,Verse.ThingDef,System.Int32,System.Int32@,System.Predicate{Verse.Thing})">
+            <summary>
+            从容器中取出指定数量的物品
+            </summary>
+            <returns>取出的物品列表</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.RemoveThingsOfDef(Verse.IThingHolder,Verse.ThingDef,System.Int32,System.Predicate{Verse.Thing})">
+            <summary>
+            从容器中移除指定数量的物品（直接销毁）
+            </summary>
+            <returns>实际移除的数量</returns>
+        </member>
         <member name="M:OberoniaAurea_Frame.CaravanArrivalAction_GenerateAndEnter.#ctor(OberoniaAurea_Frame.MapParent_Enterable)">
             <summary>
             使用可直接进入的<see cref="T:RimWorld.Planet.MapParent"/>初始化远行队到达动作。
@@ -1293,6 +1323,18 @@
             <summary>
             获取<see cref="T:Verse.Pawn"/>集合中最高属性值的<see cref="T:Verse.Pawn"/>和对应属性值。
             </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.RegisterPawnPreApplyDamageHandler(Verse.Pawn,OberoniaAurea_Frame.IPawnPreApplyDamage)">
+            <summary>
+            注册Pawn的伤害前处理回调
+            </summary>
+            <returns>是否注册成功</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.DeregisterPawnPreApplyDamageHandler(Verse.Pawn,OberoniaAurea_Frame.IPawnPreApplyDamage)">
+            <summary>
+            注销Pawn的伤害前处理回调
+            </summary>
+            <returns>是否注销成功</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_TileFinderUtility.GetAvailableNeighborTile(RimWorld.Planet.PlanetTile,RimWorld.Planet.PlanetTile@,System.Boolean)">
             <summary>

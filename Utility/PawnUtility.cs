@@ -272,4 +272,36 @@ public static class OAFrame_PawnUtility
         }
         return (maxStatPawn, maxStatValue);
     }
+
+    /// <summary>
+    /// 注册Pawn的伤害前处理回调
+    /// </summary>
+    /// <returns>是否注册成功</returns>
+    public static bool RegisterPawnPreApplyDamageHandler(this Pawn pawn, IPawnPreApplyDamage damageProcessor)
+    {
+        if (pawn is null || damageProcessor is null)
+            return false;
+
+        CompPawnPreApplyDamageHandler damageHandler = pawn.GetComp<CompPawnPreApplyDamageHandler>();
+        if (damageHandler is null)
+            return false;
+
+        return damageHandler.RegisterDamageProcessor(damageProcessor);
+    }
+
+    /// <summary>
+    /// 注销Pawn的伤害前处理回调
+    /// </summary>
+    /// <returns>是否注销成功</returns>
+    public static bool DeregisterPawnPreApplyDamageHandler(this Pawn pawn, IPawnPreApplyDamage damageProcessor)
+    {
+        if (pawn is null || damageProcessor is null)
+            return false;
+
+        CompPawnPreApplyDamageHandler damageHandler = pawn.GetComp<CompPawnPreApplyDamageHandler>();
+        if (damageHandler is null)
+            return false;
+
+        return damageHandler.DeregisterDamageProcessor(damageProcessor);
+    }
 }
