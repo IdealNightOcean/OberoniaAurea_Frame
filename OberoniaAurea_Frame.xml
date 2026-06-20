@@ -124,6 +124,218 @@
             验证派系是否符合条件。
             </summary>
         </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver.LinkedThing">
+            <summary>
+            关联的物体，用于确定位置和阵营信息。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver.HediffToGive">
+            <summary>
+            要给予的Hediff定义。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver.Radius">
+            <summary>
+            影响范围半径。小于等于0时不会生效。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver.BodyPartRecordToGive">
+            <summary>
+            要给予Hediff的目标身体部位。为null时使用默认部位。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver.InitSeverity">
+            <summary>
+            初始严重度。小于等于0时使用Hediff定义的默认值。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver.OverrideDisappearTicks">
+            <summary>
+            覆盖Hediff的消失时间（Tick数）。小于等于0时使用Hediff定义的默认值。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver.DrawConnection">
+            <summary>
+            是否绘制Hediff与关联物体之间的连接线。
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.RangeHediffGiver.TargetMap">
+            <summary>
+            获取关联物体所在的地图。
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.RangeHediffGiver.LinkedFaction">
+            <summary>
+            获取关联物体所属的阵营。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver.TargetRace">
+            <summary>
+            目标种族的筛选条件。默认为 <see cref="F:OberoniaAurea_Frame.RaceType.Humanlike"/>。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver.TargetRelation">
+            <summary>
+            目标阵营关系的筛选条件。默认为 <see cref="F:OberoniaAurea_Frame.TargetRelationType.Default"/>。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver.#ctor">
+            <summary>
+            创建一个新的范围Hediff给予器实例。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver.#ctor(Verse.Thing,Verse.HediffDef,System.Single)">
+            <summary>
+            使用指定的关联物体、Hediff定义和范围半径创建一个新的范围Hediff给予器实例。
+            </summary>
+            <param name="linkedThing">关联的物体，用于确定位置和阵营信息。</param>
+            <param name="hediffToGive">要给予的Hediff定义。</param>
+            <param name="radius">影响范围半径。</param>
+            <exception cref="T:System.ArgumentNullException">当 <paramref name="linkedThing"/> 或 <paramref name="hediffToGive"/> 为 null 时抛出。</exception>
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver.ExposeData">
+            <summary>
+            序列化/反序列化此对象的所有数据字段。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver.GiveHediffToRange">
+            <summary>
+            对范围内所有符合条件的Pawn给予Hediff。
+            根据 <see cref="F:OberoniaAurea_Frame.RangeHediffGiver.Radius"/> 确定范围，并根据 <see cref="F:OberoniaAurea_Frame.RangeHediffGiver.TargetRace"/> 和 <see cref="F:OberoniaAurea_Frame.RangeHediffGiver.TargetRelation"/> 过滤目标。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver.GiveHediffToTarget(Verse.Pawn)">
+            <summary>
+            对指定的单个Pawn给予Hediff。如果目标已有同类型Hediff则跳过添加，但会更新消失时间。
+            </summary>
+            <param name="target">要给予Hediff的目标Pawn。</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver.CanApplyOnPawn(Verse.Pawn,Verse.IntVec3,System.Single)">
+            <summary>
+            检查指定的Pawn是否符合所有条件（距离、种族、阵营关系），以确定是否对其给予Hediff。
+            </summary>
+            <param name="target">要检查的目标Pawn。</param>
+            <param name="center">范围中心位置。</param>
+            <param name="radiusSquared">范围半径的平方。</param>
+            <returns>如果目标符合条件则返回 <see langword="true"/>。</returns>
+        </member>
+        <member name="T:OberoniaAurea_Frame.RaceType">
+            <summary>
+            目标种族类型
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RaceType.None">
+            <summary>
+            无
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RaceType.Humanlike">
+            <summary>
+            人类
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RaceType.Animal">
+            <summary>
+            动物
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RaceType.Mechanoid">
+            <summary>
+            机械体
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RaceType.AnomalyEntity">
+            <summary>
+            异常实体
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RaceType.Drone">
+            <summary>
+            无人机
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RaceType.AllNormal">
+            <summary>
+            全部普通种族，包含人类、动物、机械体、异常实体。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RaceType.All">
+            <summary>
+            全部种族，包含所有普通种族和无人机。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.RangeHediffGiver_AddServity">
+            <summary>
+            累加严重度范围Hediff给予器。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.RangeHediffGiver_AddServity.AddSeverity">
+            <summary>
+            每次检查时累加的严重度值。默认值为 0.1。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver_AddServity.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver_AddServity.#ctor(Verse.Thing,Verse.HediffDef,System.Single)">
+            <inheritdoc />
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver_AddServity.GiveHediffToTarget(Verse.Pawn)">
+            <inheritdoc />
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver_AddServity.ExposeData">
+            <inheritdoc />
+        </member>
+        <member name="T:OberoniaAurea_Frame.TargetRelationType">
+            <summary>
+            目标关系类型
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.None">
+            <summary>
+            无
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.Self">
+            <summary>
+            自身
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.SameFaction">
+            <summary>
+            相同派系
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.Ally">
+            <summary>
+            盟友派系
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.Neutral">
+            <summary>
+            中立派系
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.Hostile">
+            <summary>
+            敌对派系
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.NonHostile">
+            <summary>
+            非敌对，包含自身、相同派系、盟友派系、中立派系。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.Default">
+            <summary>
+            默认值，包含自身、相同派系、盟友派系、中立派系。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.All">
+            <summary>
+            全部，包含自身、相同派系、盟友派系、中立派系、敌对派系。
+            </summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.ThingMakeInfo">
             <summary>
             物品制作信息，记录要制作的物品及其数量、品质和材料。
@@ -542,7 +754,7 @@
         </member>
         <member name="P:OberoniaAurea_Frame.IFixedCaravanAssociate.FixedCaravanName">
             <summary>
-            获取<see cref="T:OberoniaAurea_Frame.FixedCaravan"/>名称。
+            获取<see cref="T:OberoniaAurea_Frame.FixedCaravan"/>的名称。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.IFixedCaravanAssociate.PreConvertToCaravanByPlayer">
@@ -862,7 +1074,7 @@
         </member>
         <member name="M:OberoniaAurea_Frame.SimpleUniqueList`1.ExposeData">
             <summary>
-            暴露数据以进行存档保存和加载。
+            序列化/反序列化此对象的所有数据字段。
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.QuestNode_AllFactionsGoodwillChange">

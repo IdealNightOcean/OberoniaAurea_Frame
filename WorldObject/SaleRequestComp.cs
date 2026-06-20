@@ -87,11 +87,9 @@ public class SaleRequestComp : WorldObjectComp
 
     private void Fulfill(Caravan caravan)
     {
-        List<Thing> things = OAFrame_MiscUtility.TryGenerateThing(thingDef, count);
-        foreach (Thing t in things)
-        {
-            CaravanInventoryUtility.GiveThing(caravan, t);
-        }
+        IEnumerable<Thing> things = OAFrame_ThingUtility.GenerateThingsSplitByStack(thingDef, count);
+        OAFrame_CaravanUtility.GiveThings(caravan, things);
+
         QuestUtility.SendQuestTargetSignals(parent.questTags, "SaleTradeRequestFulfilled", parent.Named("SUBJECT"), caravan.Named("CARAVAN"));
         Disable();
     }

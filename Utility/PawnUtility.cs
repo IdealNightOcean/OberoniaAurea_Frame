@@ -15,10 +15,7 @@ public static class OAFrame_PawnUtility
     /// 检查<see cref="Pawn"/>的容器是否为持久保有者（<see cref="IPawnRetentionHolder"/>)。
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool IsChildOfRetentionHolder(this Pawn p)
-    {
-        return p.ParentHolder is IPawnRetentionHolder;
-    }
+    public static bool IsChildOfRetentionHolder(this Pawn p) => p.ParentHolder is IPawnRetentionHolder;
 
     /// <summary>
     /// 添加健康状态
@@ -27,13 +24,11 @@ public static class OAFrame_PawnUtility
     {
         Hediff hediff = pawn?.health.GetOrAddHediff(hediffDef, part, dinfo, result);
         if (hediff is null)
-        {
             return;
-        }
-        if (severity > 0)
-        {
+
+        if (severity > 0f)
             hediff.Severity = severity;
-        }
+
         if (overrideDisappearTicks > 0)
         {
             HediffComp_Disappears comp = hediff.TryGetComp<HediffComp_Disappears>();
@@ -65,10 +60,7 @@ public static class OAFrame_PawnUtility
     /// 检查<see cref="Pawn"/>是否正在睡眠。
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool SleepNow(this Pawn pawn)
-    {
-        return pawn.jobs?.curDriver?.asleep ?? false;
-    }
+    public static bool SleepNow(this Pawn pawn) => pawn.jobs?.curDriver?.asleep ?? false;
 
     /// <summary>
     /// 使<see cref="Pawn"/>加入玩家派系。
@@ -109,9 +101,7 @@ public static class OAFrame_PawnUtility
     public static void TakeNonLethalDamage(Pawn pawn, int injuriesCount, DamageDef fixedDamageDef = null)
     {
         if (pawn.DeadOrDowned)
-        {
             return;
-        }
 
         pawn.health.forceDowned = true;
         IEnumerable<BodyPartRecord> source = from p in HittablePartsViolence(pawn.health.hediffSet)
@@ -132,9 +122,8 @@ public static class OAFrame_PawnUtility
             }
             maxHealth -= 3f;
             if (maxHealth <= 0f)
-            {
                 continue;
-            }
+
 
             int min = Mathf.Min(Mathf.RoundToInt(maxHealth * 0.3f), (int)partHealth - 1);
             int max = Mathf.Min(Mathf.RoundToInt(maxHealth * 0.8f), (int)partHealth - 1);
@@ -142,9 +131,8 @@ public static class OAFrame_PawnUtility
             DamageDef damageDef = fixedDamageDef ?? HealthUtility.RandomViolenceDamageType();
             HediffDef hediffDefFromDamage = HealthUtility.GetHediffDefFromDamage(damageDef, pawn, bodyPartRecord);
             if (pawn.health.WouldDieAfterAddingHediff(hediffDefFromDamage, bodyPartRecord, statValue * severity))
-            {
                 break;
-            }
+
             DamageInfo dinfo = new(damageDef, severity, 999f, -1f, null, bodyPartRecord);
             dinfo.SetAllowDamagePropagation(val: false);
             pawn.TakeDamage(dinfo);
@@ -175,17 +163,14 @@ public static class OAFrame_PawnUtility
     public static int GetMaxSkillLevelOfPawns(IEnumerable<Pawn> pawns, SkillDef skill)
     {
         if (pawns is null)
-        {
             return -1;
-        }
+
         int maxSkillLevel = -1;
 
         foreach (Pawn pawn in pawns)
         {
             if (pawn.skills is null)
-            {
                 continue;
-            }
             maxSkillLevel = Mathf.Max(maxSkillLevel, pawn.skills.GetSkill(skill).GetLevel());
         }
         return maxSkillLevel;
@@ -197,9 +182,8 @@ public static class OAFrame_PawnUtility
     public static (Pawn, int) GetMaxSkillLevelPawn(IEnumerable<Pawn> pawns, SkillDef skill)
     {
         if (pawns is null)
-        {
             return (null, -1);
-        }
+
         Pawn maxSkillPawn = null;
         int maxSkillLevel = -1;
 
@@ -207,9 +191,8 @@ public static class OAFrame_PawnUtility
         foreach (Pawn pawn in pawns)
         {
             if (pawn.skills is null)
-            {
                 continue;
-            }
+
             skillLevel = pawn.skills.GetSkill(skill).GetLevel();
             if (skillLevel > maxSkillLevel)
             {
@@ -226,9 +209,8 @@ public static class OAFrame_PawnUtility
     public static float GetMaxStatOfPawns(IEnumerable<Pawn> pawns, StatDef statDef)
     {
         if (pawns is null)
-        {
             return -999f;
-        }
+
         float maxStatValue = -999f;
 
         foreach (Pawn pawn in pawns)
@@ -251,9 +233,8 @@ public static class OAFrame_PawnUtility
     public static (Pawn, float) GetMaxStatPawn(IEnumerable<Pawn> pawns, StatDef statDef)
     {
         if (pawns is null)
-        {
             return (null, -999f);
-        }
+
         Pawn maxStatPawn = null;
         float maxStatValue = -999f;
 
@@ -271,6 +252,35 @@ public static class OAFrame_PawnUtility
             }
         }
         return (maxStatPawn, maxStatValue);
+    }
+
+    /// <summary>
+    /// 获取<see cref="Pawn"/>的种族类型
+    /// </summary>
+    /// <returns>对应的种族类型，若Pawn为null或无法匹配则返回<see cref="RaceType.None"/></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static RaceType GetRaceType(this Pawn pawn)
+    {
+        if (pawn is null)
+            return RaceType.None;
+
+        RaceProperties raceProps = pawn.RaceProps;
+        if (raceProps.Humanlike)
+            return RaceType.Humanlike;
+
+        if (raceProps.IsAnomalyEntity)
+            return RaceType.AnomalyEntity;
+
+        if (raceProps.Animal)
+            return RaceType.Animal;
+
+        if (raceProps.IsMechanoid)
+            return RaceType.Mechanoid;
+
+        if (raceProps.IsDrone)
+            return RaceType.Drone;
+
+        return RaceType.None;
     }
 
     /// <summary>

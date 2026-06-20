@@ -161,7 +161,7 @@ public class SimpleUniqueList<T> : IList<T>, IExposable
     }
 
     /// <summary>
-    /// 暴露数据以进行存档保存和加载。
+    /// 序列化/反序列化此对象的所有数据字段。
     /// </summary>
     public void ExposeData()
     {

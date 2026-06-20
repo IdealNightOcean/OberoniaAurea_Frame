@@ -11,7 +11,7 @@ public static class OAFrame_DropPodUtility
     /// </summary>
     public static IntVec3 DefaultDropThingOfDef(ThingDef def, int count, Map map, Faction faction = null, bool sendLetter = true)
     {
-        List<Thing> things = OAFrame_MiscUtility.TryGenerateThing(def, count);
+        List<Thing> things = OAFrame_ThingUtility.GenerateThingListSplitByStack(def, count);
         return DefaultDropThing(things, map, faction, sendLetter);
     }
 

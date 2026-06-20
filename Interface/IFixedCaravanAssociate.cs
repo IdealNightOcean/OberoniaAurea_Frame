@@ -13,7 +13,7 @@ public interface IFixedCaravanAssociate
     FixedCaravan AssociatedFixedCaravan { get; }
 
     /// <summary>
-    /// 获取<see cref="FixedCaravan"/>名称。
+    /// 获取<see cref="FixedCaravan"/>的名称。
     /// </summary>
     string FixedCaravanName { get; }
 
