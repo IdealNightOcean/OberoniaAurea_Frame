@@ -614,37 +614,37 @@
             获取常见的<see cref="T:Verse.Pawn"/>负面信号列表。
             </summary>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntString(System.Int32,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntString(System.Int32,System.Boolean,System.Boolean)">
             <summary>
             创建带颜色和符号的整数字符串。默认正数显示绿色，负数显示红色。
             </summary>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntNamedArgument(System.Int32,System.String,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntNamedArgument(System.Int32,System.String,System.Boolean,System.Boolean)">
             <summary>
             创建带颜色和符号的整数命名参数。默认正数显示绿色，负数显示红色。
             </summary>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatString(System.Single,System.String,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatString(System.Single,System.String,System.Boolean,System.Boolean)">
             <summary>
             创建带颜色和符号的浮点数字符串。默认正数显示绿色，负数显示红色。
             </summary>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatNamedArgument(System.Single,System.String,System.String,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatNamedArgument(System.Single,System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             创建带颜色和符号的浮点数命名参数。默认正数显示绿色，负数显示红色。
             </summary>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentString(System.Single,System.String,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentString(System.Single,System.String,System.Boolean,System.Boolean)">
             <summary>
             创建带颜色和符号的浮点数字符串。默认正数显示绿色，负数显示红色。
             </summary>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentNamedArgument(System.Single,System.String,System.String,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentNamedArgument(System.Single,System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
             创建带颜色和符号的百分比数命名参数。默认正数显示绿色，负数显示红色。
             </summary>
@@ -1535,6 +1535,12 @@
             <summary>
             获取<see cref="T:Verse.Pawn"/>集合中最高属性值的<see cref="T:Verse.Pawn"/>和对应属性值。
             </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetRaceType(Verse.Pawn)">
+            <summary>
+            获取<see cref="T:Verse.Pawn"/>的种族类型
+            </summary>
+            <returns>对应的种族类型，若Pawn为null或无法匹配则返回<see cref="F:OberoniaAurea_Frame.RaceType.None"/></returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.RegisterPawnPreApplyDamageHandler(Verse.Pawn,OberoniaAurea_Frame.IPawnPreApplyDamage)">
             <summary>
