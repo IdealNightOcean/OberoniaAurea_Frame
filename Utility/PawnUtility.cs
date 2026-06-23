@@ -40,6 +40,42 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
+    /// 获取或向<see cref="Pawn"/>添加一个<see cref="Hediff"/>。如果目标已有同类型<see cref="Hediff"/>则更新相关属性并返回，否则根据参数创建并添加新的<see cref="Hediff"/>。
+    /// 同时根据参数配置设置初始严重度和覆盖消失时间。
+    /// </summary>
+    /// <returns>已有的或新创建的<see cref="Hediff"/>实例；如果 <see cref="Pawn"/> 或 <see href="parms"/> 为 <see langword="null"/> 则返回 <see langword="null"/>。</returns>
+    public static Hediff GetOrAddHediffToPawn(Pawn pawn, HediffGiveParams parms)
+    {
+        if (pawn is null || parms is null)
+            return null;
+
+        Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(parms.HediffToGive);
+        if (hediff is null)
+        {
+            hediff = HediffMaker.MakeHediff(parms.HediffToGive, pawn, parms.BodyPartRecordToGive);
+            if (parms.InitSeverity > 0f)
+                hediff.Severity = parms.InitSeverity;
+
+            pawn.health.AddHediff(hediff);
+        }
+
+        if (parms.OverrideDisappearTicks > 0)
+        {
+            HediffComp_Disappears hediffComp_Disappears = hediff.TryGetComp<HediffComp_Disappears>();
+            if (hediffComp_Disappears is null)
+            {
+                Log.Error($"[OAFrame] {hediff} 没有 {nameof(HediffComp_Disappears)} 组件。");
+            }
+            else
+            {
+                hediffComp_Disappears.ticksToDisappear = parms.OverrideDisappearTicks;
+            }
+        }
+
+        return hediff;
+    }
+
+    /// <summary>
     /// 移除第一个相关Def的健康状态。
     /// </summary>
     public static void RemoveFirstHediffOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)

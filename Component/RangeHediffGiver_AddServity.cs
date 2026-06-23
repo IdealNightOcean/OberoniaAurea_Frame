@@ -3,43 +3,41 @@
 namespace OberoniaAurea_Frame;
 
 /// <summary>
-/// 累加严重度范围Hediff给予器。
+/// 累加严重度范围<see cref="Hediff"/>给予器。
 /// </summary>
 public class RangeHediffGiver_AddServity : RangeHediffGiver
 {
-    /// <summary>
-    /// 每次检查时累加的严重度值。默认值为 0.1。
-    /// </summary>
-    public float AddSeverity = 0.1f;
+    /// <inheritdoc />
+    public new RangeHediffGiveParams_AddServity Parms => (RangeHediffGiveParams_AddServity)parms;
 
     /// <inheritdoc />
     public RangeHediffGiver_AddServity() { }
 
     /// <inheritdoc />
-    public RangeHediffGiver_AddServity(Thing linkedThing, HediffDef hediffToGive, float radius) : base(linkedThing, hediffToGive, radius)
+    public RangeHediffGiver_AddServity(Thing linkedThing, RangeHediffGiveParams_AddServity parms) : base(linkedThing, parms)
     { }
 
     /// <inheritdoc />
     protected override void GiveHediffToTarget(Pawn target)
     {
-        Hediff hediff = target.health.hediffSet.GetFirstHediffOfDef(HediffToGive);
+        Hediff hediff = target.health.hediffSet.GetFirstHediffOfDef(Parms.HediffToGive);
         if (hediff is null)
         {
-            hediff = target.health.AddHediff(HediffToGive, BodyPartRecordToGive);
-            if (InitSeverity > 0f)
-                hediff.Severity = InitSeverity;
+            hediff = target.health.AddHediff(Parms.HediffToGive, Parms.BodyPartRecordToGive);
+            if (Parms.InitSeverity > 0f)
+                hediff.Severity = Parms.InitSeverity;
         }
         else
         {
-            hediff.Severity += AddSeverity;
+            hediff.Severity += Parms.AddSeverity;
         }
         HediffComp_Link hediffComp_Link = hediff.TryGetComp<HediffComp_Link>();
         if (hediffComp_Link is not null)
         {
             hediffComp_Link.drawConnection = false;
-            hediffComp_Link.other = LinkedThing;
+            hediffComp_Link.other = linkedThing;
         }
-        if (OverrideDisappearTicks > 0)
+        if (Parms.OverrideDisappearTicks > 0)
         {
             HediffComp_Disappears hediffComp_Disappears = hediff.TryGetComp<HediffComp_Disappears>();
             if (hediffComp_Disappears is null)
@@ -48,15 +46,8 @@ public class RangeHediffGiver_AddServity : RangeHediffGiver
             }
             else
             {
-                hediffComp_Disappears.ticksToDisappear = OverrideDisappearTicks;
+                hediffComp_Disappears.ticksToDisappear = Parms.OverrideDisappearTicks;
             }
         }
-    }
-
-    /// <inheritdoc />
-    public override void ExposeData()
-    {
-        base.ExposeData();
-        Scribe_Values.Look(ref AddSeverity, nameof(AddSeverity), defaultValue: 0.1f);
     }
 }
