@@ -6,18 +6,18 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 /// <summary>
-/// 范围Hediff给予器。对关联物体周围指定范围内的所有符合条件的Pawn自动给予Hediff。
+/// 范围<see cref="Hediff"/>给予器。对关联物体周围指定范围内的所有符合条件的<see cref="Pawn"/>给予<see cref="Hediff"/>。
 /// </summary>
 public class RangeHediffGiver : IExposable
 {
-    protected RangeHediffGiveParams parms;
+    private RangeHediffGiveParams parms;
     /// <summary>
     /// 获取此给予器所使用的参数配置。
     /// </summary>
     public RangeHediffGiveParams Parms => parms;
 
 
-    protected Thing linkedThing;
+    private Thing linkedThing;
 
     /// <summary>
     /// 关联的物体，用于确定位置和阵营信息。
@@ -28,6 +28,10 @@ public class RangeHediffGiver : IExposable
         set => linkedThing = value;
     }
 
+    /// <summary>
+    /// 额外的目标验证委托。在已有条件基础上进行额外筛选，返回 <see langword="true"/> 时表示目标通过验证。
+    /// </summary>
+    public Predicate<Pawn> ExtraTargetValiator { get; set; }
 
     /// <summary>
     /// 获取关联物体所在的地图。
@@ -39,21 +43,23 @@ public class RangeHediffGiver : IExposable
     public Faction LinkedFaction => linkedThing?.Faction;
 
     /// <summary>
-    /// 创建一个新的范围Hediff给予器实例。
+    /// 创建一个新的范围<see cref="Hediff"/>给予器实例。
     /// </summary>
     public RangeHediffGiver() { }
 
     /// <summary>
-    /// 使用指定的关联物体和参数配置创建一个新的范围Hediff给予器实例。
+    /// 使用指定的关联物体和参数配置创建一个新的范围<see cref="Hediff"/>给予器实例。
     /// </summary>
     /// <param name="linkedThing">关联的物体，用于确定位置和阵营信息。</param>
     /// <param name="parms">参数配置。</param>
-    /// <exception cref="ArgumentNullException">当 <paramref name="linkedThing"/> 为 null 时抛出。</exception>
+    /// <exception cref="ArgumentNullException">当 <paramref name="linkedThing"/> 为 <see langword="null"/> 时抛出。</exception>
     public RangeHediffGiver(Thing linkedThing, RangeHediffGiveParams parms)
     {
         this.linkedThing = linkedThing ?? throw new ArgumentNullException(nameof(linkedThing));
         this.parms = parms;
     }
+
+    public void SetGiveParams(RangeHediffGiveParams parms) => this.parms = parms;
 
     /// <summary>
     /// 序列化/反序列化此对象的所有数据字段。
@@ -65,7 +71,7 @@ public class RangeHediffGiver : IExposable
     }
 
     /// <summary>
-    /// 对范围内所有符合条件的Pawn给予Hediff。
+    /// 对范围内所有符合条件的<see cref="Pawn"/>给予<see cref="Hediff"/>。
     /// 根据 <see href="Parms.Radius"/> 确定范围，并根据 <see href="Parms.TargetRace"/> 和 <see href="Parms.TargetRelation"/> 过滤目标。
     /// </summary>
     public void GiveHediffToRange()
@@ -93,32 +99,54 @@ public class RangeHediffGiver : IExposable
     }
 
     /// <summary>
-    /// 对指定的单个Pawn给予Hediff。如果目标已有同类型Hediff则跳过添加，但会更新消失时间。
+    /// 对指定的单个<see cref="Pawn"/>给予<see cref="Hediff"/>。如果目标已有同类型<see cref="Hediff"/>则跳过添加，但会更新消失时间。
     /// </summary>
-    /// <param name="target">要给予Hediff的目标Pawn。</param>
-    protected virtual void GiveHediffToTarget(Pawn target)
+    /// <param name="target">要给予<see cref="Hediff"/>的目标<see cref="Pawn"/>。</param>
+    protected void GiveHediffToTarget(Pawn target)
     {
         Hediff hediff = target.health.hediffSet.GetFirstHediffOfDef(Parms.HediffToGive);
+        bool isNewHediff = false;
         if (hediff is null)
         {
             hediff = target.health.AddHediff(Parms.HediffToGive, Parms.BodyPartRecordToGive);
-            if (Parms.InitSeverity > 0f)
-                hediff.Severity = Parms.InitSeverity;
+            isNewHediff = true;
 
-            HediffComp_Link hediffComp_Link = hediff.TryGetComp<HediffComp_Link>();
-            if (hediffComp_Link is not null)
-            {
-                hediffComp_Link.drawConnection = Parms.DrawConnection;
-                hediffComp_Link.other = linkedThing;
-            }
+        }
+
+        PostGiveHediff(target, hediff, isNewHediff);
+    }
+
+    /// <summary>
+    /// 在给予<see cref="Hediff"/>后调用，用于执行后续处理（调整严重度、设置连接线、覆盖消失时间）。
+    /// </summary>
+    /// <param name="target">被给予<see cref="Hediff"/>的目标<see cref="Pawn"/>。</param>
+    /// <param name="hediffGived">被给予的<see cref="Hediff"/>实例。</param>
+    /// <param name="isNewHediff">指示是否为新增的<see cref="Hediff"/>。</param>
+    protected virtual void PostGiveHediff(Pawn target, Hediff hediffGived, bool isNewHediff)
+    {
+        if (isNewHediff)
+        {
+            if (Parms.InitSeverity > 0f)
+                hediffGived.Severity = Parms.InitSeverity;
+        }
+        else if (Parms.AddSeverityIfExist.HasValue)
+        {
+            hediffGived.Severity += Parms.AddSeverityIfExist.Value;
+        }
+
+        HediffComp_Link hediffComp_Link = hediffGived.TryGetComp<HediffComp_Link>();
+        if (hediffComp_Link is not null)
+        {
+            hediffComp_Link.drawConnection = Parms.DrawConnection;
+            hediffComp_Link.other = linkedThing;
         }
 
         if (Parms.OverrideDisappearTicks > 0)
         {
-            HediffComp_Disappears hediffComp_Disappears = hediff.TryGetComp<HediffComp_Disappears>();
+            HediffComp_Disappears hediffComp_Disappears = hediffGived.TryGetComp<HediffComp_Disappears>();
             if (hediffComp_Disappears is null)
             {
-                Log.Error($"[OAFrame] {hediff} 没有 {nameof(HediffComp_Disappears)} 组件。");
+                Log.Error($"[OAFrame] {hediffGived} 没有 {nameof(HediffComp_Disappears)} 组件。");
             }
             else
             {
@@ -128,9 +156,9 @@ public class RangeHediffGiver : IExposable
     }
 
     /// <summary>
-    /// 检查指定的Pawn是否符合所有条件（距离、种族、阵营关系），以确定是否对其给予Hediff。
+    /// 检查指定的<see cref="Pawn"/>是否符合所有条件（距离、种族、阵营关系），以确定是否对其给予<see cref="Hediff"/>。
     /// </summary>
-    /// <param name="target">要检查的目标Pawn。</param>
+    /// <param name="target">要检查的目标<see cref="Pawn"/>。</param>
     /// <param name="center">范围中心位置。</param>
     /// <param name="radiusSquared">范围半径的平方。</param>
     /// <returns>如果目标符合条件则返回 <see langword="true"/>。</returns>
@@ -194,6 +222,19 @@ public class RangeHediffGiver : IExposable
                         if (!targetRelation.ContainsFlag(TargetRelationType.Neutral)) return false;
                         break;
                 }
+            }
+        }
+
+        if (ExtraTargetValiator is not null)
+        {
+            try
+            {
+                return ExtraTargetValiator.Invoke(target);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"[OAFrame] 对目标进行额外判定{nameof(ExtraTargetValiator)}时出现异常，目标已被排除，异常：{ex}");
+                return false;
             }
         }
 

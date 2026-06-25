@@ -126,28 +126,44 @@
         </member>
         <member name="T:OberoniaAurea_Frame.HediffGiveParams">
             <summary>
-            用于配置给予Hediff的参数集合。
+            用于配置给予<see cref="T:Verse.Hediff"/>的参数集合。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.HediffGiveParams.HediffToGive">
             <summary>
-            要给予的Hediff定义。
+            要给予的<see cref="T:Verse.HediffDef"/>。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.HediffGiveParams.BodyPartRecordToGive">
             <summary>
-            要给予Hediff的目标身体部位。为null时使用默认部位。
+            要给予<see cref="T:Verse.Hediff"/>的目标身体部位。为 <see langword="null"/> 时使用全身。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.HediffGiveParams.InitSeverity">
             <summary>
-            初始严重度。小于等于0时使用Hediff定义的默认值。
+            初始严重度。小于等于0时使用<see cref="T:Verse.Hediff"/>自身的默认值。
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.HediffGiveParams.AddSeverityIfExist">
+            <summary>
+            当目标已有同类型<see cref="T:Verse.Hediff"/>时，增加其严重度。为 <see langword="null"/> 时不做调整。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.HediffGiveParams.OverrideDisappearTicks">
             <summary>
-            覆盖Hediff的消失时间（Tick数）。小于等于0时使用Hediff定义的默认值。
+            覆盖<see cref="T:Verse.Hediff"/>的消失时间（Tick数）。小于等于0时使用<see cref="T:Verse.Hediff"/>自身的默认值。
             </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.HediffGiveParams.#ctor">
+            <summary>
+            创建一个新的<see cref="T:Verse.Hediff"/>给予参数实例。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.HediffGiveParams.#ctor(Verse.HediffDef)">
+            <summary>
+            使用指定的<see cref="T:Verse.HediffDef"/>创建一个新的<see cref="T:Verse.Hediff"/>给予参数实例。
+            </summary>
+            <param name="hediffToGive">要给予的<see cref="T:Verse.HediffDef"/>。</param>
         </member>
         <member name="M:OberoniaAurea_Frame.HediffGiveParams.ShallowCopy">
             <summary>
@@ -161,7 +177,7 @@
         </member>
         <member name="T:OberoniaAurea_Frame.RangeHediffGiver">
             <summary>
-            范围Hediff给予器。对关联物体周围指定范围内的所有符合条件的Pawn自动给予Hediff。
+            范围<see cref="T:Verse.Hediff"/>给予器。对关联物体周围指定范围内的所有符合条件的<see cref="T:Verse.Pawn"/>给予<see cref="T:Verse.Hediff"/>。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiver.Parms">
@@ -172,6 +188,11 @@
         <member name="P:OberoniaAurea_Frame.RangeHediffGiver.LinkedThing">
             <summary>
             关联的物体，用于确定位置和阵营信息。
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.RangeHediffGiver.ExtraTargetValiator">
+            <summary>
+            额外的目标验证委托。在已有条件基础上进行额外筛选，返回 <see langword="true"/> 时表示目标通过验证。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiver.TargetMap">
@@ -186,16 +207,16 @@
         </member>
         <member name="M:OberoniaAurea_Frame.RangeHediffGiver.#ctor">
             <summary>
-            创建一个新的范围Hediff给予器实例。
+            创建一个新的范围<see cref="T:Verse.Hediff"/>给予器实例。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.RangeHediffGiver.#ctor(Verse.Thing,OberoniaAurea_Frame.RangeHediffGiveParams)">
             <summary>
-            使用指定的关联物体和参数配置创建一个新的范围Hediff给予器实例。
+            使用指定的关联物体和参数配置创建一个新的范围<see cref="T:Verse.Hediff"/>给予器实例。
             </summary>
             <param name="linkedThing">关联的物体，用于确定位置和阵营信息。</param>
             <param name="parms">参数配置。</param>
-            <exception cref="T:System.ArgumentNullException">当 <paramref name="linkedThing"/> 为 null 时抛出。</exception>
+            <exception cref="T:System.ArgumentNullException">当 <paramref name="linkedThing"/> 为 <see langword="null"/> 时抛出。</exception>
         </member>
         <member name="M:OberoniaAurea_Frame.RangeHediffGiver.ExposeData">
             <summary>
@@ -204,21 +225,29 @@
         </member>
         <member name="M:OberoniaAurea_Frame.RangeHediffGiver.GiveHediffToRange">
             <summary>
-            对范围内所有符合条件的Pawn给予Hediff。
+            对范围内所有符合条件的<see cref="T:Verse.Pawn"/>给予<see cref="T:Verse.Hediff"/>。
             根据 <see href="Parms.Radius"/> 确定范围，并根据 <see href="Parms.TargetRace"/> 和 <see href="Parms.TargetRelation"/> 过滤目标。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.RangeHediffGiver.GiveHediffToTarget(Verse.Pawn)">
             <summary>
-            对指定的单个Pawn给予Hediff。如果目标已有同类型Hediff则跳过添加，但会更新消失时间。
+            对指定的单个<see cref="T:Verse.Pawn"/>给予<see cref="T:Verse.Hediff"/>。如果目标已有同类型<see cref="T:Verse.Hediff"/>则跳过添加，但会更新消失时间。
             </summary>
-            <param name="target">要给予Hediff的目标Pawn。</param>
+            <param name="target">要给予<see cref="T:Verse.Hediff"/>的目标<see cref="T:Verse.Pawn"/>。</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiver.PostGiveHediff(Verse.Pawn,Verse.Hediff,System.Boolean)">
+            <summary>
+            在给予<see cref="T:Verse.Hediff"/>后调用，用于执行后续处理（调整严重度、设置连接线、覆盖消失时间）。
+            </summary>
+            <param name="target">被给予<see cref="T:Verse.Hediff"/>的目标<see cref="T:Verse.Pawn"/>。</param>
+            <param name="hediffGived">被给予的<see cref="T:Verse.Hediff"/>实例。</param>
+            <param name="isNewHediff">指示是否为新增的<see cref="T:Verse.Hediff"/>。</param>
         </member>
         <member name="M:OberoniaAurea_Frame.RangeHediffGiver.CanApplyOnPawn(Verse.Pawn,Verse.IntVec3,System.Single)">
             <summary>
-            检查指定的Pawn是否符合所有条件（距离、种族、阵营关系），以确定是否对其给予Hediff。
+            检查指定的<see cref="T:Verse.Pawn"/>是否符合所有条件（距离、种族、阵营关系），以确定是否对其给予<see cref="T:Verse.Hediff"/>。
             </summary>
-            <param name="target">要检查的目标Pawn。</param>
+            <param name="target">要检查的目标<see cref="T:Verse.Pawn"/>。</param>
             <param name="center">范围中心位置。</param>
             <param name="radiusSquared">范围半径的平方。</param>
             <returns>如果目标符合条件则返回 <see langword="true"/>。</returns>
@@ -270,7 +299,7 @@
         </member>
         <member name="T:OberoniaAurea_Frame.RangeHediffGiveParams">
             <summary>
-            用于配置范围型Hediff给予的参数集合。继承自 <see cref="T:OberoniaAurea_Frame.HediffGiveParams"/>，额外包含影响范围、连接线绘制、目标种族和阵营关系等筛选条件。
+            用于配置范围型<see cref="T:Verse.Hediff"/>给予的参数集合。继承自 <see cref="T:OberoniaAurea_Frame.HediffGiveParams"/>，额外包含影响范围、连接线绘制、目标种族和阵营关系等筛选条件。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.Radius">
@@ -293,29 +322,24 @@
             目标阵营关系的筛选条件。默认为 <see cref="F:OberoniaAurea_Frame.TargetRelationType.Default"/>。
             </summary>
         </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiveParams.#ctor">
+            <summary>
+            创建一个新的范围型<see cref="T:Verse.Hediff"/>给予参数实例。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.RangeHediffGiveParams.#ctor(Verse.HediffDef,System.Single)">
+            <summary>
+            使用指定的<see cref="T:Verse.HediffDef"/>和影响范围半径创建一个新的范围型<see cref="T:Verse.Hediff"/>给予参数实例。
+            </summary>
+            <param name="hediffToGive">要给予的<see cref="T:Verse.HediffDef"/>。</param>
+            <param name="radius">影响范围半径。</param>
+        </member>
         <member name="M:OberoniaAurea_Frame.RangeHediffGiveParams.ShallowCopy">
             <summary>
             创建此对象的浅表副本。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.RangeHediffGiveParams.ExposeData">
-            <inheritdoc />
-        </member>
-        <member name="T:OberoniaAurea_Frame.RangeHediffGiver_AddServity">
-            <summary>
-            累加严重度范围<see cref="T:Verse.Hediff"/>给予器。
-            </summary>
-        </member>
-        <member name="P:OberoniaAurea_Frame.RangeHediffGiver_AddServity.Parms">
-            <inheritdoc />
-        </member>
-        <member name="M:OberoniaAurea_Frame.RangeHediffGiver_AddServity.#ctor">
-            <inheritdoc />
-        </member>
-        <member name="M:OberoniaAurea_Frame.RangeHediffGiver_AddServity.#ctor(Verse.Thing,OberoniaAurea_Frame.RangeHediffGiveParams_AddServity)">
-            <inheritdoc />
-        </member>
-        <member name="M:OberoniaAurea_Frame.RangeHediffGiver_AddServity.GiveHediffToTarget(Verse.Pawn)">
             <inheritdoc />
         </member>
         <member name="T:OberoniaAurea_Frame.TargetRelationType">
@@ -537,19 +561,6 @@
             <summary>
             设置信号转换
             </summary>
-        </member>
-        <member name="T:OberoniaAurea_Frame.RangeHediffGiveParams_AddServity">
-            <summary>
-            可累加严重度的范围型<see cref="T:Verse.Hediff"/>给予参数。继承自 <see cref="T:OberoniaAurea_Frame.RangeHediffGiveParams"/>，额外包含每次检查时累加的严重度值。
-            </summary>
-        </member>
-        <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams_AddServity.AddSeverity">
-            <summary>
-            每次检查时累加的严重度值。默认值为 0.1。
-            </summary>
-        </member>
-        <member name="M:OberoniaAurea_Frame.RangeHediffGiveParams_AddServity.ExposeData">
-            <inheritdoc />
         </member>
         <member name="T:OberoniaAurea_Frame.IPawnFloatMenuOptionProvider">
             <summary>

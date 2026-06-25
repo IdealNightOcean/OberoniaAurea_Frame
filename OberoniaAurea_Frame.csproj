@@ -74,7 +74,6 @@
     <Compile Include="Component\RangeHediffGiver.cs" />
     <Compile Include="Component\RaceType.cs" />
     <Compile Include="Component\RangeHediffGiveParams.cs" />
-    <Compile Include="Component\RangeHediffGiver_AddServity.cs" />
     <Compile Include="Component\TargetRelationType.cs" />
     <Compile Include="Component\ThingMakeInfo.cs" />
     <Compile Include="FactionTagsExtension.cs" />
@@ -98,7 +97,6 @@
     <Compile Include="Quest\Quest_MultiSignalCount.cs" />
     <Compile Include="Quest\QuestNode\QuestNode_QuestUnique.cs" />
     <Compile Include="Quest\Quest_TransToHardcodedSignalWithQuestID.cs" />
-    <Compile Include="Component\RangeHediffGiveParams_AddServity.cs" />
     <Compile Include="Thing\BulletBase.cs" />
     <Compile Include="Thing\CompDestroyAfterSwapMap.cs" />
     <Compile Include="HarmonyPatch\MapParent_GetShuttleFloatMenuOptions_Patch.cs" />

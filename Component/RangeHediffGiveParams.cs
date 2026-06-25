@@ -3,7 +3,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 /// <summary>
-/// 用于配置范围型Hediff给予的参数集合。继承自 <see cref="HediffGiveParams"/>，额外包含影响范围、连接线绘制、目标种族和阵营关系等筛选条件。
+/// 用于配置范围型<see cref="Hediff"/>给予的参数集合。继承自 <see cref="HediffGiveParams"/>，额外包含影响范围、连接线绘制、目标种族和阵营关系等筛选条件。
 /// </summary>
 public class RangeHediffGiveParams : HediffGiveParams
 {
@@ -45,6 +45,20 @@ public class RangeHediffGiveParams : HediffGiveParams
     {
         get => targetRelation;
         set => targetRelation = value;
+    }
+
+    /// <summary>
+    /// 创建一个新的范围型<see cref="Hediff"/>给予参数实例。
+    /// </summary>
+    public RangeHediffGiveParams() { }
+    /// <summary>
+    /// 使用指定的<see cref="HediffDef"/>和影响范围半径创建一个新的范围型<see cref="Hediff"/>给予参数实例。
+    /// </summary>
+    /// <param name="hediffToGive">要给予的<see cref="HediffDef"/>。</param>
+    /// <param name="radius">影响范围半径。</param>
+    public RangeHediffGiveParams(HediffDef hediffToGive, float radius) : base(hediffToGive)
+    {
+        this.radius = radius;
     }
 
     /// <summary>

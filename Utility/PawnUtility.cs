@@ -58,6 +58,11 @@ public static class OAFrame_PawnUtility
 
             pawn.health.AddHediff(hediff);
         }
+        else
+        {
+            if (parms.AddSeverityIfExist.HasValue)
+                hediff.Severity += parms.AddSeverityIfExist.Value;
+        }
 
         if (parms.OverrideDisappearTicks > 0)
         {
