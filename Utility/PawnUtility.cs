@@ -44,7 +44,7 @@ public static class OAFrame_PawnUtility
     /// 同时根据参数配置设置初始严重度和覆盖消失时间。
     /// </summary>
     /// <returns>已有的或新创建的<see cref="Hediff"/>实例；如果 <see cref="Pawn"/> 或 <see href="parms"/> 为 <see langword="null"/> 则返回 <see langword="null"/>。</returns>
-    public static Hediff GetOrAddHediffToPawn(Pawn pawn, HediffGiveParams parms)
+    public static Hediff GetOrAddHediff(this Pawn pawn, HediffGiveParams parms)
     {
         if (pawn is null || parms is null)
             return null;
@@ -83,8 +83,12 @@ public static class OAFrame_PawnUtility
     /// <summary>
     /// 移除第一个相关Def的健康状态。
     /// </summary>
-    public static void RemoveFirstHediffOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
+    /// <returns>是否成功移除。</returns>
+    public static bool RemoveFirstHediffOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
     {
+        if (pawn is null || def is null)
+            return false;
+
         List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
         for (int i = 0; i < hediffs.Count; i++)
         {
@@ -92,8 +96,112 @@ public static class OAFrame_PawnUtility
             if (hediff.def == def && (!mustBeVisible || hediff.Visible))
             {
                 pawn.health.RemoveHediff(hediff);
-                return;
+                return true;
             }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 移除所有相关Def的健康状态。
+    /// </summary>
+    /// <returns>移除的相关<see cref="Hediff"/>的数量。</returns>
+    public static int RemoveAllHediffsOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
+    {
+        if (pawn is null || def is null)
+            return 0;
+
+        int total = 0;
+        while (RemoveFirstHediffOfDef(pawn, def, mustBeVisible))
+            total++;
+
+        return total;
+    }
+
+    /// <summary>
+    /// 获取或添加指定的 <see cref="Thought_Memory"/> 到 <see cref="Pawn"/> 的记忆中。
+    /// 若已有该类型的记忆则直接返回，否则新建并返回。
+    /// </summary>
+    /// <param name="pawn">目标角色。</param>
+    /// <param name="parms">记忆参数，包含记忆类型、心情偏移量、是否永久等信息。</param>
+    /// <returns>获取或创建成功的 <see cref="Thought_Memory"/> 实例，若参数无效则返回 null。</returns>
+    public static Thought_Memory GetOrAddMemory(this Pawn pawn, MemoryGiveParams parms)
+    {
+        if (parms is null || pawn is null)
+            return null;
+
+        MemoryThoughtHandler memories = pawn.needs?.mood?.thoughts?.memories;
+        if (memories is null)
+            return null;
+
+        Thought_Memory memory = memories.GetFirstMemoryOfDef(parms.MemoryToGive);
+        if (memory is null)
+        {
+            memory = (Thought_Memory)ThoughtMaker.MakeThought(parms.MemoryToGive);
+            memory.moodOffset = parms.MoodOffset;
+
+        }
+
+        if (parms.Permanent)
+        {
+            memory.permanent = true;
+        }
+        else
+        {
+            memory.permanent = false;
+            if (parms.OverrideDisappearTicks > 0)
+            {
+                memory.durationTicksOverride = parms.OverrideDisappearTicks;
+                memory.Renew();
+            }
+        }
+
+        return memory;
+    }
+
+    /// <summary>
+    /// 移除 <see cref="Pawn"/> 记忆中的第一个指定 <see cref="ThoughtDef"/> 类型的记忆。
+    /// </summary>
+    /// <returns>是否成功移除。</returns>
+    public static bool RemoveFirstMemoryOfDef(this Pawn pawn, ThoughtDef def)
+    {
+        if (def is null || pawn is null)
+            return false;
+
+        MemoryThoughtHandler memories = pawn.needs?.mood?.thoughts?.memories;
+        if (memories is null)
+            return false;
+
+        Thought_Memory memory = memories.GetFirstMemoryOfDef(def);
+        if (memory is null)
+            return false;
+
+        memories.RemoveMemory(memory);
+        return true;
+    }
+
+    /// <summary>
+    /// 移除 <see cref="Pawn"/> 记忆中所有指定 <see cref="ThoughtDef"/> 类型的记忆。
+    /// </summary>
+    /// <returns>是否移除了至少一个记忆。</returns>
+    public static bool RemoveAllMemoriesOfDef(this Pawn pawn, ThoughtDef def)
+    {
+        if (def is null || pawn is null)
+            return false;
+
+        MemoryThoughtHandler memories = pawn.needs?.mood?.thoughts?.memories;
+        if (memories is null)
+            return false;
+
+        bool anyRemoved = false;
+        while (true)
+        {
+            Thought_Memory memory = memories.GetFirstMemoryOfDef(def);
+            if (memory is null)
+                return anyRemoved;
+
+            memories.RemoveMemoriesOfDef(def);
+            anyRemoved = true;
         }
     }
 

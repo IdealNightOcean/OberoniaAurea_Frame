@@ -71,6 +71,7 @@
     <Compile Include="Component\CooldownRecord.cs" />
     <Compile Include="Component\FactionValidationParams.cs" />
     <Compile Include="Component\HediffGiveParams.cs" />
+    <Compile Include="Component\MemoryGiveParams.cs" />
     <Compile Include="Component\RangeHediffGiver.cs" />
     <Compile Include="Component\RaceType.cs" />
     <Compile Include="Component\RangeHediffGiveParams.cs" />

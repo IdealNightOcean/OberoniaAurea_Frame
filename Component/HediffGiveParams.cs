@@ -86,6 +86,5 @@ public class HediffGiveParams : IExposable
         Scribe_BodyParts.Look(ref bodyPartRecordToGive, nameof(bodyPartRecordToGive));
         Scribe_Values.Look(ref initSeverity, nameof(initSeverity), defaultValue: -1f);
         Scribe_Values.Look(ref overrideDisappearTicks, nameof(overrideDisappearTicks), defaultValue: -1);
-
     }
 }
