@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -6,6 +6,9 @@ using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 带有交互功能的守卫职责。
+/// </summary>
 public class LordToil_DefendPointWithInteraction : LordToil_DefendPoint
 {
     public LordToil_DefendPointWithInteraction(bool canSatisfyLongNeeds = true) : base(canSatisfyLongNeeds) { }

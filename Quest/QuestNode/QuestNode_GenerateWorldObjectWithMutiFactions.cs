@@ -1,10 +1,13 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：生成包含多个派系的世界对象。 
+/// </summary>
 public class QuestNode_GenerateWorldObjectWithMutiFactions : QuestNode_GenerateInteractiveWorldObject
 {
     public SlateRef<IEnumerable<Faction>> participantFactions;

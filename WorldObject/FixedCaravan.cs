@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 固定远行队。 
+/// </summary>
 public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
 {
     private Material cachedMat;

@@ -6,6 +6,9 @@ using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 可对话的访问殖民地职责。
+/// </summary>
 public class LordJob_VisitColonyTalkable : LordJob_VisitColonyBase, ILordJobWithTalk
 {
     protected Pawn talkablePawn;

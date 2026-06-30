@@ -1,10 +1,13 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using Verse;
 using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 立即攻击且从不逃跑的袭击策略。
+/// </summary>
 public abstract class RaidStrategyWorker_ImmediateAttack_NeverFlee : RaidStrategyWorker
 {
     protected override LordJob MakeLordJob(IncidentParms parms, Map map, List<Pawn> pawns, int raidSeed)

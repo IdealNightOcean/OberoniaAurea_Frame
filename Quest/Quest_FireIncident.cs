@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：触发事件。 
+/// </summary>
 public class QuestNode_FireIncident : QuestNode
 {
     [NoTranslate]
@@ -92,6 +95,9 @@ public class QuestNode_FireIncident : QuestNode
     }
 }
 
+/// <summary> 
+/// 任务部件：触发事件。 
+/// </summary>
 public class QuestPart_FireIncident : QuestPart
 {
     public string inSignal;

@@ -5,6 +5,9 @@ using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 对话的工作驱动抽象类。
+/// </summary>
 public abstract class JobDriver_TalkWithAtOnce : JobDriver
 {
     protected Pawn TalkWith => TargetPawnA;

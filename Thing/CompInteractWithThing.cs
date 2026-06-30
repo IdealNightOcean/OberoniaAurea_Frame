@@ -4,11 +4,17 @@ using Verse.AI;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 与物体交互的组件属性。
+/// </summary>
 public class CompProperties_InteractWithThing : CompProperties
 {
     public JobDef interactJob;
 }
 
+/// <summary>
+/// 与物体交互的组件抽象类。
+/// </summary>
 public abstract class CompInteractWithThing : ThingComp
 {
     protected CompProperties_InteractWithThing Props => (CompProperties_InteractWithThing)props;

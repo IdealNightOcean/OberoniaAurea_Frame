@@ -5,6 +5,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 简单的唯一元素列表。
+/// </summary>
 public class SimpleUniqueList<T> : IList<T>, IExposable
 {
     private LookMode innerListLookMode;

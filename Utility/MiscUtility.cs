@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 杂项工具类。
+///  </summary>
 [StaticConstructorOnStartup]
 public static class OAFrame_MiscUtility
 {

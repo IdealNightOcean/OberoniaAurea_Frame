@@ -2,6 +2,9 @@ using RimWorld.Planet;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 多交互类型的世界对象基类。 
+/// </summary>
 public abstract class WorldObject_MutiInteractiveBase : WorldObject_InteractiveBase
 {
     public override void Notify_CaravanArrived(Caravan caravan)

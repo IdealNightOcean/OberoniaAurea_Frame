@@ -9,6 +9,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 固定远行队工具类。 
+/// </summary>
 public static class OAFrame_FixedCaravanUtility
 {
     private static readonly List<Thing> TempInventoryItems = [];

@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Verse;
 using Verse.AI;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 与物体交互的工作驱动抽象类。
+/// </summary>
 public abstract class JobDriver_InteractWithThingAtOnce : JobDriver
 {
     protected Thing InteractTarget => TargetThingA;

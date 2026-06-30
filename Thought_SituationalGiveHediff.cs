@@ -2,6 +2,9 @@ using RimWorld;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 情境型想法，激活时给予 <see cref="Hediff"/>。
+/// </summary>
 public class Thought_SituationalGiveHediff : Thought_Situational
 {
     protected override void Notify_BecameActive()

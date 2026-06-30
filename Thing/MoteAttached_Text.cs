@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 附着文本粒子。
+/// </summary>
 public class MoteAttached_Text : MoteAttached
 {
     public string text;

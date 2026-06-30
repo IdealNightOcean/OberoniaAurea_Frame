@@ -1,8 +1,11 @@
-﻿using RimWorld.QuestGen;
+using RimWorld.QuestGen;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：生成物品的<see cref="ThingDef"/>及数量。 
+/// </summary>
 public class QuestNode_GenerateThingDefCount : QuestNode
 {
     public SlateRef<ThingDef> thingDef;

@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// <see cref="Pawn"/> 生成工具类。
+/// </summary>
 public static class OAFrame_PawnGenerateUtility
 {
     /// <summary>

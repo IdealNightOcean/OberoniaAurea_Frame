@@ -9,6 +9,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务工具类。 
+/// </summary>
 [StaticConstructorOnStartup]
 public static class OAFrame_QuestUtility
 {

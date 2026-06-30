@@ -4,10 +4,16 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 冷却记录管理器。
+/// </summary>
 public class CooldownRecordManager : IExposable
 {
     private Dictionary<string, CooldownRecord> records = [];
 
+    /// <summary>
+    /// 序列化/反序列化此对象的所有数据字段。
+    /// </summary>
     public void ExposeData()
     {
         Scribe_Collections.Look(ref records, nameof(records), LookMode.Value, LookMode.Deep);

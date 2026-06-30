@@ -1,11 +1,13 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//计算物品需求数，主要用于交易类任务
+/// <summary> 
+/// 任务节点：计算物品需求数，主要用于交易类任务。 
+/// </summary>
 public class QuestNode_RequestThingCount : QuestNode
 {
     [NoTranslate]

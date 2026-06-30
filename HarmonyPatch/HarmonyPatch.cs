@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using JetBrains.Annotations;
 using System.Reflection;
 using Verse;
@@ -6,6 +6,9 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 
+/// <summary>
+/// Mod 的 Harmony 补丁入口。
+/// </summary>
 [UsedImplicitly]
 [StaticConstructorOnStartup]
 public static class ModHarmonyPatch

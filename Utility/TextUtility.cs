@@ -1,9 +1,12 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 文本工具类。 
+/// </summary>
 [StaticConstructorOnStartup]
 public static class OAFrame_TextUtility
 {

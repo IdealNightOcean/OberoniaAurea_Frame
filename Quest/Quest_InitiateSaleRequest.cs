@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
@@ -39,7 +39,9 @@ public class QuestNode_InitiateSaleRequest : QuestNode
 
 }
 
-//初始化给予玩家型交易comp
+/// <summary> 
+/// 任务部件：初始化给予玩家型交易。 
+/// </summary>
 public class QuestPart_InitiateSaleRequest : QuestPart
 {
     public string inSignal;

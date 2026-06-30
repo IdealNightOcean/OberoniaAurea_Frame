@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Verse;
 
+/// <summary> 运输舱访问交互世界对象的动作。 </summary>
 public class TransportersArrivalAction_VisitInteractiveObject : TransportersArrivalAction_FormCaravan
 {
     protected WorldObject_InteractiveBase worldObject;

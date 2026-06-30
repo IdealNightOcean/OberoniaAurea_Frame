@@ -3,6 +3,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 图标工具类。
+///  </summary>
 [StaticConstructorOnStartup]
 public static class OAFrame_IconUtility
 {

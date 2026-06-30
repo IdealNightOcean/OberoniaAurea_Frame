@@ -5,6 +5,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 基于哈希集合的简单列表，保证元素唯一性。
+/// </summary>
 public class SimpleHashList<T> : IList<T>, IExposable
 {
     private LookMode innerListLookMode;

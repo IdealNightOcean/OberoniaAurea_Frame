@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
@@ -6,7 +6,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//用于获取派系
+/// <summary> 
+/// 任务节点：获取派系。 
+/// </summary>
 public class QuestNode_GetFaction : QuestNode
 {
     [NoTranslate]

@@ -8,7 +8,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 /// <summary>
-/// 物品工具类
+/// <see cref="Thing"/> 工具类。
 /// </summary>
 public static class OAFrame_ThingUtility
 {

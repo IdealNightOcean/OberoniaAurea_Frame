@@ -7,6 +7,9 @@ using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 访问殖民地的基础职责。
+/// </summary>
 public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
 {
     protected Faction faction;

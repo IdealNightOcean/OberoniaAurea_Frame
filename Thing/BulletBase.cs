@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -6,6 +6,9 @@ using Verse.Sound;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 弹药基类。
+/// </summary>
 public class BulletBase : Bullet
 {
     public override bool AnimalsFleeImpact => true;

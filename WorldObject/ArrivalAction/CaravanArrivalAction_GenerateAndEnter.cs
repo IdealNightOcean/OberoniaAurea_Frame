@@ -5,6 +5,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 远行队到达并生成可进入地图的动作。 </summary>
 public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
 {
     private MapParent_Enterable mapParent;

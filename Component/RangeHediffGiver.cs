@@ -88,7 +88,12 @@ public class RangeHediffGiver : IExposable
         IntVec3 linkedThingPos = linkedThing.Position;
         float radiusSquared = Parms.Radius * Parms.Radius;
 
-        IEnumerable<Pawn> potentialPawns = TargetMap.mapPawns.AllPawnsSpawned;
+        IEnumerable<Pawn> potentialPawns = null;
+        if (linkedThing.Faction is null || parms.TargetRelation.ContainsAnyFlag(TargetRelationType.NonSameFaction))
+            potentialPawns = TargetMap.mapPawns.AllPawnsSpawned;
+        else
+            potentialPawns = TargetMap.mapPawns.SpawnedPawnsInFaction(linkedThing.Faction);
+
         foreach (Pawn target in potentialPawns)
         {
             if (CanApplyOnPawn(target, linkedThingPos, radiusSquared))
@@ -110,7 +115,6 @@ public class RangeHediffGiver : IExposable
         {
             hediff = target.health.AddHediff(Parms.HediffToGive, Parms.BodyPartRecordToGive);
             isNewHediff = true;
-
         }
 
         PostGiveHediff(target, hediff, isNewHediff);

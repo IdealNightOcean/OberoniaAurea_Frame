@@ -1,9 +1,12 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 攻击指定物体且从不逃跑的职责。
+/// </summary>
 public class LordJob_AssaultThings_NeverFlee : LordJob_AssaultThings
 {
     public override bool AddFleeToil => false;

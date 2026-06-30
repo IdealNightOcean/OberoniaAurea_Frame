@@ -37,9 +37,9 @@ public class RangeHediffGiveParams : HediffGiveParams
         set => targetRace = value;
     }
 
-    private TargetRelationType targetRelation = TargetRelationType.Default;
+    private TargetRelationType targetRelation = TargetRelationType.NonHostile;
     /// <summary>
-    /// 目标阵营关系的筛选条件。默认为 <see cref="TargetRelationType.Default"/>。
+    /// 目标阵营关系的筛选条件。默认为 <see cref="TargetRelationType.NonHostile"/>。
     /// </summary>
     public TargetRelationType TargetRelation
     {
@@ -75,6 +75,6 @@ public class RangeHediffGiveParams : HediffGiveParams
         Scribe_Values.Look(ref drawConnection, nameof(drawConnection), defaultValue: false);
 
         Scribe_Values.Look(ref targetRace, nameof(targetRace), defaultValue: RaceType.Humanlike);
-        Scribe_Values.Look(ref targetRelation, nameof(targetRelation), defaultValue: TargetRelationType.Default);
+        Scribe_Values.Look(ref targetRelation, nameof(targetRelation), defaultValue: TargetRelationType.NonHostile);
     }
 }

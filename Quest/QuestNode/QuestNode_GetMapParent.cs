@@ -1,9 +1,10 @@
-﻿using RimWorld.Planet;
+using RimWorld.Planet;
 using RimWorld.QuestGen;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 任务节点：获取地图父对象。 </summary>
 public class QuestNode_GetMapParent : QuestNode
 {
     [NoTranslate]

@@ -1,10 +1,13 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：任务唯一性检查。 
+/// </summary>
 public class QuestNode_QuestUnique : QuestNode
 {
     public enum CheckRestriction

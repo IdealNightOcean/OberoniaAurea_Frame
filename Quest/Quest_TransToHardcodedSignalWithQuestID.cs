@@ -4,6 +4,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：转换为含任务ID的硬编码信号。 
+/// </summary>
 public class QuestNode_TransToHardcodedSignalWithQuestID : QuestNode
 {
     [NoTranslate]
@@ -41,7 +44,9 @@ public class QuestNode_TransToHardcodedSignalWithQuestID : QuestNode
         }
     }
 }
-
+/// <summary> 
+/// 任务部件：转换为含任务ID的硬编码信号。 
+/// </summary>
 public class QuestPart_TransToHardcodedSignalWithQuestID : QuestPart
 {
     private string inSignal;

@@ -4,6 +4,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 集合工具类。
+/// </summary>
 public static class OAFrame_CollectionUtility
 {
     /// <summary>

@@ -3,6 +3,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 基于地图的简单值缓存。
+/// </summary>
 public struct SimpleMapCahce<T> where T : unmanaged
 {
     private Map cachedMap;

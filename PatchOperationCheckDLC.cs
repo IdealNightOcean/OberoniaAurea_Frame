@@ -1,8 +1,11 @@
-﻿using System.Xml;
+using System.Xml;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 检查 DLC 是否启用的补丁操作。
+/// </summary>
 public class PatchOperationCheckDLC : PatchOperation
 {
     public bool Royalty;

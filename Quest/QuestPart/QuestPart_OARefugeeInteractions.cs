@@ -8,6 +8,9 @@ using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务部件：难民交互处理。 
+/// </summary>
 public class QuestPart_OARefugeeInteractions : QuestPartActivable
 {
     private enum InteractionResponseType

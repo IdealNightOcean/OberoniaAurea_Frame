@@ -1,10 +1,13 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：为世界对象设置多个派系。 
+/// </summary>
 public class QuestNode_SetMutiFactionsForWorldObject : QuestNode
 {
     public SlateRef<WorldObject> worldObject;

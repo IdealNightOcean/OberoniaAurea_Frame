@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 可进入的地图父对象。 
+/// </summary>
 public class MapParent_Enterable : MapParent, IQuestAssociate
 {
     protected Quest quest;

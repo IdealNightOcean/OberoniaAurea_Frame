@@ -1,10 +1,13 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：季节性限制。 
+/// </summary>
 public class QuestNode_SeasonalRestriction : QuestNode
 {
     public SlateRef<bool> allowSpring = true;

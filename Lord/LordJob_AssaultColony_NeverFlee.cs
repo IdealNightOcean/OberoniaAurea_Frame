@@ -1,7 +1,10 @@
-﻿using RimWorld;
+using RimWorld;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 攻击殖民地且从不逃跑的职责。
+/// </summary>
 public class LordJob_AssaultColony_NeverFlee : LordJob_AssaultColony
 {
     public override bool AddFleeToil => false;

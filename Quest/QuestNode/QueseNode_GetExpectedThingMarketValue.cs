@@ -1,10 +1,12 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//根据物品Def计算特定数量的物品价值
+/// <summary> 
+/// 任务节点：根据物品Def计算特定数量的预期市场价值。 
+/// </summary>
 public class QueseNode_GetExpectedThingMarketValue : QuestNode
 {
     [NoTranslate]

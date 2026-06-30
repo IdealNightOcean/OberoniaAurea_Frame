@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -6,6 +6,9 @@ using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 带有交互功能的旅行职责。
+/// </summary>
 public class LordToil_TravelWithInteraction : LordToil_Travel
 {
     public LordToil_TravelWithInteraction(IntVec3 dest) : base(dest) { }

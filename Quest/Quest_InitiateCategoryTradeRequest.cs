@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
@@ -52,7 +52,9 @@ public class QuestNode_InitiateCategoryTradeRequest : QuestNode
 
 }
 
-//初始化 类型物品交易请求comp
+/// <summary> 
+/// 任务部件：初始化类型物品交易请求。 
+/// </summary>
 public class QuestPart_InitiateCategoryTradeRequest : QuestPart
 {
     public string inSignal;

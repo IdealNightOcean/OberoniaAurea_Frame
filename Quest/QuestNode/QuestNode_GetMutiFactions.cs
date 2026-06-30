@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//QuestNode：获取指定数量多个派系
+/// <summary> 
+/// 任务节点：获取指定数量的多个派系。 
+/// </summary>
 public class QuestNode_GetMutiFactions : QuestNode_GetFaction
 {
     public SlateRef<IntRange> factionCount;

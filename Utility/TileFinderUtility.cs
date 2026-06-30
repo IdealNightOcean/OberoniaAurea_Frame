@@ -5,6 +5,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 地块查找工具类。 
+/// </summary>
 [StaticConstructorOnStartup]
 public static class OAFrame_TileFinderUtility
 {

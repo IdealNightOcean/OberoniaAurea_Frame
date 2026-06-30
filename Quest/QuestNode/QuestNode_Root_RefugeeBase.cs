@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：难民任务基础节点。 
+/// </summary>
 public class QuestNode_Root_RefugeeBase : QuestNode
 {
     protected const string IsMainFactionSlate = "isMainFaction";

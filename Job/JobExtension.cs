@@ -3,6 +3,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 工作扩展记录，保存工作相关属性。
+/// </summary>
 public class JobExtensionRecord : IExposable
 {
     public SkillDef jobSkill;
@@ -26,6 +29,9 @@ public class JobExtensionRecord : IExposable
     }
 }
 
+/// <summary>
+/// 工作定义扩展，包含工作扩展记录。
+/// </summary>
 public class JobExtension : DefModExtension
 {
     public JobExtensionRecord jobExtensionRecord;

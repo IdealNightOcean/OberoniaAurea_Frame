@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 派系工具类。 
+/// </summary>
 [StaticConstructorOnStartup]
 public static class OAFrame_FactionUtility
 {

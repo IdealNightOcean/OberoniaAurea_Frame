@@ -1,4 +1,5 @@
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,11 +9,14 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// <see cref="Pawn"/> 工具类。 
+/// </summary>
 [StaticConstructorOnStartup]
 public static class OAFrame_PawnUtility
 {
     /// <summary>
-    /// 检查<see cref="Pawn"/>的容器是否为持久保有者（<see cref="IPawnRetentionHolder"/>)。
+    /// 检查 <see cref="Pawn"/> 的容器是否为持久保有者（<see cref="IPawnRetentionHolder"/>)。
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsChildOfRetentionHolder(this Pawn p) => p.ParentHolder is IPawnRetentionHolder;
@@ -20,6 +24,7 @@ public static class OAFrame_PawnUtility
     /// <summary>
     /// 添加健康状态
     /// </summary>
+    [Obsolete($"请使用{nameof(OAFrame_PawnUtility)}.{nameof(GetOrAddHediff)}")]
     public static void AdjustOrAddHediff(this Pawn pawn, HediffDef hediffDef, float severity = -1, int overrideDisappearTicks = -1, BodyPartRecord part = null, DamageInfo? dinfo = null, DamageWorker.DamageResult result = null)
     {
         Hediff hediff = pawn?.health.GetOrAddHediff(hediffDef, part, dinfo, result);
@@ -40,7 +45,7 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 获取或向<see cref="Pawn"/>添加一个<see cref="Hediff"/>。如果目标已有同类型<see cref="Hediff"/>则更新相关属性并返回，否则根据参数创建并添加新的<see cref="Hediff"/>。
+    /// 获取或向 <see cref="Pawn"/> 添加一个 <see cref="Hediff"/> 。如果目标已有同类型 <see cref="Hediff"/> 则更新相关属性并返回，否则根据参数创建并添加新的<see cref="Hediff"/>。
     /// 同时根据参数配置设置初始严重度和覆盖消失时间。
     /// </summary>
     /// <returns>已有的或新创建的<see cref="Hediff"/>实例；如果 <see cref="Pawn"/> 或 <see href="parms"/> 为 <see langword="null"/> 则返回 <see langword="null"/>。</returns>
@@ -81,7 +86,7 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 移除第一个相关Def的健康状态。
+    /// 移除第一个相关 <see cref="HediffDef"/> 的 <see cref="Hediff"/>。
     /// </summary>
     /// <returns>是否成功移除。</returns>
     public static bool RemoveFirstHediffOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
@@ -103,9 +108,9 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 移除所有相关Def的健康状态。
+    /// 移除所有相关 <see cref="HediffDef"/> 的 <see cref="Hediff"/>。
     /// </summary>
-    /// <returns>移除的相关<see cref="Hediff"/>的数量。</returns>
+    /// <returns>移除的相关 <see cref="Hediff"/> 的数量。</returns>
     public static int RemoveAllHediffsOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
     {
         if (pawn is null || def is null)
@@ -124,7 +129,7 @@ public static class OAFrame_PawnUtility
     /// </summary>
     /// <param name="pawn">目标角色。</param>
     /// <param name="parms">记忆参数，包含记忆类型、心情偏移量、是否永久等信息。</param>
-    /// <returns>获取或创建成功的 <see cref="Thought_Memory"/> 实例，若参数无效则返回 null。</returns>
+    /// <returns>获取或创建成功的 <see cref="Thought_Memory"/> 实例，若参数无效则返回 <see langword="null"/>。</returns>
     public static Thought_Memory GetOrAddMemory(this Pawn pawn, MemoryGiveParams parms)
     {
         if (parms is null || pawn is null)
@@ -206,14 +211,15 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 检查<see cref="Pawn"/>是否正在睡眠。
+    /// 检查 <see cref="Pawn"/> 是否正在睡眠。
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool SleepNow(this Pawn pawn) => pawn.jobs?.curDriver?.asleep ?? false;
 
     /// <summary>
-    /// 使<see cref="Pawn"/>加入玩家派系。
+    /// 使 <see cref="Pawn"/> 加入玩家派系。
     /// </summary>
+    /// <param name="pawn">目标 <see cref="Pawn"/></param>
     /// <param name="makePrisoner">是否作为囚犯加入</param>
     public static void MakePawnJoinPlayer(Pawn pawn, bool makePrisoner = false)
     {
@@ -245,8 +251,11 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 造成不致命、不残疾的伤害。
+    /// 对 <see cref="Pawn"/> 造成不致命、不残疾的伤害。
     /// </summary>
+    /// <param name="pawn">目标 <see cref="Pawn"/></param>
+    /// <param name="injuriesCount">伤害次数</param>
+    /// <param name="fixedDamageDef">固定伤害类型，可为 <see langword="null"/></param>
     public static void TakeNonLethalDamage(Pawn pawn, int injuriesCount, DamageDef fixedDamageDef = null)
     {
         if (pawn.DeadOrDowned)
@@ -307,8 +316,33 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 获取<see cref="Pawn"/>群体的最高技能等级。
+    /// 获取<see cref="Pawn"/>指定技能的等级。
     /// </summary>
+    /// <param name="pawn">目标 <see cref="Pawn"/></param>
+    /// <param name="skill">指定技能定义</param>
+    /// <param name="includeAptitudes">是否包含天赋加成</param>
+    /// <returns>技能等级；参数无效或 <see cref="Pawn"/> 对应技能无效时返回 0</returns>
+    public static int GetSkillLevel(this Pawn pawn, SkillDef skill, bool includeAptitudes = true)
+    {
+        if (skill is null || pawn is null || pawn.skills is null)
+            return 0;
+
+        List<SkillRecord> skills = pawn.skills.skills;
+        for (int i = 0; i < skills.Count; i++)
+        {
+            if (skills[i].def == skill)
+            {
+                return skills[i].GetLevel(includeAptitudes);
+            }
+        }
+
+        return 0;
+    }
+
+    /// <summary>
+    /// 获取 <see cref="Pawn"/> 集合中的最高技能等级。
+    /// </summary>
+    /// <returns>最高技能等级；pawns 为 <see langword="null"/> 时返回 -1</returns>
     public static int GetMaxSkillLevelOfPawns(IEnumerable<Pawn> pawns, SkillDef skill)
     {
         if (pawns is null)
@@ -320,14 +354,15 @@ public static class OAFrame_PawnUtility
         {
             if (pawn.skills is null)
                 continue;
-            maxSkillLevel = Mathf.Max(maxSkillLevel, pawn.skills.GetSkill(skill).GetLevel());
+            maxSkillLevel = Mathf.Max(maxSkillLevel, pawn.GetSkillLevel(skill));
         }
         return maxSkillLevel;
     }
 
     /// <summary>
-    /// 获取<see cref="Pawn"/>群体中最高技能等级的<see cref="Pawn"/>和对应技能等级。
+    /// 获取 <see cref="Pawn"/> 集合中最高技能等级的 <see cref="Pawn"/> 和对应技能等级。
     /// </summary>
+    /// <returns>包含（最高技能<see cref="Pawn"/>，技能等级）的元组；pawns 为 <see langword="null"/> 时返回 (<see langword="null"/>, -1)</returns>
     public static (Pawn, int) GetMaxSkillLevelPawn(IEnumerable<Pawn> pawns, SkillDef skill)
     {
         if (pawns is null)
@@ -342,7 +377,7 @@ public static class OAFrame_PawnUtility
             if (pawn.skills is null)
                 continue;
 
-            skillLevel = pawn.skills.GetSkill(skill).GetLevel();
+            skillLevel = pawn.GetSkillLevel(skill);
             if (skillLevel > maxSkillLevel)
             {
                 maxSkillLevel = skillLevel;
@@ -353,14 +388,15 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 获取<see cref="Pawn"/>集合的最大属性值。
+    /// 获取 <see cref="Pawn"/> 集合的最大属性值。
     /// </summary>
+    /// <returns>最大属性值；pawns 为 <see langword="null"/> 时返回 <see cref="float.NegativeInfinity"/></returns>
     public static float GetMaxStatOfPawns(IEnumerable<Pawn> pawns, StatDef statDef)
     {
         if (pawns is null)
-            return -999f;
+            return float.NegativeInfinity;
 
-        float maxStatValue = -999f;
+        float maxStatValue = float.NegativeInfinity;
 
         foreach (Pawn pawn in pawns)
         {
@@ -377,15 +413,16 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 获取<see cref="Pawn"/>集合中最高属性值的<see cref="Pawn"/>和对应属性值。
+    /// 获取 <see cref="Pawn"/> 集合中最高属性值的 <see cref="Pawn"/> 和对应属性值。
     /// </summary>
+    /// <returns>包含（最高属性<see cref="Pawn"/>，属性值）的元组；pawns 为 <see langword="null"/> 时返回 (<see langword="null"/>, <see cref="float.NegativeInfinity"/>)</returns>
     public static (Pawn, float) GetMaxStatPawn(IEnumerable<Pawn> pawns, StatDef statDef)
     {
         if (pawns is null)
-            return (null, -999f);
+            return (null, float.NegativeInfinity);
 
         Pawn maxStatPawn = null;
-        float maxStatValue = -999f;
+        float maxStatValue = float.NegativeInfinity;
 
         float statValue;
         foreach (Pawn pawn in pawns)
@@ -404,9 +441,9 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 获取<see cref="Pawn"/>的种族类型
+    /// 获取 <see cref="Pawn"/> 的种族类型
     /// </summary>
-    /// <returns>对应的种族类型，若Pawn为null或无法匹配则返回<see cref="RaceType.None"/></returns>
+    /// <returns>对应的种族类型，若 <see cref="Pawn"/> 为 <see langword="null"/> 或无法匹配则返回<see cref="RaceType.None"/></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static RaceType GetRaceType(this Pawn pawn)
     {
@@ -433,7 +470,7 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 注册Pawn的伤害前处理回调
+    /// 注册 <see cref="Pawn"/> 的伤害前处理回调（<see cref="IPawnPreApplyDamage"/>）
     /// </summary>
     /// <returns>是否注册成功</returns>
     public static bool RegisterPawnPreApplyDamageHandler(this Pawn pawn, IPawnPreApplyDamage damageProcessor)
@@ -449,7 +486,7 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
-    /// 注销Pawn的伤害前处理回调
+    /// 注销 <see cref="Pawn"/> 的伤害前处理回调（<see cref="IPawnPreApplyDamage"/>）
     /// </summary>
     /// <returns>是否注销成功</returns>
     public static bool DeregisterPawnPreApplyDamageHandler(this Pawn pawn, IPawnPreApplyDamage damageProcessor)

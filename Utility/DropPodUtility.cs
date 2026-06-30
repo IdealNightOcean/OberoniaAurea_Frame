@@ -4,6 +4,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 空投舱工具类。 
+/// </summary>
 public static class OAFrame_DropPodUtility
 {
     /// <summary>

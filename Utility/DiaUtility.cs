@@ -5,6 +5,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 对话界面工具类。 
+/// </summary>
 public static class OAFrame_DiaUtility
 {
     /// <summary>

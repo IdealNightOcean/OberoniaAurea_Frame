@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 地图工具类。 
+/// </summary>
 [StaticConstructorOnStartup]
 public static class OAFrame_MapUtility
 {

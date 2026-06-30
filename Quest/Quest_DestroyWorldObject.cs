@@ -6,6 +6,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：销毁世界对象。 
+/// </summary>
 public class QuestNode_DestroyWorldObject : QuestNode
 {
     [NoTranslate]
@@ -32,6 +35,9 @@ public class QuestNode_DestroyWorldObject : QuestNode
     }
 }
 
+/// <summary> 
+/// 任务部件：销毁世界对象。 
+/// </summary>
 public class QuestPart_DestroyWorldObject : QuestPart
 {
     public bool DestroyOnCleanup = true;

@@ -5,6 +5,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 反射工具类。 
+/// </summary>
 [StaticConstructorOnStartup]
 public static class OAFrame_ReflectionUtility
 {

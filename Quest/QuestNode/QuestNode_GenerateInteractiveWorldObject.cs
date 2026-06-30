@@ -1,10 +1,13 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：生成可交互的世界对象。 
+/// </summary>
 public class QuestNode_GenerateInteractiveWorldObject : QuestNode
 {
     public SlateRef<WorldObjectDef> def;

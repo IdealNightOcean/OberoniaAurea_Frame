@@ -36,13 +36,13 @@ public enum TargetRelationType
     Hostile = 1 << 4,
 
     /// <summary>
+    /// 非自身派系，包含盟友派系、中立派系、敌对派系。
+    /// </summary>
+    NonSameFaction = Ally | Neutral | Hostile,
+    /// <summary>
     /// 非敌对，包含自身、相同派系、盟友派系、中立派系。
     /// </summary>
     NonHostile = Self | SameFaction | Ally | Neutral,
-    /// <summary>
-    /// 默认值，包含自身、相同派系、盟友派系、中立派系。
-    /// </summary>
-    Default = Self | SameFaction | Ally | Neutral,
 
     /// <summary>
     /// 全部，包含自身、相同派系、盟友派系、中立派系、敌对派系。

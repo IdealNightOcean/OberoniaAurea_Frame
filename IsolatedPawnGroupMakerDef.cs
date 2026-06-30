@@ -6,6 +6,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 独立的<see cref="Pawn"/>组生成器<see cref="Def"/>。
+/// </summary>
 public class IsolatedPawnGroupMakerDef : Def
 {
     public List<PawnGroupMaker> groupMakers;
@@ -47,6 +50,9 @@ public class IsolatedPawnGroupMakerDef : Def
     }
 }
 
+/// <summary>
+/// 带标签的小人组生成器定义。
+/// </summary>
 public class PawnGroupWithTagMakerDef : Def
 {
     public List<PawnGroupOption> groupOptions;
@@ -65,6 +71,9 @@ public class PawnGroupWithTagMakerDef : Def
     }
 }
 
+/// <summary>
+/// 小人组选项。
+/// </summary>
 public class PawnGroupOption
 {
     public PawnGroupKindDef kindDef;
@@ -112,6 +121,9 @@ public class PawnGroupOption
     }
 }
 
+/// <summary>
+/// 带标签的小人生成组。
+/// </summary>
 public class PawnGenGroupWithTag
 {
     public string tag;

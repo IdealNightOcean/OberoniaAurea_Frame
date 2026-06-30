@@ -1,10 +1,12 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//获取特定派系领导人
+/// <summary> 
+/// 任务节点：获取特定派系领导人。 
+/// </summary>
 public class QuestNode_GetFactionLeader : QuestNode
 {
     [NoTranslate]

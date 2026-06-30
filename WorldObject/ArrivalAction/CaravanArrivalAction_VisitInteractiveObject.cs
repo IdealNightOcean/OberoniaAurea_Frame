@@ -5,7 +5,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//右键菜单
+/// <summary> 远行队访问交互世界对象的动作。 </summary>
 public class CaravanArrivalAction_VisitInteractiveObject : CaravanArrivalAction
 {
     protected WorldObject_InteractiveBase worldObject;
@@ -64,6 +64,7 @@ public class CaravanArrivalAction_VisitInteractiveObject : CaravanArrivalAction
     }
 }
 
+/// <summary> 远行队以指定类型访问多交互世界对象的动作。 </summary>
 public class CaravanArrivalAction_VisitInteractiveObject_Muti : CaravanArrivalAction
 {
     protected WorldObject_MutiInteractiveBase worldObject;

@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,9 @@ using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 独立商人商队到达事件。
+/// </summary>
 public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_NeutralGroup
 {
     protected virtual IsolatedPawnGroupMakerDef PawnGroupMakerDef => null;

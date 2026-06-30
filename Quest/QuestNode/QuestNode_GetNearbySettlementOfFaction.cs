@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
 using System.Collections.Generic;
@@ -7,7 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//获取特定派系的基地
+/// <summary> 
+/// 任务节点：获取特定派系的基地。 
+/// </summary>
 public class QuestNode_GetNearbySettlementOfFaction : QuestNode
 {
     [NoTranslate]

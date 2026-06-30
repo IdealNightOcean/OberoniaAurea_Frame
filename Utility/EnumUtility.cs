@@ -1,7 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 枚举工具类。 
+/// </summary>
 public static class OARO_EnumUtility
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

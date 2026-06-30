@@ -6,7 +6,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//类型化物品交易
+/// <summary> 
+/// 类型化物品交易的组件属性。 
+/// </summary>
 public class WorldObjectCompProperties_CategoryTradeRequestComp : WorldObjectCompProperties
 {
     public WorldObjectCompProperties_CategoryTradeRequestComp()
@@ -15,6 +17,9 @@ public class WorldObjectCompProperties_CategoryTradeRequestComp : WorldObjectCom
     }
 }
 
+/// <summary> 
+/// 类型化物品交易请求组件。 
+/// </summary>
 public class CategoryTradeRequestComp : WorldObjectComp
 {
     protected const string loadPrefix = "categoryRQ_";

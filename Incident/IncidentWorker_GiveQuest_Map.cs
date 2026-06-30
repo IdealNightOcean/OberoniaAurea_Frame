@@ -1,8 +1,11 @@
-﻿using RimWorld;
+using RimWorld;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 给予地图任务的事件。
+/// </summary>
 public class IncidentWorker_GiveQuest_Map : RimWorld.IncidentWorker_GiveQuest_Map
 {
     protected override bool CanFireNowSub(IncidentParms parms)

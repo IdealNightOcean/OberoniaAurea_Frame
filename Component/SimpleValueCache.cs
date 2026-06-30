@@ -3,6 +3,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 简单的值缓存。
+/// </summary>
 public struct SimpleValueCache<T> where T : unmanaged
 {
     private T cachedResult;

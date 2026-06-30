@@ -1,9 +1,12 @@
-﻿using RimWorld.Planet;
+using RimWorld.Planet;
 using RimWorld.QuestGen;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：获取世界对象的地块。 
+/// </summary>
 public class QuestNode_GetWorldObjectTile : QuestNode
 {
     [NoTranslate]

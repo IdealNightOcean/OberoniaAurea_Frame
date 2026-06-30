@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,6 +7,9 @@ using Verse.AI;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 与物体交互的工作驱动抽象类。
+/// </summary>
 public abstract class JobDriver_InteractWithThing : JobDriver
 {
     protected JobExtensionRecord jobExtensionRecord;

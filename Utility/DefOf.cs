@@ -2,6 +2,9 @@ using RimWorld;
 using Verse;
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 框架Def 定义类。
+/// </summary>
 [DefOf]
 public static class OAFrameDefOf
 {

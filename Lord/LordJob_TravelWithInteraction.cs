@@ -1,8 +1,11 @@
-﻿using Verse;
+using Verse;
 using Verse.AI.Group;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 带有交互功能的旅行职责。
+/// </summary>
 public class LordJob_TravelWithInteraction : LordJob_Travel
 {
     protected IntVec3 interactTravelDest;

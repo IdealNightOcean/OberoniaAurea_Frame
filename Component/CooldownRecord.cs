@@ -2,6 +2,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 冷却记录。
+/// </summary>
 public struct CooldownRecord : IExposable
 {
     public int lastActiveTick;
@@ -40,6 +43,9 @@ public struct CooldownRecord : IExposable
         this.removeWhenExpired = removeWhenExpired;
     }
 
+    /// <summary>
+    /// 序列化/反序列化此对象的所有数据字段。
+    /// </summary>
     public void ExposeData()
     {
         Scribe_Values.Look(ref lastActiveTick, nameof(lastActiveTick), -1);

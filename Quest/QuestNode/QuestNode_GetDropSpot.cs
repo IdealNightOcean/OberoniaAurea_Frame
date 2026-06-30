@@ -1,9 +1,12 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：获取空投点位置。 
+/// </summary>
 public class QuestNode_GetDropSpot : QuestNode
 {
     [NoTranslate]

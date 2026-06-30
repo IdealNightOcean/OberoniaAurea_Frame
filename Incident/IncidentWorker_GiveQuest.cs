@@ -1,8 +1,11 @@
-﻿using RimWorld;
+using RimWorld;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 给予任务的事件。
+/// </summary>
 public class IncidentWorker_GiveQuest : RimWorld.IncidentWorker_GiveQuest
 {
     protected override bool CanFireNowSub(IncidentParms parms)

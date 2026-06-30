@@ -5,7 +5,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-//给予玩家型交易
+/// <summary> 
+/// 给予玩家型交易的组件属性。 
+/// </summary>
 public class WorldObjectCompProperties_SaleRequestComp : WorldObjectCompProperties
 {
     public WorldObjectCompProperties_SaleRequestComp()
@@ -14,6 +16,9 @@ public class WorldObjectCompProperties_SaleRequestComp : WorldObjectCompProperti
     }
 }
 
+/// <summary> 
+/// 给予玩家型交易请求组件。 
+/// </summary>
 public class SaleRequestComp : WorldObjectComp
 {
     protected const string loadPrefix = "saleRQ_";

@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 强制颜色组件属性。
+/// </summary>
 public class CompProperties_ForceColor : CompProperties
 {
     public Color color = Color.white;
@@ -12,6 +15,9 @@ public class CompProperties_ForceColor : CompProperties
     }
 }
 
+/// <summary>
+/// 强制颜色的组件。
+/// </summary>
 public class CompForceColor : ThingComp
 {
     public CompProperties_ForceColor Props => (CompProperties_ForceColor)props;

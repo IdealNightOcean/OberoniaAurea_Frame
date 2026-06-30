@@ -8,6 +8,9 @@ using Verse.Grammar;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 任务节点：选择信件节点。 
+/// </summary>
 public class QuestNode_ChoiceLetter : QuestNode
 {
     protected static Type defaultPartClass = typeof(QuestPart_ChoiceLetter);
@@ -69,6 +72,9 @@ public class QuestNode_ChoiceLetter : QuestNode
     protected virtual void PostGeneratePart(QuestPart_ChoiceLetter questPart_ChoiceLetter) { }
 }
 
+/// <summary> 
+/// 任务部件：选择信件部件。 
+/// </summary>
 public class QuestPart_ChoiceLetter : QuestPart
 {
     protected const string RootSymbol = "root";

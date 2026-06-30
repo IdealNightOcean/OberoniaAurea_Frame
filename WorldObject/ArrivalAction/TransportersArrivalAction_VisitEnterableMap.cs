@@ -6,6 +6,7 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 运输舱到达可进入地图的动作。 </summary>
 public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAction
 {
     private MapParent_Enterable mapParent;

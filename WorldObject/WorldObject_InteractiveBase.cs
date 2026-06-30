@@ -7,6 +7,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 可交互世界对象基类。 
+/// </summary>
 public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssociate, IQuestAssociate
 {
     protected virtual string VisitLabel => "OAFrame_VisitObject";

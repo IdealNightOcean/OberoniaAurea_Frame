@@ -4,6 +4,16 @@
         <name>OberoniaAurea_Frame</name>
     </assembly>
     <members>
+        <member name="T:OberoniaAurea_Frame.CooldownRecordManager">
+            <summary>
+            冷却记录管理器。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.CooldownRecordManager.ExposeData">
+            <summary>
+            序列化/反序列化此对象的所有数据字段。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.CooldownRecordManager.HasRecordOfKey(System.String)">
             <summary>
             检查冷却记录是否存在。
@@ -39,9 +49,19 @@
             获取冷却记录详情信息。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.CooldownRecord">
+            <summary>
+            冷却记录。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.CooldownRecord.#ctor(System.Int32,System.Boolean)">
             <summary>
             使用冷却时间和过期移除标志初始化冷却记录。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.CooldownRecord.ExposeData">
+            <summary>
+            序列化/反序列化此对象的所有数据字段。
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.FactionValidationParams">
@@ -355,7 +375,7 @@
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.TargetRelation">
             <summary>
-            目标阵营关系的筛选条件。默认为 <see cref="F:OberoniaAurea_Frame.TargetRelationType.Default"/>。
+            目标阵营关系的筛选条件。默认为 <see cref="F:OberoniaAurea_Frame.TargetRelationType.NonHostile"/>。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.RangeHediffGiveParams.#ctor">
@@ -413,14 +433,14 @@
             敌对派系
             </summary>
         </member>
+        <member name="F:OberoniaAurea_Frame.TargetRelationType.NonSameFaction">
+            <summary>
+            非自身派系，包含盟友派系、中立派系、敌对派系。
+            </summary>
+        </member>
         <member name="F:OberoniaAurea_Frame.TargetRelationType.NonHostile">
             <summary>
             非敌对，包含自身、相同派系、盟友派系、中立派系。
-            </summary>
-        </member>
-        <member name="F:OberoniaAurea_Frame.TargetRelationType.Default">
-            <summary>
-            默认值，包含自身、相同派系、盟友派系、中立派系。
             </summary>
         </member>
         <member name="F:OberoniaAurea_Frame.TargetRelationType.All">
@@ -473,9 +493,19 @@
             数据的保存与读取。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.FactionTagsExtension">
+            <summary>
+            派系标签扩展。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.FactionTagsExtension.HasTag(System.String)">
             <summary>
             检查是否包含指定标签。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.RatkinFactionFlag">
+            <summary>
+            鼠族派系标记扩展。
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.ILordJobWithTalk">
@@ -508,6 +538,26 @@
             禁用对话。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.JobDriver_InteractWithThing">
+            <summary>
+            与物体交互的工作驱动抽象类。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.JobDriver_InteractWithThingAtOnce">
+            <summary>
+            与物体交互的工作驱动抽象类。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.IncidentWorker_GiveQuest_Map">
+            <summary>
+            给予地图任务的事件。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.IncidentWorker_GiveQuest">
+            <summary>
+            给予任务的事件。
+            </summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.ILordFloatMenuProvider">
             <summary>
             <see cref="T:Verse.AI.Group.Lord"/>浮动菜单选项提供者接口。
@@ -518,6 +568,11 @@
             获取额外的浮动菜单选项。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.JobDriver_TalkWithAtOnce">
+            <summary>
+            对话的工作驱动抽象类。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.JobDriver_TalkWithAtOnce.EnableLordJobTalk(Verse.Pawn)">
             <summary>
             启用职责中的对话功能。
@@ -526,6 +581,26 @@
         <member name="M:OberoniaAurea_Frame.JobDriver_TalkWithAtOnce.DisableLordJobTalk(Verse.Pawn,System.Boolean)">
             <summary>
             禁用职责中的对话功能。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.JobExtensionRecord">
+            <summary>
+            工作扩展记录，保存工作相关属性。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.JobExtension">
+            <summary>
+            工作定义扩展，包含工作扩展记录。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.LordJob_TravelWithInteraction">
+            <summary>
+            带有交互功能的旅行职责。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.LordJob_VisitColonyTalkable">
+            <summary>
+            可对话的访问殖民地职责。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.LordJob_VisitColonyTalkable.#ctor(Verse.Pawn,Verse.JobDef,RimWorld.Faction,Verse.IntVec3,System.String,System.Nullable{System.Int32})">
@@ -563,6 +638,21 @@
             检查指定工作是否与目标<see cref="T:Verse.Pawn"/>关联。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.LordToil_DefendPointWithInteraction">
+            <summary>
+            带有交互功能的守卫职责。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.LordToil_TravelWithInteraction">
+            <summary>
+            带有交互功能的旅行职责。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.LordJob_VisitColonyBase">
+            <summary>
+            访问殖民地的基础职责。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.LordJob_VisitColonyBase.#ctor(RimWorld.Faction,Verse.IntVec3,System.Nullable{System.Int32})">
             <summary>
             初始化访问职责。
@@ -571,6 +661,21 @@
         <member name="M:OberoniaAurea_Frame.LordJob_VisitColonyBase.ExtraFloatMenuOptions(Verse.Pawn,Verse.Pawn)">
             <summary>
             获取额外的浮动菜单选项。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_InitiateTradeRequest">
+            <summary> 
+            任务节点：初始化交易请求。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_DestroyWorldObject">
+            <summary> 
+            任务节点：销毁世界对象。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestPart_DestroyWorldObject">
+            <summary> 
+            任务部件：销毁世界对象。 
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.QuestPart_DestroyWorldObject.InitWorldObjects(System.Collections.Generic.IEnumerable{RimWorld.Planet.WorldObject})">
@@ -583,9 +688,19 @@
             尝试移除世界对象（<see cref="T:RimWorld.Planet.WorldObject"/>）
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_ChoiceLetter">
+            <summary> 
+            任务节点：选择信件节点。 
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.QuestNode_ChoiceLetter.PostGeneratePart(OberoniaAurea_Frame.QuestPart_ChoiceLetter)">
             <summary>
             生成任务部件后的回调
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestPart_ChoiceLetter">
+            <summary> 
+            任务部件：选择信件部件。 
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.QuestPart_ChoiceLetter.InitLetterTextRequest(System.String,System.String,Verse.Grammar.RulePack,Verse.Grammar.RulePack)">
@@ -593,9 +708,65 @@
             初始化信件文本请求
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "T:OberoniaAurea_Frame.QuestPart_PawnNegativeSiganl" -->
+        <member name="T:OberoniaAurea_Frame.QuestPart_MultiSignalCount">
+            <summary> 
+            任务部件：多重信号计数。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_QuestUnique">
+            <summary> 
+            任务节点：任务唯一性检查。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_TransToHardcodedSignalWithQuestID">
+            <summary> 
+            任务节点：转换为含任务ID的硬编码信号。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestPart_TransToHardcodedSignalWithQuestID">
+            <summary> 
+            任务部件：转换为含任务ID的硬编码信号。 
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.QuestPart_TransToHardcodedSignalWithQuestID.SetSignalTrans(System.String,System.String)">
             <summary>
             设置信号转换
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.BulletBase">
+            <summary>
+            弹药基类。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CompProperties_DestroyAfterSwapMap">
+            <summary>
+            交换地图后销毁的组件属性。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CompDestroyAfterSwapMap">
+            <summary>
+            切换地图后自动销毁的组件。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CompProperties_DestoryAfterSwapMap">
+            <summary>
+            （已废弃）交换地图后销毁的组件属性（旧命名）。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.MapParent_GetShuttleFloatMenuOptions_Patch">
+            <summary>
+            为地图父对象添加穿梭机浮动菜单选项的补丁。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_SetMutiFactionsForWorldObject">
+            <summary> 
+            任务节点：为世界对象设置多个派系。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_SetQuestForWorldObject">
+            <summary> 
+            任务节点：为世界对象设置任务关联。 
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.IPawnFloatMenuOptionProvider">
@@ -633,9 +804,34 @@
             注销菜单选项提供者。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.CompProperties_ForceColor">
+            <summary>
+            强制颜色组件属性。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CompForceColor">
+            <summary>
+            强制颜色的组件。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CompProperties_InteractWithThing">
+            <summary>
+            与物体交互的组件属性。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CompInteractWithThing">
+            <summary>
+            与物体交互的组件抽象类。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.CompInteractWithThing.InteractionResult(Verse.Pawn)">
             <summary>
             处理交互结果。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_CollectionUtility">
+            <summary> 
+            集合工具类。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_CollectionUtility.TakeRandomElements``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
@@ -644,6 +840,11 @@
             返回顺序为随机顺序，不保留源序列中的原始顺序。
             本方法不会对元素值进行去重；若源序列包含重复值，结果中可能包含重复。
             若 <paramref name="count"/> 大于序列长度，则返回全部元素（顺序随机）。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_DropPodUtility">
+            <summary> 
+            空投舱工具类。 
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_DropPodUtility.DefaultDropThingOfDef(Verse.ThingDef,System.Int32,Verse.Map,RimWorld.Faction,System.Boolean)">
@@ -669,6 +870,16 @@
         <member name="M:OberoniaAurea_Frame.OAFrame_DropPodUtility.DefaultDropSingleThing(Verse.Thing,Verse.Map,RimWorld.Faction,System.Boolean)">
             <summary>
             默认空投单个物品。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OARO_EnumUtility">
+            <summary> 
+            枚举工具类。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_QuestUtility">
+            <summary> 
+            任务工具类。 
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_QuestUtility.AddInvolvedFaction(RimWorld.Quest,RimWorld.Faction)">
@@ -704,6 +915,11 @@
         <member name="M:OberoniaAurea_Frame.OAFrame_QuestUtility.GetCommonPawnNegativeSiganls(System.Boolean,System.String)">
             <summary>
             获取常见的<see cref="T:Verse.Pawn"/>负面信号列表。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_TextUtility">
+            <summary> 
+            文本工具类。 
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntString(System.Int32,System.Boolean,System.Boolean)">
@@ -750,7 +966,7 @@
         </member>
         <member name="T:OberoniaAurea_Frame.OAFrame_ThingUtility">
             <summary>
-            物品工具类
+            <see cref="T:Verse.Thing"/> 工具类。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_ThingUtility.GenerateThing(OberoniaAurea_Frame.ThingMakeInfo)">
@@ -815,6 +1031,19 @@
             </summary>
             <returns>实际移除的数量</returns>
         </member>
+        <member name="T:OberoniaAurea_Frame.WorkGiver_ThingDefRequestExtension">
+            <summary>
+            <see cref="!:ThingDefRequest"/>的物品定义请求扩展。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.WorkGiver_ThingDefScanner">
+            <summary>
+            扫描指定物品定义的工作给予者。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CaravanArrivalAction_GenerateAndEnter">
+            <summary> 远行队到达并生成可进入地图的动作。 </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.CaravanArrivalAction_GenerateAndEnter.#ctor(OberoniaAurea_Frame.MapParent_Enterable)">
             <summary>
             使用可直接进入的<see cref="T:RimWorld.Planet.MapParent"/>初始化远行队到达动作。
@@ -868,6 +1097,21 @@
         <member name="M:OberoniaAurea_Frame.IFixedCaravanAssociate.FixedCaravanWorkDesc">
             <summary>
             获取<see cref="T:OberoniaAurea_Frame.FixedCaravan"/>的工作描述。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GenerateWorldObjectWithMutiFactions">
+            <summary> 
+            任务节点：生成包含多个派系的世界对象。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GenerateInteractiveWorldObject">
+            <summary> 
+            任务节点：生成可交互的世界对象。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.SimpleValueCache`1">
+            <summary>
+            简单的值缓存。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.SimpleValueCache`1.#ctor(System.Int32,System.Func{`0})">
@@ -940,9 +1184,34 @@
             <see cref="T:Verse.Pawn"/>保留持有者接口。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.RaidStrategyWorker_ImmediateAttack_NeverFlee">
+            <summary>
+            立即攻击且从不逃跑的袭击策略。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.LordJob_AssistColony_NeverFlee">
+            <summary>
+            协助殖民地且从不逃跑的职责。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.IncidentWorker_IsolatedTraderCaravanArrival">
+            <summary>
+            独立商人商队到达事件。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.IncidentWorker_IsolatedTraderCaravanArrival.FactionCanBeGroupSource(RimWorld.Faction,RimWorld.IncidentParms,System.Boolean)">
             <summary>
             检查派系是否可以作为事件来源。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.MoteAttached_Text">
+            <summary>
+            附着文本粒子。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.IsolatedPawnGroupMakerDef">
+            <summary>
+            独立的<see cref="T:Verse.Pawn"/>组生成器<see cref="T:Verse.Def"/>。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.IsolatedPawnGroupMakerDef.TryGetRandomPawnGroupMaker(RimWorld.PawnGroupKindDef,RimWorld.PawnGroupMaker@)">
@@ -955,9 +1224,19 @@
             尝试获取符合参数条件的可用PawnGroupMaker。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.PawnGroupWithTagMakerDef">
+            <summary>
+            带标签的小人组生成器定义。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.PawnGroupWithTagMakerDef.TryGetRandomPawnGroupOption(RimWorld.PawnGroupKindDef,OberoniaAurea_Frame.PawnGroupOption@)">
             <summary>
             尝试获取指定类型的随机<see cref="T:OberoniaAurea_Frame.PawnGroupOption"/>。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.PawnGroupOption">
+            <summary>
+            小人组选项。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.PawnGroupOption.GetRandomGroupOptionsIgnoreTag">
@@ -975,6 +1254,26 @@
             获取指定标签的首个<see cref="T:OberoniaAurea_Frame.PawnGroupOption"/>生成组。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.PawnGenGroupWithTag">
+            <summary>
+            带标签的小人生成组。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.PatchOperationCheckDLC">
+            <summary>
+            检查 DLC 是否启用的补丁操作。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_FireIncident">
+            <summary> 
+            任务节点：触发事件。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestPart_FireIncident">
+            <summary> 
+            任务部件：触发事件。 
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.QuestPart_FireIncident.ResolveParms_World">
             <summary>
             解析世界事件参数
@@ -990,9 +1289,34 @@
             设置世界类型事件参数
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.QuestPart_OARefugeeInteractions">
+            <summary> 
+            任务部件：难民交互处理。 
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.QuestPart_OARefugeeInteractions.InitWithDefaultSingals(System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             使用默认信号初始化交互设置
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_Root_RefugeeBase">
+            <summary> 
+            任务节点：难民任务基础节点。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GetDropSpot">
+            <summary> 
+            任务节点：获取空投点位置。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GenerateThingDefCount">
+            <summary> 
+            任务节点：生成物品的<see cref="T:Verse.ThingDef"/>及数量。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.SimpleHashList`1">
+            <summary>
+            基于哈希集合的简单列表，保证元素唯一性。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.SimpleHashList`1.#ctor(Verse.LookMode)">
@@ -1075,6 +1399,11 @@
             暴露数据以进行存档保存和加载。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.SimpleMapCahce`1">
+            <summary>
+            基于地图的简单值缓存。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.SimpleMapCahce`1.#ctor(System.Int32,System.Boolean,System.Func{Verse.Map,`0})">
             <summary>
             使用缓存间隔和检查器初始化地图缓存。
@@ -1093,6 +1422,11 @@
         <member name="M:OberoniaAurea_Frame.SimpleMapCahce`1.GetCachedResult(Verse.Map)">
             <summary>
             获取地图的缓存结果。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.SimpleUniqueList`1">
+            <summary>
+            简单的唯一元素列表。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.SimpleUniqueList`1.#ctor(Verse.LookMode)">
@@ -1175,9 +1509,44 @@
             序列化/反序列化此对象的所有数据字段。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.Thought_SituationalGiveHediff">
+            <summary>
+            情境型想法，激活时给予 <see cref="!:Hediff"/>。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.GetCriticalPawnReason_Patch">
+            <summary>
+            为世界重要角色理由添加保留持有者检查的补丁。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.ModHarmonyPatch">
+            <summary>
+            Mod 的 Harmony 补丁入口。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QueseNode_GetExpectedCategoryMarketValue">
+            <summary> 
+            任务节点：根据物品类别（<see cref="T:Verse.ThingCategoryDef"/>）计算特定数量的预期市场价值。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GetMutiFactions">
+            <summary> 
+            任务节点：获取指定数量的多个派系。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QueseNode_GetExpectedThingMarketValue">
+            <summary> 
+            任务节点：根据物品Def计算特定数量的预期市场价值。 
+            </summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.QuestNode_AllFactionsGoodwillChange">
             <summary>
             统一影响全部派系关系
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestPart_AllFactionsGoodwillChange">
+            <summary> 
+            任务部件：统一影响全部派系关系。 
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.QuestPart_AllFactionsGoodwillChange.Cleanup">
@@ -1195,14 +1564,37 @@
             判断派系是否可用于关系变更
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GetMapParent">
+            <summary> 任务节点：获取地图父对象。 </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GetNearTile">
+            <summary> 
+            任务节点：获取附近地块。 
+            </summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.QuestNode_InitiateCategoryTradeRequest">
             <summary>
             初始化类型物品交易请求
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.QuestPart_InitiateCategoryTradeRequest">
+            <summary> 
+            任务部件：初始化类型物品交易请求。 
+            </summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.QuestNode_InitiateSaleRequest">
             <summary>
             初始化给予玩家型交易
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestPart_InitiateSaleRequest">
+            <summary> 
+            任务部件：初始化给予玩家型交易。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_RequestThingCount">
+            <summary> 
+            任务节点：计算物品需求数，主要用于交易类任务。 
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.SiteTrader">
@@ -1280,6 +1672,11 @@
             修改持有物品的数量。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.OAFrameDefOf">
+            <summary>
+            框架Def 定义类。
+            </summary>
+        </member>
         <member name="F:OberoniaAurea_Frame.OAFrameDefOf.OAFrame_Mote_AttachedText">
             <summary>
             附加文本 mote。
@@ -1298,6 +1695,11 @@
         <member name="F:OberoniaAurea_Frame.OAFrameDefOf.OAFrame_GiveQuest_Map">
             <summary>
             给予地图任务事件定义。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_DiaUtility">
+            <summary> 
+            对话界面工具类。 
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.OAFrame_DiaUtility.DefaultConfirmOption">
@@ -1378,6 +1780,11 @@
         <member name="M:OberoniaAurea_Frame.OAFrame_DiaUtility.ConfirmDiaNode(Verse.TaggedString,System.String,System.Action,System.String,System.Action)">
             <summary>
             创建确认对话节点。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_FactionUtility">
+            <summary> 
+            派系工具类。 
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_FactionUtility.IsRatkinFaction(RimWorld.FactionDef)">
@@ -1497,6 +1904,11 @@
             </summary>
             <returns>找到的玩家远行队；若不存在则返回 <see langword="null"/></returns>
         </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_PawnGenerateUtility">
+            <summary> 
+            <see cref="T:Verse.Pawn"/> 生成工具类。
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnGenerateUtility.CommonPawnGenerationRequest(Verse.PawnKindDef,RimWorld.Faction,System.Nullable{RimWorld.Planet.PlanetTile},System.Boolean,System.Boolean)">
             <summary>
             创建通用的Pawn生成请求。
@@ -1510,6 +1922,11 @@
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnGenerateUtility.GeneratePawns(RimWorld.PawnGroupMakerParms,RimWorld.PawnGroupMaker,System.Boolean,System.Boolean)">
             <summary>
             生成Pawn。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_MapUtility">
+            <summary> 
+            地图工具类。 
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_MapUtility.AmountSendableSilver(Verse.Map)">
@@ -1563,6 +1980,11 @@
             地图上玩家敌人的数量
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_IconUtility">
+            <summary> 
+            图标工具类。
+             </summary>
+        </member>
         <member name="F:OberoniaAurea_Frame.OAFrame_IconUtility.RecombineIcon">
             <summary>
             重组基因图标。
@@ -1583,9 +2005,14 @@
             交易命令图标。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_PawnUtility">
+            <summary> 
+            <see cref="T:Verse.Pawn"/> 工具类。 
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.IsChildOfRetentionHolder(Verse.Pawn)">
             <summary>
-            检查<see cref="T:Verse.Pawn"/>的容器是否为持久保有者（<see cref="T:OberoniaAurea_Frame.IPawnRetentionHolder"/>)。
+            检查 <see cref="T:Verse.Pawn"/> 的容器是否为持久保有者（<see cref="T:OberoniaAurea_Frame.IPawnRetentionHolder"/>)。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.AdjustOrAddHediff(Verse.Pawn,Verse.HediffDef,System.Single,System.Int32,Verse.BodyPartRecord,System.Nullable{Verse.DamageInfo},Verse.DamageWorker.DamageResult)">
@@ -1595,22 +2022,22 @@
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetOrAddHediff(Verse.Pawn,OberoniaAurea_Frame.HediffGiveParams)">
             <summary>
-            获取或向<see cref="T:Verse.Pawn"/>添加一个<see cref="T:Verse.Hediff"/>。如果目标已有同类型<see cref="T:Verse.Hediff"/>则更新相关属性并返回，否则根据参数创建并添加新的<see cref="T:Verse.Hediff"/>。
+            获取或向 <see cref="T:Verse.Pawn"/> 添加一个 <see cref="T:Verse.Hediff"/> 。如果目标已有同类型 <see cref="T:Verse.Hediff"/> 则更新相关属性并返回，否则根据参数创建并添加新的<see cref="T:Verse.Hediff"/>。
             同时根据参数配置设置初始严重度和覆盖消失时间。
             </summary>
             <returns>已有的或新创建的<see cref="T:Verse.Hediff"/>实例；如果 <see cref="T:Verse.Pawn"/> 或 <see href="parms"/> 为 <see langword="null"/> 则返回 <see langword="null"/>。</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.RemoveFirstHediffOfDef(Verse.Pawn,Verse.HediffDef,System.Boolean)">
             <summary>
-            移除第一个相关Def的健康状态。
+            移除第一个相关 <see cref="T:Verse.HediffDef"/> 的 <see cref="T:Verse.Hediff"/>。
             </summary>
             <returns>是否成功移除。</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.RemoveAllHediffsOfDef(Verse.Pawn,Verse.HediffDef,System.Boolean)">
             <summary>
-            移除所有相关Def的健康状态。
+            移除所有相关 <see cref="T:Verse.HediffDef"/> 的 <see cref="T:Verse.Hediff"/>。
             </summary>
-            <returns>移除的相关<see cref="T:Verse.Hediff"/>的数量。</returns>
+            <returns>移除的相关 <see cref="T:Verse.Hediff"/> 的数量。</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetOrAddMemory(Verse.Pawn,OberoniaAurea_Frame.MemoryGiveParams)">
             <summary>
@@ -1619,7 +2046,7 @@
             </summary>
             <param name="pawn">目标角色。</param>
             <param name="parms">记忆参数，包含记忆类型、心情偏移量、是否永久等信息。</param>
-            <returns>获取或创建成功的 <see cref="T:RimWorld.Thought_Memory"/> 实例，若参数无效则返回 null。</returns>
+            <returns>获取或创建成功的 <see cref="T:RimWorld.Thought_Memory"/> 实例，若参数无效则返回 <see langword="null"/>。</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.RemoveFirstMemoryOfDef(Verse.Pawn,RimWorld.ThoughtDef)">
             <summary>
@@ -1635,57 +2062,79 @@
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.SleepNow(Verse.Pawn)">
             <summary>
-            检查<see cref="T:Verse.Pawn"/>是否正在睡眠。
+            检查 <see cref="T:Verse.Pawn"/> 是否正在睡眠。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.MakePawnJoinPlayer(Verse.Pawn,System.Boolean)">
             <summary>
-            使<see cref="T:Verse.Pawn"/>加入玩家派系。
+            使 <see cref="T:Verse.Pawn"/> 加入玩家派系。
             </summary>
+            <param name="pawn">目标 <see cref="T:Verse.Pawn"/></param>
             <param name="makePrisoner">是否作为囚犯加入</param>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.TakeNonLethalDamage(Verse.Pawn,System.Int32,Verse.DamageDef)">
             <summary>
-            造成不致命、不残疾的伤害。
+            对 <see cref="T:Verse.Pawn"/> 造成不致命、不残疾的伤害。
             </summary>
+            <param name="pawn">目标 <see cref="T:Verse.Pawn"/></param>
+            <param name="injuriesCount">伤害次数</param>
+            <param name="fixedDamageDef">固定伤害类型，可为 <see langword="null"/></param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetSkillLevel(Verse.Pawn,RimWorld.SkillDef,System.Boolean)">
+            <summary>
+            获取<see cref="T:Verse.Pawn"/>指定技能的等级。
+            </summary>
+            <param name="pawn">目标 <see cref="T:Verse.Pawn"/></param>
+            <param name="skill">指定技能定义</param>
+            <param name="includeAptitudes">是否包含天赋加成</param>
+            <returns>技能等级；参数无效或 <see cref="T:Verse.Pawn"/> 对应技能无效时返回 0</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetMaxSkillLevelOfPawns(System.Collections.Generic.IEnumerable{Verse.Pawn},RimWorld.SkillDef)">
             <summary>
-            获取<see cref="T:Verse.Pawn"/>群体的最高技能等级。
+            获取 <see cref="T:Verse.Pawn"/> 集合中的最高技能等级。
             </summary>
+            <returns>最高技能等级；pawns 为 <see langword="null"/> 时返回 -1</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetMaxSkillLevelPawn(System.Collections.Generic.IEnumerable{Verse.Pawn},RimWorld.SkillDef)">
             <summary>
-            获取<see cref="T:Verse.Pawn"/>群体中最高技能等级的<see cref="T:Verse.Pawn"/>和对应技能等级。
+            获取 <see cref="T:Verse.Pawn"/> 集合中最高技能等级的 <see cref="T:Verse.Pawn"/> 和对应技能等级。
             </summary>
+            <returns>包含（最高技能<see cref="T:Verse.Pawn"/>，技能等级）的元组；pawns 为 <see langword="null"/> 时返回 (<see langword="null"/>, -1)</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetMaxStatOfPawns(System.Collections.Generic.IEnumerable{Verse.Pawn},RimWorld.StatDef)">
             <summary>
-            获取<see cref="T:Verse.Pawn"/>集合的最大属性值。
+            获取 <see cref="T:Verse.Pawn"/> 集合的最大属性值。
             </summary>
+            <returns>最大属性值；pawns 为 <see langword="null"/> 时返回 <see cref="F:System.Single.NegativeInfinity"/></returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetMaxStatPawn(System.Collections.Generic.IEnumerable{Verse.Pawn},RimWorld.StatDef)">
             <summary>
-            获取<see cref="T:Verse.Pawn"/>集合中最高属性值的<see cref="T:Verse.Pawn"/>和对应属性值。
+            获取 <see cref="T:Verse.Pawn"/> 集合中最高属性值的 <see cref="T:Verse.Pawn"/> 和对应属性值。
             </summary>
+            <returns>包含（最高属性<see cref="T:Verse.Pawn"/>，属性值）的元组；pawns 为 <see langword="null"/> 时返回 (<see langword="null"/>, <see cref="F:System.Single.NegativeInfinity"/>)</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetRaceType(Verse.Pawn)">
             <summary>
-            获取<see cref="T:Verse.Pawn"/>的种族类型
+            获取 <see cref="T:Verse.Pawn"/> 的种族类型
             </summary>
-            <returns>对应的种族类型，若Pawn为null或无法匹配则返回<see cref="F:OberoniaAurea_Frame.RaceType.None"/></returns>
+            <returns>对应的种族类型，若 <see cref="T:Verse.Pawn"/> 为 <see langword="null"/> 或无法匹配则返回<see cref="F:OberoniaAurea_Frame.RaceType.None"/></returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.RegisterPawnPreApplyDamageHandler(Verse.Pawn,OberoniaAurea_Frame.IPawnPreApplyDamage)">
             <summary>
-            注册Pawn的伤害前处理回调
+            注册 <see cref="T:Verse.Pawn"/> 的伤害前处理回调（<see cref="T:OberoniaAurea_Frame.IPawnPreApplyDamage"/>）
             </summary>
             <returns>是否注册成功</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.DeregisterPawnPreApplyDamageHandler(Verse.Pawn,OberoniaAurea_Frame.IPawnPreApplyDamage)">
             <summary>
-            注销Pawn的伤害前处理回调
+            注销 <see cref="T:Verse.Pawn"/> 的伤害前处理回调（<see cref="T:OberoniaAurea_Frame.IPawnPreApplyDamage"/>）
             </summary>
             <returns>是否注销成功</returns>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_TileFinderUtility">
+            <summary> 
+            地块查找工具类。 
+            </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_TileFinderUtility.GetAvailableNeighborTile(RimWorld.Planet.PlanetTile,RimWorld.Planet.PlanetTile@,System.Boolean)">
             <summary>
@@ -1701,6 +2150,9 @@
             <summary>
             检查地块是否可用于新建世界对象。
             </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CaravanArrivalAction_VisitInteractiveObject">
+            <summary> 远行队访问交互世界对象的动作。 </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.CaravanArrivalAction_VisitInteractiveObject.#ctor(OberoniaAurea_Frame.WorldObject_InteractiveBase)">
             <summary>
@@ -1722,6 +2174,9 @@
             获取带接受报告的浮动菜单选项。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.CaravanArrivalAction_VisitInteractiveObject_Muti">
+            <summary> 远行队以指定类型访问多交互世界对象的动作。 </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.CaravanArrivalAction_VisitInteractiveObject_Muti.#ctor(OberoniaAurea_Frame.WorldObject_MutiInteractiveBase,System.Int32)">
             <summary>
             使用多交互世界对象和访问类型初始化远行队到达动作。
@@ -1740,6 +2195,51 @@
         <member name="M:OberoniaAurea_Frame.CaravanArrivalAction_VisitInteractiveObject_Muti.GetFloatMenuOptions(RimWorld.Planet.Caravan,OberoniaAurea_Frame.WorldObject_MutiInteractiveBase,System.Int32,RimWorld.FloatMenuAcceptanceReport,System.String)">
             <summary>
             获取带接受报告的浮动菜单选项。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_SeasonalRestriction">
+            <summary> 
+            任务节点：季节性限制。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_EarliestDayPassed">
+            <summary> 
+            任务节点：游戏经历时间是否达到某个值。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GetWorldObjectTile">
+            <summary> 
+            任务节点：获取世界对象的地块。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GetFactionLeader">
+            <summary> 
+            任务节点：获取特定派系领导人。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GetRatkinFaction">
+            <summary> 
+            任务节点：获取鼠族派系。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GetNearbySettlementOfFaction">
+            <summary> 
+            任务节点：获取特定派系的基地。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.QuestNode_GetFaction">
+            <summary> 
+            任务节点：获取派系。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.WorldObjectCompProperties_CategoryTradeRequestComp">
+            <summary> 
+            类型化物品交易的组件属性。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CategoryTradeRequestComp">
+            <summary> 
+            类型化物品交易请求组件。 
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.CategoryTradeRequestComp.ActiveRequest">
@@ -1762,6 +2262,14 @@
             获取请求物品类别的标签文本。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.LordJob_AssaultColony_NeverFlee">
+            <summary>
+            攻击殖民地且从不逃跑的职责。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.TransportersArrivalAction_VisitEnterableMap">
+            <summary> 运输舱到达可进入地图的动作。 </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.TransportersArrivalAction_VisitEnterableMap.#ctor(OberoniaAurea_Frame.MapParent_Enterable,RimWorld.PawnsArrivalModeDef)">
             <summary>
             使用可直接进入的<see cref="T:RimWorld.Planet.MapParent"/>和到达模式初始化载具到达动作。
@@ -1775,6 +2283,11 @@
         <member name="M:OberoniaAurea_Frame.TransportersArrivalAction_VisitEnterableMap.GetFloatMenuOptions(System.Action{RimWorld.Planet.PlanetTile,RimWorld.Planet.TransportersArrivalAction},System.Collections.Generic.IEnumerable{Verse.IThingHolder},OberoniaAurea_Frame.MapParent_Enterable)">
             <summary>
             获取浮动菜单选项。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.MapParent_Enterable">
+            <summary> 
+            可进入的地图父对象。 
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.MapParent_Enterable.AssociatedQuest">
@@ -1818,6 +2331,11 @@
             批量添加参与派系
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.WorldObject_InteractiveBase">
+            <summary> 
+            可交互世界对象基类。 
+            </summary>
+        </member>
         <member name="P:OberoniaAurea_Frame.WorldObject_InteractiveBase.ParticipantFactions">
             <summary>
             额外参与派系
@@ -1842,6 +2360,11 @@
             <summary>
             获取特定的浮动菜单选项。
             </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_MiscUtility">
+            <summary> 
+            杂项工具类。
+             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.OAFrame_MiscUtility.GodMode">
             <summary>
@@ -1873,6 +2396,11 @@
             验证单例是否为空。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_ReflectionUtility">
+            <summary> 
+            反射工具类。 
+            </summary>
+        </member>
         <member name="F:OberoniaAurea_Frame.OAFrame_ReflectionUtility.InstanceAttr">
             <summary>
             实例绑定标志，用于反射获取实例成员。
@@ -1895,6 +2423,11 @@
             <typeparam name="T">对象类型。</typeparam>
             <param name="source">源对象。</param>
             <returns>源对象的浅表副本；如果源对象为 <see langword="null"/>，则返回  <see langword="null"/>。</returns>
+        </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_FixedCaravanUtility">
+            <summary> 
+            固定远行队工具类。 
+            </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_FixedCaravanUtility.GetFixedCaravan(Verse.Pawn)">
             <summary>
@@ -1972,6 +2505,11 @@
             <param name="errorOnFailed">发放失败时是否记录错误日志</param>
             <returns>是否成功发放物品</returns>
         </member>
+        <member name="T:OberoniaAurea_Frame.FixedCaravan">
+            <summary> 
+            固定远行队。 
+            </summary>
+        </member>
         <member name="P:OberoniaAurea_Frame.FixedCaravan.PawnsListForReading">
             <summary>
             获取<see cref="T:Verse.Pawn"/>列表。
@@ -2027,9 +2565,24 @@
             转换为远行队（<see cref="T:RimWorld.Planet.Caravan"/>）后的处理。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.WorldObject_MutiInteractiveBase">
+            <summary> 
+            多交互类型的世界对象基类。 
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.WorldObject_MutiInteractiveBase.Notify_CaravanArrived(RimWorld.Planet.Caravan,System.Int32)">
             <summary>
             通知远行队（<see cref="T:RimWorld.Planet.Caravan"/>）到达（带访问类型）。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.WorldObjectCompProperties_SaleRequestComp">
+            <summary> 
+            给予玩家型交易的组件属性。 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.SaleRequestComp">
+            <summary> 
+            给予玩家型交易请求组件。 
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.SaleRequestComp.ActiveRequest">
@@ -2045,6 +2598,16 @@
         <member name="M:OberoniaAurea_Frame.SaleRequestComp.Disable">
             <summary>
             禁用销售请求。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.LordJob_AssaultThings_NeverFlee">
+            <summary>
+            攻击指定物体且从不逃跑的职责。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.WorldObject_InteractWithFixedCaravanBase">
+            <summary> 
+            与固定远行队交互的世界对象基类。 
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.WorldObject_InteractWithFixedCaravanBase.IsWorking">
@@ -2086,6 +2649,9 @@
             <summary>
             获取固定远行队工作描述。
             </summary>
+        </member>
+        <member name="T:TransportersArrivalAction_VisitInteractiveObject">
+            <summary> 运输舱访问交互世界对象的动作。 </summary>
         </member>
         <member name="M:TransportersArrivalAction_VisitInteractiveObject.#ctor(OberoniaAurea_Frame.WorldObject_InteractiveBase)">
             <summary>

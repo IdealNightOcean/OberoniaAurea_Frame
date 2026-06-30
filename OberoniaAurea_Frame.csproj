@@ -110,7 +110,6 @@
     <Compile Include="Utility\DropPodUtility.cs" />
     <Compile Include="Utility\EnumUtility.cs" />
     <Compile Include="Utility\QuestUtility.cs" />
-    <Compile Include="Utility\RangeHediffGiveUtility.cs" />
     <Compile Include="Utility\TextUtility.cs" />
     <Compile Include="Utility\ThingUtility.cs" />
     <Compile Include="WorkGiver_ThingRequestExtension.cs" />

@@ -5,6 +5,9 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary> 
+/// 与固定远行队交互的世界对象基类。 
+/// </summary>
 public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_InteractiveBase, IFixedCaravanAssociate
 {
     protected virtual WorldObjectDef FixedCaravanDef => OAFrameDefOf.OAFrame_FixedCaravan;

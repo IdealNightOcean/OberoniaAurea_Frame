@@ -43,6 +43,9 @@ public class QuestNode_AllFactionsGoodwillChange : QuestNode
     }
 }
 
+/// <summary> 
+/// 任务部件：统一影响全部派系关系。 
+/// </summary>
 public class QuestPart_AllFactionsGoodwillChange : QuestPart
 {
     public string inSignal;

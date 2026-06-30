@@ -1,4 +1,4 @@
-﻿using RimWorld;
+using RimWorld;
 using RimWorld.QuestGen;
 using Verse;
 
@@ -32,8 +32,9 @@ public class QuestNode_MultiSignalCount : QuestNode
         QuestGen.quest.AddPart(questPart_MultiSignalCount);
     }
 }
-
-
+/// <summary> 
+/// 任务部件：多重信号计数。 
+/// </summary>
 public class QuestPart_MultiSignalCount : QuestPart
 {
     public string inSignal;
