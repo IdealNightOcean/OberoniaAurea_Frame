@@ -82,20 +82,21 @@ public class RangeHediffGiver : IExposable
             return;
         }
 
-        if (Parms.Radius <= 0f || !linkedThing.Spawned)
+        if (!linkedThing.Spawned)
             return;
 
         IntVec3 linkedThingPos = linkedThing.Position;
-        float radiusSquared = Parms.Radius * Parms.Radius;
+        float radiusSquared = Parms.RadiusSquared;
 
-        IEnumerable<Pawn> potentialPawns = null;
+        IReadOnlyList<Pawn> potentialPawns;
         if (linkedThing.Faction is null || parms.TargetRelation.ContainsAnyFlag(TargetRelationType.NonSameFaction))
             potentialPawns = TargetMap.mapPawns.AllPawnsSpawned;
         else
             potentialPawns = TargetMap.mapPawns.SpawnedPawnsInFaction(linkedThing.Faction);
 
-        foreach (Pawn target in potentialPawns)
+        for (int i = potentialPawns.Count - 1; i >= 0; i--)
         {
+            Pawn target = potentialPawns[i];
             if (CanApplyOnPawn(target, linkedThingPos, radiusSquared))
             {
                 GiveHediffToTarget(target);
@@ -138,11 +139,14 @@ public class RangeHediffGiver : IExposable
             hediffGived.Severity += Parms.AddSeverityIfExist.Value;
         }
 
-        HediffComp_Link hediffComp_Link = hediffGived.TryGetComp<HediffComp_Link>();
-        if (hediffComp_Link is not null)
+        if (Parms.AddlinkWithThing)
         {
-            hediffComp_Link.drawConnection = Parms.DrawConnection;
-            hediffComp_Link.other = linkedThing;
+            HediffComp_Link hediffComp_Link = hediffGived.TryGetComp<HediffComp_Link>();
+            if (hediffComp_Link is not null)
+            {
+                hediffComp_Link.drawConnection = Parms.DrawConnection;
+                hediffComp_Link.other = linkedThing;
+            }
         }
 
         if (Parms.OverrideDisappearTicks > 0)
@@ -174,7 +178,7 @@ public class RangeHediffGiver : IExposable
         if (target == linkedThing && !OARO_EnumUtility.ContainsFlag(Parms.TargetRelation, TargetRelationType.Self))
             return false;
 
-        if (center.DistanceToSquared(target.Position) > radiusSquared)
+        if (radiusSquared > 0f && center.DistanceToSquared(target.Position) > radiusSquared)
             return false;
 
         RaceType targetRace = Parms.TargetRace;

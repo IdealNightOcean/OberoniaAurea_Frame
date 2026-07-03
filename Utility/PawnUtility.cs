@@ -45,6 +45,21 @@ public static class OAFrame_PawnUtility
     }
 
     /// <summary>
+    /// 获取或向 <see cref="Pawn"/> 添加一个 <see cref="Hediff"/> 。如果目标已有同Def的 <see cref="Hediff"/> 则直接返回，否则根据<see cref="HediffDef"/>创建并添加新的<see cref="Hediff"/>。
+    /// </summary>
+    /// <returns>已有的或新创建的<see cref="Hediff"/>实例；如果 <see cref="Pawn"/> 或 <see cref="HediffDef"/> 为 <see langword="null"/> 则返回 <see langword="null"/>。</returns>
+    public static Hediff GetOrAddHediff(this Pawn pawn, HediffDef hediffDef)
+    {
+        if (pawn is null || hediffDef is null)
+            return null;
+
+        if (pawn.health.hediffSet.TryGetHediff(hediffDef, out Hediff hediff))
+            return hediff;
+
+        return pawn.health.AddHediff(hediffDef);
+    }
+
+    /// <summary>
     /// 获取或向 <see cref="Pawn"/> 添加一个 <see cref="Hediff"/> 。如果目标已有同类型 <see cref="Hediff"/> 则更新相关属性并返回，否则根据参数创建并添加新的<see cref="Hediff"/>。
     /// 同时根据参数配置设置初始严重度和覆盖消失时间。
     /// </summary>
@@ -54,19 +69,18 @@ public static class OAFrame_PawnUtility
         if (pawn is null || parms is null)
             return null;
 
-        Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(parms.HediffToGive);
-        if (hediff is null)
+        if (pawn.health.hediffSet.TryGetHediff(parms.HediffToGive, out Hediff hediff))
+        {
+            if (parms.AddSeverityIfExist.HasValue)
+                hediff.Severity += parms.AddSeverityIfExist.Value;
+        }
+        else
         {
             hediff = HediffMaker.MakeHediff(parms.HediffToGive, pawn, parms.BodyPartRecordToGive);
             if (parms.InitSeverity > 0f)
                 hediff.Severity = parms.InitSeverity;
 
             pawn.health.AddHediff(hediff);
-        }
-        else
-        {
-            if (parms.AddSeverityIfExist.HasValue)
-                hediff.Severity += parms.AddSeverityIfExist.Value;
         }
 
         if (parms.OverrideDisappearTicks > 0)

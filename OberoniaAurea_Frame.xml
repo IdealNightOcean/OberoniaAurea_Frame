@@ -360,12 +360,22 @@
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.Radius">
             <summary>
-            影响范围半径。小于等于0时不会生效。
+            影响范围半径。小于0时全图生效。
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.RadiusSquared">
+            <summary>
+            影响范围半径的平方。小于0时全图生效。
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.AddlinkWithThing">
+            <summary>
+            是否设置<see cref="T:Verse.HediffComp_Link"/>
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.DrawConnection">
             <summary>
-            是否绘制<see cref="T:Verse.Hediff"/>所有者与关联物体之间的连接线。
+            是否绘制 <see cref="T:Verse.Hediff"/> 所有者与关联物体之间的连接线。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.TargetRace">
@@ -2019,6 +2029,12 @@
             <summary>
             添加健康状态
             </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetOrAddHediff(Verse.Pawn,Verse.HediffDef)">
+            <summary>
+            获取或向 <see cref="T:Verse.Pawn"/> 添加一个 <see cref="T:Verse.Hediff"/> 。如果目标已有同Def的 <see cref="T:Verse.Hediff"/> 则直接返回，否则根据<see cref="T:Verse.HediffDef"/>创建并添加新的<see cref="T:Verse.Hediff"/>。
+            </summary>
+            <returns>已有的或新创建的<see cref="T:Verse.Hediff"/>实例；如果 <see cref="T:Verse.Pawn"/> 或 <see cref="T:Verse.HediffDef"/> 为 <see langword="null"/> 则返回 <see langword="null"/>。</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_PawnUtility.GetOrAddHediff(Verse.Pawn,OberoniaAurea_Frame.HediffGiveParams)">
             <summary>

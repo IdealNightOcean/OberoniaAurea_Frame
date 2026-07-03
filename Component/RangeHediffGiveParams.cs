@@ -7,19 +7,33 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class RangeHediffGiveParams : HediffGiveParams
 {
-    private float radius = -1f;
+    private float radius;
     /// <summary>
-    /// 影响范围半径。小于等于0时不会生效。
+    /// 影响范围半径。小于等于0时全图生效。
     /// </summary>
     public float Radius
     {
         get => radius;
         set => radius = value;
     }
+    /// <summary>
+    /// 影响范围半径的平方。小于等于0时全图生效。
+    /// </summary>
+    public float RadiusSquared => radius <= 0f ? -1f : radius * radius;
+
+    private bool addlinkWithThing = true;
+    /// <summary>
+    /// 是否设置<see cref="HediffComp_Link"/>
+    /// </summary>
+    public bool AddlinkWithThing
+    {
+        get => addlinkWithThing;
+        set => addlinkWithThing = value;
+    }
 
     private bool drawConnection = false;
     /// <summary>
-    /// 是否绘制<see cref="Hediff"/>所有者与关联物体之间的连接线。
+    /// 是否绘制 <see cref="Hediff"/> 所有者与关联物体之间的连接线。
     /// </summary>
     public bool DrawConnection
     {
@@ -72,6 +86,7 @@ public class RangeHediffGiveParams : HediffGiveParams
     {
         Scribe_Values.Look(ref radius, nameof(radius), defaultValue: -1f);
 
+        Scribe_Values.Look(ref addlinkWithThing, nameof(addlinkWithThing), defaultValue: true);
         Scribe_Values.Look(ref drawConnection, nameof(drawConnection), defaultValue: false);
 
         Scribe_Values.Look(ref targetRace, nameof(targetRace), defaultValue: RaceType.Humanlike);
