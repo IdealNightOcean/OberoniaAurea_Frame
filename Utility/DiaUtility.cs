@@ -124,10 +124,10 @@ public static class OAFrame_DiaUtility
     public static DiaNode ConfirmDiaNode(TaggedString text, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
     {
         DiaNode diaNode = new(text);
-        if (string.IsNullOrEmpty(acceptText))
+        if (String.IsNullOrEmpty(acceptText))
             acceptText = "Confirm".Translate();
 
-        if (!string.IsNullOrEmpty(acceptText))
+        if (!String.IsNullOrEmpty(acceptText))
         {
             DiaOption accept = new(acceptText)
             {
@@ -136,7 +136,7 @@ public static class OAFrame_DiaUtility
             };
             diaNode.options.Add(accept);
         }
-        if (!string.IsNullOrEmpty(rejectText))
+        if (!String.IsNullOrEmpty(rejectText))
         {
             DiaOption reject = new(rejectText)
             {

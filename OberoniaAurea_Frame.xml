@@ -360,12 +360,12 @@
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.Radius">
             <summary>
-            影响范围半径。小于0时全图生效。
+            影响范围半径。小于等于0时全图生效。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.RadiusSquared">
             <summary>
-            影响范围半径的平方。小于0时全图生效。
+            影响范围半径的平方。小于等于0时全图生效。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.RangeHediffGiveParams.AddlinkWithThing">

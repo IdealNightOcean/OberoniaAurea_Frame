@@ -229,7 +229,7 @@ public class QuestPart_ChoiceLetter : QuestPart
             relatedFaction: RelatedFaction,
             quest: quest);
 
-        bool letterValid = !string.IsNullOrEmpty(choiceLetter.Text);
+        bool letterValid = !String.IsNullOrEmpty(choiceLetter.Text);
         PostGenerateLetter(choiceLetter, out bool postValid);
         if (letterValid && postValid)
         {

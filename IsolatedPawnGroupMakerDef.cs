@@ -1,4 +1,5 @@
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -92,7 +93,7 @@ public class PawnGroupOption
     /// </summary>
     public IReadOnlyList<PawnGenOption> GetRandomGroupOptionsWithTag(string tag)
     {
-        if (groups.NullOrEmpty() || string.IsNullOrEmpty(tag))
+        if (groups.NullOrEmpty() || String.IsNullOrEmpty(tag))
         {
             return null;
         }
@@ -105,7 +106,7 @@ public class PawnGroupOption
     /// </summary>
     public IReadOnlyList<PawnGenOption> GetFirstGroupOptionsWithTag(string tag)
     {
-        if (groups.NullOrEmpty() || string.IsNullOrEmpty(tag))
+        if (groups.NullOrEmpty() || String.IsNullOrEmpty(tag))
         {
             return null;
         }
