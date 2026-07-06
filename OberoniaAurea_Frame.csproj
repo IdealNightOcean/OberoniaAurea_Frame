@@ -77,6 +77,9 @@
     <Compile Include="Component\RangeHediffGiveParams.cs" />
     <Compile Include="Component\TargetRelationType.cs" />
     <Compile Include="Component\ThingMakeInfo.cs" />
+    <Compile Include="DataLibrary\KeyLibrary_Misc.cs" />
+    <Compile Include="DataLibrary\KeyLibrary_FormatArgName.cs" />
+    <Compile Include="DataLibrary\KeyLibrary_Window.cs" />
     <Compile Include="FactionTagsExtension.cs" />
     <Compile Include="Interface\ILordJobWithTalk.cs" />
     <Compile Include="Job\JobDriver_InteractWithThing.cs" />

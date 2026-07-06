@@ -503,6 +503,202 @@
             数据的保存与读取。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.KeyLibrary_Misc">
+            <summary>
+            杂项字符串值常量库。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_Misc.UNKOWN">
+            <summary> 
+            未知 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_Misc.SpaceCap2">
+            <summary> 
+            2空格缩进 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_Misc.SpaceCap4">
+            <summary> 
+            4空格缩进 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_Misc.SpaceCap8">
+            <summary>
+            8空格缩进 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_Misc.ErrorTip">
+            <summary> 
+            错误提示文本 
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.KeyLibrary_Misc.ErrorTipWithColor">
+            <summary> 
+            红色的错误提示文本 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.KeyLibrary_FormatArgName">
+            <summary>
+            格式化参数名的键值常量库。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.UNKOWN">
+            <summary> 
+            未知 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.DEF">
+            <summary> 
+            <see cref="T:Verse.Def"/> 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.FACTION">
+            <summary> 
+            派系 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.PAWN">
+            <summary> 
+            <see cref="T:Verse.Pawn"/> 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.SKILL">
+            <summary> 
+            技能 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.STUFF">
+            <summary> 
+            材料 (<see cref="T:Verse.Thing"/> )
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.SUBJECT">
+            <summary> 
+            主题 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.TALKER">
+            <summary> 
+            对话者 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.TALKWITH">
+            <summary> 
+            交谈对象 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.THING">
+            <summary> 
+            物品  (<see cref="T:Verse.Thing"/> )
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.CARAVAN">
+            <summary> 
+            远行队 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.WORLDOBJECT">
+            <summary> 
+            世界对象 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Caravan">
+            <summary> 
+            远行队 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.QuestName">
+            <summary> 
+            任务名称 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.ThingsInfo">
+            <summary> 
+            物品信息 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.PawnsInfo">
+            <summary> 
+            Pawn信息 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Quality">
+            <summary> 
+            品质 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Chance">
+            <summary> 
+            概率 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Change">
+            <summary> 
+            变化 
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Count" -->
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Level">
+            <summary> 
+            等级 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Offset">
+            <summary> 
+            偏移 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Factor">
+            <summary> 
+            系数 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Reason">
+            <summary> 
+            原因 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Value">
+            <summary> 
+            值 
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.KeyLibrary_Window">
+            <summary>
+            窗口相关字符串值常量库。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_Window.Confirm">
+            <summary> 
+            确认 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_Window.Cancel">
+            <summary> 
+            取消 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_Window.GoBack">
+            <summary> 
+            返回 
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.KeyLibrary_Window.ConfirmGreen">
+            <summary> 
+            绿色确认文本
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.KeyLibrary_Window.ConfirmRed">
+            <summary> 
+            红色确认文本 
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.KeyLibrary_Window.CancelRed">
+            <summary> 
+            红色取消文本 
+            </summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.FactionTagsExtension">
             <summary>
             派系标签扩展。
@@ -932,46 +1128,65 @@
             文本工具类。 
             </summary>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntString(System.Int32,System.Boolean,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntString(System.Int32,System.Boolean,System.Int32,System.Boolean)">
             <summary>
             创建带颜色和符号的整数字符串。默认正数显示绿色，负数显示红色。
             </summary>
+            <param name="value">整数值</param>
             <param name="includeSign">是否显示符号。为 <see langword="true"/> 时显示，否则不显示。</param>
+            <param name="originPoint">比较基准点</param>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntNamedArgument(System.Int32,System.String,System.Boolean,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntNamedArgument(System.Int32,System.String,System.Boolean,System.Int32,System.Boolean)">
             <summary>
             创建带颜色和符号的整数命名参数。默认正数显示绿色，负数显示红色。
             </summary>
+            <param name="value">整数值</param>
+            <param name="name">参数名称</param>
             <param name="includeSign">是否显示符号。为 <see langword="true"/> 时显示，否则不显示。</param>
+            <param name="originPoint">比较基准点</param>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatString(System.Single,System.String,System.Boolean,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatString(System.Single,System.String,System.Boolean,System.Single,System.Boolean)">
             <summary>
             创建带颜色和符号的浮点数字符串。默认正数显示绿色，负数显示红色。
             </summary>
+            <param name="value">浮点数值</param>
+            <param name="format">格式化字符串</param>
             <param name="includeSign">是否显示符号。为 <see langword="true"/> 时显示，否则不显示。</param>
+            <param name="originPoint">比较基准点</param>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatNamedArgument(System.Single,System.String,System.String,System.Boolean,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatNamedArgument(System.Single,System.String,System.String,System.Boolean,System.Single,System.Boolean)">
             <summary>
             创建带颜色和符号的浮点数命名参数。默认正数显示绿色，负数显示红色。
             </summary>
+            <param name="value">浮点数值</param>
+            <param name="name">参数名称</param>
+            <param name="format">格式化字符串</param>
             <param name="includeSign">是否显示符号。为 <see langword="true"/> 时显示，否则不显示。</param>
+            <param name="originPoint">比较基准点</param>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentString(System.Single,System.String,System.Boolean,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentString(System.Single,System.String,System.Boolean,System.Single,System.Boolean)">
             <summary>
-            创建带颜色和符号的浮点数字符串。默认正数显示绿色，负数显示红色。
+            创建带颜色和符号的百分比数字符串。默认正数显示绿色，负数显示红色。
             </summary>
+            <param name="value">百分比数值（浮点）</param>
+            <param name="format">格式化字符串</param>
             <param name="includeSign">是否显示符号。为 <see langword="true"/> 时显示，否则不显示。</param>
+            <param name="originPoint">比较基准点</param>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentNamedArgument(System.Single,System.String,System.String,System.Boolean,System.Boolean)">
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentNamedArgument(System.Single,System.String,System.String,System.Boolean,System.Single,System.Boolean)">
             <summary>
             创建带颜色和符号的百分比数命名参数。默认正数显示绿色，负数显示红色。
             </summary>
+            <param name="value">百分比数值（浮点）</param>
+            <param name="name">参数名称</param>
+            <param name="format">格式化字符串</param>
             <param name="includeSign">是否显示符号。为 <see langword="true"/> 时显示，否则不显示。</param>
+            <param name="originPoint">比较基准点</param>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
         <member name="T:OberoniaAurea_Frame.OAFrame_ThingUtility">
