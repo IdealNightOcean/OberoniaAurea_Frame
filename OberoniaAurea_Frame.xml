@@ -69,39 +69,44 @@
             派系验证参数。
             </summary>
         </member>
+        <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllowPlayerFaction">
+            <summary>
+            匹配玩家派系
+            </summary>
+        </member>
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllowAlly">
             <summary>
-            允许同盟关系。
+            匹配同盟关系。
             </summary>
         </member>
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllowNeutral">
             <summary>
-            允许中立关系。
+            匹配中立关系。
             </summary>
         </member>
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllyHostile">
             <summary>
-            允许敌对关系。
+            匹配敌对关系。
             </summary>
         </member>
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllDefeated">
             <summary>
-            允许已击败派系。
+            匹配已击败派系。
             </summary>
         </member>
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllHidden">
             <summary>
-            允许隐藏派系。
+            匹配隐藏派系。
             </summary>
         </member>
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllTemporary">
             <summary>
-            允许临时派系。
+            匹配临时派系。
             </summary>
         </member>
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.AllowNonHumanlike">
             <summary>
-            允许非人派系。
+            匹配非人派系。
             </summary>
         </member>
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.MustHasGoodwill">
@@ -117,6 +122,11 @@
         <member name="F:OberoniaAurea_Frame.FactionValidationParams.MaxTechLevel">
             <summary>
             最大科技等级。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.FactionValidationParams.ExposeData">
+            <summary>
+            序列化/反序列化此对象的所有数据字段。
             </summary>
         </member>
         <member name="P:OberoniaAurea_Frame.FactionValidationParams.DefaultFaction">
@@ -1128,6 +1138,41 @@
             文本工具类。 
             </summary>
         </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColorizeStrByValue(Verse.TaggedString,System.Single,System.Boolean,System.Single)">
+            <summary>
+            根据数值为文本着色（基于值本身）。
+            </summary>
+            <param name="oriStr">原始文本</param>
+            <param name="value">比较数值</param>
+            <param name="reverse">是否反转颜色逻辑</param>
+            <param name="originPoint">比较基准点</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColorizeStrByOffset(Verse.TaggedString,System.Single,System.Boolean,System.Single)">
+            <summary>
+            根据偏移量为文本着色（基于偏移）。
+            </summary>
+            <param name="oriStr">原始文本</param>
+            <param name="value">偏移数值</param>
+            <param name="reverse">是否反转颜色逻辑</param>
+            <param name="originPoint">比较基准点</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColorizeStrByFactor(Verse.TaggedString,System.Single,System.Boolean,System.Single)">
+            <summary>
+            根据系数为文本着色（基于倍率）。
+            </summary>
+            <param name="oriStr">原始文本</param>
+            <param name="value">系数数值</param>
+            <param name="reverse">是否反转颜色逻辑</param>
+            <param name="originPoint">比较基准点（默认 1）</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.IntNamedArgument(System.Int32,System.String,System.Boolean)">
+            <summary>
+            创建整数命名参数。
+            </summary>
+            <param name="value">整数值</param>
+            <param name="name">参数名称</param>
+            <param name="includeSign">是否显示符号</param>
+        </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredIntString(System.Int32,System.Boolean,System.Int32,System.Boolean)">
             <summary>
             创建带颜色和符号的整数字符串。默认正数显示绿色，负数显示红色。
@@ -1157,6 +1202,15 @@
             <param name="originPoint">比较基准点</param>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
         </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.FloatNamedArgument(System.Single,System.String,System.String,System.Boolean)">
+            <summary>
+            创建浮点数命名参数。
+            </summary>
+            <param name="value">浮点数值</param>
+            <param name="name">参数名称</param>
+            <param name="format">格式化字符串</param>
+            <param name="includeSign">是否显示符号</param>
+        </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredFloatNamedArgument(System.Single,System.String,System.String,System.Boolean,System.Single,System.Boolean)">
             <summary>
             创建带颜色和符号的浮点数命名参数。默认正数显示绿色，负数显示红色。
@@ -1167,6 +1221,15 @@
             <param name="includeSign">是否显示符号。为 <see langword="true"/> 时显示，否则不显示。</param>
             <param name="originPoint">比较基准点</param>
             <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.PercentNamedArgument(System.Single,System.String,System.String,System.Boolean)">
+            <summary>
+            创建百分比命名参数。
+            </summary>
+            <param name="value">百分比数值</param>
+            <param name="name">参数名称</param>
+            <param name="format">格式化字符串</param>
+            <param name="includeSign">是否显示符号</param>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_TextUtility.ColoredPercentString(System.Single,System.String,System.Boolean,System.Single,System.Boolean)">
             <summary>

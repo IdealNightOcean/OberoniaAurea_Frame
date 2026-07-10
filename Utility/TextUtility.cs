@@ -11,6 +11,55 @@ namespace OberoniaAurea_Frame;
 public static class OAFrame_TextUtility
 {
     /// <summary>
+    /// 根据数值为文本着色（基于值本身）。
+    /// </summary>
+    /// <param name="oriStr">原始文本</param>
+    /// <param name="value">比较数值</param>
+    /// <param name="reverse">是否反转颜色逻辑</param>
+    /// <param name="originPoint">比较基准点</param>
+    public static string ColorizeStrByValue(this TaggedString oriStr, float value, bool reverse = false, float originPoint = 0f)
+    {
+        Color color = (reverse ^ (value < originPoint)) ? ColorLibrary.RedReadable : Color.green;
+        return $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{oriStr}</color>";
+    }
+
+    /// <summary>
+    /// 根据偏移量为文本着色（基于偏移）。
+    /// </summary>
+    /// <param name="oriStr">原始文本</param>
+    /// <param name="value">偏移数值</param>
+    /// <param name="reverse">是否反转颜色逻辑</param>
+    /// <param name="originPoint">比较基准点</param>
+    public static string ColorizeStrByOffset(this TaggedString oriStr, float value, bool reverse = false, float originPoint = 0f)
+    {
+        Color color = (reverse ^ (value < originPoint)) ? ColorLibrary.RedReadable : Color.green;
+        return $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{oriStr}</color>";
+    }
+
+    /// <summary>
+    /// 根据系数为文本着色（基于倍率）。
+    /// </summary>
+    /// <param name="oriStr">原始文本</param>
+    /// <param name="value">系数数值</param>
+    /// <param name="reverse">是否反转颜色逻辑</param>
+    /// <param name="originPoint">比较基准点（默认 1）</param>
+    public static string ColorizeStrByFactor(this TaggedString oriStr, float value, bool reverse = false, float originPoint = 1f)
+    {
+        Color color = (reverse ^ (value < originPoint)) ? ColorLibrary.RedReadable : Color.green;
+        return $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{oriStr}</color>";
+    }
+
+    /// <summary>
+    /// 创建整数命名参数。
+    /// </summary>
+    /// <param name="value">整数值</param>
+    /// <param name="name">参数名称</param>
+    /// <param name="includeSign">是否显示符号</param>
+    public static NamedArgument IntNamedArgument(int value, string name, bool includeSign = false)
+    {
+        return (includeSign ? value.ToStringWithSign() : value.ToString()).Named(name);
+    }
+    /// <summary>
     /// 创建带颜色和符号的整数字符串。默认正数显示绿色，负数显示红色。
     /// </summary>
     /// <param name="value">整数值</param>
@@ -45,6 +94,18 @@ public static class OAFrame_TextUtility
     {
         return (includeSign ? value.ToStringWithSign(format) : value.ToString(format)).Colorize((reverse ^ value < originPoint) ? ColorLibrary.RedReadable : Color.green);
     }
+
+    /// <summary>
+    /// 创建浮点数命名参数。
+    /// </summary>
+    /// <param name="value">浮点数值</param>
+    /// <param name="name">参数名称</param>
+    /// <param name="format">格式化字符串</param>
+    /// <param name="includeSign">是否显示符号</param>
+    public static NamedArgument FloatNamedArgument(float value, string name, string format = "0.##", bool includeSign = false)
+    {
+        return (includeSign ? value.ToStringWithSign(format) : value.ToString(format)).Named(name);
+    }
     /// <summary>
     /// 创建带颜色和符号的浮点数命名参数。默认正数显示绿色，负数显示红色。
     /// </summary>
@@ -56,6 +117,17 @@ public static class OAFrame_TextUtility
     /// <param name="reverse">是否反转颜色逻辑。为 <see langword="true"/> 时正数显示红色，负数显示绿色。</param>
     public static NamedArgument ColoredFloatNamedArgument(float value, string name, string format = "0.##", bool includeSign = false, float originPoint = 0f, bool reverse = false) => ColoredFloatString(value, format, includeSign, originPoint, reverse).Named(name);
 
+    /// <summary>
+    /// 创建百分比命名参数。
+    /// </summary>
+    /// <param name="value">百分比数值</param>
+    /// <param name="name">参数名称</param>
+    /// <param name="format">格式化字符串</param>
+    /// <param name="includeSign">是否显示符号</param>
+    public static NamedArgument PercentNamedArgument(float value, string name, string format = "0.##", bool includeSign = false)
+    {
+        return (includeSign ? value.ToStringPercentSigned(format) : value.ToStringPercent(format)).Named(name);
+    }
     /// <summary>
     /// 创建带颜色和符号的百分比数字符串。默认正数显示绿色，负数显示红色。
     /// </summary>

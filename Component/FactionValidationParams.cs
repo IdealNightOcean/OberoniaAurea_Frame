@@ -9,32 +9,37 @@ namespace OberoniaAurea_Frame;
 public struct FactionValidationParams : IExposable
 {
     /// <summary>
-    /// 允许同盟关系。
+    /// 匹配玩家派系
+    /// </summary>
+    public bool AllowPlayerFaction = false;
+
+    /// <summary>
+    /// 匹配同盟关系。
     /// </summary>
     public bool AllowAlly = true;
     /// <summary>
-    /// 允许中立关系。
+    /// 匹配中立关系。
     /// </summary>
     public bool AllowNeutral = true;
     /// <summary>
-    /// 允许敌对关系。
+    /// 匹配敌对关系。
     /// </summary>
     public bool AllyHostile = true;
 
     /// <summary>
-    /// 允许已击败派系。
+    /// 匹配已击败派系。
     /// </summary>
     public bool AllDefeated = false;
     /// <summary>
-    /// 允许隐藏派系。
+    /// 匹配隐藏派系。
     /// </summary>
     public bool AllHidden = false;
     /// <summary>
-    /// 允许临时派系。
+    /// 匹配临时派系。
     /// </summary>
     public bool AllTemporary = false;
     /// <summary>
-    /// 允许非人派系。
+    /// 匹配非人派系。
     /// </summary>
     public bool AllowNonHumanlike = false;
 
@@ -54,8 +59,13 @@ public struct FactionValidationParams : IExposable
 
     public FactionValidationParams() { }
 
+    /// <summary>
+    /// 序列化/反序列化此对象的所有数据字段。
+    /// </summary>
     public void ExposeData()
     {
+        Scribe_Values.Look(ref AllowPlayerFaction, nameof(AllowPlayerFaction), defaultValue: false);
+
         Scribe_Values.Look(ref AllowAlly, nameof(AllowAlly), defaultValue: true);
         Scribe_Values.Look(ref AllowNeutral, nameof(AllowNeutral), defaultValue: true);
         Scribe_Values.Look(ref AllyHostile, nameof(AllyHostile), defaultValue: true);
@@ -94,9 +104,11 @@ public struct FactionValidationParams : IExposable
     /// </summary>
     public readonly bool ValidateFaction(Faction faction)
     {
-        if (faction is null || faction == Faction.OfPlayer)
+        if (faction is null)
             return false;
 
+        if (!AllowPlayerFaction && faction == Faction.OfPlayer)
+            return false;
 
         if (!AllDefeated && faction.defeated)
             return false;
@@ -110,17 +122,14 @@ public struct FactionValidationParams : IExposable
         if (!AllowNonHumanlike && !faction.def.humanlikeFaction)
             return false;
 
-
         if (MustHasGoodwill && !faction.HasGoodwill)
             return false;
-
 
         if (MinTechLevel != TechLevel.Undefined && faction.def.techLevel < MinTechLevel)
             return false;
 
         if (MaxTechLevel != TechLevel.Undefined && faction.def.techLevel > MaxTechLevel)
             return false;
-
 
         return faction.PlayerRelationKind switch
         {
