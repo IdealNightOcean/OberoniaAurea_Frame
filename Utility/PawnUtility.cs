@@ -103,7 +103,29 @@ public static class OAFrame_PawnUtility
     /// 移除第一个相关 <see cref="HediffDef"/> 的 <see cref="Hediff"/>。
     /// </summary>
     /// <returns>是否成功移除。</returns>
-    public static bool RemoveFirstHediffOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
+    public static void RemoveFirstHediffOfDef(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
+    {
+        if (pawn is null || def is null)
+            return;
+
+        List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
+        for (int i = 0; i < hediffs.Count; i++)
+        {
+            Hediff hediff = hediffs[i];
+            if (hediff.def == def && (!mustBeVisible || hediff.Visible))
+            {
+                pawn.health.RemoveHediff(hediff);
+                return;
+            }
+        }
+        return;
+    }
+
+    /// <summary>
+    /// 移除第一个相关 <see cref="HediffDef"/> 的 <see cref="Hediff"/>。
+    /// </summary>
+    /// <returns>是否成功移除。</returns>
+    public static bool RemoveFirstHediffOfDef_New(this Pawn pawn, HediffDef def, bool mustBeVisible = false)
     {
         if (pawn is null || def is null)
             return false;
@@ -131,7 +153,7 @@ public static class OAFrame_PawnUtility
             return 0;
 
         int total = 0;
-        while (RemoveFirstHediffOfDef(pawn, def, mustBeVisible))
+        while (RemoveFirstHediffOfDef_New(pawn, def, mustBeVisible))
             total++;
 
         return total;

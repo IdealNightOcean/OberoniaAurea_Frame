@@ -115,6 +115,7 @@
     <Compile Include="Utility\QuestUtility.cs" />
     <Compile Include="Utility\TextUtility.cs" />
     <Compile Include="Utility\ThingUtility.cs" />
+    <Compile Include="Utility\UIUtility.cs" />
     <Compile Include="WorkGiver_ThingRequestExtension.cs" />
     <Compile Include="WorldObject\ArrivalAction\CaravanArrivalAction_GenerateAndEnter.cs" />
     <Compile Include="Interface\IQuestAssociate.cs" />

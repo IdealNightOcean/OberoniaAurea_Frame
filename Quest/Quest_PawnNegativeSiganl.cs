@@ -81,7 +81,7 @@ public class QuestNode_PawnNegativeSiganl : QuestNode
     }
 }
 /// <summary> 
-/// 任务部件：<see "cref"="Pawn"/>相关负面信号。 
+/// 任务部件：<see cref="Pawn"/>相关负面信号。 
 /// </summary>
 public class QuestPart_PawnNegativeSiganl : QuestPart
 {

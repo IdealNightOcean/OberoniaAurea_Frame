@@ -4,7 +4,7 @@ using Verse;
 namespace OberoniaAurea_Frame;
 
 /// <summary>
-/// <see cref="ThingDefRequest"/>的物品定义请求扩展。
+/// <see href="ThingDefRequest"/>的物品定义请求扩展。
 /// </summary>
 public class WorkGiver_ThingDefRequestExtension : DefModExtension
 {
