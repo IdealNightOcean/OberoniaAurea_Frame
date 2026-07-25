@@ -11,6 +11,35 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public static class OAFrame_Widgets
 {
+    /// <summary>
+    /// 绘制水平线。
+    /// </summary>
+    /// <param name="startPos">起点位置</param>
+    /// <param name="length">线长度</param>
+    /// <param name="color">线颜色</param>
+    /// <param name="thickness">线粗细</param>
+    public static void DrawLineHorizontal(Vector2 startPos, float length, Color color, int thickness = 1)
+    {
+        Color oriGuiColor = GUI.color;
+        GUI.color = color;
+        GUI.DrawTexture(new Rect(startPos.x, startPos.y, length, thickness), BaseContent.WhiteTex);
+        GUI.color = oriGuiColor;
+    }
+
+    /// <summary>
+    /// 绘制垂直线。
+    /// </summary>
+    /// <param name="startPos">起点位置</param>
+    /// <param name="length">线长度</param>
+    /// <param name="color">线颜色</param>
+    /// <param name="thickness">线粗细</param>
+    public static void DrawLineVertical(Vector2 startPos, float length, Color color, int thickness = 1)
+    {
+        Color oriGuiColor = GUI.color;
+        GUI.color = color;
+        GUI.DrawTexture(new Rect(startPos.x, startPos.y, thickness, length), BaseContent.WhiteTex);
+        GUI.color = oriGuiColor;
+    }
 
     /// <summary>
     /// 使用 <see cref="TextStyle_FontSize"/> 绘制标签。
@@ -52,7 +81,6 @@ public static class OAFrame_Widgets
     /// <param name="label">标签文本</param>
     public static void DrawLabel(this TextStyle_GameFont textStyle, Rect rect, string label)
     {
-
         TextStyle_GameFont oriTextStyle = TextStyle_GameFont.CurTextStyle;
 
         try

@@ -1221,6 +1221,24 @@
             UI 控件工具类。
             </summary>
         </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.DrawLineHorizontal(UnityEngine.Vector2,System.Single,UnityEngine.Color,System.Int32)">
+            <summary>
+            绘制水平线。
+            </summary>
+            <param name="startPos">起点位置</param>
+            <param name="length">线长度</param>
+            <param name="color">线颜色</param>
+            <param name="thickness">线粗细</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.DrawLineVertical(UnityEngine.Vector2,System.Single,UnityEngine.Color,System.Int32)">
+            <summary>
+            绘制垂直线。
+            </summary>
+            <param name="startPos">起点位置</param>
+            <param name="length">线长度</param>
+            <param name="color">线颜色</param>
+            <param name="thickness">线粗细</param>
+        </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.DrawLabel(OberoniaAurea_Frame.TextStyle_FontSize,UnityEngine.Rect,System.String)">
             <summary>
             使用 <see cref="T:OberoniaAurea_Frame.TextStyle_FontSize"/> 绘制标签。
@@ -1534,7 +1552,70 @@
             <param name="b">蓝色通道 0~255</param>
             <returns><see cref="N:UnityEngine"/>.<see cref="T:UnityEngine.Color"/> 浮点色彩对象</returns>
         </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.ResetText">
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.TopLeftCorner(UnityEngine.Rect)">
+            <summary> 获取矩形左上角坐标。 </summary>
+            <param name="rect">矩形</param>
+            <returns>左上角坐标</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.TopRightCorner(UnityEngine.Rect)">
+            <summary> 获取矩形右上角坐标。 </summary>
+            <param name="rect">矩形</param>
+            <returns>右上角坐标</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.BottomLeftCorner(UnityEngine.Rect)">
+            <summary> 获取矩形左下角坐标。 </summary>
+            <param name="rect">矩形</param>
+            <returns>左下角坐标</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.BottomRightCorner(UnityEngine.Rect)">
+            <summary> 获取矩形右下角坐标。 </summary>
+            <param name="rect">矩形</param>
+            <returns>右下角坐标</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.LeftSegment(UnityEngine.Rect,System.Single)">
+            <summary> 获取矩形左段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>左段矩形</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.RightSegment(UnityEngine.Rect,System.Single)">
+            <summary> 获取矩形右段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>右段矩形</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.TopSegment(UnityEngine.Rect,System.Single)">
+            <summary> 获取矩形上段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>上段矩形</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.BottomSegment(UnityEngine.Rect,System.Single)">
+            <summary> 获取矩形下段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>下段矩形</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.CenterSegment(UnityEngine.Rect,System.Single,System.Single)">
+            <summary> 获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="xSplitRatio">X轴分割比例</param>
+            <param name="ySplitRatio">Y轴分割比例</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.GetCenterSegmentOnX(UnityEngine.Rect,System.Single)">
+            <summary> 在 X 轴方向获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.GetCenterSegmentOnY(UnityEngine.Rect,System.Single)">
+            <summary> 在 Y 轴方向获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.ResetTextStyleToDefault">
             <summary>
             重置文本设置为默认值。
             </summary>
