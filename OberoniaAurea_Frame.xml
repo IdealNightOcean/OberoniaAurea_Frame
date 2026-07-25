@@ -154,6 +154,68 @@
             验证派系是否符合条件。
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.TextStyle_FontSize">
+            <summary>
+            基于字体大小的文本样式。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TextStyle_FontSize.wordWrap">
+            <summary> 
+            是否自动换行。 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TextStyle_FontSize.fontSize">
+            <summary> 
+            字体大小。 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TextStyle_FontSize.fontStyle">
+            <summary> 
+            字体样式。 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TextStyle_FontSize.anchor">
+            <summary> 
+            文本对齐方式。 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TextStyle_FontSize.guiColor">
+            <summary> 
+            <see cref="T:UnityEngine.GUI"/> 颜色。
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.TextStyle_FontSize.DefaultStyle">
+            <summary> 
+            默认样式。 
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.TextStyle_FontSize.#ctor(System.Int32,UnityEngine.TextAnchor,System.Boolean)">
+            <summary>
+            创建文本样式。
+            </summary>
+            <param name="fontSize">字体大小</param>
+            <param name="anchor">对齐方式</param>
+            <param name="wordWrap">是否换行</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.TextStyle_FontSize.#ctor(UnityEngine.Color,System.Int32,UnityEngine.TextAnchor,System.Boolean)">
+            <summary>
+            创建文本样式。
+            </summary>
+            <param name="guiColor"><see cref="T:UnityEngine.GUI"/> 颜色</param>
+            <param name="fontSize">字体大小</param>
+            <param name="anchor">对齐方式</param>
+            <param name="wordWrap">是否换行</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.TextStyle_FontSize.SetGameTextStyle">
+            <summary> 
+            应用文本样式到游戏。 
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.TextStyle_FontSize.ResetFontStyleFontSize">
+            <summary> 
+            重置 <see cref="T:UnityEngine.FontStyle"/> 字体大小。 
+            </summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.HediffGiveParams">
             <summary>
             用于配置给予<see cref="T:Verse.Hediff"/>的参数集合。
@@ -466,6 +528,63 @@
         <member name="F:OberoniaAurea_Frame.TargetRelationType.All">
             <summary>
             全部，包含自身、相同派系、盟友派系、中立派系、敌对派系。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.TextStyle_GameFont">
+            <summary>
+            基于游戏字体的文本样式。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TextStyle_GameFont.wordWrap">
+            <summary> 
+            是否自动换行。
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TextStyle_GameFont.font">
+            <summary> 
+            游戏字体类型。 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TextStyle_GameFont.anchor">
+            <summary> 
+            文本对齐方式。 
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.TextStyle_GameFont.guiColor">
+            <summary> 
+            <see cref="T:UnityEngine.GUI"/> 颜色。 
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.TextStyle_GameFont.DefaultStyle">
+            <summary> 
+            默认样式。 
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.TextStyle_GameFont.CurTextStyle">
+            <summary> 
+            当前文本样式。 
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.TextStyle_GameFont.#ctor(Verse.GameFont,UnityEngine.TextAnchor,System.Boolean)">
+            <summary>
+            创建文本样式。
+            </summary>
+            <param name="font">游戏字体</param>
+            <param name="anchor">对齐方式</param>
+            <param name="wordWrap">是否换行</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.TextStyle_GameFont.#ctor(UnityEngine.Color,Verse.GameFont,UnityEngine.TextAnchor,System.Boolean)">
+            <summary>
+            创建文本样式。
+            </summary>
+            <param name="guiColor"><see cref="T:UnityEngine.GUI"/> 颜色</param>
+            <param name="font">游戏字体</param>
+            <param name="anchor">对齐方式</param>
+            <param name="wordWrap">是否换行</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.TextStyle_GameFont.SetGameTextStyle">
+            <summary> 
+            应用文本样式到游戏。 
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.ThingMakeInfo">
@@ -1097,6 +1216,74 @@
             枚举工具类。 
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.OAFrame_Widgets">
+            <summary>
+            UI 控件工具类。
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.DrawLabel(OberoniaAurea_Frame.TextStyle_FontSize,UnityEngine.Rect,System.String)">
+            <summary>
+            使用 <see cref="T:OberoniaAurea_Frame.TextStyle_FontSize"/> 绘制标签。
+            </summary>
+            <param name="textStyle">字体样式</param>
+            <param name="rect">绘制区域</param>
+            <param name="label">标签文本</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.DrawLabel(OberoniaAurea_Frame.TextStyle_GameFont,UnityEngine.Rect,System.String)">
+            <summary>
+            使用 <see cref="T:OberoniaAurea_Frame.TextStyle_GameFont"/> 绘制标签。
+            </summary>
+            <param name="textStyle">字体样式</param>
+            <param name="rect">绘制区域</param>
+            <param name="label">标签文本</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.TextButtonImageFitted(UnityEngine.Rect,System.String,UnityEngine.Texture2D,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,UnityEngine.Color,System.Boolean)">
+            <summary>
+            绘制带有文本和图片的按钮。
+            </summary>
+            <param name="butRect">按钮区域</param>
+            <param name="text">按钮文本</param>
+            <param name="butTex">按钮图片</param>
+            <param name="baseButColor">按钮基础颜色</param>
+            <param name="mouseoverButColor">鼠标悬停时按钮颜色</param>
+            <param name="baseTextColor">文本基础颜色</param>
+            <param name="mouseoverTextColor">鼠标悬停时文本颜色</param>
+            <param name="doMouseoverSound">是否播放悬停音效</param>
+            <returns>是否点击</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.DefaultTextButtonImageFitted(UnityEngine.Rect,System.String,UnityEngine.Texture2D,System.Boolean)">
+            <summary>
+            使用默认颜色绘制带有文本和图片的按钮。
+            </summary>
+            <param name="butRect">按钮区域</param>
+            <param name="text">按钮文本</param>
+            <param name="butTex">按钮图片</param>
+            <param name="doMouseoverSound">是否播放悬停音效</param>
+            <returns>是否点击</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.DrawTextureWithColor(UnityEngine.Rect,UnityEngine.Texture2D,UnityEngine.Color,UnityEngine.ScaleMode)">
+            <summary>
+            以指定颜色绘制纹理。
+            </summary>
+            <param name="position">绘制区域</param>
+            <param name="texture">纹理</param>
+            <param name="color">颜色</param>
+            <param name="scaleMode">缩放模式</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.DrawTextureWithMaterial(UnityEngine.Rect,UnityEngine.Texture,UnityEngine.Material,UnityEngine.ScaleMode)">
+            <summary>
+            以指定材质绘制纹理。
+            </summary>
+            <param name="rect">绘制区域</param>
+            <param name="texture">纹理</param>
+            <param name="material">材质</param>
+            <param name="scaleMode">缩放模式</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_Widgets.CalculateScaledTextureRects(UnityEngine.Rect,UnityEngine.ScaleMode,System.Single,UnityEngine.Rect@,UnityEngine.Rect@)">
+            <summary>
+            <see cref="N:UnityEngine"/>.<see cref="T:UnityEngine.GUI"/>.<see href="CalculateScaledTextureRects"/> 的实现
+            </summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.OAFrame_QuestUtility">
             <summary> 
             任务工具类。 
@@ -1328,28 +1515,29 @@
             UI 工具类。
             </summary>
         </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.FromRgba255(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            将 0~255 整型 RGBA 通道转换为 <see cref="N:UnityEngine"/>.<see cref="T:UnityEngine.Color"/> 浮点色彩对象
+            </summary>
+            <param name="r">红色通道 0~255</param>
+            <param name="g">绿色通道 0~255</param>
+            <param name="b">蓝色通道 0~255</param>
+            <param name="a">透明度通道 0~255</param>
+            <returns><see cref="N:UnityEngine"/>.<see cref="T:UnityEngine.Color"/> 浮点色彩对象</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.FromRgba255(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            将 0~255 整型 RGBA 通道转换为 <see cref="N:UnityEngine"/>.<see cref="T:UnityEngine.Color"/> 浮点色彩对象
+            </summary>
+            <param name="r">红色通道 0~255</param>
+            <param name="g">绿色通道 0~255</param>
+            <param name="b">蓝色通道 0~255</param>
+            <returns><see cref="N:UnityEngine"/>.<see cref="T:UnityEngine.Color"/> 浮点色彩对象</returns>
+        </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.ResetText">
             <summary>
             重置文本设置为默认值。
             </summary>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.DrawTextureWithColor(UnityEngine.Rect,UnityEngine.Texture2D,UnityEngine.Color,UnityEngine.ScaleMode)">
-            <summary>
-            以指定颜色绘制纹理。
-            </summary>
-            <param name="position">绘制区域</param>
-            <param name="texture">纹理</param>
-            <param name="color">颜色</param>
-            <param name="scaleMode">缩放模式</param>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.DrawTextureWithMaterial(UnityEngine.Rect,UnityEngine.Texture,UnityEngine.Material,UnityEngine.ScaleMode)">
-            <summary>
-            以指定材质绘制纹理。
-            </summary>
-            <param name="rect">绘制区域</param>
-            <param name="texture">纹理</param>
-            <param name="material">材质</param>
-            <param name="scaleMode">缩放模式</param>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.GetTintMaterial(UnityEngine.Color,UnityEngine.Texture2D)">
             <summary>
@@ -1358,11 +1546,6 @@
             <param name="color">颜色</param>
             <param name="maskTex">遮罩纹理</param>
             <returns>染色材质</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.CalculateScaledTextureRects(UnityEngine.Rect,UnityEngine.ScaleMode,System.Single,UnityEngine.Rect@,UnityEngine.Rect@)">
-            <summary>
-            UnityEngine.GUI.CalculateScaledTextureRects的实现
-            </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.WorkGiver_ThingDefRequestExtension">
             <summary>

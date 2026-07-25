@@ -9,6 +9,31 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public static class OAFrame_UIUtility
 {
+    private const float RgbaByteScale = 1f / 255f;
+    /// <summary>
+    /// 将 0~255 整型 RGBA 通道转换为 <see cref="UnityEngine"/>.<see cref="Color"/> 浮点色彩对象
+    /// </summary>
+    /// <param name="r">红色通道 0~255</param>
+    /// <param name="g">绿色通道 0~255</param>
+    /// <param name="b">蓝色通道 0~255</param>
+    /// <param name="a">透明度通道 0~255</param>
+    /// <returns><see cref="UnityEngine"/>.<see cref="Color"/> 浮点色彩对象</returns>
+    public static Color FromRgba255(int r, int g, int b, int a)
+    {
+        return new Color(r * RgbaByteScale, g * RgbaByteScale, b * RgbaByteScale, a * RgbaByteScale);
+    }
+    /// <summary>
+    /// 将 0~255 整型 RGBA 通道转换为 <see cref="UnityEngine"/>.<see cref="Color"/> 浮点色彩对象
+    /// </summary>
+    /// <param name="r">红色通道 0~255</param>
+    /// <param name="g">绿色通道 0~255</param>
+    /// <param name="b">蓝色通道 0~255</param>
+    /// <returns><see cref="UnityEngine"/>.<see cref="Color"/> 浮点色彩对象</returns>
+    public static Color FromRgba255(int r, int g, int b)
+    {
+        return new Color(r * RgbaByteScale, g * RgbaByteScale, b * RgbaByteScale, 1f);
+    }
+
     /// <summary>
     /// 重置文本设置为默认值。
     /// </summary>
@@ -20,45 +45,6 @@ public static class OAFrame_UIUtility
         Text.Anchor = TextAnchor.UpperLeft;
     }
 
-    /// <summary>
-    /// 以指定颜色绘制纹理。
-    /// </summary>
-    /// <param name="position">绘制区域</param>
-    /// <param name="texture">纹理</param>
-    /// <param name="color">颜色</param>
-    /// <param name="scaleMode">缩放模式</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void DrawTextureWithColor(Rect position, Texture2D texture, Color color, ScaleMode scaleMode = ScaleMode.StretchToFill)
-    {
-        Color oriColor = GUI.color;
-        GUI.color = color;
-        GUI.DrawTexture(position, texture, scaleMode);
-        GUI.color = oriColor;
-    }
-
-    /// <summary>
-    /// 以指定材质绘制纹理。
-    /// </summary>
-    /// <param name="rect">绘制区域</param>
-    /// <param name="texture">纹理</param>
-    /// <param name="material">材质</param>
-    /// <param name="scaleMode">缩放模式</param>
-    public static void DrawTextureWithMaterial(Rect rect, Texture texture, Material material, ScaleMode scaleMode = ScaleMode.StretchToFill)
-    {
-        if (material == null)
-        {
-            GUI.DrawTexture(rect, texture, scaleMode);
-        }
-        else if (Event.current.type == EventType.Repaint)
-        {
-            Color color = material.shader.SupportsMaskTex() ? GUI.color : new Color(GUI.color.r * 0.5f, GUI.color.g * 0.5f, GUI.color.b * 0.5f, GUI.color.a);
-            Rect screenRect = default;
-            Rect sorceRect = default;
-            float imageAspect = texture.width / (float)texture.height;
-            CalculateScaledTextureRects(rect, scaleMode, imageAspect, ref screenRect, ref sorceRect);
-            Graphics.DrawTexture(screenRect, texture, sorceRect, 0, 0, 0, 0, color, material);
-        }
-    }
 
     /// <summary>
     /// 获取带遮罩的染色材质。
@@ -86,53 +72,4 @@ public static class OAFrame_UIUtility
         }
     }
 
-    /// <summary>
-    /// UnityEngine.GUI.CalculateScaledTextureRects的实现
-    /// </summary>
-    private static bool CalculateScaledTextureRects(Rect position, ScaleMode scaleMode, float imageAspect, ref Rect outScreenRect, ref Rect outSourceRect)
-    {
-        float positionAspect = position.width / position.height;
-        bool result = false;
-        switch (scaleMode)
-        {
-            case ScaleMode.StretchToFill:
-                outScreenRect = position;
-                outSourceRect = new Rect(0f, 0f, 1f, 1f);
-                result = true;
-                break;
-            case ScaleMode.ScaleAndCrop:
-                if (positionAspect > imageAspect)
-                {
-                    float scaleFactor = imageAspect / positionAspect;
-                    outScreenRect = position;
-                    outSourceRect = new Rect(0f, (1f - scaleFactor) * 0.5f, 1f, scaleFactor);
-                    result = true;
-                }
-                else
-                {
-                    float scaleFactor = positionAspect / imageAspect;
-                    outScreenRect = position;
-                    outSourceRect = new Rect(0.5f - scaleFactor * 0.5f, 0f, scaleFactor, 1f);
-                    result = true;
-                }
-                break;
-            case ScaleMode.ScaleToFit:
-                if (positionAspect > imageAspect)
-                {
-                    float scaleFactor = imageAspect / positionAspect;
-                    outScreenRect = new Rect(position.xMin + position.width * (1f - scaleFactor) * 0.5f, position.yMin, scaleFactor * position.width, position.height);
-                    outSourceRect = new Rect(0f, 0f, 1f, 1f);
-                    result = true;
-                }
-                else
-                {
-                    float scaleFactor = positionAspect / imageAspect;
-                    outScreenRect = new Rect(position.xMin, position.yMin + position.height * (1f - scaleFactor) * 0.5f, position.width, scaleFactor * position.height);
-                    outSourceRect = new Rect(0f, 0f, 1f, 1f);
-                    result = true;
-                }
-                break;
-        }
-        return result;
-    }
 }
