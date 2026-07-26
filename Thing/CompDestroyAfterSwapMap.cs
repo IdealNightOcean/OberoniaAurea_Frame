@@ -32,10 +32,10 @@ public class CompProperties_DestoryAfterSwapMap : CompProperties
     public CompProperties_DestoryAfterSwapMap() => compClass = typeof(CompDestoryAfterSwapMap);
 }
 
-[Obsolete("曾经错误的命名，应使用 CompProperties_DestroyAfterSwapMap")]
 /// <summary>
 /// （已废弃）交换地图后自动销毁的组件。
 /// </summary>
+[Obsolete("曾经错误的命名，应使用 CompProperties_DestroyAfterSwapMap")]
 public class CompDestoryAfterSwapMap : ThingComp
 {
     public override void PostSwapMap()

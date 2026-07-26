@@ -110,7 +110,7 @@ public static class OAFrame_FactionUtility
     }
 
     /// <summary>
-    /// 获取随机指定def的临时派系。
+    /// 获取随机指定 <see cref="FactionDef"/> 的临时派系。
     /// </summary>
     public static Faction RandomAvailableTempFactionOfDef(FactionDef def, FactionValidationParams validationParams)
     {
@@ -118,37 +118,44 @@ public static class OAFrame_FactionUtility
     }
 
     /// <summary>
-    /// 生成临时派系。
+    /// 生成指定 <see cref="FactionDef"/> 和 <see href="玩家关系"/> 的临时派系。
     /// </summary>
-    public static Faction GenerateTempFaction(FactionDef templateDef, FactionRelationKind relationKindWithPlayer = FactionRelationKind.Neutral)
+    public static Faction GenerateTempFaction(FactionDef factionDef, FactionRelationKind relationKindWithPlayer = FactionRelationKind.Neutral)
     {
-        if (templateDef is null)
+        if (factionDef is null)
+            return null;
+
+        try
         {
+            List<FactionRelation> RelationList = [];
+            Faction ofPlayer = Faction.OfPlayer;
+            foreach (Faction otherF in Find.FactionManager.AllFactionsListForReading)
+            {
+                if (!otherF.def.PermanentlyHostileTo(factionDef))
+                {
+                    FactionRelationKind relationKind = otherF == ofPlayer ? relationKindWithPlayer : FactionRelationKind.Neutral;
+
+                    RelationList.Add(new FactionRelation
+                    {
+                        other = otherF,
+                        kind = relationKind
+                    });
+                }
+            }
+            FactionGeneratorParms parms = new(factionDef, default, true);
+            if (ModsConfig.IdeologyActive)
+            {
+                parms.ideoGenerationParms = new IdeoGenerationParms(parms.factionDef, forceNoExpansionIdeo: false, DefDatabase<PreceptDef>.AllDefs.Where(p => p.proselytizes || p.approvesOfCharity).ToList());
+            }
+            Faction faction = FactionGenerator.NewGeneratedFactionWithRelations(parms, RelationList);
+            faction.temporary = true;
+            Find.FactionManager.Add(faction);
+            return faction;
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"[OAFrame] 在创建临时派系时出现异常，异常：{ex}");
             return null;
         }
-        List<FactionRelation> RelationList = [];
-        Faction ofPlayer = Faction.OfPlayer;
-        foreach (Faction otherF in Find.FactionManager.AllFactionsListForReading)
-        {
-            if (!otherF.def.PermanentlyHostileTo(templateDef))
-            {
-                FactionRelationKind relationKind = otherF == ofPlayer ? relationKindWithPlayer : FactionRelationKind.Neutral;
-
-                RelationList.Add(new FactionRelation
-                {
-                    other = otherF,
-                    kind = relationKind
-                });
-            }
-        }
-        FactionGeneratorParms parms = new(templateDef, default, true);
-        if (ModsConfig.IdeologyActive)
-        {
-            parms.ideoGenerationParms = new IdeoGenerationParms(parms.factionDef, forceNoExpansionIdeo: false, DefDatabase<PreceptDef>.AllDefs.Where(p => p.proselytizes || p.approvesOfCharity).ToList());
-        }
-        Faction faction = FactionGenerator.NewGeneratedFactionWithRelations(parms, RelationList);
-        faction.temporary = true;
-        Find.FactionManager.Add(faction);
-        return faction;
     }
 }

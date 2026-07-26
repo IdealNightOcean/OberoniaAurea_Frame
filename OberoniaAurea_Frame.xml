@@ -767,7 +767,11 @@
             变化 
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Count" -->
+        <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Count">
+            <summary> 
+            数量 
+            </summary>
+        </member>
         <member name="F:OberoniaAurea_Frame.KeyLibrary_FormatArgName.Level">
             <summary> 
             等级 
@@ -1091,6 +1095,11 @@
         <member name="T:OberoniaAurea_Frame.CompProperties_DestoryAfterSwapMap">
             <summary>
             （已废弃）交换地图后销毁的组件属性（旧命名）。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.CompDestoryAfterSwapMap">
+            <summary>
+            （已废弃）交换地图后自动销毁的组件。
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.MapParent_GetShuttleFloatMenuOptions_Patch">
@@ -1551,69 +1560,6 @@
             <param name="g">绿色通道 0~255</param>
             <param name="b">蓝色通道 0~255</param>
             <returns><see cref="N:UnityEngine"/>.<see cref="T:UnityEngine.Color"/> 浮点色彩对象</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.TopLeftCorner(UnityEngine.Rect)">
-            <summary> 获取矩形左上角坐标。 </summary>
-            <param name="rect">矩形</param>
-            <returns>左上角坐标</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.TopRightCorner(UnityEngine.Rect)">
-            <summary> 获取矩形右上角坐标。 </summary>
-            <param name="rect">矩形</param>
-            <returns>右上角坐标</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.BottomLeftCorner(UnityEngine.Rect)">
-            <summary> 获取矩形左下角坐标。 </summary>
-            <param name="rect">矩形</param>
-            <returns>左下角坐标</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.BottomRightCorner(UnityEngine.Rect)">
-            <summary> 获取矩形右下角坐标。 </summary>
-            <param name="rect">矩形</param>
-            <returns>右下角坐标</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.LeftSegment(UnityEngine.Rect,System.Single)">
-            <summary> 获取矩形左段区域。 </summary>
-            <param name="sourceRect">源矩形</param>
-            <param name="splitRatio">分割比例</param>
-            <returns>左段矩形</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.RightSegment(UnityEngine.Rect,System.Single)">
-            <summary> 获取矩形右段区域。 </summary>
-            <param name="sourceRect">源矩形</param>
-            <param name="splitRatio">分割比例</param>
-            <returns>右段矩形</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.TopSegment(UnityEngine.Rect,System.Single)">
-            <summary> 获取矩形上段区域。 </summary>
-            <param name="sourceRect">源矩形</param>
-            <param name="splitRatio">分割比例</param>
-            <returns>上段矩形</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.BottomSegment(UnityEngine.Rect,System.Single)">
-            <summary> 获取矩形下段区域。 </summary>
-            <param name="sourceRect">源矩形</param>
-            <param name="splitRatio">分割比例</param>
-            <returns>下段矩形</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.CenterSegment(UnityEngine.Rect,System.Single,System.Single)">
-            <summary> 获取矩形中心区域。 </summary>
-            <param name="sourceRect">源矩形</param>
-            <param name="xSplitRatio">X轴分割比例</param>
-            <param name="ySplitRatio">Y轴分割比例</param>
-            <returns>中心矩形</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.GetCenterSegmentOnX(UnityEngine.Rect,System.Single)">
-            <summary> 在 X 轴方向获取矩形中心区域。 </summary>
-            <param name="sourceRect">源矩形</param>
-            <param name="splitRatio">分割比例</param>
-            <returns>中心矩形</returns>
-        </member>
-        <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.GetCenterSegmentOnY(UnityEngine.Rect,System.Single)">
-            <summary> 在 Y 轴方向获取矩形中心区域。 </summary>
-            <param name="sourceRect">源矩形</param>
-            <param name="splitRatio">分割比例</param>
-            <returns>中心矩形</returns>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_UIUtility.ResetTextStyleToDefault">
             <summary>
@@ -2446,12 +2392,12 @@
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_FactionUtility.RandomAvailableTempFactionOfDef(RimWorld.FactionDef,OberoniaAurea_Frame.FactionValidationParams)">
             <summary>
-            获取随机指定def的临时派系。
+            获取随机指定 <see cref="T:RimWorld.FactionDef"/> 的临时派系。
             </summary>
         </member>
         <member name="M:OberoniaAurea_Frame.OAFrame_FactionUtility.GenerateTempFaction(RimWorld.FactionDef,RimWorld.FactionRelationKind)">
             <summary>
-            生成临时派系。
+            生成指定 <see cref="T:RimWorld.FactionDef"/> 和 <see href="玩家关系"/> 的临时派系。
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.OAFrame_CaravanUtility">

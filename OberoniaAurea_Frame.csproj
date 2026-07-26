@@ -43,7 +43,7 @@
     </Reference>
     <Reference Include="NightOcean, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RimWorldReference\NightOcean\NightOcean.dll</HintPath>
+      <HintPath>..\..\NightOcean\bin\Release\netstandard2.1\NightOcean.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

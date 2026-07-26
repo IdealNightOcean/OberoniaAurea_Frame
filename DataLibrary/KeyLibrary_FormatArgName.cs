@@ -89,7 +89,7 @@ public static class KeyLibrary_FormatArgName
     public const string Change = "Change";
     /// <summary> 
     /// 数量 
-    /// <summary>
+    /// </summary>
     public const string Count = "Count";
     /// <summary> 
     /// 等级 
