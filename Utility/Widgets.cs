@@ -42,12 +42,27 @@ public static class OAFrame_Widgets
     }
 
     /// <summary>
-    /// 使用 <see cref="TextStyle_FontSize"/> 绘制标签。
+    /// 绘制带颜色的矩形边框。
     /// </summary>
-    /// <param name="textStyle">字体样式</param>
+    /// <param name="rect">矩形区域</param>
+    /// <param name="color">边框颜色</param>
+    /// <param name="thickness">边框粗细</param>
+    /// <param name="lineTexture">线条纹理</param>
+    public static void DrawBox(Rect rect, Color color, int thickness = 1, Texture2D lineTexture = null)
+    {
+        Color oriGuiColor = GUI.color;
+        GUI.color = color;
+        Widgets.DrawBox(rect, thickness, lineTexture);
+        GUI.color = oriGuiColor;
+    }
+
+    /// <summary>
+    /// 使用 <see cref="TextStyle"/> 绘制标签。
+    /// </summary>
     /// <param name="rect">绘制区域</param>
     /// <param name="label">标签文本</param>
-    public static void DrawLabel(this TextStyle_FontSize textStyle, Rect rect, string label)
+    /// <param name="textStyle">字体样式</param>
+    public static void DrawLabel(Rect rect, string label, TextStyle textStyle)
     {
         Rect position = rect;
         float halfUIScale = Prefs.UIScale * 0.5f;
@@ -58,40 +73,26 @@ public static class OAFrame_Widgets
             position.xMax = UIScaling.AdjustCoordToUIScalingCeil(rect.xMax + 1E-05f);
             position.yMax = UIScaling.AdjustCoordToUIScalingCeil(rect.yMax + 1E-05f);
         }
+        Color oriColor = GUI.color;
+        GUI.color = textStyle.guiColor;
+        GUI.Label(position, label, textStyle.FontStyle);
+        GUI.color = oriColor;
+        textStyle.RestoreTextStyle();
 
-        TextStyle_GameFont oriTextStyle = TextStyle_GameFont.CurTextStyle;
-
-        try
-        {
-            textStyle.SetGameTextStyle();
-            GUI.Label(position, label, textStyle.fontStyle);
-        }
-        finally
-        {
-            textStyle.ResetFontStyleFontSize();
-            oriTextStyle.SetGameTextStyle();
-        }
     }
 
     /// <summary>
-    /// 使用 <see cref="TextStyle_GameFont"/> 绘制标签。
+    /// 绘制带省略号截断的标签。
     /// </summary>
-    /// <param name="textStyle">字体样式</param>
     /// <param name="rect">绘制区域</param>
     /// <param name="label">标签文本</param>
-    public static void DrawLabel(this TextStyle_GameFont textStyle, Rect rect, string label)
+    /// <param name="textStyle">文本样式</param>
+    /// <returns>是否发生截断</returns>
+    public static bool DrawLabelEllipses(Rect rect, string label, TextStyle textStyle)
     {
-        TextStyle_GameFont oriTextStyle = TextStyle_GameFont.CurTextStyle;
-
-        try
-        {
-            textStyle.SetGameTextStyle();
-            Widgets.Label(rect, label);
-        }
-        finally
-        {
-            oriTextStyle.SetGameTextStyle();
-        }
+        label = OAFrame_TextUtility.ClampTextWithEllipsis(rect, label, textStyle, out bool isTextClamped);
+        DrawLabel(rect, label, textStyle);
+        return isTextClamped;
     }
 
     /// <summary>
@@ -124,7 +125,7 @@ public static class OAFrame_Widgets
 
         Text.Anchor = oriAnchor;
         GUI.color = oriColor;
-        return Widgets.ButtonInvisible(butRect);
+        return Widgets.ButtonInvisible(butRect, doMouseoverSound: doMouseoverSound);
     }
 
     /// <summary>

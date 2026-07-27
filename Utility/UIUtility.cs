@@ -10,6 +10,7 @@ namespace OberoniaAurea_Frame;
 public static class OAFrame_UIUtility
 {
     private const float RgbaByteScale = 1f / 255f;
+
     /// <summary>
     /// 将 0~255 整型 RGBA 通道转换为 <see cref="UnityEngine"/>.<see cref="Color"/> 浮点色彩对象
     /// </summary>
