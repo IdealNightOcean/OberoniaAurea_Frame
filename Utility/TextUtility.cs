@@ -199,21 +199,19 @@ public static class OAFrame_TextUtility
         if (sourceText.Length <= 4)
             return sourceText;
 
-        float availWidth = rect.width - 13f;
-
         float fullRawWidth = CalcSize(sourceText, textStyle).x;
-        if (fullRawWidth <= availWidth)
+        if (fullRawWidth <= rect.width)
             return sourceText;
 
         string ellipsis = "...";
         float ellipsisWidth = CalcSize(ellipsis, textStyle).x;
-        if (ellipsisWidth >= availWidth)
+        if (ellipsisWidth >= rect.width)
         {
             isTextClamped = true;
             return ellipsis;
         }
 
-        float maxRawTextWidth = availWidth - ellipsisWidth;
+        float maxRawTextWidth = rect.width - ellipsisWidth;
 
         int left = 0;
         int right = sourceText.Length;
