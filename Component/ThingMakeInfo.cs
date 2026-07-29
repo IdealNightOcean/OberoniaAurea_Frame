@@ -75,7 +75,7 @@ public class ThingMakeInfo : IExposable
     }
 
     /// <summary>
-    /// 数据的保存与读取。
+    /// 序列化/反序列化此对象需持久保存的字段。
     /// </summary>
     public void ExposeData()
     {

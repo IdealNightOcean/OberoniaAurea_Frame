@@ -13,9 +13,14 @@ public class SimpleUniqueList<T> : IList<T>, IExposable
     private LookMode innerListLookMode;
     private List<T> innerList;
 
+    /// <summary> 获取列表元素数量。 </summary>
     public int Count => innerList.Count;
+    /// <summary> 获取列表是否为只读。 </summary>
     public bool IsReadOnly => false;
 
+    /// <summary>
+    /// 初始化空列表。
+    /// </summary>
     public SimpleUniqueList()
     {
         innerListLookMode = LookMode.Deep;
@@ -50,6 +55,10 @@ public class SimpleUniqueList<T> : IList<T>, IExposable
         AddRange(collection);
     }
 
+    /// <summary>
+    /// 获取或设置指定索引处的元素。
+    /// </summary>
+    /// <param name="index">索引</param>
     public T this[int index]
     {
         get
@@ -79,14 +88,14 @@ public class SimpleUniqueList<T> : IList<T>, IExposable
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    /// <summary>
-    /// 获取指定元素的索引。
-    /// </summary>
+    /// <inheritdoc />
     public int IndexOf(T item) => innerList.IndexOf(item);
 
     /// <summary>
     /// 在指定索引处插入元素。
     /// </summary>
+    /// <param name="index">插入位置</param>
+    /// <param name="item">要插入的元素</param>
     public void Insert(int index, T item)
     {
         if (index < 0 || index > innerList.Count)
@@ -102,21 +111,23 @@ public class SimpleUniqueList<T> : IList<T>, IExposable
     /// <summary>
     /// 确定列表是否包含指定元素。
     /// </summary>
+    /// <param name="item">要查找的元素</param>
+    /// <returns>是否包含该元素</returns>
     public bool Contains(T item) => innerList.Contains(item);
 
-    /// <summary>
-    /// 将列表元素复制到数组。
-    /// </summary>
+    /// <inheritdoc />
     public void CopyTo(T[] array, int arrayIndex) => innerList.CopyTo(array, arrayIndex);
 
     /// <summary>
     /// 添加元素到列表。
     /// </summary>
+    /// <param name="item">要添加的元素</param>
     public void Add(T item) => innerList.AddUnique(item);
 
     /// <summary>
     /// 批量添加元素。
     /// </summary>
+    /// <param name="collection">要添加的元素集合</param>
     public void AddRange(IEnumerable<T> collection)
     {
         if (collection is null)
@@ -136,14 +147,19 @@ public class SimpleUniqueList<T> : IList<T>, IExposable
     /// <summary>
     /// 从列表中移除指定元素。
     /// </summary>
+    /// <param name="item">要移除的元素</param>
+    /// <returns>是否移除成功</returns>
     public bool Remove(T item) => innerList.Remove(item);
     /// <summary>
     /// 移除指定索引处的元素。
     /// </summary>
+    /// <param name="index">要移除的索引</param>
     public void RemoveAt(int index) => innerList.RemoveAt(index);
     /// <summary>
     /// 移除所有匹配指定谓词的元素。
     /// </summary>
+    /// <param name="match">用于判断元素是否要移除的谓词</param>
+    /// <returns>被移除的元素数量</returns>
     public int RemoveAll(Predicate<T> match) => innerList.RemoveAll(match);
     /// <summary>
     /// 清空列表中的所有元素。
@@ -164,7 +180,7 @@ public class SimpleUniqueList<T> : IList<T>, IExposable
     }
 
     /// <summary>
-    /// 序列化/反序列化此对象的所有数据字段。
+    /// 序列化/反序列化此对象需持久保存的字段。
     /// </summary>
     public void ExposeData()
     {

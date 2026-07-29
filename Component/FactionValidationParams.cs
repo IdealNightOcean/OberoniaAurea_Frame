@@ -57,10 +57,13 @@ public struct FactionValidationParams : IExposable
     /// </summary>
     public TechLevel MaxTechLevel = TechLevel.Undefined;
 
+    /// <summary>
+    /// 创建默认派系验证参数实例。
+    /// </summary>
     public FactionValidationParams() { }
 
     /// <summary>
-    /// 序列化/反序列化此对象的所有数据字段。
+    /// 序列化/反序列化此对象需持久保存的字段。
     /// </summary>
     public void ExposeData()
     {
@@ -102,6 +105,8 @@ public struct FactionValidationParams : IExposable
     /// <summary>
     /// 验证派系是否符合条件。
     /// </summary>
+    /// <param name="faction">要验证的派系</param>
+    /// <returns>是否符合条件</returns>
     public readonly bool ValidateFaction(Faction faction)
     {
         if (faction is null)

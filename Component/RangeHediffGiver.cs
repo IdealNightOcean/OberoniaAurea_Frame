@@ -59,10 +59,14 @@ public class RangeHediffGiver : IExposable
         this.parms = parms;
     }
 
+    /// <summary>
+    /// 设置给予参数。
+    /// </summary>
+    /// <param name="parms">参数配置</param>
     public void SetGiveParams(RangeHediffGiveParams parms) => this.parms = parms;
 
     /// <summary>
-    /// 序列化/反序列化此对象的所有数据字段。
+    /// 序列化/反序列化此对象需持久保存的字段。
     /// </summary>
     public virtual void ExposeData()
     {

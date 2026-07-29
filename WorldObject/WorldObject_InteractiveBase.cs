@@ -14,12 +14,18 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
 {
     protected virtual string VisitLabel => "OAFrame_VisitObject";
 
+    /// <summary>
+    /// 额外参与派系
+    /// </summary>
     protected SimpleHashList<Faction> participantFactions = new(LookMode.Reference);
     /// <summary>
     /// 额外参与派系
     /// </summary>
     public SimpleHashList<Faction> ParticipantFactions => participantFactions;
 
+    /// <summary>
+    /// 关联任务
+    /// </summary>
     protected Quest quest;
     /// <summary>
     /// 关联任务
@@ -44,11 +50,12 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
         this.quest = quest;
     }
 
-    /// <summary>
-    /// 通知远行队（<see cref="Caravan"/>）到达。
-    /// </summary>
+    /// <inheritdoc />
     public abstract void Notify_CaravanArrived(Caravan caravan);
 
+    /// <summary>
+    /// 获取远行队的浮动菜单选项。
+    /// </summary>
     public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
     {
         foreach (FloatMenuOption floatMenuOption in base.GetFloatMenuOptions(caravan))
@@ -60,6 +67,7 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
             yield return floatMenuOption2;
         }
     }
+
     /// <summary>
     /// 获取特定的浮动菜单选项。
     /// </summary>
@@ -68,6 +76,9 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
         return CaravanArrivalAction_VisitInteractiveObject.GetFloatMenuOptions(caravan, this, VisitLabel);
     }
 
+    /// <summary>
+    /// 获取运输舱的浮动菜单选项。
+    /// </summary>
     public override IEnumerable<FloatMenuOption> GetTransportersFloatMenuOptions(IEnumerable<IThingHolder> pods, Action<PlanetTile, TransportersArrivalAction> launchAction)
     {
         foreach (FloatMenuOption floatMenuOption in base.GetTransportersFloatMenuOptions(pods, launchAction))
@@ -80,6 +91,9 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
         }
     }
 
+    /// <summary>
+    /// 获取穿梭机的浮动菜单选项。
+    /// </summary>
     public override IEnumerable<FloatMenuOption> GetShuttleFloatMenuOptions(IEnumerable<IThingHolder> pods, Action<PlanetTile, TransportersArrivalAction> launchAction)
     {
         foreach (FloatMenuOption floatMenuOption in base.GetTransportersFloatMenuOptions(pods, launchAction))
@@ -92,6 +106,9 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
         }
     }
 
+    /// <summary>
+    /// 序列化/反序列化此对象需持久保存的字段。
+    /// </summary>
     public override void ExposeData()
     {
         base.ExposeData();

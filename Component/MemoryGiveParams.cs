@@ -69,7 +69,7 @@ public class MemoryGiveParams : IExposable
     }
 
     /// <summary>
-    /// 序列化/反序列化此对象的所有数据字段。
+    /// 序列化/反序列化此对象需持久保存的字段。
     /// </summary>
     public virtual void ExposeData()
     {

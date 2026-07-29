@@ -7,9 +7,12 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public struct CooldownRecord : IExposable
 {
+    /// <summary> 上次激活的游戏时刻。 </summary>
     public int lastActiveTick;
+    /// <summary> 下次可使用的游戏时刻。 </summary>
     public int nextAvailableTick;
     private bool removeWhenExpired;
+    /// <summary> 是否应当移除此冷却记录。 </summary>
     public readonly bool ShouldRemove
     {
         get
@@ -44,7 +47,7 @@ public struct CooldownRecord : IExposable
     }
 
     /// <summary>
-    /// 序列化/反序列化此对象的所有数据字段。
+    /// 序列化/反序列化此对象需持久保存的字段。
     /// </summary>
     public void ExposeData()
     {
@@ -53,10 +56,13 @@ public struct CooldownRecord : IExposable
         Scribe_Values.Look(ref removeWhenExpired, nameof(removeWhenExpired), defaultValue: false);
     }
 
+    /// <summary> 剩余冷却时刻数。 </summary>
     public readonly int CooldownTicksLeft => lastActiveTick < 0 ? -1 : nextAvailableTick - Find.TickManager.TicksGame;
 
+    /// <summary> 距上次激活的时刻数。 </summary>
     public readonly int TicksSinceLastActive => lastActiveTick < 0 ? -1 : Find.TickManager.TicksGame - lastActiveTick;
 
+    /// <summary> 是否处于冷却中。 </summary>
     public readonly bool IsInCooldown => nextAvailableTick > 0 && nextAvailableTick > Find.TickManager.TicksGame;
 
     public override readonly string ToString() => $"LastActiveTick: {lastActiveTick}, NextAvailableTick: {nextAvailableTick}";

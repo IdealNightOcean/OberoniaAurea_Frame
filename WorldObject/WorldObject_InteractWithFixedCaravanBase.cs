@@ -45,6 +45,7 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         }
     }
 
+    /// <inheritdoc />
     protected override void TickInterval(int delta)
     {
         base.TickInterval(delta);
@@ -140,6 +141,7 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         return "OAFrame_FixedCaravanWork_TimeLeft".Translate(ticksRemaining.ToStringTicksToPeriod());
     }
 
+    /// <inheritdoc />
     public override IEnumerable<Gizmo> GetGizmos()
     {
         foreach (Gizmo gizmo in base.GetGizmos())
@@ -157,6 +159,7 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         }
     }
 
+    /// <inheritdoc />
     public override void Destroy()
     {
         if (isWorking)
@@ -165,6 +168,8 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         }
         base.Destroy();
     }
+
+    /// <inheritdoc />
     public override void ExposeData()
     {
         base.ExposeData();
