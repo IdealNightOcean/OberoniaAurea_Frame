@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
 
-namespace OberoniaAurea_Frame;
+namespace OberoniaAurea_Frame.UI;
 
 /// <summary>
 /// UI 控件工具类。
@@ -90,7 +90,7 @@ public static class OAFrame_Widgets
     /// <returns>是否发生截断</returns>
     public static bool DrawLabelEllipses(Rect rect, string label, TextStyle textStyle)
     {
-        label = OAFrame_TextUtility.ClampTextWithEllipsis(rect, label, textStyle, out bool isTextClamped);
+        label = Utility.OAFrame_TextUtility.ClampTextWithEllipsis(rect, label, textStyle, out bool isTextClamped);
         DrawLabel(rect, label, textStyle);
         return isTextClamped;
     }

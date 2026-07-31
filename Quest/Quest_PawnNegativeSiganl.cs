@@ -50,7 +50,7 @@ public class QuestNode_PawnNegativeSiganl : QuestNode
 
         if (useCommonSiganls.GetValue(slate))
         {
-            inSignals.AddRangeUnique(OAFrame_QuestUtility.GetCommonPawnNegativeSiganls(addTag, tagToAdd));
+            inSignals.AddRangeUnique(Utility.OAFrame_QuestUtility.GetCommonPawnNegativeSiganls(addTag, tagToAdd));
         }
 
         return inSignals;

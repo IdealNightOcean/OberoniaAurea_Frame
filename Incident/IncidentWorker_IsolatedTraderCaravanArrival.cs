@@ -105,7 +105,7 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
     protected virtual List<Pawn> SpawnTradePawns(IncidentParms parms, PawnGroupMakerParms groupMakerParms, PawnGroupMaker groupMaker)
     {
         Map map = (Map)parms.target;
-        List<Pawn> pawns = OAFrame_PawnGenerateUtility.GeneratePawns(groupMakerParms, groupMaker, needFaction: false, warnOnZeroResults: false).ToList();
+        List<Pawn> pawns = Utility.OAFrame_PawnGenerateUtility.GeneratePawns(groupMakerParms, groupMaker, needFaction: false, warnOnZeroResults: false).ToList();
         foreach (Pawn pawn in pawns)
         {
             IntVec3 loc = CellFinder.RandomClosewalkCellNear(parms.spawnCenter, map, 5);

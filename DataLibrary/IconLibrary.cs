@@ -1,13 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
 
-namespace OberoniaAurea_Frame;
+namespace OberoniaAurea_Frame.DataLibrary;
 
 /// <summary> 
-/// 图标工具类。
+/// 常用图标库。
 ///  </summary>
 [StaticConstructorOnStartup]
-public static class OAFrame_IconUtility
+public static class IconLibrary
 {
     /// <summary>
     /// 重组基因图标。

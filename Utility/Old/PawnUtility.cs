@@ -7,12 +7,13 @@ using System.Text;
 using UnityEngine;
 using Verse;
 
-namespace OberoniaAurea_Frame.Utility;
+namespace OberoniaAurea_Frame;
 
 /// <summary> 
 /// <see cref="Pawn"/> 工具类。 
 /// </summary>
 [StaticConstructorOnStartup]
+[Obsolete("请使用 OberoniaAurea_Frame.Utility 命名空间下同名工具类。")]
 public static class OAFrame_PawnUtility
 {
     /// <summary>

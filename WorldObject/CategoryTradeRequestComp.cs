@@ -1,3 +1,4 @@
+using OberoniaAurea_Frame.DataLibrary;
 using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
@@ -88,7 +89,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
         {
             defaultLabel = "CommandFulfillTradeOffer".Translate(),
             defaultDesc = "CommandFulfillTradeOfferDesc".Translate(),
-            icon = OAFrame_IconUtility.TradeCommandIcon,
+            icon = IconLibrary.TradeCommandIcon,
             action = delegate
             {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillCategoryTradeConfirm".Translate(category), delegate

@@ -40,7 +40,7 @@ public class MoteAttached_Text : MoteAttached
     {
         Vector3 position = new(worldPos.x, 0f, worldPos.y);
         Vector2 vector = Find.Camera.WorldToScreenPoint(position) / Prefs.UIScale;
-        vector.y = UI.screenHeight - vector.y;
+        vector.y = Verse.UI.screenHeight - vector.y;
         Text.Font = GameFont.Tiny;
         float rectY = vector.y;
 

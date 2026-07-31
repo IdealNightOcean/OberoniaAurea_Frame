@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace OberoniaAurea_Frame;
+namespace OberoniaAurea_Frame.UI;
 
 /// <summary>
 /// 文本样式结构。

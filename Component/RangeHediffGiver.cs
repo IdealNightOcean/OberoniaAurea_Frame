@@ -179,7 +179,7 @@ public class RangeHediffGiver : IExposable
         if (target is null)
             return false;
 
-        if (target == linkedThing && !OARO_EnumUtility.ContainsFlag(Parms.TargetRelation, TargetRelationType.Self))
+        if (target == linkedThing && !Utility.OARO_EnumUtility.ContainsFlag(Parms.TargetRelation, TargetRelationType.Self))
             return false;
 
         if (radiusSquared > 0f && center.DistanceToSquared(target.Position) > radiusSquared)

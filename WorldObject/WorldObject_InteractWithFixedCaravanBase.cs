@@ -68,7 +68,7 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
     /// </summary>
     public virtual bool StartWork(Caravan caravan)
     {
-        FixedCaravan fixedCaravan = OAFrame_FixedCaravanUtility.CreateFixedCaravan(caravan, FixedCaravanDef, this);
+        FixedCaravan fixedCaravan = Utility.OAFrame_FixedCaravanUtility.CreateFixedCaravan(caravan, FixedCaravanDef, this);
         if (fixedCaravan is null)
         {
             Reset();
@@ -106,7 +106,7 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
 
         if (convertToCaravan && associatedFixedCaravan is not null)
         {
-            OAFrame_FixedCaravanUtility.ConvertToCaravan(associatedFixedCaravan);
+            Utility.OAFrame_FixedCaravanUtility.ConvertToCaravan(associatedFixedCaravan);
         }
 
         Reset();

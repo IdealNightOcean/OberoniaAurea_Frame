@@ -68,7 +68,7 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
     }
 
 
-    protected IEnumerable<Thing> AllItems => OAFrame_FixedCaravanUtility.AllInventoryItems(this);
+    protected IEnumerable<Thing> AllItems => Utility.OAFrame_FixedCaravanUtility.AllInventoryItems(this);
 
     protected bool skillsDirty = true;
     protected readonly Dictionary<SkillDef, int> totalSkills = [];
@@ -162,7 +162,7 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         }
         else
         {
-            OAFrame_FixedCaravanUtility.GiveThing(this, thing);
+            Utility.OAFrame_FixedCaravanUtility.GiveThing(this, thing);
         }
     }
 
@@ -221,7 +221,7 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
             action = delegate
             {
                 PreConvertToCaravanByPlayer();
-                OAFrame_FixedCaravanUtility.ConvertToCaravan(this);
+                Utility.OAFrame_FixedCaravanUtility.ConvertToCaravan(this);
             }
         };
         yield return command_Convert;

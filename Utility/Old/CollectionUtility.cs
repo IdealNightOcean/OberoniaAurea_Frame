@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Verse;
 
-namespace OberoniaAurea_Frame.Utility;
+namespace OberoniaAurea_Frame;
 
 /// <summary> 
 /// 集合工具类。
 /// </summary>
+[Obsolete("请使用 OberoniaAurea_Frame.Utility 命名空间下同名工具类。")]
 public static class OAFrame_CollectionUtility
 {
     /// <summary>

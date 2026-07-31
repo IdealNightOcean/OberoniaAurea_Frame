@@ -1,6 +1,6 @@
 using Verse;
 
-namespace OberoniaAurea_Frame;
+namespace OberoniaAurea_Frame.DataLibrary;
 
 /// <summary>
 /// 杂项字符串值常量库。

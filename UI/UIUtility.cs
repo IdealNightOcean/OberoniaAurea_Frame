@@ -2,7 +2,7 @@
 using UnityEngine;
 using Verse;
 
-namespace OberoniaAurea_Frame;
+namespace OberoniaAurea_Frame.UI;
 
 /// <summary>
 /// UI 工具类。

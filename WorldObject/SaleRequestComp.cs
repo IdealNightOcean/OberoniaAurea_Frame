@@ -1,3 +1,4 @@
+using OberoniaAurea_Frame.DataLibrary;
 using RimWorld;
 using RimWorld.Planet;
 using System.Collections.Generic;
@@ -78,7 +79,7 @@ public class SaleRequestComp : WorldObjectComp
         {
             defaultLabel = "OAFrame_CommandReciveSaleOffer".Translate(),
             defaultDesc = "OAFrame_CommandReciveSaleOfferDesc".Translate(),
-            icon = OAFrame_IconUtility.TradeCommandIcon,
+            icon = IconLibrary.TradeCommandIcon,
             action = delegate
             {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillSaleRQConfirm".Translate(GenLabel.ThingLabel(thingDef, null, count)), delegate
@@ -92,8 +93,8 @@ public class SaleRequestComp : WorldObjectComp
 
     private void Fulfill(Caravan caravan)
     {
-        IEnumerable<Thing> things = OAFrame_ThingUtility.GenerateThingsSplitByStack(thingDef, count);
-        OAFrame_CaravanUtility.GiveThings(caravan, things);
+        IEnumerable<Thing> things = Utility.OAFrame_ThingUtility.GenerateThingsSplitByStack(thingDef, count);
+        Utility.OAFrame_CaravanUtility.GiveThings(caravan, things);
 
         QuestUtility.SendQuestTargetSignals(parent.questTags, "SaleTradeRequestFulfilled", parent.Named("SUBJECT"), caravan.Named("CARAVAN"));
         Disable();

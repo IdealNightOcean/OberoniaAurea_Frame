@@ -1,6 +1,6 @@
 using Verse;
 
-namespace OberoniaAurea_Frame;
+namespace OberoniaAurea_Frame.DataLibrary;
 
 /// <summary>
 /// 格式化参数名的键值常量库。

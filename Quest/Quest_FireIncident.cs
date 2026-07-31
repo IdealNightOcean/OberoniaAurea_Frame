@@ -137,14 +137,14 @@ public class QuestPart_FireIncident : QuestPart
         if (worldIncident)
         {
             ResolveParms_World();
-            OAFrame_MiscUtility.TryFireIncidentNow(incident, incidentParms);
+            Utility.OAFrame_MiscUtility.TryFireIncidentNow(incident, incidentParms);
             incidentParms.target = Find.World;
         }
         else if (mapParent is not null && mapParent.HasMap)
         {
             Map targetMap = mapParent.Map;
             ResolveParms_Map(targetMap);
-            OAFrame_MiscUtility.TryFireIncidentNow(incident, incidentParms);
+            Utility.OAFrame_MiscUtility.TryFireIncidentNow(incident, incidentParms);
             incidentParms.target = null;
         }
     }

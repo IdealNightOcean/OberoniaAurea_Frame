@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace OberoniaAurea_Frame;
+namespace OberoniaAurea_Frame.DataLibrary;
 
 /// <summary>
 /// 窗口相关字符串值常量库。
