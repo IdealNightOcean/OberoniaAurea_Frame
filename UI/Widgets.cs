@@ -184,6 +184,50 @@ public static class OAFrame_Widgets
         }
     }
 
+    /// <summary>
+    /// 绘制可填充进度条。
+    /// </summary>
+    /// <param name="rect">进度条区域</param>
+    /// <param name="fillPercent">填充比例（0~1）</param>
+    /// <param name="fillColor">填充颜色</param>
+    /// <returns>填充区域的矩形</returns>
+    public static Rect FillableBar(Rect rect, float fillPercent, Color fillColor)
+    {
+        return FillableBar(rect, fillPercent, fillColor, Color.black, doBorder: true);
+    }
+
+    /// <summary>
+    /// 绘制可填充进度条。
+    /// </summary>
+    /// <param name="rect">进度条区域</param>
+    /// <param name="fillPercent">填充比例（0~1）</param>
+    /// <param name="fillColor">填充颜色</param>
+    /// <param name="bgColor">背景颜色；为 <see langword="null"/> 时不绘制背景</param>
+    /// <param name="doBorder">是否绘制边框</param>
+    /// <returns>填充区域的矩形</returns>
+    public static Rect FillableBar(Rect rect, float fillPercent, Color fillColor, Color? bgColor, bool doBorder)
+    {
+        if (doBorder)
+        {
+            GUI.DrawTexture(rect, BaseContent.BlackTex);
+            rect = rect.ContractedBy(3f);
+        }
+
+        Color oriGuiColor = GUI.color;
+        if (bgColor is not null)
+        {
+            GUI.color = bgColor.Value;
+            GUI.DrawTexture(rect, BaseContent.WhiteTex);
+        }
+
+        Rect result = rect;
+        rect.width *= fillPercent;
+        GUI.color = fillColor;
+        GUI.DrawTexture(rect, BaseContent.WhiteTex);
+
+        GUI.color = oriGuiColor;
+        return result;
+    }
 
     /// <summary>
     /// <see cref="UnityEngine"/>.<see cref="GUI"/>.<see href="CalculateScaledTextureRects"/> 的实现

@@ -931,6 +931,26 @@
             <param name="material">材质</param>
             <param name="scaleMode">缩放模式</param>
         </member>
+        <member name="M:OberoniaAurea_Frame.UI.OAFrame_Widgets.FillableBar(UnityEngine.Rect,System.Single,UnityEngine.Color)">
+            <summary>
+            绘制可填充进度条。
+            </summary>
+            <param name="rect">进度条区域</param>
+            <param name="fillPercent">填充比例（0~1）</param>
+            <param name="fillColor">填充颜色</param>
+            <returns>填充区域的矩形</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.OAFrame_Widgets.FillableBar(UnityEngine.Rect,System.Single,UnityEngine.Color,System.Nullable{UnityEngine.Color},System.Boolean)">
+            <summary>
+            绘制可填充进度条。
+            </summary>
+            <param name="rect">进度条区域</param>
+            <param name="fillPercent">填充比例（0~1）</param>
+            <param name="fillColor">填充颜色</param>
+            <param name="bgColor">背景颜色；为 <see langword="null"/> 时不绘制背景</param>
+            <param name="doBorder">是否绘制边框</param>
+            <returns>填充区域的矩形</returns>
+        </member>
         <member name="M:OberoniaAurea_Frame.UI.OAFrame_Widgets.CalculateScaledTextureRects(UnityEngine.Rect,UnityEngine.ScaleMode,System.Single,UnityEngine.Rect@,UnityEngine.Rect@)">
             <summary>
             <see cref="N:UnityEngine"/>.<see cref="T:UnityEngine.GUI"/>.<see href="CalculateScaledTextureRects"/> 的实现
