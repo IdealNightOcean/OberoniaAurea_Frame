@@ -11,7 +11,6 @@ namespace OberoniaAurea_Frame.Utility;
 [StaticConstructorOnStartup]
 public static class OAFrame_TextUtility
 {
-
     private static readonly GUIContent tempTextGUIContent = new();
 
     /// <summary>

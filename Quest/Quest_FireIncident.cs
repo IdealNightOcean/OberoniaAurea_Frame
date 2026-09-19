@@ -1,3 +1,4 @@
+using OberoniaAurea_Frame.Utility;
 using RimWorld;
 using RimWorld.Planet;
 using RimWorld.QuestGen;
@@ -137,14 +138,14 @@ public class QuestPart_FireIncident : QuestPart
         if (worldIncident)
         {
             ResolveParms_World();
-            Utility.OAFrame_MiscUtility.TryFireIncidentNow(incident, incidentParms);
+            OAFrame_IncidentUtility.TryFireIncidentNow(incident, incidentParms);
             incidentParms.target = Find.World;
         }
         else if (mapParent is not null && mapParent.HasMap)
         {
             Map targetMap = mapParent.Map;
             ResolveParms_Map(targetMap);
-            Utility.OAFrame_MiscUtility.TryFireIncidentNow(incident, incidentParms);
+            OAFrame_IncidentUtility.TryFireIncidentNow(incident, incidentParms);
             incidentParms.target = null;
         }
     }

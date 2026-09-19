@@ -46,12 +46,12 @@ public static class OAFrame_MiscUtility
     {
         if (parms is null)
         {
-            Log.Error($"Try add a new queued incident,but {nameof(IncidentParms)} is NULL.");
+            Log.Error($"[OAFrame] 尝试添加队列事件，但 {nameof(IncidentParms)} 为空。");
             return;
         }
         if (parms.target is null)
         {
-            Log.Error($"Try add a new queued incident,but {nameof(IncidentParms)}.{nameof(IncidentParms.target)} is NULL.");
+            Log.Error($"[OAFrame] 尝试添加队列事件，但 {nameof(IncidentParms)}.{nameof(IncidentParms.target)} 为空。");
             return;
         }
         Find.Storyteller.incidentQueue.Add(incidentDef, Find.TickManager.TicksGame + delayTicks, parms, retryDurationTicks);
@@ -84,7 +84,7 @@ public static class OAFrame_MiscUtility
     {
         if (instance is not null)
         {
-            throw new InvalidOperationException($"{instanceName} is not null when constructing. {typeof(T).Name} is a simple singleton. Use {instanceName} instead of creating new instance.");
+            throw new InvalidOperationException($"构造时 {instanceName} 已不为空。{typeof(T).Name} 是单例类型，请直接使用 {instanceName}，不要重复创建实例。");
         }
     }
 }

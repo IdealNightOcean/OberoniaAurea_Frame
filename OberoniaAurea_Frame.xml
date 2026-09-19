@@ -95,6 +95,112 @@
         <member name="P:OberoniaAurea_Frame.CooldownRecord.IsInCooldown">
             <summary> 是否处于冷却中。 </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.DataCacheBase">
+            <summary>
+            UI 数据缓存基类，提供 <see cref="T:OberoniaAurea_Frame.IDataCache"/> 的通用状态管理
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.DataCacheBase.DataState">
+            <summary>
+            当前数据状态
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.DataCacheBase.IsDataValid">
+            <summary>
+            数据有效可用
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.DataCacheBase.CanDraw">
+            <summary>
+            允许绘制：空占位 / 正常有效数据
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.DataCacheBase.MarkDirty">
+            <summary>
+            标记数据过期，下次绘制前应当刷新
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.DataCacheBase.Refresh">
+            <summary>
+            刷新数据并更新 <see cref="P:OberoniaAurea_Frame.DataCacheBase.DataState"/>
+            </summary>
+            <remarks>
+            若 <see cref="M:OberoniaAurea_Frame.DataCacheBase.RefreshInner"/> 错误地返回 <see cref="F:OberoniaAurea_Frame.DataCacheState.Dirty"/>，会记录错误日志并将状态回退为 <see cref="F:OberoniaAurea_Frame.DataCacheState.Invalid"/>。
+            </remarks>
+        </member>
+        <member name="M:OberoniaAurea_Frame.DataCacheBase.RefreshInner">
+            <summary>
+            执行实际数据校验逻辑
+            <para>不可返回 <see cref="F:OberoniaAurea_Frame.DataCacheState.Dirty"/>；该状态仅用于外部标记数据过期，不能作为刷新完成结果。</para>
+            </summary>
+            <returns>刷新完成后的业务状态</returns>
+        </member>
+        <member name="T:OberoniaAurea_Frame.EventDispatcher`1">
+            <summary>
+            一个简单事件分发器
+            用于注册、注销和触发事件
+            </summary>
+            <remarks>
+            <para>- 该分发器单个事件调用出现异常时不会中断调用链</para>
+            <para>- 线程不安全</para>
+            </remarks>
+        </member>
+        <member name="M:OberoniaAurea_Frame.EventDispatcher`1.Register(`0)">
+            <summary>
+            注册事件处理器
+            </summary>
+            <param name="handler">要注册的处理器委托</param>
+            <returns>注册成功返回 <see langword="true"/>；<paramref name="handler"/> 为 <see langword="null"/> 或已存在时返回 <see langword="false"/></returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.EventDispatcher`1.Deregister(`0)">
+            <summary>
+            注销事件处理器
+            </summary>
+            <param name="handler">要注销的处理器委托</param>
+            <returns>成功移除返回 <see langword="true"/>；处理器未注册时返回 <see langword="false"/></returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.EventDispatcher`1.Raise(System.Action{`0})">
+            <summary>
+            触发事件，遍历调用所有已注册的处理器
+            </summary>
+            <remarks>
+            <para>- 外部调用者可以在调用过程中被修改内部委托列表，此时会导致异常</para>
+            <para>- 线程不安全</para>
+            </remarks>
+        </member>
+        <member name="M:OberoniaAurea_Frame.EventDispatcher`1.RaiseSafe(System.Action{`0})">
+            <summary>
+            触发事件，通过快照遍历调用所有已注册的处理器，允许在调用过程中修改处理器列表
+            </summary>
+            <remarks>
+            <para>- 线程不安全</para>
+            </remarks>
+        </member>
+        <member name="T:OberoniaAurea_Frame.DataCacheState">
+            <summary>
+            UI数据状态
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.DataCacheState.Dirty">
+            <summary>
+            0 -数据脏，需要重新刷新
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.DataCacheState.Invalid">
+            <summary>
+            1 - 检测无效，不可绘制
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.DataCacheState.Empty">
+            <summary>
+            2 - 检测为空，可绘制空占位
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.DataCacheState.Ready">
+            <summary>
+            3 - 检测有效，正常绘制
+            </summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.FactionValidationParams">
             <summary>
             派系验证参数。
@@ -241,6 +347,31 @@
         <member name="M:OberoniaAurea_Frame.HediffGiveParams.ExposeData">
             <summary>
             序列化/反序列化此对象需持久保存的字段。
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.IDataCache">
+            <summary>
+            UI 数据缓存接口，维护供绘制器使用的数据及其刷新状态
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.IDataCache.DataState">
+            <summary>
+            当前数据状态
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.IDataCache.CanDraw">
+            <summary>
+            当前数据是否允许绘制（空占位或正常有效数据）
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.IDataCache.MarkDirty">
+            <summary>
+            标记数据过期，下次绘制前需要重新刷新
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.IDataCache.Refresh">
+            <summary>
+            立即刷新数据并更新 <see cref="P:OberoniaAurea_Frame.IDataCache.DataState"/>
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.MemoryGiveParams">
@@ -737,6 +868,270 @@
             红色取消文本 
             </summary>
         </member>
+        <member name="T:OberoniaAurea_Frame.UI.DataCacheDrawerBase`1">
+            <summary>
+            数据缓存绘制器基类，将 <typeparamref name="T"/> 类型的数据源与具体绘制逻辑绑定
+            </summary>
+            <typeparam name="T">绑定的数据缓存类型</typeparam>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawerBase`1.DrawData">
+            <summary>
+            当前绑定的绘制数据源
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawerBase`1.SetDrawData(`0)">
+            <summary>
+            设置绘制数据源
+            </summary>
+            <param name="drawData">要绑定的数据缓存实例</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawerBase`1.Draw(UnityEngine.Vector2)">
+            <summary>
+            执行绘制：数据源为 <see langword="null"/> 时记录错误并跳过；数据为 <see cref="F:OberoniaAurea_Frame.DataCacheState.Dirty"/> 时先刷新；仅在 <see cref="P:OberoniaAurea_Frame.IDataCache.CanDraw"/> 时调用 <see cref="M:OberoniaAurea_Frame.UI.DataCacheDrawerBase`1.DrawInner(UnityEngine.Vector2)"/>
+            </summary>
+            <param name="position">绘制起始位置</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawerBase`1.DrawInner(UnityEngine.Vector2)">
+            <summary>
+            子类实现的具体绘制逻辑，仅在数据源允许绘制时被调用
+            </summary>
+            <param name="position">绘制起始位置</param>
+        </member>
+        <member name="T:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2">
+            <summary>
+            可选择列表绘制器，将 <see cref="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.DrawDatas"/> 按网格布局绘制并支持单选（再次点击取消选择）
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.EntryDrawInfo">
+            <summary>
+            条目布局遍历信息
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.EntryDrawInfo.Row">
+            <summary>所在行（从 1 开始）</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.EntryDrawInfo.Column">
+            <summary>所在列（从 1 开始）</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.EntryDrawInfo.EntryPos">
+            <summary>条目左上角绘制位置</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.EntryDrawInfo.Visible">
+            <summary>条目是否与当前可视区域相交（用于视口裁剪）</summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.Drawer">
+            <summary>
+            用于绘制单个条目的绘制器
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.DrawDatas">
+            <summary>
+            列表数据源
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.SelectedIndex">
+            <summary>
+            当前选中条目索引，-1 表示未选中；赋值时会自动规整到合法范围
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.HasSelectedItem">
+            <summary>
+            是否存在已选中的条目
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.SelectedItem">
+            <summary>
+            当前选中的数据条目，未选中或无数据时返回默认值
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.RowLimit">
+            <summary>
+            行数上限：横向滚动时每列最多排列的行数，-1 表示不限
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.ColumnLimit">
+            <summary>
+            列数上限：纵向滚动时每行最多排列的列数，-1 表示不限
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.HorizontalScroll">
+            <summary>
+            是否横向滚动排列，<see langword="false"/> 时为纵向滚动
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.ShowScrollBar">
+            <summary>
+            是否显示滚动条并为其预留尺寸
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.DrawMouseOverHighlight">
+            <summary>是否绘制鼠标悬停高亮</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.DrawSelectedBox">
+            <summary>是否为选中条目绘制选框</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.DrawSelectedHighlight">
+            <summary>是否为选中条目绘制选中高亮</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.EnableDeselect">
+            <summary>是否允许点击已选中条目再次取消选择</summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.ItemInterval">
+            <summary>
+            条目之间的水平与垂直间隔
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.LayoutStrategy">
+            <summary>
+            滚动区域的布局计算策略
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.LayoutSizeChanged">
+            <summary>
+            布局参数是否已变更，需要在下次绘制时重新计算
+            </summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.scrollPosition">
+            <summary>当前滚动位置</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.onSelecting">
+            <summary>是否正处于选择流程中，用于防止重入</summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.OutRectSize">
+            <summary>
+            滚动视口（外框）尺寸，首次访问或布局失效时懒计算
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.EntryDrawSize">
+            <summary>
+            单个条目的绘制尺寸，首次访问或布局失效时懒计算
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.OnSelectedItem">
+            <summary>
+            选中项变化事件；参数依次为：旧的选择索引、新的选择索引（-1 表示取消选择）
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.#ctor(`1,System.Collections.Generic.IList{`0})">
+            <summary>
+            创建可选择列表绘制器
+            </summary>
+            <param name="drawer">用于绘制单个条目的绘制器</param>
+            <param name="drawDatas">列表数据源</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.SetDrawer(`1)">
+            <summary>
+            替换条目绘制器，同时标记布局失效并重置选择
+            </summary>
+            <param name="drawer">新的条目绘制器</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.SetDrawDatas(System.Collections.Generic.IList{`0})">
+            <summary>
+            替换列表数据源并重置选择
+            </summary>
+            <param name="drawDatas">新的数据源</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.ResetSelection">
+            <summary>
+            清除当前选择
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.SelectItem(System.Int32,System.Boolean)">
+            <summary>
+            选择指定索引的条目；在 <see cref="F:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.EnableDeselect"/> 开启时再次选择已选中条目会取消选择
+            </summary>
+            <param name="index">目标索引，-1 表示取消选择</param>
+            <param name="applySelectionEvent">是否触发 <see cref="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.OnSelectedItem"/> 事件</param>
+            <returns>选择索引是否发生变化</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.DoSelectItem(System.Int32,System.Boolean)">
+            <summary>
+            执行实际选择变更逻辑，可由子类重写
+            </summary>
+            <param name="index">目标索引</param>
+            <param name="applySelectionEvent">是否触发 <see cref="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.OnSelectedItem"/> 事件</param>
+            <returns>选择索引是否发生变化</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.ApplyOnSelectedItem(System.Int32,System.Int32)">
+            <summary>
+            触发 <see cref="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.OnSelectedItem"/> 事件
+            </summary>
+            <param name="oldSelectedIndex">变更前的选择索引</param>
+            <param name="newSelectedIndex">变更后的选择索引</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.RefreshEntryDrawSize">
+            <summary>
+            重新计算单个条目的绘制尺寸并写回 <see cref="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.EntryDrawSize"/>；在 <see cref="F:OberoniaAurea_Frame.UI.ScrollLayoutStrategy.ViewGivenItemAdapt"/> 策略下会按行列约束等比适配条目绘制器尺寸
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.GetViewRect">
+            <summary>
+            计算包含全部条目的滚动内容区域（view rect）
+            </summary>
+            <returns>全部条目铺开后的总内容区域；数据源为空、绘制器为空或步进尺寸非法时返回 <see cref="P:UnityEngine.Rect.zero"/></returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.Draw(UnityEngine.Vector2)">
+            <summary>
+            在指定位置绘制带滚动与选择功能的条目网格，视口外的条目会被跳过绘制
+            </summary>
+            <param name="position">列表左上角位置</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.DrawEntry(UnityEngine.Rect,System.Int32)">
+            <summary>
+            绘制单个条目并处理点击选择与高亮效果，可由子类重写
+            </summary>
+            <param name="inRect">条目绘制区域</param>
+            <param name="dataIndex">条目在 <see cref="P:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.DrawDatas"/> 中的索引</param>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.UpdateEntrytPosition(OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList{`0,`1}.EntryDrawInfo)">
+            <summary>
+            根据当前滚动方向与行列上限，计算下一个条目的行列与位置
+            </summary>
+            <param name="entryDrawInfo">当前条目的布局信息</param>
+            <returns>下一个条目的布局信息</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.RefreshLayoutSize">
+            <summary>
+            重新计算视口尺寸与条目尺寸，并清除布局失效标记
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.DataCacheDrawer_SelectableList`2.ResetLayoutSize">
+            <summary>
+            重置布局缓存，使下次绘制时重新计算视口与条目尺寸
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.UI.IUIDrawer">
+            <summary>
+            UI 绘制器接口，描述绘制元素的尺寸、边框厚度与文本样式
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.IUIDrawer.OutlineThickness">
+            <summary>
+            边框线条厚度（像素）
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.IUIDrawer.DrawSize">
+            <summary>
+            绘制区域尺寸
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.IUIDrawer.TextStyle">
+            <summary>
+            绘制时使用的文本样式
+            </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.UI.ScrollLayoutStrategy">
+            <summary>滚动区域布局计算策略</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.ScrollLayoutStrategy.ViewGiven">
+            <summary>使用给定视口，保留条目原始尺寸</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.ScrollLayoutStrategy.ViewGivenItemAdapt">
+            <summary>使用给定视口，适配调整条目尺寸</summary>
+        </member>
+        <member name="F:OberoniaAurea_Frame.UI.ScrollLayoutStrategy.ViewDerivedByRowCol">
+            <summary>由行列约束推导视口，保留条目原始尺寸</summary>
+        </member>
         <member name="T:OberoniaAurea_Frame.UI.TextStyle">
             <summary>
             文本样式结构。
@@ -839,6 +1234,66 @@
         </member>
         <member name="M:OberoniaAurea_Frame.UI.TextStyle.RestoreTextStyle">
             <summary> 恢复字体样式。 </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.UI.UIDrawerBase">
+            <summary>
+            UI 绘制器基类，提供绘制尺寸、边框厚度与文本样式的基础配置
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.UIDrawerBase.DrawSize">
+            <summary>
+            绘制区域的总尺寸（含边框），默认 800×600
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.UIDrawerBase.ValidDrawSize">
+            <summary>
+            扣除四周边框厚度后的有效绘制尺寸
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.UIDrawerBase.OutlineThickness">
+            <summary>
+            边框线条厚度（像素），默认 1
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.UI.UIDrawerBase.TextStyle">
+            <summary>
+            绘制时使用的文本样式，默认为 <see cref="P:OberoniaAurea_Frame.UI.TextStyle.DefaultStyle"/>
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.UIDrawerBase.SetDrawSize(UnityEngine.Vector2)">
+            <summary>
+            设置绘制尺寸
+            </summary>
+            <param name="size">目标尺寸</param>
+            <returns>尺寸宽高均为正值时设置成功并返回 <see langword="true"/>，否则返回 <see langword="false"/></returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.UIDrawerBase.SetDrawSizeAspectFit(UnityEngine.Vector2)">
+            <summary>
+            在容器尺寸内按原始宽高比等比适配绘制尺寸（contain 方式）
+            </summary>
+            <param name="containerSize">容器尺寸</param>
+            <returns>适配成功返回 <see langword="true"/>；容器尺寸非法时返回 <see langword="false"/></returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.UIDrawerBase.SetDrawSizeByWidth(System.Single)">
+            <summary>
+            固定宽度，按原始宽高比自动计算高度
+            </summary>
+            <param name="width">目标宽度</param>
+            <returns>宽度或当前绘制尺寸非法时返回 <see langword="false"/>，否则返回设置结果</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.UIDrawerBase.SetDrawSizeByHeight(System.Single)">
+            <summary>
+            固定高度，按原始宽高比自动计算宽度
+            </summary>
+            <param name="height">目标高度</param>
+            <returns>高度或当前绘制尺寸非法时返回 <see langword="false"/>，否则返回设置结果</returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.UI.UIDrawerBase.ScaleDrawSize(System.Single)">
+            <summary>
+            按缩放系数整体缩放DrawSize
+            </summary>
+            <param name="scaleFactor">缩放系数</param>
+            <returns>系数为正时返回缩放后的设置结果，否则返回 <see langword="false"/></returns>
         </member>
         <member name="T:OberoniaAurea_Frame.UI.OAFrame_Widgets">
             <summary>
@@ -1430,6 +1885,48 @@
             <summary> 
             枚举工具类。 
             </summary>
+        </member>
+        <member name="T:OberoniaAurea_Frame.Utility.GamePlayUtility">
+            <summary>
+            游戏玩法相关的通用工具方法
+            </summary>
+        </member>
+        <member name="P:OberoniaAurea_Frame.Utility.GamePlayUtility.GodMode">
+            <summary>
+            是否处于上帝模式（同时要求开启开发者模式）
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.Utility.GamePlayUtility.ValidateSingleton``1(``0,System.String)">
+            <summary>
+            构造单例前验证实例尚不存在；若 <paramref name="instance"/> 不为 <see langword="null"/> 则抛出 <see cref="T:System.InvalidOperationException"/>
+            </summary>
+            <typeparam name="T">单例类型</typeparam>
+            <param name="instance">构造前持有的单例实例，必须为 <see langword="null"/></param>
+            <param name="instanceName">单例实例的字段或属性名称，用于拼接异常信息</param>
+            <exception cref="T:System.InvalidOperationException">当 <paramref name="instance"/> 已存在时抛出</exception>
+        </member>
+        <member name="T:OberoniaAurea_Frame.Utility.OAFrame_IncidentUtility">
+            <summary>
+            事件（<see cref="T:RimWorld.IncidentDef"/>）相关的扩展工具方法
+            </summary>
+        </member>
+        <member name="M:OberoniaAurea_Frame.Utility.OAFrame_IncidentUtility.TryFireIncidentNow(RimWorld.IncidentDef,RimWorld.IncidentParms,System.Boolean)">
+            <summary>
+            尝试立刻触发事件
+            </summary>
+            <param name="incidentDef">要触发的事件定义</param>
+            <param name="parms">事件参数</param>
+            <param name="force">是否跳过 <see cref="M:RimWorld.IncidentWorker.CanFireNow(RimWorld.IncidentParms)"/> 检查强制执行</param>
+            <returns>事件成功执行返回 <see langword="true"/>；未强制执行且当前不可触发时返回 <see langword="false"/></returns>
+        </member>
+        <member name="M:OberoniaAurea_Frame.Utility.OAFrame_IncidentUtility.AddNewQueuedIncident(RimWorld.IncidentDef,System.Int32,RimWorld.IncidentParms,System.Int32)">
+            <summary>
+            添加队列事件
+            </summary>
+            <param name="incidentDef">要加入故事讲述者队列的事件定义</param>
+            <param name="delayTicks">相对当前游戏刻的延迟刻数，事件将在该刻数后触发</param>
+            <param name="parms">事件参数，不能为 <see langword="null"/>，且其 <see cref="F:RimWorld.IncidentParms.target"/> 不能为 <see langword="null"/></param>
+            <param name="retryDurationTicks">事件到时无法触发时的重试持续刻数，0 表示不重试</param>
         </member>
         <member name="T:OberoniaAurea_Frame.Utility.OAFrame_QuestUtility">
             <summary> 
@@ -2124,34 +2621,9 @@
             杂项工具类。
              </summary>
         </member>
-        <member name="P:OberoniaAurea_Frame.Utility.OAFrame_MiscUtility.GodMode">
-            <summary>
-            是否处于上帝模式
-            </summary>
-        </member>
         <member name="M:OberoniaAurea_Frame.Utility.OAFrame_MiscUtility.IsSameDefNonNullable``1(``0,``0)">
             <summary>
             检查两个<see cref="T:Verse.Def"/>是否相同且非空。
-            </summary>
-        </member>
-        <member name="M:OberoniaAurea_Frame.Utility.OAFrame_MiscUtility.TryFireIncidentNow(RimWorld.IncidentDef,RimWorld.IncidentParms,System.Boolean)">
-            <summary>
-            尝试立刻触发事件
-            </summary>
-        </member>
-        <member name="M:OberoniaAurea_Frame.Utility.OAFrame_MiscUtility.AddNewQueuedIncident(RimWorld.IncidentDef,System.Int32,RimWorld.IncidentParms,System.Int32)">
-            <summary>
-            添加队列事件
-            </summary>
-        </member>
-        <member name="M:OberoniaAurea_Frame.Utility.OAFrame_MiscUtility.TryGenerateThing(Verse.ThingDef,System.Int32)">
-            <summary>
-            生成物品并按堆叠上限自动拆分，直接返回拆分后的物品列表
-            </summary>
-        </member>
-        <member name="M:OberoniaAurea_Frame.Utility.OAFrame_MiscUtility.ValidateSingleton``1(``0,System.String)">
-            <summary>
-            验证单例是否为空。
             </summary>
         </member>
         <member name="T:OberoniaAurea_Frame.Utility.OAFrame_ReflectionUtility">
