@@ -96,6 +96,27 @@ public static class OAFrame_Widgets
     }
 
     /// <summary>
+    /// 绘制带省略号截断的标签，若发生截断则以 tip 显示截断前的原始文本。
+    /// </summary>
+    /// <param name="rect">绘制区域</param>
+    /// <param name="label">标签文本</param>
+    /// <param name="textStyle">文本样式</param>
+    /// <param name="uniqueId">tip 的唯一 id；为负数时使用截断后文本的哈希值</param>
+    /// <returns>是否发生截断</returns>
+    public static bool DrawLabelEllipsesWithOriginalTip(Rect rect, string label, TextStyle textStyle, int uniqueId = -1)
+    {
+        string clampedText = Utility.OAFrame_TextUtility.ClampTextWithEllipsis(rect, label, textStyle, out bool isTextClamped);
+        DrawLabel(rect, label, textStyle);
+        if (isTextClamped)
+        {
+            TooltipHandler.TipRegion(rect, new TipSignal(text: label, uniqueId: uniqueId > 0 ? uniqueId : clampedText.GetHashCode()));
+        }
+
+        return isTextClamped;
+    }
+
+
+    /// <summary>
     /// 绘制带有文本和图片的按钮。
     /// </summary>
     /// <param name="butRect">按钮区域</param>

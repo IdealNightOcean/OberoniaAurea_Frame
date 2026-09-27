@@ -40,6 +40,11 @@ public class EventDispatcher<TDelegate> where TDelegate : Delegate
     public bool Deregister(TDelegate handler) => handlers.Remove(handler);
 
     /// <summary>
+    /// 清除所有已注册的事件处理器
+    /// </summary>
+    public void Clear() => handlers.Clear();
+
+    /// <summary>
     /// 触发事件，遍历调用所有已注册的处理器
     /// </summary>
     /// <remarks>
