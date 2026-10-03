@@ -159,6 +159,11 @@
             <param name="handler">要注销的处理器委托</param>
             <returns>成功移除返回 <see langword="true"/>；处理器未注册时返回 <see langword="false"/></returns>
         </member>
+        <member name="M:OberoniaAurea_Frame.EventDispatcher`1.Clear">
+            <summary>
+            清除所有已注册的事件处理器
+            </summary>
+        </member>
         <member name="M:OberoniaAurea_Frame.EventDispatcher`1.Raise(System.Action{`0})">
             <summary>
             触发事件，遍历调用所有已注册的处理器

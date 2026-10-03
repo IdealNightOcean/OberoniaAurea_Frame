@@ -53,15 +53,21 @@ public abstract class UIDrawerBase : IUIDrawer
         if (containerSize.x <= 1e-6f || containerSize.y <= 1e-6f)
             return false;
 
-        float scaledHeight = DrawSize.y * containerSize.x / DrawSize.x;
-        if (scaledHeight < containerSize.y)
-        {
-            return SetDrawSizeByWidth(containerSize.x);
-        }
-        else
-        {
-            return SetDrawSizeByHeight(containerSize.y);
-        }
+        if (DrawSize.x <= 1e-6f || DrawSize.y <= 1e-6f)
+            return false;
+
+        float scaleX = containerSize.x / DrawSize.x;
+        float scaleY = containerSize.y / DrawSize.y;
+        float scale = Mathf.Min(scaleX, scaleY);
+
+        float w = DrawSize.x * scale;
+        float h = DrawSize.y * scale;
+
+
+        w = Mathf.Min(w, containerSize.x);
+        h = Mathf.Min(h, containerSize.y);
+
+        return SetDrawSize(new Vector2(w, h));
     }
 
     /// <summary>

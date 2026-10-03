@@ -20,7 +20,7 @@ public abstract class DataCacheBase : IDataCache
     /// <summary>
     /// 允许绘制：空占位 / 正常有效数据
     /// </summary>
-    public virtual bool CanDraw => DataState is DataCacheState.Empty or DataCacheState.Ready;
+    public virtual bool CanDraw => DataState == DataCacheState.Empty || DataState == DataCacheState.Ready;
 
     /// <summary>
     /// 标记数据过期，下次绘制前应当刷新
