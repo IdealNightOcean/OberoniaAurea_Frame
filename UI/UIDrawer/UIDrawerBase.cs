@@ -32,7 +32,7 @@ public abstract class UIDrawerBase : IUIDrawer
     /// </summary>
     /// <param name="size">目标尺寸</param>
     /// <returns>尺寸宽高均为正值时设置成功并返回 <see langword="true"/>，否则返回 <see langword="false"/></returns>
-    public bool SetDrawSize(Vector2 size)
+    public virtual bool SetDrawSize(Vector2 size)
     {
         if (size.x > 1e-6f && size.y > 1e-6f)
         {

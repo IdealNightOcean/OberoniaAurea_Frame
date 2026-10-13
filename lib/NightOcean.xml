@@ -1,0 +1,889 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NightOcean</name>
+    </assembly>
+    <members>
+        <member name="T:NightOcean.AsyncLazyMutable`1">
+            <summary>
+            表示一个线程安全的异步惰性可变值容器。
+            值在首次访问或被标记为脏后，通过指定的异步函数按需计算；
+            支持通过 <see cref="M:NightOcean.AsyncLazyMutable`1.MarkDirty"/> 主动使值失效；
+            内部确保同一时间最多只有一个刷新任务在执行，避免重复计算。
+            </summary>
+            <typeparam name="T">所包装值的类型。</typeparam>
+        </member>
+        <member name="P:NightOcean.AsyncLazyMutable`1.IsValueValid">
+            <summary>
+            指示是否已成功创建并缓存了一个值（即当前未被标记为脏）。注意：即使为 <see langword="true"/>，后续仍可能因 <see cref="M:NightOcean.AsyncLazyMutable`1.MarkDirty"/> 而失效。
+            </summary>
+        </member>
+        <member name="M:NightOcean.AsyncLazyMutable`1.#ctor(System.Func{System.Threading.CancellationToken,System.Threading.Tasks.Task{`0}})">
+            <summary>
+            初始化 <see cref="T:NightOcean.AsyncLazyMutable`1"/> 的新实例。
+            初始状态为“脏”，首次访问 <see cref="M:NightOcean.AsyncLazyMutable`1.GetValueAsync(System.Threading.CancellationToken)"/> 时将调用 <paramref name="refreshFunc"/> 异步计算值。
+            </summary>
+            <param name="refreshFunc">用于异步刷新值的函数，接收 <see cref="T:System.Threading.CancellationToken"/> 并返回 <see cref="T:System.Threading.Tasks.Task`1"/>。不可为 <see langword="null"/>。</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="refreshFunc"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="M:NightOcean.AsyncLazyMutable`1.GetValueAsync(System.Threading.CancellationToken)">
+            <summary>获取当前缓存的值（异步）。如果值为脏，则等待刷新完成并返回最新值。多个并发调用将共享同一个刷新任务，避免重复执行。</summary>
+            <param name="cancellationToken">用于取消等待或刷新操作的令牌。</param>
+            <returns>当前有效的值。</returns>
+            <exception cref="T:System.OperationCanceledException">操作被取消。</exception>
+            <exception cref="T:System.Exception">刷新函数抛出的任何异常。</exception>
+        </member>
+        <member name="M:NightOcean.AsyncLazyMutable`1.GetNewestValueAsync(System.Threading.CancellationToken)">
+            <summary>强制立即异步刷新值，忽略缓存，并返回最新结果。此操作总是触发刷新，即使值当前未被标记为脏。</summary>
+            <param name="cancellationToken">用于取消刷新操作的令牌。</param>
+            <returns>通过刷新函数计算出的最新值。</returns>
+        </member>
+        <member name="M:NightOcean.AsyncLazyMutable`1.TryGetValueFastUnsafe(`0@)">
+            <summary>
+            快速尝试获取当前缓存值（无锁，非线程安全）。
+            仅在单线程环境或对一致性要求不高的场景使用。
+            </summary>
+            <param name="value">输出缓存值（若有效），否则为 default。</param>
+            <returns>若值有效（未脏），返回 true；否则 false。</returns>
+        </member>
+        <member name="M:NightOcean.AsyncLazyMutable`1.MarkDirty">
+            <summary>
+            手动将当前值标记为“脏”，使得下次调用 <see cref="M:NightOcean.AsyncLazyMutable`1.GetValueAsync(System.Threading.CancellationToken)"/> 时重新刷新。此操作是线程安全的，并会取消任何正在进行的刷新（因其结果已过时）。
+            </summary>
+        </member>
+        <member name="M:NightOcean.AsyncLazyMutable`1.Reset">
+            <summary>
+            重置缓存状态：清空值并标记为脏。如果有正在进行的刷新，也会尝试取消它。
+            </summary>
+        </member>
+        <member name="M:NightOcean.AsyncLazyMutable`1.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:NightOcean.AsyncLazyMutable`1.DisposeAsync">
+            <inheritdoc />
+        </member>
+        <member name="T:NightOcean.Collection.ICollectiontUtils">
+            <summary>
+            提供与 <see cref="T:System.Collections.Generic.ICollection`1"/> 相关的扩展和工具方法。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.ICollectiontUtils.NullOrEmpty``1(System.Collections.Generic.ICollection{``0})">
+            <summary>判断集合是否为 <see langword="null"/> 或空。</summary>
+            <typeparam name="T">集合元素类型</typeparam>
+            <param name="collection">被检查集合</param>
+            <returns>如果集合为 null 或元素数量为 0，则返回 <see langword="true"/>；否则返回 <see langword="false"/>。</returns>
+        </member>
+        <member name="M:NightOcean.Collection.ICollectiontUtils.AddRange``1(System.Collections.Generic.ICollection{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary> 将指定集合中的所有元素添加到目标集合中。</summary>
+            <typeparam name="T">集合中元素的类型。</typeparam>
+            <param name="target">要添加元素的目标集合。若为 <see langword="null"/>，方法直接返回。</param>
+            <param name="items">要添加的元素集合。若为 <see langword="null"/>，方法直接返回。</param>
+        </member>
+        <member name="T:NightOcean.Collection.IListUtils">
+            <summary>
+            提供与 <see cref="T:System.Collections.Generic.IList`1"/> 相关的扩展和工具方法。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.IListUtils.BinarySearch``1(System.Collections.Generic.IList{``0},``0,System.Func{``0,``0,System.Int32})">
+            <summary>在已排序的列表中使用自定义比较函数二分查找指定元素。</summary>
+            <typeparam name="T">列表元素类型</typeparam>
+            <param name="list">已按升序排序的列表，不可为 <see langword="null"/>。</param>
+            <param name="item">查找元素</param>
+            <param name="compareFunc">元素比较函数，应返回负数（小于）、零（等于）或正数（大于）。不可为 <see langword="null"/>。</param>
+            <returns>如果找到元素，返回其索引；否则返回 <c>~(插入位置)</c>（即按顺序插入 <paramref name="item"/> 的位置的按位取反）。</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="list"/> 或 <paramref name="compareFunc"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.IListUtils.BinaryInsert``1(System.Collections.Generic.IList{``0},``0,System.Func{``0,``0,System.Int32})">
+            <summary>在已排序的列表中使用二分查找插入元素，保持列表有序。</summary>
+            <typeparam name="T">列表元素类型</typeparam>
+            <param name="list">已按升序排序的列表，不可为 <see langword="null"/>。</param>
+            <param name="item">插入元素</param>
+            <param name="compareFunc">元素比较函数，应返回负数（小于）、零（等于）或正数（大于）。不可为 <see langword="null"/>。</param>
+        </member>
+        <member name="M:NightOcean.Collection.IListUtils.TryGetElementAtIndex``1(System.Collections.Generic.IList{``0},System.Int32,``0@)">
+            <summary>尝试按索引获取集合元素</summary>
+            <typeparam name="T">元素类型</typeparam>
+            <param name="list">源索引集合</param>
+            <param name="index">目标索引</param>
+            <param name="item">输出元素；索引无效时为<see href="default(T)"/></param>
+            <returns>索引合法返回 <see langword="true"/>，索引集合为 <see langword="null"/> 或 索引越界 时返回 <see langword="false"/></returns>
+        </member>
+        <member name="M:NightOcean.Collection.IListUtils.AtIndexOrFallback``1(System.Collections.Generic.IList{``0},System.Int32,``0)">
+            <summary>按索引获取集合元素，索引集合为 <see langword="null"/> 或 索引越界 时返回备用值</summary>
+            <typeparam name="T">元素类型</typeparam>
+            <param name="list">源索引集合</param>
+            <param name="index">目标索引</param>
+            <param name="fallback">备用返回值，默认为 <see href="default(T)"/></param>
+            <returns>索引有效返回对应元素，否则返回 <see href="fallback"/></returns>
+        </member>
+        <member name="M:NightOcean.Collection.IListUtils.AtIndexOrFallbackIfNull``1(System.Collections.Generic.IList{``0},System.Int32,``0)">
+            <summary>按索引获取集合元素，索引集合为 <see langword="null"/>、索引越界、元素为 <see langword="null"/> 均返回备用值</summary>
+            <typeparam name="T">引用类型元素</typeparam>
+            <param name="list">源索引集合</param>
+            <param name="index">目标索引</param>
+            <param name="fallback">备用返回值</param>
+            <returns>索引有效且对应元素非空时返回对应元素，否则返回 <see href="fallback"/></returns>
+        </member>
+        <member name="T:NightOcean.Collection.LazyMutableCollection`2">
+            <summary>
+            表示一个可变的延迟加载集合容器。集合内容在首次访问或被标记为脏后，
+            通过指定的刷新函数重新填充。支持任意实现了 <see cref="T:System.Collections.Generic.ICollection`1"/> 且具有无参构造函数的集合类型（如 <see cref="T:System.Collections.Generic.List`1"/>、<see cref="T:System.Collections.Generic.HashSet`1"/>）；
+            线程不安全。
+            </summary>
+            <typeparam name="T">集合类型，必须实现 <see cref="T:System.Collections.Generic.ICollection`1"/> 并具有公共无参构造函数。</typeparam>
+            <typeparam name="V">集合中元素的类型。</typeparam>
+        </member>
+        <member name="P:NightOcean.Collection.LazyMutableCollection`2.IsValueValid">
+            <summary>
+            指示是否已成功创建并缓存了一个值（即当前未被标记为脏）。注意：即使为 <see langword="true"/>，后续仍可能因 <see cref="M:NightOcean.Collection.LazyMutableCollection`2.MarkDirty"/> 而失效。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.LazyMutableCollection`2.#ctor(System.Func{System.Collections.Generic.IEnumerable{`1}})">
+            <summary>初始化 <see cref="T:NightOcean.Collection.LazyMutableCollection`2"/> 的新实例。</summary>
+            <param name="refreshFunc">用于按需重新生成集合元素的函数。当值被标记为脏后，访问 <see cref="P:NightOcean.Collection.LazyMutableCollection`2.Value"/> 将清空集合并重新填充。不可为 <see langword="null"/>。</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="refreshFunc"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.LazyMutableCollection`2.#ctor(`0,System.Func{System.Collections.Generic.IEnumerable{`1}})">
+            <summary>初始化 <see cref="T:NightOcean.Collection.LazyMutableCollection`2"/> 的新实例。</summary>
+            <param name="initValue">初始值，在首次刷新前或未启用刷新时使用。</param>
+            <param name="refreshFunc">用于按需重新生成集合元素的函数。当值被标记为脏后，访问 <see cref="P:NightOcean.Collection.LazyMutableCollection`2.Value"/> 将清空集合并重新填充。不可为 <see langword="null"/>。</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="refreshFunc"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="P:NightOcean.Collection.LazyMutableCollection`2.Value">
+            <summary>
+            获取当前集合。如果集合被标记为脏，则先清空现有内容，
+            再通过 <see cref="F:NightOcean.Collection.LazyMutableCollection`2.refreshFunc"/> 重新填充。
+            首次访问时若未提供初始值，则会创建一个空集合并填充。
+            </summary>
+            <value>当前有效的集合实例（始终为同一引用，内容可能更新）。</value>
+        </member>
+        <member name="P:NightOcean.Collection.LazyMutableCollection`2.NewestValue">
+            <summary>强制立即调用刷新函数获取最新集合，忽略当前缓存，并更新内部状态。调用后，内部值被更新，脏标记被清除。</summary>
+            <value>通过刷新函数计算出的最新值。</value>
+            <remarks>
+            与 <see cref="P:NightOcean.Collection.LazyMutableCollection`2.Value"/> 不同，此属性**总是**触发刷新，即使值当前未被标记为脏。
+            适用于需要绕过缓存、主动拉取最新数据的场景。
+            </remarks>
+        </member>
+        <member name="M:NightOcean.Collection.LazyMutableCollection`2.MarkDirty">
+            <summary>
+            手动将当前值标记为“脏”，使得下次访问 <see cref="P:NightOcean.Collection.LazyMutableCollection`2.Value"/> 时刷新。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.LazyMutableCollection`2.Clear">
+            <summary>
+            立即清空当前缓存的集合内容（若已初始化），并将状态标记为“脏”。
+            下次访问 <see cref="P:NightOcean.Collection.LazyMutableCollection`2.Value"/> 时将触发 <see cref="F:NightOcean.Collection.LazyMutableCollection`2.refreshFunc"/> 重新加载数据。
+            </summary>
+        </member>
+        <member name="T:NightOcean.Collection.ListUtils">
+            <summary>
+            提供与 <see cref="T:System.Collections.Generic.List`1"/> 相关的扩展和工具方法。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.ListUtils.BinaryInsert``1(System.Collections.Generic.List{``0},``0,System.Collections.Generic.IComparer{``0})">
+            <summary>在已排序的列表中使用二分查找插入元素，保持列表有序。</summary>
+            <typeparam name="T">列表元素类型</typeparam>
+            <param name="list">已按升序排序的列表，不可为 <see langword="null"/>。</param>
+            <param name="item">插入元素</param>
+            <param name="comparer">元素比较器；若为 <see langword="null"/>，则使用<see cref="P:System.Collections.Generic.Comparer`1.Default"/>。</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="list"/>为 <see langword="null"/>。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.ListUtils.MergeSortedLists``1(System.Collections.Generic.IList{``0},System.Collections.Generic.IList{``0},System.Collections.Generic.IComparer{``0})">
+            <summary>合并两个已排序的列表，返回一个新的有序列表。</summary>
+            <typeparam name="T">列表元素类型</typeparam>
+            <param name="addendA">第一个已排序列表，不可为 <see langword="null"/>。</param>
+            <param name="addendB">第二个已排序列表，不可为 <see langword="null"/>。</param>
+            <param name="comparer">元素比较器；若为 <see langword="null"/>，则使用 <see cref="P:System.Collections.Generic.Comparer`1.Default"/>。</param>
+            <returns>合并后的新有序列表</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="addendA"/> 或 <paramref name="addendB"/> 为 null。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.ListUtils.MergeSortedLists``1(System.Collections.Generic.IList{``0},System.Collections.Generic.IList{``0},System.Func{``0,``0,System.Int32})">
+            <summary>合并两个已排序的列表，返回一个新的有序列表。</summary>
+            <typeparam name="T">列表元素类型</typeparam>
+            <param name="addendA">第一个已排序列表，不可为 <see langword="null"/>。</param>
+            <param name="addendB">第二个已排序列表，不可为 <see langword="null"/>。</param>
+            <param name="compareFunc">元素比较函数，应返回负数（小于）、零（等于）或正数（大于）。不可为 <see langword="null"/>。</param>
+            <returns>合并后的新有序列表</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="addendA"/> 或 <paramref name="addendB"/> 为 null。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.ListUtils.MergeSortedListsInplace``1(System.Collections.Generic.List{``0},System.Collections.Generic.IList{``0},System.Collections.Generic.IComparer{``0})">
+            <summary>原地合并两个已排序的列表（升序），结果保留在 <paramref name="augend"/> 中。</summary>
+            <param name="augend">被并入列表（读写），不可为 <see langword="null"/>。</param>
+            <param name="addend">并入列表（只读），可为 <see langword="null"/>。</param>
+            <param name="comparer">元素比较器；若为 <see langword="null"/>，则使用默认比较器。</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="augend"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.ListUtils.MergeSortedListsInplace``1(System.Collections.Generic.List{``0},System.Collections.Generic.IList{``0},System.Func{``0,``0,System.Int32})">
+            <summary> 原地合并两个已排序的列表（升序），结果保留在 <paramref name="augend"/> 中。</summary>
+            <param name="augend">被并入列表（读写），不可为 <see langword="null"/>。</param>
+            <param name="addend">并入列表（只读），可为 <see langword="null"/>。</param>
+            <param name="compareFunc">元素比较函数，应返回负数（小于）、零（等于）或正数（大于）。不可为 <see langword="null"/>。</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="augend"/> 或 <paramref name="compareFunc"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.ListUtils.ExtractMatching``1(System.Collections.Generic.List{``0},System.Predicate{``0})">
+            <summary>
+            从列表中移除所有满足<paramref name="predicate"/>的元素，并返回被移除的元素列表。
+            移除操作在单次遍历后一次性完成，以减少内存重分配。
+            </summary>
+            <typeparam name="T">列表元素的类型</typeparam>
+            <param name="list">要操作的列表，不可为 <see langword="null"/>。</param>
+            <param name="predicate">判断元素是否应被移除，不可为 <see langword="null"/>。</param>
+            <returns>包含所有被移除元素的新列表</returns>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="list"/> 为 <see langword="null"/>；
+            <paramref name="predicate"/> 为 <see langword="null"/>。
+            </exception>
+        </member>
+        <member name="M:NightOcean.Collection.ListUtils.RemoveAllAndExecute``1(System.Collections.Generic.List{``0},System.Predicate{``0},System.Action{``0})">
+            <summary>
+            从列表中移除所有满足<paramref name="predicate"/>的元素，<paramref name="postRemoved"/>在移除完成后统一执行。
+            使用<see cref="M:NightOcean.Collection.ListUtils.ExtractMatching``1(System.Collections.Generic.List{``0},System.Predicate{``0})"/>移除元素。
+            </summary>
+            <typeparam name="T">列表元素的类型</typeparam>
+            <param name="list">要操作的列表，不可为 <see langword="null"/>。</param>
+            <param name="predicate">判断元素是否应被移除，不可为 <see langword="null"/>。</param>
+            <param name="postRemoved">每个被移除元素执行的操作，不可为 <see langword="null"/>。</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="postRemoved"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="T:NightOcean.Collection.ObservablePaddedList`1">
+            <summary>
+            带变更通知的紧凑列表，继承纯数据的 <see cref="T:NightOcean.Collection.PaddedList`1"/> 并叠加 <see cref="E:NightOcean.Collection.ObservablePaddedList`1.CollectionChanged"/>。
+            <para>
+            每个会改变集合内容的方法都会重写基类实现，在完成真实操作后触发对应通知；
+            仅真实区的元素变更与长度变化会产生通知，虚拟填充位本身不产生通知。
+            线程不安全；无订阅者时零额外分配（不构造事件参数对象）。
+            </para>
+            </summary>
+            <typeparam name="T">元素类型。</typeparam>
+        </member>
+        <member name="E:NightOcean.Collection.ObservablePaddedList`1.CollectionChanged">
+            <summary>集合变更通知。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.#ctor(System.Int32,`0)">
+            <summary>使用共享填充值创建空紧凑列表。</summary>
+            <param name="minCount">长度下限；负数将引发异常。</param>
+            <param name="fillValue">虚拟填充位的共享返回值。</param>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.#ctor(System.Int32,System.Func{`0})">
+            <summary>使用填充工厂创建空紧凑列表（每次读取填充位新建独立实例）。</summary>
+            <param name="minCount">长度下限；负数将引发异常。</param>
+            <param name="fillValueFactory">虚拟填充位工厂；不可为 <see langword="null"/>。</param>
+        </member>
+        <member name="P:NightOcean.Collection.ObservablePaddedList`1.IsUpdating">
+            <summary>指示当前是否处于批量变更作用域内（<see cref="M:NightOcean.Collection.ObservablePaddedList`1.BeginUpdate"/> 尚未 <see cref="M:NightOcean.Collection.ObservablePaddedList`1.EndUpdate"/>）。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.BeginUpdate">
+            <summary>
+            开始批量变更作用域。作用域内所有真实区变更仅被记录，不会逐条触发事件；
+            直到最外层 <see cref="M:NightOcean.Collection.ObservablePaddedList`1.EndUpdate"/> 时才统一触发一次 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Reset"/>。
+            支持嵌套：所有 <see cref="M:NightOcean.Collection.ObservablePaddedList`1.BeginUpdate"/> 都需配对的 <see cref="M:NightOcean.Collection.ObservablePaddedList`1.EndUpdate"/> 收尾。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.EndUpdate">
+            <summary>
+            结束一层批量作用域。当最外层结束时，若期间发生任何真实区变更则触发一次 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Reset"/>。
+            </summary>
+            <exception cref="T:System.InvalidOperationException"><see cref="M:NightOcean.Collection.ObservablePaddedList`1.EndUpdate"/> 与 <see cref="M:NightOcean.Collection.ObservablePaddedList`1.BeginUpdate"/> 不配对。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.BeginUpdateScope">
+            <summary>创建可配合 <see langword="using"/> 使用的批量作用域（离开作用域自动 <see cref="M:NightOcean.Collection.ObservablePaddedList`1.EndUpdate"/>）。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.Add(`0)">
+            <summary>在真实区末端追加元素并返回其索引，随后触发 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Add"/>。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.Insert(System.Int32,`0)">
+            <summary>在 <paramref name="index"/> 处插入元素，随后触发 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Add"/>。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.Remove(`0)">
+            <summary>移除真实区中第一个等于 <paramref name="item"/> 的元素；移除成功则触发 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Remove"/>。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.RemoveAt(System.Int32)">
+            <summary>移除真实区索引 <paramref name="index"/> 处的元素，随后触发 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Remove"/>。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.RemoveAll(System.Predicate{`0})">
+            <summary>移除所有满足 <paramref name="match"/> 的真实元素；移除数大于 0 时触发一次 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Reset"/>。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.Clear">
+            <summary>清空全部真实元素，随后触发 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Reset"/>。</summary>
+        </member>
+        <member name="P:NightOcean.Collection.ObservablePaddedList`1.Item(System.Int32)">
+            <summary>
+            覆盖真实元素触发 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Replace"/>；向填充位写入（含撑大 <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/>）触发
+            <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Reset"/>。读取委托基类。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.Move(System.Int32,System.Int32)">
+            <summary>在真实区内移动元素，随后触发 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Move"/>（<c>OldStartingIndex = from</c>、<c>NewStartingIndex = to</c>）。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.Swap(System.Int32,System.Int32)">
+            <summary>在真实区内交换元素，随后触发两次 <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Replace"/>（先 <paramref name="i"/> 后 <paramref name="j"/>）。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.Raise(System.Collections.Specialized.NotifyCollectionChangedAction,`0,System.Int32,`0,System.Int32)">
+            <summary>
+            触发通知的入口：批量作用域内只置 <see cref="F:NightOcean.Collection.ObservablePaddedList`1.pendingChange"/> 标记；
+            作用域外仅在存在订阅者时构造事件参数并触发（避免无订阅时无谓分配）。
+            </summary>
+        </member>
+        <member name="T:NightOcean.Collection.ObservablePaddedList`1.UpdateScope">
+            <summary>
+            <see cref="M:NightOcean.Collection.ObservablePaddedList`1.BeginUpdateScope"/> 返回的 <see cref="T:System.IDisposable"/> 作用域；离开作用域时自动调用 <see cref="M:NightOcean.Collection.ObservablePaddedList`1.EndUpdate"/>。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.ObservablePaddedList`1.UpdateScope.Dispose">
+            <summary>结束批量作用域并触发一次 Reset（若期间有变更）。</summary>
+        </member>
+        <member name="T:NightOcean.Collection.PaddedList`1">
+            <summary>
+            由「真实元素」与「尾部虚拟填充」组成的紧凑列表。
+            <para>
+            真实元素连续存放在 <c>[0, <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/>)</c> 区间；尾部填充位仅为逻辑概念。</para>
+            <para>
+            共享填充模式（默认）下<b>内存中并不实际存储任何填充对象</b>，所有填充位读取时统一返回
+            <see cref="P:NightOcean.Collection.PaddedList`1.FillValue"/>，跨读取一致且不存在引用别名问题。</para>
+            <para>
+            工厂填充模式（传入 <see cref="M:NightOcean.Collection.PaddedList`1.#ctor(System.Int32,System.Func{`0})"/>）下为保证填充位稳定，按槽缓存工厂结果：
+            同一位置多次读取返回同一实例、不同位置各为独立实例；此时会实际存储已读取过的填充槽。</para>
+            <para>
+            适用于需要一个始终满足最小长度约束、但真实元素更少的序列的场景（例如固定行数的 UI 表、位图、缓冲区）。
+            </para>
+            </summary>
+            <typeparam name="T">元素类型。</typeparam>
+        </member>
+        <member name="F:NightOcean.Collection.PaddedList`1.realCount">
+            <summary>
+            集合中的真实元素数量。
+            </summary>
+        </member>
+        <member name="F:NightOcean.Collection.PaddedList`1.minCount">
+            <summary>
+            长度下限
+            </summary>
+        </member>
+        <member name="F:NightOcean.Collection.PaddedList`1.fillValue">
+            <summary>
+            虚拟填充位的返回值
+            </summary>
+        </member>
+        <member name="F:NightOcean.Collection.PaddedList`1.fillValueFactory">
+            <summary>
+            虚拟填充位工厂；为 <see langword="null"/> 时读取填充位回落到共享的 <see cref="F:NightOcean.Collection.PaddedList`1.fillValue"/>。
+            </summary>
+        </member>
+        <member name="F:NightOcean.Collection.PaddedList`1.fillValueCreated">
+            <summary>
+            工厂模式下标记各填充槽是否已创建填充实例（避免与工厂恰好返回 <see langword="null"/> 混淆）。
+            填充实例直接存进 <see cref="F:NightOcean.Collection.PaddedList`1.items"/> 的对应物理槽，故不另占一块 <c>T[]</c> 缓存——空间只有 <c>T*minCount + bool*minCount</c>。
+            仅工厂模式使用；共享模式下该数组保持为空（零填充存储）。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.#ctor(System.Int32,`0)">
+            <summary>
+            使用共享填充值创建空紧凑列表。所有填充位统一返回同一 <paramref name="fillValue"/> 实例。
+            </summary>
+            <param name="minCount">长度下限；负数将引发异常。</param>
+            <param name="fillValue">虚拟填充位的共享返回值。</param>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="minCount"/> 小于 0。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.#ctor(System.Int32,System.Func{`0})">
+            <summary>
+            使用填充工厂创建空紧凑列表。每次读取填充位都调用 <paramref name="fillValueFactory"/> 产生独立实例（避免别名传染）。
+            </summary>
+            <param name="minCount">长度下限；负数将引发异常。</param>
+            <param name="fillValueFactory">虚拟填充位工厂；不可为 <see langword="null"/>。</param>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="minCount"/> 小于 0。</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="fillValueFactory"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="P:NightOcean.Collection.PaddedList`1.Count">
+            <summary>
+            逻辑长度：等于 <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/> 与 <see cref="P:NightOcean.Collection.PaddedList`1.MinCount"/> 中较大者。极简且高频，内联以避免调用开销。
+            </summary>
+        </member>
+        <member name="P:NightOcean.Collection.PaddedList`1.RealCount">
+            <summary>
+            真实元素的数量（<c>[0, RealCount)</c> 区间内的元素）。只读。极简且高频，内联。
+            </summary>
+        </member>
+        <member name="P:NightOcean.Collection.PaddedList`1.MinCount">
+            <summary>
+            长度下限。调大时 <see cref="P:NightOcean.Collection.PaddedList`1.Count"/> 相应增大；调小时<b>不截断</b>真实数据。
+            </summary>
+        </member>
+        <member name="P:NightOcean.Collection.PaddedList`1.FillValue">
+            <summary>
+            虚拟填充位的返回值。只读；通过「共享值」构造器（<see cref="M:NightOcean.Collection.PaddedList`1.#ctor(System.Int32,`0)"/>）设置，
+            构造后不可更改。
+            <para>
+            注意：若 <typeparamref name="T"/> 为<em>可变引用类型</em>，所有填充位共享此引用，改动会互相传染；
+            需要每个填充位独立实例时，请改用「工厂」构造器（<see cref="M:NightOcean.Collection.PaddedList`1.#ctor(System.Int32,System.Func{`0})"/>）
+            并观察 <see cref="P:NightOcean.Collection.PaddedList`1.FillValueFactory"/>。
+            </para>
+            </summary>
+        </member>
+        <member name="P:NightOcean.Collection.PaddedList`1.FillValueFactory">
+            <summary>
+            虚拟填充位工厂。只读；通过「工厂」构造器（<see cref="M:NightOcean.Collection.PaddedList`1.#ctor(System.Int32,System.Func{`0})"/>）设置，
+            构造后不可更改。非 <see langword="null"/> 时每个填充槽首次被读取时调用它创建一次并缓存：
+            同一槽多次读取返回同一实例，不同槽为独立实例（避免槽间别名传染）。
+            为 <see langword="null"/> 时回落到共享的 <see cref="P:NightOcean.Collection.PaddedList`1.FillValue"/>。
+            </summary>
+        </member>
+        <member name="P:NightOcean.Collection.PaddedList`1.Capacity">
+            <summary>
+            内部数组容量。
+            </summary>
+        </member>
+        <member name="P:NightOcean.Collection.PaddedList`1.IsReadOnly">
+            <summary>
+            始终为 <see langword="false"/>，<see cref="T:System.Collections.Generic.IList`1"/> 接口要求。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.TrimExcess">
+            <summary>
+            将 <see cref="P:NightOcean.Collection.PaddedList`1.Capacity"/> 缩减到 <see cref="P:NightOcean.Collection.PaddedList`1.Count"/>（若更小）。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.ToArray">
+            <summary>
+            将真实元素与按 <see cref="P:NightOcean.Collection.PaddedList`1.Count"/> 展开后的填充位一并输出为新数组（长度等于 <c>Count</c>）。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.Add(`0)">
+            <summary>
+            在真实区末端追加 <paramref name="item"/> 并返回其在真实区中的索引。<b>永不忽略任何值</b>（含等于 <see cref="P:NightOcean.Collection.PaddedList`1.FillValue"/> 者与 <see langword="null"/>）。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            在真实区末端批量追加 <paramref name="collection"/> 中的元素。
+            只做一次容量调整与一次标记复位，避免逐项调用 <see cref="M:NightOcean.Collection.PaddedList`1.Add(`0)"/> 的重复调整工作。
+            </summary>
+            <exception cref="T:System.ArgumentNullException"><paramref name="collection"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.Insert(System.Int32,`0)">
+            <summary>在 <paramref name="index"/> 处插入 <paramref name="item"/>。仅 <c>0 ≤ index ≤ <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/></c> 合法；不允许插入虚拟区。</summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> 越界。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.Remove(`0)">
+            <summary>
+            移除真实区中第一个等于 <paramref name="item"/> 的元素（含 <see langword="null"/> 匹配）；填充位不参与比较。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.RemoveAt(System.Int32)">
+            <summary>移除真实区索引 <paramref name="index"/> 处的元素。<c>index ≥ <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/></c> 抛出异常。</summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> 越界或落在虚拟区。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.RemoveAll(System.Predicate{`0})">
+            <summary>移除真实区中所有满足 <paramref name="match"/> 的元素，返回移除数量。</summary>
+            <exception cref="T:System.ArgumentNullException"><paramref name="match"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.Clear">
+            <summary>
+            清空全部真实元素；<see cref="P:NightOcean.Collection.PaddedList`1.Count"/> 回落为 <see cref="P:NightOcean.Collection.PaddedList`1.MinCount"/>（自动补填）。
+            </summary>
+        </member>
+        <member name="P:NightOcean.Collection.PaddedList`1.Item(System.Int32)">
+            <summary>
+            读：<c>index ≥ <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/></c> 时返回 <see cref="P:NightOcean.Collection.PaddedList`1.FillValue"/>。
+            写：<c>index &lt; <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/></c> 覆盖；否则将 <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/> 撑大到 <c>index + 1</c>。
+            </summary>
+            <remarks>
+            <b>警告：</b>向填充位写入（<c>RealCount ≤ index &lt; Count</c> 或 <c>index ≥ Count</c>）会把 <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/> 撑开到 <c>index + 1</c>，
+            中间不会留下真·空洞。若需要保留稀疏空洞，请改用稀疏版本。
+            </remarks>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> 小于 0 或大于等于 <c>Count</c>（写）/ 小于 0（读时越界不抛，返回填充值）。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.IndexOf(`0)">
+            <summary>
+            仅在真实元素中查找，返回元素位置或 -1；虚拟区不参与。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.Contains(`0)">
+            <summary>
+            仅在真实元素中查找是否存在；虚拟区不参与。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.CopyTo(`0[],System.Int32)">
+            <summary>
+            按 <see cref="P:NightOcean.Collection.PaddedList`1.Count"/> 复制（超出真实区部分用 <see cref="P:NightOcean.Collection.PaddedList`1.FillValue"/> 填满）。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.GetEnumerator">
+            <summary>
+            按 <see cref="P:NightOcean.Collection.PaddedList`1.Count"/> 枚举（真实区 + 填充区，填充区产出 <see cref="P:NightOcean.Collection.PaddedList`1.FillValue"/>）。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.IsFilled(System.Int32)">
+            <summary>判断 <paramref name="index"/> 是否为真实元素。<c>index &lt; <see cref="P:NightOcean.Collection.PaddedList`1.RealCount"/></c> 为 <see langword="true"/>。</summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> 越界（&lt; 0 或 ≥ <see cref="P:NightOcean.Collection.PaddedList`1.Count"/>）。</exception>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.Move(System.Int32,System.Int32)">
+            <summary>在真实区内将 <paramref name="from"/> 处元素移动到 <paramref name="to"/> 处。复杂度 O(RealCount)。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.Swap(System.Int32,System.Int32)">
+            <summary>在真实区内交换 <paramref name="i"/> 与 <paramref name="j"/> 处的元素。复杂度 O(1)。</summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.TryMove(System.Int32,System.Int32)">
+            <summary>
+            尝试在真实区内移动；索引合法返回 <see langword="true"/>，否则返回 <see langword="false"/> 且不做任何修改。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.TrySwap(System.Int32,System.Int32)">
+            <summary>
+            尝试在真实区内交换；索引合法返回 <see langword="true"/>，否则返回 <see langword="false"/> 且不做任何修改。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.System#Collections#Generic#ICollection{T}#Add(`0)">
+            <summary>
+            显式 <see cref="M:System.Collections.Generic.ICollection`1.Add(`0)"/>：追加真实元素。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.System#Collections#Generic#IList{T}#Insert(System.Int32,`0)">
+            <summary>
+            显式 <see cref="M:System.Collections.Generic.IList`1.Insert(System.Int32,`0)"/>：仅真实区合法。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.System#Collections#Generic#IList{T}#RemoveAt(System.Int32)">
+            <summary>
+            显式 <see cref="M:System.Collections.Generic.IList`1.RemoveAt(System.Int32)"/>。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.GetFill(System.Int32)">
+            <summary>
+            读取填充槽 <paramref name="index"/> 的填充值：
+            共享模式（无工厂）固定返回 <see cref="F:NightOcean.Collection.PaddedList`1.fillValue"/>，零存储、跨读取一致；
+            工厂模式首次读到该槽时调用 <see cref="F:NightOcean.Collection.PaddedList`1.fillValueFactory"/> 创建，存入 <see cref="F:NightOcean.Collection.PaddedList`1.items"/> 对应物理槽并标记
+            <see cref="F:NightOcean.Collection.PaddedList`1.fillValueCreated"/>，之后同一槽复用同一实例（不同槽仍各自独立）。不另占一块 <c>T[]</c> 缓存。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Collection.PaddedList`1.ResetFillCreated(System.Int32,System.Int32)">
+            <summary>
+            工厂模式下，将 <c>[start, start+length)</c> 物理槽的「已创建填充实例」标记清零，
+            使它们下次以填充槽身份被读取时重新经工厂创建，避免复用被真实数据覆盖后的旧物理槽。
+            共享模式（无工厂）下为空操作。
+            </summary>
+        </member>
+        <member name="T:NightOcean.LazyMutable`1">
+            <summary>
+            表示一个可变的惰性值容器。值在首次访问或被标记为脏后，通过指定函数按需计算；
+            与 <see cref="T:System.Lazy`1"/> 不同，本类型支持通过 <see cref="M:NightOcean.LazyMutable`1.MarkDirty"/> 主动使值失效并刷新；
+            线程不安全。
+            </summary>
+            <typeparam name="T">所包装值的类型。</typeparam>
+        </member>
+        <member name="P:NightOcean.LazyMutable`1.IsValueValid">
+            <summary>
+            指示是否已成功创建并缓存了一个值（即当前未被标记为脏）。注意：即使为 <see langword="true"/>，后续仍可能因 <see cref="M:NightOcean.LazyMutable`1.MarkDirty"/> 而失效。
+            </summary>
+        </member>
+        <member name="M:NightOcean.LazyMutable`1.#ctor(System.Func{`0})">
+            <summary>初始化 <see cref="T:NightOcean.LazyMutable`1"/> 的新实例。</summary>
+            <param name="refreshFunc">用于刷新值的函数。当值为脏时，访问 <see cref="P:NightOcean.LazyMutable`1.Value"/> 将调用此函数刷新。不可为 <see langword="null"/>。</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="refreshFunc"/> 为 <see langword="null"/>。</exception>
+        </member>
+        <member name="P:NightOcean.LazyMutable`1.Value">
+            <summary>获取当前值。如果值已被标记为脏且刷新函数可用，则先执行刷新。刷新后自动清除脏标记。</summary>
+            <value>当前有效的缓存值</value>
+            <remarks>
+            此属性是惰性的：仅在值为脏时执行计算，否则直接返回缓存值。
+            若需强制立即重新计算，请使用 <see cref="P:NightOcean.LazyMutable`1.NewestValue"/>。
+            </remarks>
+        </member>
+        <member name="P:NightOcean.LazyMutable`1.NewestValue">
+            <summary>强制立即调用刷新函数获取最新值，忽略当前缓存，并更新内部状态。调用后，内部值被更新，脏标记被清除。</summary>
+            <value>通过刷新函数计算出的最新值。</value>
+            <remarks>
+            与 <see cref="P:NightOcean.LazyMutable`1.Value"/> 不同，此属性**总是**触发刷新，即使值当前未被标记为脏。
+            适用于需要绕过缓存、主动拉取最新数据的场景。
+            </remarks>
+        </member>
+        <member name="M:NightOcean.LazyMutable`1.MarkDirty">
+            <summary>
+            手动将当前值标记为“脏”，使得下次访问 <see cref="P:NightOcean.LazyMutable`1.Value"/> 时刷新。
+            </summary>
+        </member>
+        <member name="M:NightOcean.LazyMutable`1.Reset">
+            <summary>
+            重置缓存状态：将内部值设为默认值（<see langword="default"/>），并标记为“脏”。
+            下次访问值时将触发重新加载或重新计算。
+            </summary>
+        </member>
+        <member name="T:NightOcean.Utility.FlagsEnumUtils">
+            <summary>
+            提供对标志枚举（Flags Enum）的扩展方法，包括检查、添加和移除标志位的操作。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Utility.FlagsEnumUtils.ContainsFlag``1(``0,``0)">
+            <summary>
+            检查当前枚举值是否包含指定标志位。
+            </summary>
+            <typeparam name="T">枚举类型。</typeparam>
+            <param name="value">当前枚举值。</param>
+            <param name="flag">要检查的标志位。</param>
+            <returns>如果包含指定标志位，则为 <see langword="true"/>；否则为 <see langword="false"/>。</returns>
+        </member>
+        <member name="M:NightOcean.Utility.FlagsEnumUtils.ContainsAnyFlag``1(``0,``0)">
+            <summary>
+            检查当前枚举值是否包含指定标志位中的任意一个。
+            </summary>
+            <typeparam name="T">枚举类型。</typeparam>
+            <param name="value">当前枚举值。</param>
+            <param name="flag">要检查的标志位。</param>
+            <returns>如果包含任意一个指定标志位，则为 <see langword="true"/>；否则为 <see langword="false"/>。</returns>
+        </member>
+        <member name="M:NightOcean.Utility.FlagsEnumUtils.AddFlag``1(``0,``0)">
+            <summary>
+            向当前枚举值添加指定标志位。
+            </summary>
+            <typeparam name="T">枚举类型。</typeparam>
+            <param name="value">当前枚举值。</param>
+            <param name="flag">要添加的标志位。</param>
+            <returns>添加标志位后的新枚举值。</returns>
+        </member>
+        <member name="M:NightOcean.Utility.FlagsEnumUtils.RemoveFlag``1(``0,``0)">
+            <summary>
+            从当前枚举值中移除指定标志位。
+            </summary>
+            <typeparam name="T">枚举类型。</typeparam>
+            <param name="value">当前枚举值。</param>
+            <param name="flag">要移除的标志位。</param>
+            <returns>移除标志位后的新枚举值。</returns>
+        </member>
+        <member name="T:NightOcean.Utility.RectIntUtils">
+            <summary>
+            提供用于 <see cref="T:UnityEngine.RectInt"/> 相关的扩展和工具方法。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Utility.RectIntUtils.MinMaxRect(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            根据最小/最大坐标创建<see cref="T:UnityEngine.RectInt"/>
+            </summary>
+            <param name="xMin">最小x坐标</param>
+            <param name="yMin">最小y坐标</param>
+            <param name="xMax">最大x坐标</param>
+            <param name="yMax">最大y坐标</param>
+            <returns>具有指定边界的新<see cref="T:UnityEngine.RectInt"/></returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectIntUtils.Intersection(UnityEngine.RectInt,UnityEngine.RectInt)">
+            <summary>
+            返回两个矩形的交集
+            </summary>
+            <param name="a">第一个矩形</param>
+            <param name="b">第二个矩形</param>
+            <returns>表示<paramref name="a"/>和<paramref name="b"/>交集的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectIntUtils.Contains(UnityEngine.RectInt,UnityEngine.RectInt)">
+            <summary>
+            判断一个矩形是否完全包含另一个矩形
+            </summary>
+            <param name="outer">外部矩形</param>
+            <param name="inner">要检查的内部矩形</param>
+            <returns>如果<paramref name="outer"/>完全包含<paramref name="inner"/>则为<see langword="true"/>；否则为<see langword="false"/></returns>
+        </member>
+        <member name="T:NightOcean.Utility.RectUtils">
+            <summary>
+            提供用于 <see cref="T:UnityEngine.Rect"/> 相关的扩展和工具方法。
+            </summary>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.TopLeftCorner(UnityEngine.Rect)">
+            <summary> 获取矩形左上角坐标。 </summary>
+            <param name="rect">矩形</param>
+            <returns>左上角坐标</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.TopRightCorner(UnityEngine.Rect)">
+            <summary> 获取矩形右上角坐标。 </summary>
+            <param name="rect">矩形</param>
+            <returns>右上角坐标</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.BottomLeftCorner(UnityEngine.Rect)">
+            <summary> 获取矩形左下角坐标。 </summary>
+            <param name="rect">矩形</param>
+            <returns>左下角坐标</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.BottomRightCorner(UnityEngine.Rect)">
+            <summary> 获取矩形右下角坐标。 </summary>
+            <param name="rect">矩形</param>
+            <returns>右下角坐标</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.LeftPixelSegment(UnityEngine.Rect,System.Single)">
+            <summary> 获取矩形左段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="width">分割宽度</param>
+            <returns>左段矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.RightPixelSegment(UnityEngine.Rect,System.Single)">
+            <summary> 获取矩形右段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="width">分割宽度</param>
+            <returns>右段矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.TopPixelSegment(UnityEngine.Rect,System.Single)">
+            <summary> 获取矩形上段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="height">分割高度</param>
+            <returns>上段矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.BottomPixelSegment(UnityEngine.Rect,System.Single)">
+            <summary> 获取矩形下段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="height">分割高度</param>
+            <returns>下段矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenterPixelSegmentOnX(UnityEngine.Rect,System.Single)">
+            <summary> 在 X 轴方向获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="width">X轴分割宽度</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenterPixelSegmentOnY(UnityEngine.Rect,System.Single)">
+            <summary> 在 Y 轴方向获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="height">Y轴分割高度</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenterPixelSegment(UnityEngine.Rect,System.Single,System.Single)">
+            <summary> 获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="width">X轴分割宽度</param>
+            <param name="height">Y轴分割高度</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenterPixelSegment(UnityEngine.Rect,UnityEngine.Vector2)">
+            <summary> 获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="size">分割尺寸</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.LeftSegment(UnityEngine.Rect,System.Single)">
+            <summary> 按比例获取矩形左段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>左段矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.RightSegment(UnityEngine.Rect,System.Single)">
+            <summary> 按比例获取矩形右段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>右段矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.TopSegment(UnityEngine.Rect,System.Single)">
+            <summary> 按比例获取矩形上段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>上段矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.BottomSegment(UnityEngine.Rect,System.Single)">
+            <summary> 按比例获取矩形下段区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>下段矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenterSegmentOnX(UnityEngine.Rect,System.Single)">
+            <summary> 按比例在 X 轴方向获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenterSegmentOnY(UnityEngine.Rect,System.Single)">
+            <summary> 按比例在 Y 轴方向获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="splitRatio">分割比例</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenterSegment(UnityEngine.Rect,System.Single,System.Single)">
+            <summary> 按比例获取矩形中心区域。 </summary>
+            <param name="sourceRect">源矩形</param>
+            <param name="xSplitRatio">X轴分割比例</param>
+            <param name="ySplitRatio">Y轴分割比例</param>
+            <returns>中心矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenteredIn(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary> 将源矩形居中放置在容器矩形内。 </summary>
+            <param name="source">源矩形</param>
+            <param name="container">容器矩形</param>
+            <returns>居中后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenteredOnXIn(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary> 将源矩形在容器矩形内沿 X 轴居中。 </summary>
+            <param name="source">源矩形</param>
+            <param name="container">容器矩形</param>
+            <returns>X轴居中后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.CenteredOnYIn(UnityEngine.Rect,UnityEngine.Rect)">
+            <summary> 将源矩形在容器矩形内沿 Y 轴居中。 </summary>
+            <param name="source">源矩形</param>
+            <param name="container">容器矩形</param>
+            <returns>Y轴居中后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.ExpandedBy(UnityEngine.Rect,System.Single)">
+            <summary> 向四周扩展矩形。 </summary>
+            <param name="rect">源矩形</param>
+            <param name="margin">扩展边距</param>
+            <returns>扩展后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.ExpandedBy(UnityEngine.Rect,System.Single,System.Single)">
+            <summary> 向四周扩展矩形。 </summary>
+            <param name="rect">源矩形</param>
+            <param name="marginX">X轴扩展边距</param>
+            <param name="marginY">Y轴扩展边距</param>
+            <returns>扩展后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.ContractedBy(UnityEngine.Rect,System.Single)">
+            <summary> 向中心收缩矩形。 </summary>
+            <param name="rect">源矩形</param>
+            <param name="margin">收缩边距</param>
+            <returns>收缩后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.ContractedBy(UnityEngine.Rect,System.Single,System.Single)">
+            <summary> 向中心收缩矩形。 </summary>
+            <param name="rect">源矩形</param>
+            <param name="marginX">X轴收缩边距</param>
+            <param name="marginY">Y轴收缩边距</param>
+            <returns>收缩后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.ScaledBy(UnityEngine.Rect,System.Single)">
+            <summary> 以矩形中心为原点缩放矩形。 </summary>
+            <param name="rect">源矩形</param>
+            <param name="scale">缩放比例</param>
+            <returns>缩放后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.OffsetHorizontal(UnityEngine.Rect,System.Single)">
+            <summary> 水平偏移矩形。 </summary>
+            <param name="source">源矩形</param>
+            <param name="offsetX">X轴偏移量</param>
+            <returns>偏移后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.OffsetVertical(UnityEngine.Rect,System.Single)">
+            <summary> 垂直偏移矩形。 </summary>
+            <param name="source">源矩形</param>
+            <param name="offsetY">Y轴偏移量</param>
+            <returns>偏移后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.Offset(UnityEngine.Rect,System.Single,System.Single)">
+            <summary> 偏移矩形。 </summary>
+            <param name="source">源矩形</param>
+            <param name="offsetX">X轴偏移量</param>
+            <param name="offsetY">Y轴偏移量</param>
+            <returns>偏移后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.Offset(UnityEngine.Rect,UnityEngine.Vector2)">
+            <summary> 偏移矩形。 </summary>
+            <param name="source">源矩形</param>
+            <param name="offset">偏移向量</param>
+            <returns>偏移后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.MoveTo(UnityEngine.Rect,System.Single,System.Single)">
+            <summary> 将矩形移动到指定位置。 </summary>
+            <param name="source">源矩形</param>
+            <param name="x">目标 X 坐标</param>
+            <param name="y">目标 Y 坐标</param>
+            <returns>移动后的矩形</returns>
+        </member>
+        <member name="M:NightOcean.Utility.RectUtils.MoveTo(UnityEngine.Rect,UnityEngine.Vector2)">
+            <summary> 将矩形移动到指定位置。 </summary>
+            <param name="source">源矩形</param>
+            <param name="position">目标位置向量</param>
+            <returns>移动后的矩形</returns>
+        </member>
+    </members>
+</doc>
