@@ -1,226 +1,66 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{06D29BCA-A6C0-4239-AEBD-F933F4060AC7}</ProjectGuid>
+    <TargetFramework>net10.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OberoniaAurea_Frame</RootNamespace>
     <AssemblyName>OberoniaAurea_Frame</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <LangVersion>12.0</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <!-- 保留现有 Properties\AssemblyInfo.cs，禁止 SDK 自动生成重复的程序集特性 -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <OutputPath>Release\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>E:\ProgramFiles\Steam\steamapps\common\RimWorld\Mods\[OA]Oberonia Aurea Framework\1.6\Assemblies\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <!-- 定义Mod输出根路径，带[]特殊字符，单独放属性 -->
+  <PropertyGroup>
+    <RimWorldModAssemblyDir>E:\ProgramFiles\Steam\steamapps\common\RimWorld\Mods\[OA]Oberonia Aurea Framework\1.7\Assemblies</RimWorldModAssemblyDir>
+  </PropertyGroup>
+
+  <!-- 引用暂未迁移：0Harmony、Assembly-CSharp、NightOcean、UnityEngine.* 等待后续处理 -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <OutputPath>Release\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>OberoniaAurea_Frame.xml</DocumentationFile>
+    <!-- 使用Path.GetFullPath求值，避免MSBuild直接解析[]为通配符 -->
+    <OutputPath>$([System.IO.Path]::GetFullPath($(RimWorldModAssemblyDir)))</OutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Release\**" />
+    <EmbeddedResource Remove="Release\**" />
+    <None Remove="Release\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>lib\0Harmony.dll</HintPath>
+      <HintPath>E:\ProgramFiles\Steam\steamapps\workshop\content\294100\2009463077\1.7\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>lib\Assembly-CSharp.dll</HintPath>
+      <HintPath>E:\ProgramFiles\Steam\steamapps\common\RimWorld\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="NightOcean, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\NightOcean.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>lib\UnityEngine.dll</HintPath>
+    <Reference Include="NightOcean">
+      <HintPath>..\..\NightOcean\bin\Release\NightOcean.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>lib\UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>lib\UnityEngine.TextRenderingModule.dll</HintPath>
+    <Reference Include="UnityStubs">
+      <HintPath>E:\ProgramFiles\Steam\steamapps\common\RimWorld\UnityStubs.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Component\CooldownRecordManager.cs" />
-    <Compile Include="Component\CooldownRecord.cs" />
-    <Compile Include="Component\DataCacheBase.cs" />
-    <Compile Include="Component\EventDispatcher.cs" />
-    <Compile Include="EnumType\DataCacheState.cs" />
-    <Compile Include="Component\FactionValidationParams.cs" />
-    <Compile Include="Component\HediffGiveParams.cs" />
-    <Compile Include="Interface\IDataCache.cs" />
-    <Compile Include="Component\MemoryGiveParams.cs" />
-    <Compile Include="Component\RangeHediffGiver.cs" />
-    <Compile Include="EnumType\RaceType.cs" />
-    <Compile Include="Component\RangeHediffGiveParams.cs" />
-    <Compile Include="Component\TargetRelationType.cs" />
-    <Compile Include="DataLibrary\IconLibrary.cs" />
-    <Compile Include="UI\UIDrawer\DataCacheDrawerBase.cs" />
-    <Compile Include="UI\UIDrawer\DataCacheDrawer_SelectableList.cs" />
-    <Compile Include="UI\UIDrawer\IUIDrawer.cs" />
-    <Compile Include="UI\ScrollLayoutStrategy.cs" />
-    <Compile Include="UI\TextStyle.cs" />
-    <Compile Include="Component\ThingMakeInfo.cs" />
-    <Compile Include="DataLibrary\KeyLibrary_Misc.cs" />
-    <Compile Include="DataLibrary\KeyLibrary_FormatArgName.cs" />
-    <Compile Include="DataLibrary\KeyLibrary_Window.cs" />
-    <Compile Include="FactionTagsExtension.cs" />
-    <Compile Include="Interface\ILordJobWithTalk.cs" />
-    <Compile Include="Job\JobDriver_InteractWithThing.cs" />
-    <Compile Include="Job\JobDriver_InteractWithThingAtOnce.cs" />
-    <Compile Include="Incident\IncidentWorker_GiveQuest_Map.cs" />
-    <Compile Include="Incident\IncidentWorker_GiveQuest.cs" />
-    <Compile Include="Interface\ILordFloatMenuProvider.cs" />
-    <Compile Include="Job\JobDriver_TalkWithAtOnce.cs" />
-    <Compile Include="Job\JobExtension.cs" />
-    <Compile Include="Lord\LordJob_TravelWithInteraction.cs" />
-    <Compile Include="Lord\LordJob_VisitColonyTalkable.cs" />
-    <Compile Include="Lord\LordToil_DefendPointWithInteraction.cs" />
-    <Compile Include="Lord\LordToil_TravelWithInteraction.cs" />
-    <Compile Include="Lord\LordJob_VisitColonyBase.cs" />
-    <Compile Include="Quest\Quest_InitiateTradeRequest.cs" />
-    <Compile Include="Quest\Quest_DestroyWorldObject.cs" />
-    <Compile Include="Quest\Quest_ChoiceLetter.cs" />
-    <Compile Include="Quest\Quest_PawnNegativeSiganl.cs" />
-    <Compile Include="Quest\Quest_MultiSignalCount.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_QuestUnique.cs" />
-    <Compile Include="Quest\Quest_TransToHardcodedSignalWithQuestID.cs" />
-    <Compile Include="Thing\BulletBase.cs" />
-    <Compile Include="Thing\CompDestroyAfterSwapMap.cs" />
-    <Compile Include="HarmonyPatch\MapParent_GetShuttleFloatMenuOptions_Patch.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_SetMutiFactionsForWorldObject.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_SetQuestForWorldObject.cs" />
-    <Compile Include="Interface\IPawnFloatMenuOptionProvider.cs" />
-    <Compile Include="Thing\CompForceColor.cs" />
-    <Compile Include="Thing\CompInteractWithThing.cs" />
-    <Compile Include="UI\UIDrawer\UIDrawerBase.cs" />
-    <Compile Include="Utility\CollectionUtility.cs" />
-    <Compile Include="Utility\DropPodUtility.cs" />
-    <Compile Include="Utility\EnumUtility.cs" />
-    <Compile Include="UI\Widgets.cs" />
-    <Compile Include="Utility\GamePlayUtility.cs" />
-    <Compile Include="Utility\IncidentUtility.cs" />
-    <Compile Include="Utility\Old\CaravanUtility.cs" />
-    <Compile Include="Utility\Old\CollectionUtility.cs" />
-    <Compile Include="Utility\Old\DiaUtility.cs" />
-    <Compile Include="Utility\Old\DropPodUtility.cs" />
-    <Compile Include="Utility\Old\EnumUtility.cs" />
-    <Compile Include="Utility\Old\FactionUtility.cs" />
-    <Compile Include="Utility\Old\FixedCaravanUtility.cs" />
-    <Compile Include="Utility\Old\MapUtility.cs" />
-    <Compile Include="Utility\Old\MiscUtility.cs" />
-    <Compile Include="Utility\Old\PawnGenerateUtility.cs" />
-    <Compile Include="Utility\Old\PawnUtility.cs" />
-    <Compile Include="Utility\Old\QuestUtility.cs" />
-    <Compile Include="Utility\Old\TextUtility.cs" />
-    <Compile Include="Utility\Old\ThingUtility.cs" />
-    <Compile Include="Utility\Old\TileFinderUtility.cs" />
-    <Compile Include="Utility\QuestUtility.cs" />
-    <Compile Include="Utility\Old\ReflectionUtility.cs" />
-    <Compile Include="Utility\TextUtility.cs" />
-    <Compile Include="Utility\ThingUtility.cs" />
-    <Compile Include="UI\UIUtility.cs" />
-    <Compile Include="WorkGiver_ThingRequestExtension.cs" />
-    <Compile Include="WorldObject\ArrivalAction\CaravanArrivalAction_GenerateAndEnter.cs" />
-    <Compile Include="Interface\IQuestAssociate.cs" />
-    <Compile Include="Interface\IFixedCaravanAssociate.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GenerateWorldObjectWithMutiFactions.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GenerateInteractiveWorldObject.cs" />
-    <Compile Include="Component\SimpleValueCache.cs" />
-    <Compile Include="Interface\ICaravanAssociate.cs" />
-    <Compile Include="Interface\IPawnPreApplyDamage.cs" />
-    <Compile Include="Interface\IPawnRetentionHolder.cs" />
-    <Compile Include="RaidStrategyWorker_ImmediateAttack_NeverFlee.cs" />
-    <Compile Include="Lord\LordJob_AssistColony_NeverFlee.cs" />
-    <Compile Include="Incident\IncidentWorker_IsolatedTraderCaravanArrival.cs" />
-    <Compile Include="Thing\MoteAttached_Text.cs" />
-    <Compile Include="IsolatedPawnGroupMakerDef.cs" />
-    <Compile Include="PatchOperationCheckDLC.cs" />
-    <Compile Include="Quest\Quest_FireIncident.cs" />
-    <Compile Include="Quest\QuestPart\QuestPart_OARefugeeInteractions.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_Root_RefugeeBase.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetDropSpot.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GenerateThingDefCount.cs" />
-    <Compile Include="Component\SimpleHashList.cs" />
-    <Compile Include="Component\SimpleMapCahce.cs" />
-    <Compile Include="Component\SimpleUniqueList.cs" />
-    <Compile Include="Thought_SituationalGiveHediff.cs" />
-    <Compile Include="HarmonyPatch\GetCriticalPawnReason_Patch.cs" />
-    <Compile Include="HarmonyPatch\HarmonyPatch.cs" />
-    <Compile Include="Quest\QuestNode\QueseNode_GetExpectedCategoryMarketValue.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetMutiFactions.cs" />
-    <Compile Include="Quest\QuestNode\QueseNode_GetExpectedThingMarketValue.cs" />
-    <Compile Include="Quest\Quest_AllFactionsGoodwillChange.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetMapParent.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetNearTile.cs" />
-    <Compile Include="Quest\Quest_InitiateCategoryTradeRequest.cs" />
-    <Compile Include="Quest\Quest_InitiateSaleRequest.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_RequestThingCount.cs" />
-    <Compile Include="SiteTrader.cs" />
-    <Compile Include="Utility\DefOf.cs" />
-    <Compile Include="Utility\DiaUtility.cs" />
-    <Compile Include="Utility\FactionUtility.cs" />
-    <Compile Include="Utility\CaravanUtility.cs" />
-    <Compile Include="Utility\PawnGenerateUtility.cs" />
-    <Compile Include="Utility\MapUtility.cs" />
-    <Compile Include="Utility\Old\IconUtility.cs" />
-    <Compile Include="Utility\PawnUtility.cs" />
-    <Compile Include="Utility\TileFinderUtility.cs" />
-    <Compile Include="WorldObject\ArrivalAction\CaravanArrivalAction_VisitInteractiveObject.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_SeasonalRestriction.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_EarliestDayPassed.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetWorldObjectTile.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetFactionLeader.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetRatkinFaction.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetNearbySettlementOfFaction.cs" />
-    <Compile Include="Quest\QuestNode\QuestNode_GetFaction.cs" />
-    <Compile Include="WorldObject\CategoryTradeRequestComp.cs" />
-    <Compile Include="Lord\LordJob_AssaultColony_NeverFlee.cs" />
-    <Compile Include="WorldObject\ArrivalAction\TransportersArrivalAction_VisitInteractiveObject.cs" />
-    <Compile Include="WorldObject\ArrivalAction\TransportersArrivalAction_VisitEnterableMap.cs" />
-    <Compile Include="WorldObject\MapParent_Enterable.cs" />
-    <Compile Include="WorldObject\WorldObject_WithMutiFactions.cs" />
-    <Compile Include="WorldObject\WorldObject_InteractiveBase.cs" />
-    <Compile Include="Utility\MiscUtility.cs" />
-    <Compile Include="Utility\ReflectionUtility.cs" />
-    <Compile Include="Utility\FixedCaravanUtility.cs" />
-    <Compile Include="WorldObject\FixedCaravan.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WorldObject\WorldObject_MutiInteractiveBase.cs" />
-    <Compile Include="WorldObject\SaleRequestComp.cs" />
-    <Compile Include="Lord\LordJob_AssaultThings_NeverFlee.cs" />
-    <Compile Include="WorldObject\WorldObject_InteractWithFixedCaravanBase.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
+  <Target Name="CopyNightOceanAssets" AfterTargets="Build">
+    <Copy SourceFiles="..\..\NightOcean\bin\Release\NightOcean.dll"
+          DestinationFolder="$(OutputPath)" />
+    <Copy SourceFiles="..\..\NightOcean\bin\Release\NightOcean.xml"
+          DestinationFolder="$(OutputPath)"
+          Condition="Exists('..\..\NightOcean\bin\Release\NightOcean.xml')" />
+  </Target>
 </Project>
