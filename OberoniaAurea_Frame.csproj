@@ -10,7 +10,7 @@
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <OutputPath>Release\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
   <!-- 定义Mod输出根路径，带[]特殊字符，单独放属性 -->
@@ -26,7 +26,7 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>OberoniaAurea_Frame.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\OberoniaAurea_Frame.xml</DocumentationFile>
     <!-- 使用Path.GetFullPath求值，避免MSBuild直接解析[]为通配符 -->
     <OutputPath>$([System.IO.Path]::GetFullPath($(RimWorldModAssemblyDir)))</OutputPath>
   </PropertyGroup>
@@ -57,10 +57,7 @@
   </ItemGroup>
 
   <Target Name="CopyNightOceanAssets" AfterTargets="Build">
-    <Copy SourceFiles="..\..\NightOcean\bin\Release\NightOcean.dll"
-          DestinationFolder="$(OutputPath)" />
-    <Copy SourceFiles="..\..\NightOcean\bin\Release\NightOcean.xml"
-          DestinationFolder="$(OutputPath)"
-          Condition="Exists('..\..\NightOcean\bin\Release\NightOcean.xml')" />
+    <Copy SourceFiles="..\..\NightOcean\bin\Release\NightOcean.dll" DestinationFolder="$(OutputPath)" />
+    <Copy SourceFiles="..\..\NightOcean\bin\Release\NightOcean.xml" DestinationFolder="$(OutputPath)" Condition="Exists('..\..\NightOcean\bin\Release\NightOcean.xml')" />
   </Target>
 </Project>
