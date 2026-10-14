@@ -79,7 +79,7 @@ public class SaleRequestComp : WorldObjectComp
         {
             defaultLabel = "OAFrame_CommandReciveSaleOffer".Translate(),
             defaultDesc = "OAFrame_CommandReciveSaleOfferDesc".Translate(),
-            icon = IconLibrary.TradeCommandIcon,
+            icon = IconLibrary_OAFrame.TradeCommandIcon,
             action = delegate
             {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillSaleRQConfirm".Translate(GenLabel.ThingLabel(thingDef, null, count)), delegate

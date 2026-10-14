@@ -90,7 +90,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
         {
             defaultLabel = "CommandFulfillTradeOffer".Translate(),
             defaultDesc = "CommandFulfillTradeOfferDesc".Translate(),
-            icon = IconLibrary.TradeCommandIcon,
+            icon = IconLibrary_OAFrame.TradeCommandIcon,
             action = delegate
             {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation("OAFrame_CommandFulfillCategoryTradeConfirm".Translate(category), delegate

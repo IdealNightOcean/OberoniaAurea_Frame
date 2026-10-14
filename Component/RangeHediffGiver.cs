@@ -2,6 +2,7 @@ using OberoniaAurea_Frame.Utility;
 using RimWorld;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -17,17 +18,10 @@ public class RangeHediffGiver : IExposable
     /// </summary>
     public RangeHediffGiveParams Parms => parms;
 
-
-    private Thing linkedThing;
-
     /// <summary>
     /// 关联的物体，用于确定位置和阵营信息。
     /// </summary>
-    public Thing LinkedThing
-    {
-        get => linkedThing;
-        set => linkedThing = value;
-    }
+    public Thing LinkedThing;
 
     /// <summary>
     /// 额外的目标验证委托。在已有条件基础上进行额外筛选，返回 <see langword="true"/> 时表示目标通过验证。
@@ -37,11 +31,11 @@ public class RangeHediffGiver : IExposable
     /// <summary>
     /// 获取关联物体所在的地图。
     /// </summary>
-    public Map TargetMap => linkedThing?.MapHeld;
+    public Map TargetMap => LinkedThing?.MapHeld;
     /// <summary>
     /// 获取关联物体所属的阵营。
     /// </summary>
-    public Faction LinkedFaction => linkedThing?.Faction;
+    public Faction LinkedFaction => LinkedThing?.Faction;
 
     /// <summary>
     /// 创建一个新的范围<see cref="Hediff"/>给予器实例。
@@ -56,7 +50,7 @@ public class RangeHediffGiver : IExposable
     /// <exception cref="ArgumentNullException">当 <paramref name="linkedThing"/> 为 <see langword="null"/> 时抛出。</exception>
     public RangeHediffGiver(Thing linkedThing, RangeHediffGiveParams parms)
     {
-        this.linkedThing = linkedThing ?? throw new ArgumentNullException(nameof(linkedThing));
+        this.LinkedThing = linkedThing ?? throw new ArgumentNullException(nameof(linkedThing));
         this.parms = parms;
     }
 
@@ -71,7 +65,7 @@ public class RangeHediffGiver : IExposable
     /// </summary>
     public virtual void ExposeData()
     {
-        Scribe_References.Look(ref linkedThing, nameof(linkedThing));
+        Scribe_References.Look(ref LinkedThing, nameof(LinkedThing));
         Scribe_Deep.Look(ref parms, nameof(parms));
     }
 
@@ -81,23 +75,23 @@ public class RangeHediffGiver : IExposable
     /// </summary>
     public void GiveHediffToRange()
     {
-        if (linkedThing is null)
+        if (LinkedThing is null)
         {
-            Log.Error($"[OARK] {nameof(linkedThing)} 不能为空。");
+            Log.Error($"[OARK] {nameof(LinkedThing)} 不能为空。");
             return;
         }
 
-        if (!linkedThing.Spawned)
+        if (!LinkedThing.Spawned)
             return;
 
-        IntVec3 linkedThingPos = linkedThing.Position;
+        IntVec3 linkedThingPos = LinkedThing.Position;
         float radiusSquared = Parms.RadiusSquared;
 
         IReadOnlyList<Pawn> potentialPawns;
-        if (linkedThing.Faction is null || parms.TargetRelation.ContainsAnyFlag(TargetRelationType.NonSameFaction))
+        if (LinkedThing.Faction is null || parms.TargetRelation.ContainsAnyFlag(TargetRelationType.NonSameFaction))
             potentialPawns = TargetMap.mapPawns.AllPawnsSpawned;
         else
-            potentialPawns = TargetMap.mapPawns.SpawnedPawnsInFaction(linkedThing.Faction);
+            potentialPawns = TargetMap.mapPawns.SpawnedPawnsInFaction(LinkedThing.Faction);
 
         for (int i = potentialPawns.Count - 1; i >= 0; i--)
         {
@@ -139,9 +133,9 @@ public class RangeHediffGiver : IExposable
             if (Parms.InitSeverity > 0f)
                 hediffGived.Severity = Parms.InitSeverity;
         }
-        else if (Parms.AddSeverityIfExist.HasValue)
+        else if (Mathf.Abs(Parms.AddSeverityIfExist) > 1e-6f)
         {
-            hediffGived.Severity += Parms.AddSeverityIfExist.Value;
+            hediffGived.Severity += Parms.AddSeverityIfExist;
         }
 
         if (Parms.AddlinkWithThing)
@@ -150,7 +144,7 @@ public class RangeHediffGiver : IExposable
             if (hediffComp_Link is not null)
             {
                 hediffComp_Link.drawConnection = Parms.DrawConnection;
-                hediffComp_Link.other = linkedThing;
+                hediffComp_Link.other = LinkedThing;
             }
         }
 
@@ -180,7 +174,7 @@ public class RangeHediffGiver : IExposable
         if (target is null)
             return false;
 
-        if (target == linkedThing && !Utility.OARO_EnumUtility.ContainsFlag(Parms.TargetRelation, TargetRelationType.Self))
+        if (target == LinkedThing && !Parms.TargetRelation.ContainsFlag(TargetRelationType.Self))
             return false;
 
         if (radiusSquared > 0f && center.DistanceToSquared(target.Position) > radiusSquared)
@@ -203,7 +197,7 @@ public class RangeHediffGiver : IExposable
             Faction targetFacion = target.Faction;
             if (targetFacion is null)
             {
-                if (target.HostileTo(linkedThing))
+                if (target.HostileTo(LinkedThing))
                 {
                     if (!targetRelation.ContainsFlag(TargetRelationType.Hostile))
                         return false;

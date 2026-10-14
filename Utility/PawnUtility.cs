@@ -71,8 +71,8 @@ public static class OAFrame_PawnUtility
 
         if (pawn.health.hediffSet.TryGetHediff(parms.HediffToGive, out Hediff hediff))
         {
-            if (parms.AddSeverityIfExist.HasValue)
-                hediff.Severity += parms.AddSeverityIfExist.Value;
+            if (Mathf.Abs(parms.AddSeverityIfExist) > 1e-6f)
+                hediff.Severity += parms.AddSeverityIfExist;
         }
         else
         {

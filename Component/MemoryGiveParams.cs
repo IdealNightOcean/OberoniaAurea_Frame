@@ -8,48 +8,27 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class MemoryGiveParams : IExposable
 {
-    private ThoughtDef memoryToGive;
     /// <summary>
     /// 要给予的<see cref="ThoughtDef"/>。
     /// </summary>
-    public ThoughtDef MemoryToGive
-    {
-        get => memoryToGive;
-        set => memoryToGive = value;
-    }
+    public ThoughtDef MemoryToGive;
 
-    private bool permanent;
     /// <summary>
     /// 该记忆是否为永久性记忆。
     /// </summary>
-    public bool Permanent
-    {
-        get => permanent;
-        set => permanent = value;
-    }
+    public bool Permanent;
 
-    private int overrideDisappearTicks = -1;
     /// <summary>
     /// 覆盖 <see cref="Thought_Memory"/> 的消失时间（Tick数）。小于等于0时使用 <see cref="Thought_Memory"/> 自身的默认值。
     /// </summary>
     /// <remarks>- 应仅在 <see cref="Permanent"/> 为 <see langword="false"/> 时生效</remarks>
-    public int OverrideDisappearTicks
-    {
-        get => overrideDisappearTicks;
-        set => overrideDisappearTicks = value;
-    }
-
+    public int OverrideDisappearTicks = -1;
     private int moodOffset;
 
-    private IntRange moodOffsetRange = IntRange.Zero;
     /// <summary>
     /// 心情偏移量的随机范围。当 <see cref="moodOffset"/> 为 <see langword="0"/> 时从此范围中随机取值。
     /// </summary>
-    public IntRange MoodOffsetRange
-    {
-        get => moodOffsetRange;
-        set => moodOffsetRange = value;
-    }
+    public IntRange MoodOffsetRange = IntRange.Zero;
 
     /// <summary>
     /// 心情偏移量。若赋值为非零值则作为固定偏移量返回；否则从 <see cref="MoodOffsetRange"/> 中随机取值。
@@ -60,8 +39,8 @@ public class MemoryGiveParams : IExposable
         {
             if (moodOffset != 0)
                 return moodOffset;
-            if (moodOffsetRange != IntRange.Zero)
-                return moodOffsetRange.RandomInRange;
+            if (MoodOffsetRange != IntRange.Zero)
+                return MoodOffsetRange.RandomInRange;
 
             return 0;
         }
@@ -73,11 +52,11 @@ public class MemoryGiveParams : IExposable
     /// </summary>
     public virtual void ExposeData()
     {
-        Scribe_Defs.Look(ref memoryToGive, nameof(memoryToGive));
+        Scribe_Defs.Look(ref MemoryToGive, nameof(MemoryToGive));
 
-        Scribe_Values.Look(ref permanent, nameof(permanent), defaultValue: false);
+        Scribe_Values.Look(ref Permanent, nameof(Permanent), defaultValue: false);
         Scribe_Values.Look(ref moodOffset, nameof(moodOffset), defaultValue: 0);
-        Scribe_Values.Look(ref moodOffsetRange, nameof(moodOffsetRange), defaultValue: IntRange.Zero);
-        Scribe_Values.Look(ref overrideDisappearTicks, nameof(overrideDisappearTicks), defaultValue: -1);
+        Scribe_Values.Look(ref MoodOffsetRange, nameof(MoodOffsetRange), defaultValue: IntRange.Zero);
+        Scribe_Values.Look(ref OverrideDisappearTicks, nameof(OverrideDisappearTicks), defaultValue: -1);
     }
 }

@@ -7,59 +7,34 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class RangeHediffGiveParams : HediffGiveParams
 {
-    private float radius;
     /// <summary>
     /// 影响范围半径。小于等于0时全图生效。
     /// </summary>
-    public float Radius
-    {
-        get => radius;
-        set => radius = value;
-    }
+    public float Radius;
     /// <summary>
     /// 影响范围半径的平方。小于等于0时全图生效。
     /// </summary>
-    public float RadiusSquared => radius <= 0f ? -1f : radius * radius;
+    public float RadiusSquared => Radius <= 0f ? -1f : Radius * Radius;
 
-    private bool addlinkWithThing = true;
     /// <summary>
     /// 是否设置<see cref="HediffComp_Link"/>
     /// </summary>
-    public bool AddlinkWithThing
-    {
-        get => addlinkWithThing;
-        set => addlinkWithThing = value;
-    }
+    public bool AddlinkWithThing = true;
 
-    private bool drawConnection = false;
     /// <summary>
     /// 是否绘制 <see cref="Hediff"/> 所有者与关联物体之间的连接线。
     /// </summary>
-    public bool DrawConnection
-    {
-        get => drawConnection;
-        set => drawConnection = value;
-    }
+    public bool DrawConnection = false;
 
-    private RaceType targetRace = RaceType.Humanlike;
     /// <summary>
     /// 目标种族的筛选条件。默认为 <see cref="RaceType.Humanlike"/>。
     /// </summary>
-    public RaceType TargetRace
-    {
-        get => targetRace;
-        set => targetRace = value;
-    }
+    public RaceType TargetRace = RaceType.Humanlike;
 
-    private TargetRelationType targetRelation = TargetRelationType.NonHostile;
     /// <summary>
     /// 目标阵营关系的筛选条件。默认为 <see cref="TargetRelationType.NonHostile"/>。
     /// </summary>
-    public TargetRelationType TargetRelation
-    {
-        get => targetRelation;
-        set => targetRelation = value;
-    }
+    public TargetRelationType TargetRelation = TargetRelationType.NonHostile;
 
     /// <summary>
     /// 创建一个新的范围型<see cref="Hediff"/>给予参数实例。
@@ -72,7 +47,7 @@ public class RangeHediffGiveParams : HediffGiveParams
     /// <param name="radius">影响范围半径。</param>
     public RangeHediffGiveParams(HediffDef hediffToGive, float radius) : base(hediffToGive)
     {
-        this.radius = radius;
+        this.Radius = radius;
     }
 
     /// <summary>
@@ -84,12 +59,12 @@ public class RangeHediffGiveParams : HediffGiveParams
     /// <inheritdoc />
     public override void ExposeData()
     {
-        Scribe_Values.Look(ref radius, nameof(radius), defaultValue: -1f);
+        Scribe_Values.Look(ref Radius, nameof(Radius), defaultValue: -1f);
 
-        Scribe_Values.Look(ref addlinkWithThing, nameof(addlinkWithThing), defaultValue: true);
-        Scribe_Values.Look(ref drawConnection, nameof(drawConnection), defaultValue: false);
+        Scribe_Values.Look(ref AddlinkWithThing, nameof(AddlinkWithThing), defaultValue: true);
+        Scribe_Values.Look(ref DrawConnection, nameof(DrawConnection), defaultValue: false);
 
-        Scribe_Values.Look(ref targetRace, nameof(targetRace), defaultValue: RaceType.Humanlike);
-        Scribe_Values.Look(ref targetRelation, nameof(targetRelation), defaultValue: TargetRelationType.NonHostile);
+        Scribe_Values.Look(ref TargetRace, nameof(TargetRace), defaultValue: RaceType.Humanlike);
+        Scribe_Values.Look(ref TargetRelation, nameof(TargetRelation), defaultValue: TargetRelationType.NonHostile);
     }
 }

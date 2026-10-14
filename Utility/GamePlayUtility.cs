@@ -7,7 +7,7 @@ namespace OberoniaAurea_Frame.Utility;
 /// <summary>
 /// 游戏玩法相关的通用工具方法
 /// </summary>
-public static class GamePlayUtility
+public static class OAFrame_GamePlayUtility
 {
     /// <summary>
     /// 是否处于上帝模式（同时要求开启开发者模式）

@@ -5,7 +5,7 @@ namespace OberoniaAurea_Frame.Utility;
 /// <summary> 
 /// 枚举工具类。 
 /// </summary>
-public static class OARO_EnumUtility
+public static class OAFrame_EnumUtility
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool ContainsFlag(this TargetRelationType value, TargetRelationType flag) => (value & flag) == flag;

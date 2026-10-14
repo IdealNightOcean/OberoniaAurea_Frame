@@ -7,7 +7,7 @@ namespace OberoniaAurea_Frame.DataLibrary;
 /// 常用图标库。
 ///  </summary>
 [StaticConstructorOnStartup]
-public static class IconLibrary
+public static class IconLibrary_OAFrame
 {
     /// <summary>
     /// 重组基因图标。
