@@ -1,0 +1,152 @@
+using RimWorld;
+using System;
+using System.Runtime.CompilerServices;
+using Verse;
+
+namespace OberoniaAurea_Frame;
+
+/// <summary> 
+/// 对话界面工具类。 
+/// </summary>
+[Obsolete("请使用 OberoniaAurea_Frame.Utility 命名空间下同名工具类。")]
+public static class OAFrame_DiaUtility
+{
+    /// <summary>
+    /// 获取默认确认选项。
+    /// </summary>
+    public static DiaOption DefaultConfirmOption => new("Confirm".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认确认选项。
+    /// </summary>
+    public static void AddDefaultConfirmOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("Confirm".Translate()) { resolveTree = true });
+    }
+
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认取消选项。
+    /// </summary>
+    public static DiaOption DefaultCancelOption => new("Cancel".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认取消选项。
+    /// </summary>
+    public static void AddDefaultCancelOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("Cancel".Translate()) { resolveTree = true });
+    }
+
+    /// <summary>
+    /// 获取默认关闭选项。
+    /// </summary>
+    public static DiaOption DefaultCloseOption => new("Close".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认关闭选项。
+    /// </summary>
+    public static void AddDefaultCloseOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("Close".Translate()) { resolveTree = true });
+    }
+
+    /// <summary>
+    /// 获取默认推迟选项。
+    /// </summary>
+    public static DiaOption DefaultPostponeOption => new("PostponeLetter".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认推迟选项。
+    /// </summary>
+    public static void AddDefaultPostponeOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("PostponeLetter".Translate()) { resolveTree = true });
+    }
+
+    /// <summary>
+    /// 获取默认忽略选项。
+    /// </summary>
+    public static DiaOption DefaultIngnoreOption => new("OAFrame_Ingnore".Translate()) { resolveTree = true };
+    /// <summary>
+    /// 为<see cref="DiaNode"/>添加默认忽略选项。
+    /// </summary>
+    public static void AddDefaultIngnoreOption(this DiaNode diaNode)
+    {
+        diaNode.options.Add(new DiaOption("OAFrame_Ingnore".Translate()) { resolveTree = true });
+    }
+
+    /// <summary>
+    /// 添加默认的返回选项，点击后会跳转到由 <paramref name="linkLateBind"/> 提供的节点。
+    /// </summary>
+    public static void AddDefaultGoBackOption(this DiaNode diaNode, Func<DiaNode> linkLateBind, Action action = null)
+    {
+        diaNode.options.Add(new DiaOption("GoBack".Translate())
+        {
+            action = action,
+            linkLateBind = linkLateBind
+        });
+    }
+
+    /// <summary>
+    /// 创建默认确认对话框。
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Dialog_NodeTree DefaultConfirmDiaNodeTree(TaggedString text, Action acceptAction = null, Action rejectAction = null)
+    {
+        return new Dialog_NodeTree(ConfirmDiaNode(text, "Confirm".Translate(), acceptAction, "Close".Translate(), rejectAction));
+    }
+
+    /// <summary>
+    /// 创建带派系信息的默认确认对话框。
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Dialog_NodeTreeWithFactionInfo DefaultConfirmDiaNodeTreeWithFactionInfo(TaggedString text, Faction faction, Action acceptAction = null, Action rejectAction = null)
+    {
+        return new Dialog_NodeTreeWithFactionInfo(ConfirmDiaNode(text, "Confirm".Translate(), acceptAction, "Close".Translate(), rejectAction), faction);
+    }
+
+    /// <summary>
+    /// 创建确认对话框。
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Dialog_NodeTree ConfirmDiaNodeTree(TaggedString text, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
+    {
+        return new Dialog_NodeTree(ConfirmDiaNode(text, acceptText, acceptAction, rejectText, rejectAction));
+    }
+
+    /// <summary>
+    /// 创建带派系信息的确认对话框。
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static Dialog_NodeTreeWithFactionInfo ConfirmDiaNodeTreeWithFactionInfo(TaggedString text, Faction faction, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
+    {
+        return new Dialog_NodeTreeWithFactionInfo(ConfirmDiaNode(text, acceptText, acceptAction, rejectText, rejectAction), faction);
+    }
+
+    /// <summary>
+    /// 创建确认对话节点。
+    /// </summary>
+    public static DiaNode ConfirmDiaNode(TaggedString text, string acceptText = null, Action acceptAction = null, string rejectText = null, Action rejectAction = null)
+    {
+        DiaNode diaNode = new(text);
+        if (String.IsNullOrEmpty(acceptText))
+            acceptText = "Confirm".Translate();
+
+        if (!String.IsNullOrEmpty(acceptText))
+        {
+            DiaOption accept = new(acceptText)
+            {
+                action = acceptAction,
+                resolveTree = true
+            };
+            diaNode.options.Add(accept);
+        }
+        if (!String.IsNullOrEmpty(rejectText))
+        {
+            DiaOption reject = new(rejectText)
+            {
+                action = rejectAction,
+                resolveTree = true
+            };
+            diaNode.options.Add(reject);
+        }
+
+        return diaNode;
+    }
+}

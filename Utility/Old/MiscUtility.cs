@@ -1,0 +1,90 @@
+using RimWorld;
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEngine;
+using Verse;
+
+namespace OberoniaAurea_Frame;
+
+/// <summary> 
+/// 杂项工具类。
+///  </summary>
+[StaticConstructorOnStartup]
+[Obsolete("请使用 OberoniaAurea_Frame.Utility 命名空间下同名工具类。")]
+public static class OAFrame_MiscUtility
+{
+    /// <summary>
+    /// 是否处于上帝模式
+    /// </summary>
+    public static bool GodMode => DebugSettings.godMode && Prefs.DevMode;
+
+    /// <summary>
+    /// 检查两个<see cref="Def"/>是否相同且非空。
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsSameDefNonNullable<T>(this T def, T other) where T : Def => def is not null && def == other;
+
+    /// <summary>
+    /// 尝试立刻触发事件
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool TryFireIncidentNow(IncidentDef incidentDef, IncidentParms parms, bool force = false)
+    {
+        if (force || incidentDef.Worker.CanFireNow(parms))
+        {
+            return incidentDef.Worker.TryExecute(parms);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 添加队列事件
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void AddNewQueuedIncident(IncidentDef incidentDef, int delayTicks, IncidentParms parms, int retryDurationTicks = 0)
+    {
+        if (parms is null)
+        {
+            Log.Error($"[OAFrame] 尝试添加队列事件，但 {nameof(IncidentParms)} 为空。");
+            return;
+        }
+        if (parms.target is null)
+        {
+            Log.Error($"[OAFrame] 尝试添加队列事件，但 {nameof(IncidentParms)}.{nameof(IncidentParms.target)} 为空。");
+            return;
+        }
+        Find.Storyteller.incidentQueue.Add(incidentDef, Find.TickManager.TicksGame + delayTicks, parms, retryDurationTicks);
+    }
+
+    /// <summary>
+    /// 生成物品并按堆叠上限自动拆分，直接返回拆分后的物品列表
+    /// </summary>
+    [Obsolete("使用OAFrame_ThingUtility.GenerateThingListSplitByStack")]
+    public static List<Thing> TryGenerateThing(ThingDef def, int count)
+    {
+        List<Thing> list = [];
+        int stackLimit = def.stackLimit;
+        int remaining = count;
+        while (remaining > 0)
+        {
+            Thing thing = ThingMaker.MakeThing(def);
+            thing.stackCount = Mathf.Min(remaining, stackLimit);
+            list.Add(thing);
+            remaining -= stackLimit;
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 验证单例是否为空。
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ValidateSingleton<T>(T instance, string instanceName) where T : class
+    {
+        if (instance is not null)
+        {
+            throw new InvalidOperationException($"构造时 {instanceName} 已不为空。{typeof(T).Name} 是单例类型，请直接使用 {instanceName}，不要重复创建实例。");
+        }
+    }
+}

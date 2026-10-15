@@ -1,0 +1,32 @@
+using System;
+using UnityEngine;
+using Verse;
+
+namespace OberoniaAurea_Frame;
+
+/// <summary> 
+/// 图标工具类。
+///  </summary>
+[StaticConstructorOnStartup]
+[Obsolete("请使用 OberoniaAurea_Frame.UI.IconLibrary 图标库")]
+public static class OAFrame_IconUtility
+{
+    /// <summary>
+    /// 重组基因图标。
+    /// </summary>
+    public static readonly Texture2D RecombineIcon = ContentFinder<Texture2D>.Get("UI/Gizmos/RecombineGenes");
+
+    /// <summary>
+    /// 插入<see cref="Pawn"/>图标。
+    /// </summary>
+    public static readonly Texture2D InsertPawnIcon = ContentFinder<Texture2D>.Get("UI/Gizmos/InsertPawn");
+    /// <summary>
+    /// 取消图标。
+    /// </summary>
+    public static readonly Texture2D CancelIcon = ContentFinder<Texture2D>.Get("UI/Designators/Cancel");
+
+    /// <summary>
+    /// 交易命令图标。
+    /// </summary>
+    public static readonly Texture2D TradeCommandIcon = ContentFinder<Texture2D>.Get("UI/Commands/FulfillTradeRequest");
+}
