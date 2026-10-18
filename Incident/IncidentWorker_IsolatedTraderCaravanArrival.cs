@@ -13,7 +13,11 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_NeutralGroup
 {
+    /// <summary>
+    /// 获取用于生成商人商队的独立<see cref="Pawn"/>生成组制造器定义。
+    /// </summary>
     protected virtual IsolatedPawnGroupMakerDef PawnGroupMakerDef => null;
+    /// <inheritdoc/>
     protected override PawnGroupKindDef PawnGroupKindDef => PawnGroupKindDefOf.Trader;
 
     /// <summary>
@@ -23,10 +27,12 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
     {
         return !f.HostileTo(Faction.OfPlayer);
     }
+    /// <inheritdoc/>
     protected override void ResolveParmsPoints(IncidentParms parms)
     {
         parms.points = TraderCaravanUtility.GenerateGuardPoints();
     }
+    /// <inheritdoc/>
     protected override bool TryResolveParmsGeneral(IncidentParms parms)
     {
         if (PawnGroupMakerDef is null)
@@ -52,11 +58,15 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
         return true;
     }
 
+    /// <summary>
+    /// 尝试从参数解析事件来源派系，未指定时随机选取一个非敌对派系。
+    /// </summary>
     protected virtual bool TryResolveFaction(IncidentParms parms)
     {
         parms.faction ??= Find.FactionManager.RandomNonHostileFaction(allowNonHumanlike: false);
         return parms.faction is not null;
     }
+    /// <inheritdoc/>
     protected override bool TryExecuteWorker(IncidentParms parms)
     {
         Map map = (Map)parms.target;
@@ -102,6 +112,13 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
         LordMaker.MakeNewLord(parms.faction, lordJob, map, pawns);
         return true;
     }
+    /// <summary>
+    /// 生成并放置在事件中心附近的交易商队小人。
+    /// </summary>
+    /// <param name="parms">事件参数。</param>
+    /// <param name="groupMakerParms">用于生成小人的参数集。</param>
+    /// <param name="groupMaker">小人组制造器。</param>
+    /// <returns>生成的小人列表。</returns>
     protected virtual List<Pawn> SpawnTradePawns(IncidentParms parms, PawnGroupMakerParms groupMakerParms, PawnGroupMaker groupMaker)
     {
         Map map = (Map)parms.target;
@@ -115,6 +132,11 @@ public class IncidentWorker_IsolatedTraderCaravanArrival : IncidentWorker_Neutra
         return pawns;
     }
 
+    /// <summary>
+    /// 发送商人商队到达事件的信件。
+    /// </summary>
+    /// <param name="parms">事件参数。</param>
+    /// <param name="pawns">商队<see cref="Pawn"/>列表。</param>
     protected virtual void SendLetter(IncidentParms parms, List<Pawn> pawns)
     {
         TaggedString letterLabel = "LetterLabelTraderCaravanArrival".Translate(parms.faction.Name, parms.traderKind.label).CapitalizeFirst();

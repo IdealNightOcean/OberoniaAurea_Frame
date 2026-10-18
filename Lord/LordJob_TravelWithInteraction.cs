@@ -8,15 +8,26 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class LordJob_TravelWithInteraction : LordJob_Travel
 {
+    /// <summary>
+    /// 带有交互功能的旅行目的地。
+    /// </summary>
     protected IntVec3 interactTravelDest;
 
+    /// <summary>
+    /// 初始化带有交互功能的旅行职责。
+    /// </summary>
     public LordJob_TravelWithInteraction() { }
 
+    /// <summary>
+    /// 根据旅行目的地初始化带有交互功能的旅行职责。
+    /// </summary>
+    /// <param name="travelDest">旅行目的地。</param>
     public LordJob_TravelWithInteraction(IntVec3 travelDest) : base(travelDest)
     {
         interactTravelDest = travelDest;
     }
 
+    /// <inheritdoc/>
     public override StateGraph CreateGraph()
     {
         StateGraph stateGraph = new();
@@ -38,6 +49,7 @@ public class LordJob_TravelWithInteraction : LordJob_Travel
         return stateGraph;
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();

@@ -11,6 +11,11 @@ namespace OberoniaAurea_Frame;
 [HarmonyPatch(typeof(WorldPawnGC), "GetCriticalPawnReason")]
 public static class GetCriticalPawnReason_Patch
 {
+    /// <summary>
+    /// 当原始结果为 <see langword="null"/> 时，检查<see cref="Pawn"/>是否为保留持有者并补充理由。
+    /// </summary>
+    /// <param name="__result">原始补丁结果。</param>
+    /// <param name="pawn">需要检查的<see cref="Pawn"/>。</param>
     [HarmonyPostfix]
     public static void Postfix(ref string __result, Pawn pawn)
     {

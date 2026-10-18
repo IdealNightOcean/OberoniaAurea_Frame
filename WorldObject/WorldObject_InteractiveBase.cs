@@ -12,6 +12,9 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssociate, IQuestAssociate
 {
+    /// <summary>
+    /// 访问标签文本。
+    /// </summary>
     protected virtual string VisitLabel => "OAFrame_VisitObject";
 
     /// <summary>
@@ -33,6 +36,7 @@ public abstract class WorldObject_InteractiveBase : WorldObject, ICaravanAssocia
     public Quest AssociatedQuest => quest;
 
     private Material cachedMat;
+    /// <inheritdoc/>
     public override Material Material
     {
         get

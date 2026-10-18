@@ -10,23 +10,51 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_QuestUnique : QuestNode
 {
+    /// <summary>
+    /// 任务唯一性检查的约束级别。
+    /// </summary>
     public enum CheckRestriction
     {
+        /// <summary>
+        /// 只要不存在进行中的同名任务即可。
+        /// </summary>
         Normal,
+        /// <summary>
+        /// 要求未接受或进行中的任务中都不存在同名任务。
+        /// </summary>
         UniqueAvailable,
+        /// <summary>
+        /// 要求未接受、进行中或已成功结束的任务中都不存在同名任务。
+        /// </summary>
         UniqueSuccess,
+        /// <summary>
+        /// 要求在任意状态的任务中都不存在同名任务。
+        /// </summary>
         Absolute
     }
 
+    /// <summary>
+    /// 用于检查唯一性的任务标记。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> tag;
+    /// <summary>
+    /// 参与唯一性判定的派系（为空时不带派系后缀）。
+    /// </summary>
     public SlateRef<Faction> faction;
 
+    /// <summary>
+    /// 唯一性检查的约束级别。
+    /// </summary>
     public SlateRef<CheckRestriction> restriction = CheckRestriction.Normal;
 
+    /// <summary>
+    /// 存储标签：处理后的任务标记。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> storeProcessedTagAs;
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -38,6 +66,7 @@ public class QuestNode_QuestUnique : QuestNode
         }
     }
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         string processedTag = GetProcessedTag(tag.GetValue(slate), faction.GetValue(slate));

@@ -6,28 +6,51 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 任务节点：<see cref="Pawn"/>相关负面信号。 
+/// </summary>
 public class QuestNode_PawnNegativeSiganl : QuestNode
 {
+    /// <summary>
+    /// 负面信号列表。 
+    /// </summary>
     [NoTranslate]
     public SlateRef<IEnumerable<string>> negativeSiganl;
 
+    /// <summary>
+    /// 是否使用通用负面信号。 
+    /// </summary>
     public SlateRef<bool> useCommonSiganls = true;
 
+    /// <summary>
+    /// 是否添加标签。 
+    /// </summary>
     public SlateRef<bool> addTag;
+    /// <summary>
+    /// 需要添加的标签。 
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> tagToAdd;
 
+    /// <summary>
+    /// 输出信号。 
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> outSignal;
 
+    /// <summary>
+    /// 是否仅输出一次。 
+    /// </summary>
     public SlateRef<bool> outOnlyOnce;
 
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         return outSignal.GetValue(slate) is not null;
     }
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -85,14 +108,24 @@ public class QuestNode_PawnNegativeSiganl : QuestNode
 /// </summary>
 public class QuestPart_PawnNegativeSiganl : QuestPart
 {
+    /// <summary>
+    /// 负面信号列表。 
+    /// </summary>
     public List<string> negativeSiganls;
 
+    /// <summary>
+    /// 输出信号。 
+    /// </summary>
     public string outSignal;
 
+    /// <summary>
+    /// 是否仅输出一次。 
+    /// </summary>
     public bool outOnlyOnce;
 
     private bool outOnce;
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();
@@ -103,6 +136,7 @@ public class QuestPart_PawnNegativeSiganl : QuestPart
         Scribe_Collections.Look(ref negativeSiganls, nameof(negativeSiganls), LookMode.Value);
     }
 
+    /// <inheritdoc/>
     public override void Cleanup()
     {
         base.Cleanup();
@@ -112,6 +146,7 @@ public class QuestPart_PawnNegativeSiganl : QuestPart
         outOnce = false;
     }
 
+    /// <inheritdoc/>
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         if (negativeSiganls is not null && (!outOnce || !outOnlyOnce))

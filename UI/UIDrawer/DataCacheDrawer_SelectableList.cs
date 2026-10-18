@@ -15,13 +15,21 @@ public class DataCacheDrawer_SelectableList<T, U> : UIDrawerBase where T : IData
     /// </summary>
     protected struct EntryDrawInfo
     {
-        /// <summary>所在行（从 1 开始）</summary>
+        /// <summary>
+        /// 所在行（从 1 开始）
+        /// </summary>
         public int Row;
-        /// <summary>所在列（从 1 开始）</summary>
+        /// <summary>
+        /// 所在列（从 1 开始）
+        /// </summary>
         public int Column;
-        /// <summary>条目左上角绘制位置</summary>
+        /// <summary>
+        /// 条目左上角绘制位置
+        /// </summary>
         public Vector2 EntryPos;
-        /// <summary>条目是否与当前可视区域相交（用于视口裁剪）</summary>
+        /// <summary>
+        /// 条目是否与当前可视区域相交（用于视口裁剪）
+        /// </summary>
         public bool Visible;
     }
 
@@ -144,14 +152,22 @@ public class DataCacheDrawer_SelectableList<T, U> : UIDrawerBase where T : IData
         }
     }
 
-    /// <summary>是否绘制鼠标悬停高亮</summary>
+    /// <summary>
+    /// 是否绘制鼠标悬停高亮
+    /// </summary>
     public bool DrawMouseOverHighlight = true;
-    /// <summary>是否为选中条目绘制选框</summary>
+    /// <summary>
+    /// 是否为选中条目绘制选框
+    /// </summary>
     public bool DrawSelectedBox = true;
-    /// <summary>是否为选中条目绘制选中高亮</summary>
+    /// <summary>
+    /// 是否为选中条目绘制选中高亮
+    /// </summary>
     public bool DrawSelectedHighlight = true;
 
-    /// <summary>是否允许点击已选中条目再次取消选择</summary>
+    /// <summary>
+    /// 是否允许点击已选中条目再次取消选择
+    /// </summary>
     public bool EnableDeselect = true;
 
     private Vector2 itemInterval = Vector2.zero;
@@ -187,9 +203,13 @@ public class DataCacheDrawer_SelectableList<T, U> : UIDrawerBase where T : IData
     /// </summary>
     protected bool LayoutSizeChanged { get; set; } = true;
 
-    /// <summary>当前滚动位置</summary>
+    /// <summary>
+    /// 当前滚动位置
+    /// </summary>
     protected Vector2 scrollPosition = Vector2.zero;
-    /// <summary>是否正处于选择流程中，用于防止重入</summary>
+    /// <summary>
+    /// 是否正处于选择流程中，用于防止重入
+    /// </summary>
     protected bool onSelecting = false;
 
     private Vector2 outRectSize = new(-1f, -1f);
@@ -209,6 +229,9 @@ public class DataCacheDrawer_SelectableList<T, U> : UIDrawerBase where T : IData
         }
     }
 
+    /// <summary>
+    /// 单个条目的绘制尺寸，首次访问或布局失效时懒计算。
+    /// </summary>
     protected Vector2 entryDrawSize = new(-1f, -1f);
     /// <summary>
     /// 单个条目的绘制尺寸，首次访问或布局失效时懒计算

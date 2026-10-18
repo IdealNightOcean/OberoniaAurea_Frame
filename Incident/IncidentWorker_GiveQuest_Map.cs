@@ -8,11 +8,13 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class IncidentWorker_GiveQuest_Map : RimWorld.IncidentWorker_GiveQuest_Map
 {
+    /// <inheritdoc/>
     protected override bool CanFireNowSub(IncidentParms parms)
     {
         return parms.questScriptDef is not null && base.CanFireNowSub(parms);
     }
 
+    /// <inheritdoc/>
     protected override bool TryExecuteWorker(IncidentParms parms)
     {
         if (parms.questScriptDef is null)

@@ -11,16 +11,43 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_InitiateCategoryTradeRequest : QuestNode
 {
+    /// <summary>
+    /// 触发信号。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> inSignal;
 
+    /// <summary>
+    /// 请求的物品类型。
+    /// </summary>
     public SlateRef<ThingCategoryDef> requestedCategoryDef;
+
+    /// <summary>
+    /// 请求的物品数量。
+    /// </summary>
     public SlateRef<int> requestedCount;
+
+    /// <summary>
+    /// 目标世界对象。
+    /// </summary>
     public SlateRef<WorldObject> worldObject;
+
+    /// <summary>
+    /// 请求持续时间。
+    /// </summary>
     public SlateRef<int> duration;
+
+    /// <summary>
+    /// 是否允许虫肉。
+    /// </summary>
     public SlateRef<bool> allowInsectMeat = false;
+
+    /// <summary>
+    /// 是否允许人形肉。
+    /// </summary>
     public SlateRef<bool> allowHumanlikeMeat = false;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         if (requestedCount.GetValue(slate) <= 0 || requestedCategoryDef.GetValue(slate) is null)
@@ -34,6 +61,7 @@ public class QuestNode_InitiateCategoryTradeRequest : QuestNode
         return true;
     }
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -57,14 +85,42 @@ public class QuestNode_InitiateCategoryTradeRequest : QuestNode
 /// </summary>
 public class QuestPart_InitiateCategoryTradeRequest : QuestPart
 {
+    /// <summary>
+    /// 触发信号。
+    /// </summary>
     public string inSignal;
+
+    /// <summary>
+    /// 目标世界对象。
+    /// </summary>
     public WorldObject worldObject;
+
+    /// <summary>
+    /// 请求的物品类型。
+    /// </summary>
     public ThingCategoryDef requestedCategoryDef;
+
+    /// <summary>
+    /// 请求的物品数量。
+    /// </summary>
     public int requestedCount;
+
+    /// <summary>
+    /// 请求持续时间。
+    /// </summary>
     public int requestDuration;
+
+    /// <summary>
+    /// 是否允许虫肉。
+    /// </summary>
     public bool requestAllowInsectMeat;
+
+    /// <summary>
+    /// 是否允许人形肉。
+    /// </summary>
     public bool requestAllowHumanlikeMeat;
 
+    /// <inheritdoc/>
     public override IEnumerable<GlobalTargetInfo> QuestLookTargets
     {
         get
@@ -80,6 +136,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Faction> InvolvedFactions
     {
         get
@@ -95,6 +152,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
     {
         get
@@ -107,6 +165,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         base.Notify_QuestSignalReceived(signal);
@@ -125,6 +184,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void Cleanup()
     {
         base.Cleanup();
@@ -135,6 +195,7 @@ public class QuestPart_InitiateCategoryTradeRequest : QuestPart
         requestDuration = 0;
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();

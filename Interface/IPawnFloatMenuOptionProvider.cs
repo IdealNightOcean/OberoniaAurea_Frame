@@ -24,6 +24,9 @@ public interface IPawnFloatMenuOptionProvider
 /// </summary>
 public class CompProperties_PawnFloatMenuOptionHandler : CompProperties
 {
+    /// <summary>
+    /// 初始化浮动菜单选项处理器组件属性。
+    /// </summary>
     public CompProperties_PawnFloatMenuOptionHandler()
     {
         compClass = typeof(CompPawnFloatMenuOptionHandler);
@@ -37,6 +40,7 @@ public class CompPawnFloatMenuOptionHandler : ThingComp
 {
     [Unsaved] private List<IPawnFloatMenuOptionProvider> providers;
 
+    /// <inheritdoc />
     public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn selPawn)
     {
         if (providers is null)

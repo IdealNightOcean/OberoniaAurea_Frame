@@ -7,6 +7,9 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public interface IQuestAssociate
 {
+    /// <summary>
+    /// 获取关联的任务。
+    /// </summary>
     Quest AssociatedQuest { get; }
     /// <summary>
     /// 设置关联任务。

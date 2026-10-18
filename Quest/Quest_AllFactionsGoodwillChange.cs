@@ -10,20 +10,46 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_AllFactionsGoodwillChange : QuestNode
 {
+    /// <summary>
+    /// 输入信号。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> inSignal;
 
+    /// <summary>
+    /// 好感度变化数值。
+    /// </summary>
     public SlateRef<int> goodwillChange;
+    /// <summary>
+    /// 关联的历史事件定义。
+    /// </summary>
     public SlateRef<HistoryEventDef> historyEvent;
+    /// <summary>
+    /// 是否可以发送消息。
+    /// </summary>
     public SlateRef<bool> canSendMessage = true;
+    /// <summary>
+    /// 是否可以发送敌对信函。
+    /// </summary>
     public SlateRef<bool> canSendHostilityLetter = true;
 
+    /// <summary>
+    /// 是否可作用于盟友。
+    /// </summary>
     public SlateRef<bool> canApplyOnAlly = true;
+    /// <summary>
+    /// 是否可作用于中立派系。
+    /// </summary>
     public SlateRef<bool> canApplyOnNeutral = true;
+    /// <summary>
+    /// 是否可作用于敌对派系。
+    /// </summary>
     public SlateRef<bool> canApplyOnHostile = true;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate) => true;
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -48,17 +74,42 @@ public class QuestNode_AllFactionsGoodwillChange : QuestNode
 /// </summary>
 public class QuestPart_AllFactionsGoodwillChange : QuestPart
 {
+    /// <summary>
+    /// 输入信号。
+    /// </summary>
     public string inSignal;
 
+    /// <summary>
+    /// 好感度变化数值。
+    /// </summary>
     public int goodwillChange;
+    /// <summary>
+    /// 关联的历史事件定义。
+    /// </summary>
     public HistoryEventDef historyEvent;
+    /// <summary>
+    /// 是否可以发送消息。
+    /// </summary>
     public bool canSendMessage = true;
+    /// <summary>
+    /// 是否可以发送敌对信函。
+    /// </summary>
     public bool canSendHostilityLetter = true;
 
+    /// <summary>
+    /// 是否可作用于盟友。
+    /// </summary>
     public bool canApplyOnAlly = true;
+    /// <summary>
+    /// 是否可作用于中立派系。
+    /// </summary>
     public bool canApplyOnNeutral = true;
+    /// <summary>
+    /// 是否可作用于敌对派系。
+    /// </summary>
     public bool canApplyOnHostile = true;
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();

@@ -10,11 +10,24 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_SeasonalRestriction : QuestNode
 {
+    /// <summary>
+    /// 是否允许春季。
+    /// </summary>
     public SlateRef<bool> allowSpring = true;
+    /// <summary>
+    /// 是否允许夏季。
+    /// </summary>
     public SlateRef<bool> allowSummer = true;
+    /// <summary>
+    /// 是否允许秋季。
+    /// </summary>
     public SlateRef<bool> allowFall = true;
+    /// <summary>
+    /// 是否允许冬季。
+    /// </summary>
     public SlateRef<bool> allowWinter = true;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         Season season;
@@ -37,5 +50,6 @@ public class QuestNode_SeasonalRestriction : QuestNode
             _ => false,
         };
     }
+    /// <inheritdoc/>
     protected override void RunInt() { }
 }

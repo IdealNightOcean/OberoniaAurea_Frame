@@ -178,14 +178,8 @@ public static class OAFrame_MapUtility
         return actualDestroyCount;
     }
 
-    [Obsolete("曾经错误的命名，应使用 DestroyThingsOfDef")]
-    public static int DestoryThingsOfDef(this Map map, ThingDef thingDef, int count, Predicate<Thing> validator = null)
-    {
-        return DestroyThingsOfDef(map, thingDef, count, validator);
-    }
-
     /// <summary>
-    /// 地图上派系威胁的数量
+    /// 地图上指定派系威胁的数量
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int ThreatsCountOfFaction(this Map map, Faction faction)

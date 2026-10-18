@@ -9,17 +9,25 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_GetWorldObjectTile : QuestNode
 {
+    /// <summary>
+    /// 存储标签：世界对象地块。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> storeAs;
 
+    /// <summary>
+    /// 世界对象。
+    /// </summary>
     public SlateRef<WorldObject> worldObject;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         SetVars(slate);
         return true;
     }
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         SetVars(QuestGen.slate);

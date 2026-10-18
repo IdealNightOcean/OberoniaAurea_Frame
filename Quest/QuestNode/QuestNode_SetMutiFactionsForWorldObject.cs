@@ -10,13 +10,21 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_SetMutiFactionsForWorldObject : QuestNode
 {
+    /// <summary>
+    /// 世界对象。
+    /// </summary>
     public SlateRef<WorldObject> worldObject;
+    /// <summary>
+    /// 参与派系。
+    /// </summary>
     public SlateRef<IEnumerable<Faction>> participantFactions;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         return true;
     }
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;

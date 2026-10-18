@@ -12,6 +12,9 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class WorldObjectCompProperties_CategoryTradeRequestComp : WorldObjectCompProperties
 {
+    /// <summary>
+    /// 创建类型化物品交易请求组件属性。
+    /// </summary>
     public WorldObjectCompProperties_CategoryTradeRequestComp()
     {
         compClass = typeof(CategoryTradeRequestComp);
@@ -23,14 +26,38 @@ public class WorldObjectCompProperties_CategoryTradeRequestComp : WorldObjectCom
 /// </summary>
 public class CategoryTradeRequestComp : WorldObjectComp
 {
+    /// <summary>
+    /// 存档加载字段前缀。
+    /// </summary>
     protected const string loadPrefix = "categoryRQ_";
 
+    /// <summary>
+    /// 当前交易请求是否激活。
+    /// </summary>
     protected bool active;
+    /// <summary>
+    /// 请求的物品类别定义。
+    /// </summary>
     protected ThingCategoryDef category;
+    /// <summary>
+    /// 请求的物品总数。
+    /// </summary>
     protected int count;
+    /// <summary>
+    /// 请求剩余未交付的物品数量。
+    /// </summary>
     protected int countLeft;
+    /// <summary>
+    /// 是否接受昆虫肉。
+    /// </summary>
     protected bool allowInsectMeat;
+    /// <summary>
+    /// 是否接受人形肉。
+    /// </summary>
     protected bool allowHumanlikeMeat;
+    /// <summary>
+    /// 请求过期时刻，-1 表示未设置。
+    /// </summary>
     protected int expiration = -1;
 
     /// <summary>
@@ -41,6 +68,11 @@ public class CategoryTradeRequestComp : WorldObjectComp
     /// <summary>
     /// 初始化类型化物品交易请求。
     /// </summary>
+    /// <param name="requestedCategoryDef">请求的物品类别定义。</param>
+    /// <param name="requestedCount">请求的物品数量。</param>
+    /// <param name="requestedDuration">请求持续的游戏刻数。</param>
+    /// <param name="allowInsectMeat">是否接受昆虫肉。</param>
+    /// <param name="allowHumanlikeMeat">是否接受人形肉。</param>
     public virtual void InitTradeRequest(ThingCategoryDef requestedCategoryDef, int requestedCount, int requestedDuration, bool allowInsectMeat = false, bool allowHumanlikeMeat = false)
     {
         category = requestedCategoryDef;
@@ -52,6 +84,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
         active = true;
     }
 
+    /// <inheritdoc/>
     public override string CompInspectStringExtra()
     {
         if (ActiveRequest)
@@ -61,6 +94,7 @@ public class CategoryTradeRequestComp : WorldObjectComp
         return null;
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Gizmo> GetCaravanGizmos(Caravan caravan)
     {
         if (ActiveRequest)
@@ -162,6 +196,9 @@ public class CategoryTradeRequestComp : WorldObjectComp
         return true;
     }
 
+    /// <summary>
+    /// 序列化/反序列化此对象需持久保存的字段。
+    /// </summary>
     public override void PostExposeData()
     {
         base.PostExposeData();
@@ -177,6 +214,10 @@ public class CategoryTradeRequestComp : WorldObjectComp
     /// <summary>
     /// 获取请求物品类别的标签文本。
     /// </summary>
+    /// <param name="categoryDef">物品类别定义。</param>
+    /// <param name="count">物品数量。</param>
+    /// <param name="allowInsectMeat">是否允许昆虫肉。</param>
+    /// <param name="allowHumanlikeMeat">是否允许人形肉。</param>
     public static string RequestedThingCategoryLabel(ThingCategoryDef categoryDef, int count, bool allowInsectMeat, bool allowHumanlikeMeat)
     {
         string text = "OAFrame_RequestedThingCategoryLabel".Translate(categoryDef.label, count);

@@ -9,11 +9,18 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_GetFactionLeader : QuestNode
 {
+    /// <summary>
+    /// 存储标签：派系领袖。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> storeAs;
 
+    /// <summary>
+    /// 目标派系。
+    /// </summary>
     public SlateRef<Faction> faction;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         Pawn leader = faction.GetValue(slate)?.leader;
@@ -25,6 +32,7 @@ public class QuestNode_GetFactionLeader : QuestNode
         return false;
     }
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;

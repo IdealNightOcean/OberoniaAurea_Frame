@@ -1,6 +1,4 @@
-﻿using LudeonTK;
-using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using UnityEngine;
 using Verse;
 
@@ -64,21 +62,11 @@ public static class OAFrame_Widgets
     /// <param name="textStyle">字体样式</param>
     public static void DrawLabel(Rect rect, string label, TextStyle textStyle)
     {
-        Rect position = rect;
-        float halfUIScale = Prefs.UIScale * 0.5f;
-        if (Prefs.UIScale > 1f && Math.Abs(halfUIScale - Mathf.Floor(halfUIScale)) > float.Epsilon)
-        {
-            position.xMin = UIScaling.AdjustCoordToUIScalingFloor(rect.xMin);
-            position.yMin = UIScaling.AdjustCoordToUIScalingFloor(rect.yMin);
-            position.xMax = UIScaling.AdjustCoordToUIScalingCeil(rect.xMax + 1E-05f);
-            position.yMax = UIScaling.AdjustCoordToUIScalingCeil(rect.yMax + 1E-05f);
-        }
         Color oriColor = GUI.color;
         GUI.color = textStyle.guiColor;
-        GUI.Label(position, label, textStyle.FontStyle);
+        GUI.Label(rect, label, textStyle.FontStyle);
         GUI.color = oriColor;
         textStyle.RestoreTextStyle();
-
     }
 
     /// <summary>

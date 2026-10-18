@@ -10,8 +10,12 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_GenerateWorldObjectWithMutiFactions : QuestNode_GenerateInteractiveWorldObject
 {
+    /// <summary>
+    /// 参与派系。
+    /// </summary>
     public SlateRef<IEnumerable<Faction>> participantFactions;
 
+    /// <inheritdoc/>
     protected override WorldObject_InteractiveBase GenerateWorldObject(Slate slate)
     {
         WorldObject_InteractiveBase worldObject = (WorldObject_InteractiveBase)WorldObjectMaker.MakeWorldObject(def.GetValue(slate));

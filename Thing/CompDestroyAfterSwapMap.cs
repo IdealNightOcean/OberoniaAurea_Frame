@@ -1,4 +1,3 @@
-using System;
 using Verse;
 
 namespace OberoniaAurea_Frame;
@@ -8,6 +7,9 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class CompProperties_DestroyAfterSwapMap : CompProperties
 {
+    /// <summary>
+    /// 初始化切换地图后销毁的组件属性。
+    /// </summary>
     public CompProperties_DestroyAfterSwapMap() => compClass = typeof(CompDestroyAfterSwapMap);
 }
 
@@ -16,28 +18,7 @@ public class CompProperties_DestroyAfterSwapMap : CompProperties
 /// </summary>
 public class CompDestroyAfterSwapMap : ThingComp
 {
-    public override void PostSwapMap()
-    {
-        if (parent.Spawned && !parent.Destroyed)
-            parent.Destroy();
-    }
-}
-
-/// <summary>
-/// （已废弃）交换地图后销毁的组件属性（旧命名）。
-/// </summary>
-[Obsolete("曾经错误的命名，应使用 CompProperties_DestroyAfterSwapMap")]
-public class CompProperties_DestoryAfterSwapMap : CompProperties
-{
-    public CompProperties_DestoryAfterSwapMap() => compClass = typeof(CompDestoryAfterSwapMap);
-}
-
-/// <summary>
-/// （已废弃）交换地图后自动销毁的组件。
-/// </summary>
-[Obsolete("曾经错误的命名，应使用 CompProperties_DestroyAfterSwapMap")]
-public class CompDestoryAfterSwapMap : ThingComp
-{
+    /// <inheritdoc/>
     public override void PostSwapMap()
     {
         if (parent.Spawned && !parent.Destroyed)

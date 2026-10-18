@@ -8,11 +8,16 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_EarliestDayPassed : QuestNode
 {
+    /// <summary>
+    /// 最早历经天数。
+    /// </summary>
     public SlateRef<int> earliestDayPassed;
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         return GenDate.DaysPassed >= earliestDayPassed.GetValue(slate);
     }
+    /// <inheritdoc/>
     protected override void RunInt() { }
 
 }

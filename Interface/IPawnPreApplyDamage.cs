@@ -25,6 +25,9 @@ public interface IPawnPreApplyDamage
 /// </summary>
 public class CompProperties_PawnPreApplyDamage : CompProperties
 {
+    /// <summary>
+    /// 初始化预伤害处理器组件属性。
+    /// </summary>
     public CompProperties_PawnPreApplyDamage()
     {
         compClass = typeof(CompPawnPreApplyDamageHandler);
@@ -38,6 +41,7 @@ public class CompPawnPreApplyDamageHandler : ThingComp
 {
     [Unsaved] private List<IPawnPreApplyDamage> pawnPreApplyDamages;
 
+    /// <inheritdoc />
     public override void PostPreApplyDamage(ref DamageInfo dinfo, out bool absorbed)
     {
         absorbed = false;

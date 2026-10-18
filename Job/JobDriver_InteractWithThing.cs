@@ -12,16 +12,35 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public abstract class JobDriver_InteractWithThing : JobDriver
 {
+    /// <summary>
+    /// 工作扩展记录。
+    /// </summary>
     protected JobExtensionRecord jobExtensionRecord;
 
+    /// <summary>
+    /// 每刻的工作量。
+    /// </summary>
     protected float tickWorkAmount;
+    /// <summary>
+    /// 当前累计工作量。
+    /// </summary>
     protected float curWorkAmount;
+    /// <summary>
+    /// 总工作量。
+    /// </summary>
     protected float totalWorkAmount = 1;
 
+    /// <summary>
+    /// 工作进度百分比。
+    /// </summary>
     protected float ProgressPercent => curWorkAmount / totalWorkAmount;
 
+    /// <summary>
+    /// 交互目标。
+    /// </summary>
     protected Thing Target => TargetThingA;
 
+    /// <inheritdoc/>
     public override bool TryMakePreToilReservations(bool errorOnFailed)
     {
         JobExtension jobExtension = job.def.GetModExtension<JobExtension>();
@@ -34,6 +53,7 @@ public abstract class JobDriver_InteractWithThing : JobDriver
         return pawn.Reserve(Target, job, 1, -1, null, errorOnFailed);
     }
 
+    /// <inheritdoc/>
     protected override IEnumerable<Toil> MakeNewToils()
     {
         this.FailOnDespawnedNullOrForbidden(TargetIndex.A);
@@ -67,11 +87,17 @@ public abstract class JobDriver_InteractWithThing : JobDriver
         });
     }
 
+    /// <summary>
+    /// 返回交互前的预备工作序列。
+    /// </summary>
     protected virtual IEnumerable<Toil> PreInteractToils()
     {
         return Enumerable.Empty<Toil>();
     }
 
+    /// <summary>
+    /// 初始化工作相关数据。
+    /// </summary>
     protected void JobInitAction()
     {
         curWorkAmount = 0f;
@@ -80,8 +106,15 @@ public abstract class JobDriver_InteractWithThing : JobDriver
         PostJobInitAction();
     }
 
+    /// <summary>
+    /// 初始化完成后执行的操作。
+    /// </summary>
     protected virtual void PostJobInitAction() { }
 
+    /// <summary>
+    /// 工作进行中的每刻操作。
+    /// </summary>
+    /// <param name="delta">经过的刻数。</param>
     protected virtual void JobTickIntervalAction(int delta)
     {
         pawn.rotationTracker.FaceTarget(Target);
@@ -93,12 +126,26 @@ public abstract class JobDriver_InteractWithThing : JobDriver
         }
     }
 
+    /// <summary>
+    /// 交互完成时执行的结果操作。
+    /// </summary>
+    /// <param name="pawn">执行交互的<see cref="Pawn"/>。</param>
     protected abstract void InteractionResult(Pawn pawn);
 
+    /// <summary>
+    /// 调整主工作序列。
+    /// </summary>
+    /// <param name="toil">主工作。</param>
     protected virtual void AdjuestMainToil(ref Toil toil) { }
 
+    /// <summary>
+    /// 获取总工作量。
+    /// </summary>
+    /// <param name="baseWorkAmount">基础工作量。</param>
+    /// <returns>计算后的总工作量。</returns>
     protected virtual float GetTotalWorkAmount(float baseWorkAmount) => baseWorkAmount;
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();

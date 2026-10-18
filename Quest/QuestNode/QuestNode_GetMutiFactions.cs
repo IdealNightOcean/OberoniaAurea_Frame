@@ -12,8 +12,15 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_GetMutiFactions : QuestNode_GetFaction
 {
+    /// <summary>
+    /// 派系数量范围。
+    /// </summary>
     public SlateRef<IntRange> factionCount;
+    /// <summary>
+    /// 必要时忽略数量下限。
+    /// </summary>
     public SlateRef<bool> ignoreMinCountIfNessary = true; //必要时忽略数量下限
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         if (factionCount.GetValue(slate).max <= 0)
@@ -28,6 +35,7 @@ public class QuestNode_GetMutiFactions : QuestNode_GetFaction
         return false;
     }
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;

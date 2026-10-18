@@ -20,63 +20,183 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         BadThought
     }
 
+    /// <summary>
+    /// 是否允许袭击殖民地。
+    /// </summary>
     public bool allowAssaultColony = true;
+    /// <summary>
+    /// 是否允许离开。
+    /// </summary>
     public bool allowLeave = true;
+    /// <summary>
+    /// 是否允许产生不良想法。
+    /// </summary>
     public bool allowBadThought = true;
 
+    /// <summary>
+    /// 被招募的输入信号。
+    /// </summary>
     public string inSignalRecruited;
+    /// <summary>
+    /// 离开地图的输入信号。
+    /// </summary>
     public string inSignalLeftMap;
 
+    /// <summary>
+    /// 被摧毁的输入信号。
+    /// </summary>
     public string inSignalDestroyed;
+    /// <summary>
+    /// 被逮捕的输入信号。
+    /// </summary>
     public string inSignalArrested;
+    /// <summary>
+    /// 手术违规的输入信号。
+    /// </summary>
     public string inSignalSurgeryViolation;
+    /// <summary>
+    /// 作为灵能仪式目标的输入信号。
+    /// </summary>
     public string inSignalPsychicRitualTarget;
+    /// <summary>
+    /// 被绑架的输入信号。
+    /// </summary>
     public string inSignalKidnapped;
+    /// <summary>
+    /// 袭击殖民地的输入信号。
+    /// </summary>
     public string inSignalAssaultColony;
+    /// <summary>
+    /// 被遗弃的输入信号。
+    /// </summary>
     public string inSignalLeftBehind;
+    /// <summary>
+    /// 被放逐的输入信号。
+    /// </summary>
     public string inSignalBanished;
 
+    /// <summary>
+    /// 被摧毁且袭击殖民地的输出信号。
+    /// </summary>
     public string outSignalDestroyed_AssaultColony;
+    /// <summary>
+    /// 被摧毁且离开殖民地的输出信号。
+    /// </summary>
     public string outSignalDestroyed_LeaveColony;
+    /// <summary>
+    /// 被摧毁且产生不良想法的输出信号。
+    /// </summary>
     public string outSignalDestroyed_BadThought;
 
+    /// <summary>
+    /// 被逮捕且袭击殖民地的输出信号。
+    /// </summary>
     public string outSignalArrested_AssaultColony;
+    /// <summary>
+    /// 被逮捕且离开殖民地的输出信号。
+    /// </summary>
     public string outSignalArrested_LeaveColony;
+    /// <summary>
+    /// 被逮捕且产生不良想法的输出信号。
+    /// </summary>
     public string outSignalArrested_BadThought;
 
+    /// <summary>
+    /// 被遗弃且离开殖民地的输出信号。
+    /// </summary>
     public string outSignalLeftBehind_LeaveColony;
+    /// <summary>
+    /// 被遗弃且产生不良想法的输出信号。
+    /// </summary>
     public string outSignalLeftBehind_BadThought;
 
+    /// <summary>
+    /// 手术违规且袭击殖民地的输出信号。
+    /// </summary>
     public string outSignalSurgeryViolation_AssaultColony;
+    /// <summary>
+    /// 手术违规且离开殖民地的输出信号。
+    /// </summary>
     public string outSignalSurgeryViolation_LeaveColony;
+    /// <summary>
+    /// 手术违规且产生不良想法的输出信号。
+    /// </summary>
     public string outSignalSurgeryViolation_BadThought;
 
+    /// <summary>
+    /// 作为灵能仪式目标且袭击殖民地的输出信号。
+    /// </summary>
     public string outSignalPsychicRitualTarget_AssaultColony;
+    /// <summary>
+    /// 作为灵能仪式目标且离开殖民地的输出信号。
+    /// </summary>
     public string outSignalPsychicRitualTarget_LeaveColony;
+    /// <summary>
+    /// 作为灵能仪式目标且产生不良想法的输出信号。
+    /// </summary>
     public string outSignalPsychicRitualTarget_BadThought;
 
+    /// <summary>
+    /// 最后一名被逮捕的输出信号。
+    /// </summary>
     public string outSignalLast_Arrested;
+    /// <summary>
+    /// 最后一名被摧毁的输出信号。
+    /// </summary>
     public string outSignalLast_Destroyed;
+    /// <summary>
+    /// 最后一名被绑架的输出信号。
+    /// </summary>
     public string outSignalLast_Kidnapped;
+    /// <summary>
+    /// 最后一名被招募的输出信号。
+    /// </summary>
     public string outSignalLast_Recruited;
+    /// <summary>
+    /// 最后一名被放逐的输出信号。
+    /// </summary>
     public string outSignalLast_Banished;
+    /// <summary>
+    /// 最后一名被遗弃的输出信号。
+    /// </summary>
     public string outSignalLast_LeftBehind;
 
+    /// <summary>
+    /// 最后一名离开地图且全部健康的输出信号。
+    /// </summary>
     public string outSignalLast_LeftMapAllHealthy;
+    /// <summary>
+    /// 最后一名离开地图且存在不健康的输出信号。
+    /// </summary>
     public string outSignalLast_LeftMapAllNotHealthy;
 
+    /// <summary>
+    /// 参与交互的难民列表。
+    /// </summary>
     public List<Pawn> pawns = [];
     [Unsaved] private List<InteractionResponseType> availableInteractions;
 
+    /// <summary>
+    /// 难民所属的派系。
+    /// </summary>
     public Faction faction;
 
+    /// <summary>
+    /// 难民所在的地图父对象。
+    /// </summary>
     public MapParent mapParent;
 
+    /// <summary>
+    /// 离开地图时不健康的难民数量。
+    /// </summary>
     public int pawnsLeftUnhealthy;
 
     /// <summary>
     /// 使用默认信号初始化交互设置
     /// </summary>
+    /// <param name="allowAssaultColony">是否允许袭击殖民地。</param>
+    /// <param name="allowLeave">是否允许离开。</param>
+    /// <param name="allowBadThought">是否允许产生不良想法。</param>
     public void InitWithDefaultSingals(bool allowAssaultColony, bool allowLeave, bool allowBadThought)
     {
         this.allowAssaultColony = allowAssaultColony;
@@ -135,6 +255,7 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         outSignalLast_LeftBehind = QuestGen.GenerateNewSignal("LastLodger_LeftBehind");
     }
 
+    /// <inheritdoc/>
     protected override void ProcessQuestSignal(Signal signal)
     {
         if (inSignalAssaultColony is not null && signal.tag == inSignalAssaultColony)
@@ -410,6 +531,7 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         return availableInteractions.RandomElementWithFallback(InteractionResponseType.Leave);
     }
 
+    /// <inheritdoc/>
     public override void Notify_FactionRemoved(Faction f)
     {
         if (faction == f)
@@ -418,6 +540,7 @@ public class QuestPart_OARefugeeInteractions : QuestPartActivable
         }
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();

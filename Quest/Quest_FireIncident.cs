@@ -13,18 +13,48 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_FireIncident : QuestNode
 {
+    /// <summary>
+    /// 触发事件的信号。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> inSignal;
 
+    /// <summary>
+    /// 事件定义。
+    /// </summary>
     public SlateRef<IncidentDef> incidentDef;
+
+    /// <summary>
+    /// 事件参数。
+    /// </summary>
     public SlateRef<IncidentParms> parms;
+
+    /// <summary>
+    /// 是否为世界事件。
+    /// </summary>
     public SlateRef<bool> worldIncident;
+
+    /// <summary>
+    /// 目标地图父对象。
+    /// </summary>
     public SlateRef<MapParent> mapParent;
 
+    /// <summary>
+    /// 最小事件点数。
+    /// </summary>
     public SlateRef<float> minPoints = -1f;
+
+    /// <summary>
+    /// 最大事件点数。
+    /// </summary>
     public SlateRef<float> maxPoints = 99999f;
+
+    /// <summary>
+    /// 当前点数倍率。
+    /// </summary>
     public SlateRef<float> currentPointsFactor = 1f;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         if (incidentDef.GetValue(slate) is null)
@@ -42,6 +72,11 @@ public class QuestNode_FireIncident : QuestNode
         return true;
     }
 
+    /// <summary>
+    /// 解析事件参数。
+    /// </summary>
+    /// <param name="slate">当前石板上下文。</param>
+    /// <returns>解析后的事件参数。</returns>
     protected virtual IncidentParms ResolveParms(Slate slate)
     {
         IncidentParms parms = this.parms.GetValue(slate);
@@ -49,6 +84,11 @@ public class QuestNode_FireIncident : QuestNode
         return parms;
     }
 
+    /// <summary>
+    /// 解析事件触发目标是否有效。
+    /// </summary>
+    /// <param name="slate">当前石板上下文。</param>
+    /// <returns>目标是否有效。</returns>
     protected bool ResolveIncidentTarget(Slate slate)
     {
         if (!worldIncident.GetValue(slate))
@@ -68,6 +108,7 @@ public class QuestNode_FireIncident : QuestNode
         }
         return true;
     }
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -101,19 +142,49 @@ public class QuestNode_FireIncident : QuestNode
 /// </summary>
 public class QuestPart_FireIncident : QuestPart
 {
+    /// <summary>
+    /// 触发事件的信号。
+    /// </summary>
     public string inSignal;
 
+    /// <summary>
+    /// 事件定义。
+    /// </summary>
     public IncidentDef incident;
+
+    /// <summary>
+    /// 事件参数。
+    /// </summary>
     protected IncidentParms incidentParms;
+
+    /// <summary>
+    /// 当前点数倍率。
+    /// </summary>
     public float currentPointsFactor = 1f;
+
+    /// <summary>
+    /// 最小事件点数。
+    /// </summary>
     public float minPoints = -1f;
+
+    /// <summary>
+    /// 最大事件点数。
+    /// </summary>
     public float maxPoints = 99999f;
 
+    /// <summary>
+    /// 是否为世界事件。
+    /// </summary>
     protected bool worldIncident;
+
+    /// <summary>
+    /// 目标地图父对象。
+    /// </summary>
     protected MapParent mapParent;
 
 
 
+    /// <inheritdoc/>
     public override IEnumerable<GlobalTargetInfo> QuestLookTargets
     {
         get
@@ -129,6 +200,7 @@ public class QuestPart_FireIncident : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         if (signal.tag != inSignal || incidentParms is null)
@@ -150,6 +222,10 @@ public class QuestPart_FireIncident : QuestPart
         }
     }
 
+    /// <summary>
+    /// 解析地图事件参数。
+    /// </summary>
+    /// <param name="map">目标地图。</param>
     protected void ResolveParms_Map(Map map)
     {
         incidentParms.forced = true;
@@ -217,6 +293,7 @@ public class QuestPart_FireIncident : QuestPart
         worldIncident = true;
     }
 
+    /// <inheritdoc/>
     public override void Cleanup()
     {
         base.Cleanup();
@@ -229,6 +306,7 @@ public class QuestPart_FireIncident : QuestPart
         mapParent = null;
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();
@@ -242,6 +320,7 @@ public class QuestPart_FireIncident : QuestPart
         Scribe_References.Look(ref mapParent, "mapParent");
     }
 
+    /// <inheritdoc/>
     public override void AssignDebugData()
     {
         base.AssignDebugData();

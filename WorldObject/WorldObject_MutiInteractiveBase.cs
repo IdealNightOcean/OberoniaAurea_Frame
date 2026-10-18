@@ -7,6 +7,7 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public abstract class WorldObject_MutiInteractiveBase : WorldObject_InteractiveBase
 {
+    /// <inheritdoc/>
     public override void Notify_CaravanArrived(Caravan caravan)
     {
         Notify_CaravanArrived(caravan, 0);

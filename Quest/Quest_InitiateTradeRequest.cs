@@ -10,17 +10,33 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_InitiateTradeRequest : QuestNode
 {
+    /// <summary>
+    /// 触发信号。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> inSignal;
 
+    /// <summary>
+    /// 目标世界对象。
+    /// </summary>
     public SlateRef<WorldObject> worldObject;
 
+    /// <summary>
+    /// 请求的物品定义。
+    /// </summary>
     public SlateRef<ThingDef> requestedThingDef;
 
+    /// <summary>
+    /// 请求的物品数量。
+    /// </summary>
     public SlateRef<int> requestedThingCount;
 
+    /// <summary>
+    /// 请求持续时间。
+    /// </summary>
     public SlateRef<int> duration;
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -36,26 +52,49 @@ public class QuestNode_InitiateTradeRequest : QuestNode
         QuestGen.quest.AddPart(part);
     }
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         return requestedThingCount.GetValue(slate) > 0 && requestedThingDef.GetValue(slate) is not null && duration.GetValue(slate) > 0;
     }
 }
 
+/// <summary> 
+/// 任务部件：初始化交易请求。 
+/// </summary>
 public class QuestPart_InitiateTradeRequest : QuestPart
 {
+    /// <summary>
+    /// 触发信号。
+    /// </summary>
     public string inSignal;
 
+    /// <summary>
+    /// 目标世界对象。
+    /// </summary>
     public WorldObject worldObject;
 
+    /// <summary>
+    /// 请求的物品定义。
+    /// </summary>
     public ThingDef requestedThingDef;
 
+    /// <summary>
+    /// 请求的物品数量。
+    /// </summary>
     public int requestedCount;
 
+    /// <summary>
+    /// 请求持续时间。
+    /// </summary>
     public int requestDuration;
 
+    /// <summary>
+    /// 是否在任务结束后保留交易请求。
+    /// </summary>
     public bool keepAfterQuestEnds;
 
+    /// <inheritdoc/>
     public override void Cleanup()
     {
         base.Cleanup();
@@ -72,6 +111,7 @@ public class QuestPart_InitiateTradeRequest : QuestPart
         requestDuration = 0;
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();
@@ -83,6 +123,7 @@ public class QuestPart_InitiateTradeRequest : QuestPart
         Scribe_Values.Look(ref keepAfterQuestEnds, nameof(keepAfterQuestEnds), defaultValue: false);
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<GlobalTargetInfo> QuestLookTargets
     {
         get
@@ -98,6 +139,7 @@ public class QuestPart_InitiateTradeRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Faction> InvolvedFactions
     {
         get
@@ -113,6 +155,7 @@ public class QuestPart_InitiateTradeRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
     {
         get
@@ -125,6 +168,7 @@ public class QuestPart_InitiateTradeRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         base.Notify_QuestSignalReceived(signal);

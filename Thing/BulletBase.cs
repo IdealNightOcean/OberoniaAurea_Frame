@@ -11,7 +11,12 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class BulletBase : Bullet
 {
+    /// <inheritdoc/>
     public override bool AnimalsFleeImpact => true;
+
+    /// <summary>
+    /// 本次射击共享的战斗日志记录条。
+    /// </summary>
     protected BattleLogEntry_RangedImpact sharedBattleLogEntry;
 
     private void ProjectileImpact(Map map, IntVec3 position, bool blockedByShield = false)
@@ -24,6 +29,7 @@ public class BulletBase : Bullet
         Destroy();
     }
 
+    /// <inheritdoc/>
     protected override void Impact(Thing hitThing, bool blockedByShield = false)
     {
         Map map = Map;
@@ -64,7 +70,18 @@ public class BulletBase : Bullet
         }
     }
 
+    /// <summary>
+    /// 处理弹丸命中指定格子的效果，供子类重写。
+    /// </summary>
+    /// <param name="map">命中的地图。</param>
+    /// <param name="hitCell">命中的格子。</param>
     protected virtual void ImpactCell(Map map, IntVec3 hitCell) { }
+
+    /// <summary>
+    /// 处理弹丸命中物体时的通用效果。
+    /// </summary>
+    /// <param name="map">命中的地图。</param>
+    /// <param name="hitThing">被命中的物体。</param>
     protected void ImpactThingCommon(Map map, Thing hitThing)
     {
         Quaternion exactRotation = ExactRotation;
@@ -93,12 +110,25 @@ public class BulletBase : Bullet
         }
     }
 
+    /// <summary>
+    /// 处理弹丸命中物体时的伤害效果，供子类重写。
+    /// </summary>
+    /// <param name="map">命中的地图。</param>
+    /// <param name="hitThing">被命中的物体。</param>
+    /// <param name="exactRotation">弹丸的精确旋转。</param>
+    /// <param name="instigatorGuilty">发射者是否负有责任。</param>
     protected virtual void ImpactThing(Map map, Thing hitThing, Quaternion exactRotation, bool instigatorGuilty)
     {
         DamageInfo dinfo = new(DamageDef, DamageAmount, ArmorPenetration, exactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing, instigatorGuilty);
         dinfo.SetWeaponQuality(equipmentQuality);
         hitThing.TakeDamage(dinfo).AssociateWithLog(sharedBattleLogEntry);
     }
+
+    /// <summary>
+    /// 处理弹丸命中<see cref="Pawn"/>时的效果，供子类重写。
+    /// </summary>
+    /// <param name="map">命中的地图。</param>
+    /// <param name="hitPawn">被命中的<see cref="Pawn"/>。</param>
     protected virtual void ImpactPawn(Map map, Pawn hitPawn)
     {
         hitPawn.stances?.stagger.Notify_BulletImpact(this);

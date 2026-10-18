@@ -8,12 +8,14 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class Thought_SituationalGiveHediff : Thought_Situational
 {
+    /// <inheritdoc/>
     protected override void Notify_BecameActive()
     {
         base.Notify_BecameActive();
         pawn.health.AddHediff(def.hediff);
     }
 
+    /// <inheritdoc/>
     protected override void Notify_BecameInactive()
     {
         base.Notify_BecameInactive();

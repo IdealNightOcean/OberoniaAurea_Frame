@@ -13,9 +13,19 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_ChoiceLetter : QuestNode
 {
+    /// <summary>
+    /// 默认部件类型。
+    /// </summary>
     protected static Type defaultPartClass = typeof(QuestPart_ChoiceLetter);
 
+    /// <summary>
+    /// 使用的部件类型。
+    /// </summary>
     public SlateRef<Type> partClass = defaultPartClass;
+
+    /// <summary>
+    /// 最终的部件类型。
+    /// </summary>
     protected virtual Type PartClass
     {
         get
@@ -24,25 +34,66 @@ public class QuestNode_ChoiceLetter : QuestNode
         }
     }
 
+    /// <summary>
+    /// 接收信件的信号。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> inSignal;
+
+    /// <summary>
+    /// 关联派系。
+    /// </summary>
     public SlateRef<Faction> relatedFaction;
+
+    /// <summary>
+    /// 信件定义。
+    /// </summary>
     public SlateRef<LetterDef> letterDef;
 
+    /// <summary>
+    /// 信件标题。
+    /// </summary>
     public SlateRef<string> label;
+
+    /// <summary>
+    /// 信件正文。
+    /// </summary>
     public SlateRef<string> text;
 
+    /// <summary>
+    /// 标题语法规则包。
+    /// </summary>
     public SlateRef<RulePack> labelRules;
+
+    /// <summary>
+    /// 正文语法规则包。
+    /// </summary>
     public SlateRef<RulePack> textRules;
 
+    /// <summary>
+    /// 信件延迟送达的刻数。
+    /// </summary>
     public SlateRef<int> delayTicks;
 
+    /// <summary>
+    /// 定位目标中是否过滤已死亡角色。
+    /// </summary>
     public SlateRef<bool> filterDeadPawnsFromLookTargets;
+
+    /// <summary>
+    /// 信件定位目标。
+    /// </summary>
     public SlateRef<IEnumerable<object>> lookTargets;
+
+    /// <summary>
+    /// 信号监听模式。
+    /// </summary>
     public SlateRef<QuestPart.SignalListenMode?> signalListenMode;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate) => true;
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -77,20 +128,54 @@ public class QuestNode_ChoiceLetter : QuestNode
 /// </summary>
 public class QuestPart_ChoiceLetter : QuestPart
 {
+    /// <summary>
+    /// 根符号。
+    /// </summary>
     protected const string RootSymbol = "root";
 
+    /// <summary>
+    /// 触发信件生成的信号。
+    /// </summary>
     public string InSignal;
 
+    /// <summary>
+    /// 信件原始标题。
+    /// </summary>
     public string RawLabel;
+
+    /// <summary>
+    /// 信件原始正文。
+    /// </summary>
     public string RawText;
+
+    /// <summary>
+    /// 信件定义。
+    /// </summary>
     public LetterDef LetterDef;
 
+    /// <summary>
+    /// 信件延迟送达的刻数。
+    /// </summary>
     public int DelayTicks;
 
+    /// <summary>
+    /// 是否从信号中获取定位目标。
+    /// </summary>
     public bool GetLookTargetsFromSignal;
+
+    /// <summary>
+    /// 信件定位目标。
+    /// </summary>
     public LookTargets LookTargets;
+
+    /// <summary>
+    /// 关联派系。
+    /// </summary>
     public Faction RelatedFaction;
 
+    /// <summary>
+    /// 定位目标中是否过滤已死亡角色。
+    /// </summary>
     public bool FilterDeadPawnsFromLookTargets;
 
     /// <summary>
@@ -109,6 +194,7 @@ public class QuestPart_ChoiceLetter : QuestPart
         }, QuestGenUtility.MergeRules(textRules, text, RootSymbol));
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();
@@ -127,6 +213,7 @@ public class QuestPart_ChoiceLetter : QuestPart
         Scribe_Values.Look(ref FilterDeadPawnsFromLookTargets, nameof(FilterDeadPawnsFromLookTargets), defaultValue: false);
     }
 
+    /// <inheritdoc/>
     public override void Cleanup()
     {
         base.Cleanup();
@@ -140,6 +227,7 @@ public class QuestPart_ChoiceLetter : QuestPart
         RelatedFaction = null;
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<GlobalTargetInfo> QuestLookTargets
     {
         get
@@ -159,6 +247,7 @@ public class QuestPart_ChoiceLetter : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Faction> InvolvedFactions
     {
         get
@@ -174,6 +263,7 @@ public class QuestPart_ChoiceLetter : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void Notify_FactionRemoved(Faction faction)
     {
         if (RelatedFaction == faction)
@@ -182,6 +272,7 @@ public class QuestPart_ChoiceLetter : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         if (signal.tag != InSignal)
@@ -237,5 +328,10 @@ public class QuestPart_ChoiceLetter : QuestPart
         }
     }
 
+    /// <summary>
+    /// 生成信件后的回调。
+    /// </summary>
+    /// <param name="choiceLetter">生成的信件。</param>
+    /// <param name="letterValid">信件是否有效。</param>
     protected virtual void PostGenerateLetter(ChoiceLetter choiceLetter, out bool letterValid) { letterValid = true; }
 }

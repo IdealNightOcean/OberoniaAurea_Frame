@@ -12,10 +12,22 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_Root_RefugeeBase : QuestNode
 {
+    /// <summary>
+    /// Slate 键：是否为主要派系。 
+    /// </summary>
     protected const string IsMainFactionSlate = "isMainFaction";
+    /// <summary>
+    /// Slate 键：独特任务描述。 
+    /// </summary>
     protected const string UniqueQuestDescSlate = "uniqueQuestDesc";
+    /// <summary>
+    /// Slate 键：独特离开信件。 
+    /// </summary>
     protected const string UniqueLeavingLetterSlate = "uniqueLeavingLetter";
 
+    /// <summary>
+    /// 敌对派系敌对者角色的生成参数。 
+    /// </summary>
     protected static readonly QuestGen_Pawns.GetPawnParms FactionOpponentPawnParams = new()
     {
         mustBeWorldPawn = true,
@@ -23,47 +35,112 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         mustBeNonHostileToPlayer = true
     };
 
+    /// <summary>
+    /// 难民任务参数类，承载任务运行所需的各种可配置数据。 
+    /// </summary>
     protected sealed class QuestParameter
     {
+        /// <summary>
+        /// 是否允许袭击殖民地。 
+        /// </summary>
         public bool allowAssaultColony = true;
+        /// <summary>
+        /// 是否允许离开。 
+        /// </summary>
         public bool allowLeave = true;
+        /// <summary>
+        /// 是否允许不良想法。 
+        /// </summary>
         public bool allowBadThought = true;
+        /// <summary>
+        /// 是否允许加入邀请。 
+        /// </summary>
         public bool allowJoinOffer = true;
+        /// <summary>
+        /// 是否允许未来奖励。 
+        /// </summary>
         public bool allowFutureReward = true;
 
         private int lodgerCount = 1;
         private int childCount = 0;
+        /// <summary>
+        /// 寄宿者总数，最小为 1。 
+        /// </summary>
         public int LodgerCount { get { return lodgerCount; } set { lodgerCount = Mathf.Max(1, value); } }
+        /// <summary>
+        /// 儿童数量，限制在 0 到寄宿者总数之间。 
+        /// </summary>
         public int ChildCount { get { return childCount; } set { childCount = Mathf.Clamp(value, 0, lodgerCount); } }
 
+        /// <summary>
+        /// 任务持续的时间刻数。 
+        /// </summary>
         public int questDurationTicks = 60000;
+        /// <summary>
+        /// 到达延迟的时间刻数，小于等于 0 表示无延迟。 
+        /// </summary>
         public int arrivalDelayTicks = -1;
 
+        /// <summary>
+        /// 成功时获得的好感度。 
+        /// </summary>
         public int goodwillSuccess;
+        /// <summary>
+        /// 失败时损失的好感度。 
+        /// </summary>
         public int goodwillFailure;
+        /// <summary>
+        /// 奖励价值的浮动范围。 
+        /// </summary>
         public FloatRange rewardValueRange;
 
+        /// <summary>
+        /// 任务地图。 
+        /// </summary>
         public Map map;
+        /// <summary>
+        /// 任务派系。 
+        /// </summary>
         public Faction faction;
 
+        /// <summary>
+        /// 任务角色列表。 
+        /// </summary>
         public List<Pawn> pawns;
 
+        /// <summary>
+        /// 构造函数，从 Slate 或默认获取地图。 
+        /// </summary>
         public QuestParameter()
         {
             map = QuestGen.slate.Get<Map>("map") ?? QuestGen_Get.GetMap();
         }
 
+        /// <summary>
+        /// 构造函数，指定任务地图。 
+        /// </summary>
+        /// <param name="map">任务地图。</param>
         public QuestParameter(Map map)
         {
             this.map = map;
         }
     }
 
+    /// <summary>
+    /// 当前难民任务参数。 
+    /// </summary>
     protected QuestParameter questParameter;
 
+    /// <summary>
+    /// 固定的角色种类。 
+    /// </summary>
     protected virtual PawnKindDef FixedPawnKind => PawnKindDefOf.Refugee;
+    /// <summary>
+    /// 要添加的想法。 
+    /// </summary>
     protected virtual ThoughtDef ThoughtToAdd => null;
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Quest quest = QuestGen.quest;
@@ -149,17 +226,29 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         SetQuestEndCompCommon(questPart_RefugeeInteractions);
     }
 
+    /// <summary>
+    /// 初始化任务参数。 
+    /// </summary>
+    /// <returns>初始化是否成功。</returns>
     protected virtual bool InitQuestParameter()
     {
         questParameter = new QuestParameter();
         return true;
     }
 
+    /// <summary>
+    /// 清空任务参数。 
+    /// </summary>
     protected virtual void ClearQuestParameter()
     {
         questParameter = null;
     }
 
+    /// <summary>
+    /// 生成寄宿者角色列表。 
+    /// </summary>
+    /// <param name="lodgerRecruitedSignal">寄宿者被招募的信号。</param>
+    /// <returns>生成的寄宿者角色列表。</returns>
     protected virtual List<Pawn> GeneratePawns(string lodgerRecruitedSignal = null)
     {
         Quest quest = QuestGen.quest;
@@ -185,6 +274,11 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         return pawns;
     }
 
+    /// <summary>
+    /// 角色生成后的后续处理，例如添加想法或加入邀请。 
+    /// </summary>
+    /// <param name="pawn">已生成的角色。</param>
+    /// <param name="lodgerRecruitedSignal">寄宿者被招募的信号。</param>
     protected virtual void PostPawnGenerated(Pawn pawn, string lodgerRecruitedSignal)
     {
         Quest quest = QuestGen.quest;
@@ -223,6 +317,10 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         }
     }
 
+    /// <summary>
+    /// 处理寄宿者到达，可带延迟。 
+    /// </summary>
+    /// <param name="lodgerArrivalSignal">寄宿者到达的信号。</param>
     protected virtual void PawnArrival(string lodgerArrivalSignal)
     {
         Quest quest = QuestGen.quest;
@@ -250,6 +348,9 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         }
     }
 
+    /// <summary>
+    /// 设置任务奖励选择。 
+    /// </summary>
     protected void SetQuestAward()
     {
         QuestPart_Choice questPart_Choice = QuestGen.quest.RewardChoice();
@@ -284,8 +385,16 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         questPart_Choice.choices.Add(choice);
     }
 
+    /// <summary>
+    /// 派生类可重写以向奖励选择添加自定义奖励。 
+    /// </summary>
+    /// <param name="choice">奖励选择。</param>
     protected virtual void AddQuestAward(QuestPart_Choice.Choice choice) { }
 
+    /// <summary>
+    /// 获取或生成难民派系。 
+    /// </summary>
+    /// <returns>生成或获取到的派系。</returns>
     protected virtual Faction GetOrGenerateFaction()
     {
         List<FactionRelation> list = [];
@@ -310,8 +419,20 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         return faction;
     }
 
+    /// <summary>
+    /// 设置任务结束组件相关信号。 
+    /// </summary>
+    /// <param name="questPart_Interactions">难民交互任务组件。</param>
+    /// <param name="failSignal">任务失败信号。</param>
+    /// <param name="delayFailSignal">迟延失败信号。</param>
+    /// <param name="successSignal">任务成功信号。</param>
     protected virtual void SetQuestEndComp(QuestPart_OARefugeeInteractions questPart_Interactions, string failSignal, string delayFailSignal, string successSignal) { }
 
+    /// <summary>
+    /// 设置寄宿者离开组件。 
+    /// </summary>
+    /// <param name="lodgerArrivalSignal">寄宿者到达的信号。</param>
+    /// <param name="inSignalRemovePawn">移除角色的信号。</param>
     protected virtual void SetPawnsLeaveComp(string lodgerArrivalSignal, string inSignalRemovePawn)
     {
         if (questParameter.questDurationTicks > 0)
@@ -320,6 +441,12 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         }
     }
 
+    /// <summary>
+    /// 设置默认的寄宿者延迟离开组件。 
+    /// </summary>
+    /// <param name="lodgerArrivalSignal">寄宿者到达的信号。</param>
+    /// <param name="inSignalDisable">禁用离开的信号，可为空。</param>
+    /// <param name="inSignalRemovePawn">移除角色的信号。</param>
     protected void DefaultDelayLeaveComp(string lodgerArrivalSignal, string inSignalDisable, string inSignalRemovePawn)
     {
         Quest quest = QuestGen.quest;
@@ -341,6 +468,10 @@ public class QuestNode_Root_RefugeeBase : QuestNode
             debugLabel: "GuestsDepartsDelay");
     }
 
+    /// <summary>
+    /// 设置任务结束时的各类信件。 
+    /// </summary>
+    /// <param name="questPart_RefugeeInteractions">难民交互任务组件。</param>
     protected void SetQuestEndLetters(QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)
     {
         Quest quest = QuestGen.quest;
@@ -375,6 +506,10 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         quest.Letter(letterDef: LetterDefOf.NegativeEvent, inSignal: questPart_RefugeeInteractions.outSignalLast_Arrested, text: "[lodgersAllArrestedLetterText]", label: "[lodgersAllArrestedLetterLabel]");
     }
 
+    /// <summary>
+    /// 设置任务结束组件的通用逻辑，包括失败、迟延失败与成功信号。 
+    /// </summary>
+    /// <param name="questPart_RefugeeInteractions">难民交互任务组件。</param>
     protected void SetQuestEndCompCommon(QuestPart_OARefugeeInteractions questPart_RefugeeInteractions)
     {
         Quest quest = QuestGen.quest;
@@ -447,5 +582,6 @@ public class QuestNode_Root_RefugeeBase : QuestNode
         }, inSignal: questPart_RefugeeInteractions.outSignalLast_LeftMapAllHealthy);
     }
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate) => QuestGen_Get.GetMap() is not null;
 }

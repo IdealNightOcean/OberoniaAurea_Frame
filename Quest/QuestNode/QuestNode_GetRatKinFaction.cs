@@ -8,6 +8,7 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_GetRatkinFaction : QuestNode_GetFaction
 {
+    /// <inheritdoc/>
     protected override bool IsGoodFaction(Faction faction, Slate slate)
     {
         return faction.IsRatkinFaction() && base.IsGoodFaction(faction, slate);

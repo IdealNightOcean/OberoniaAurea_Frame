@@ -10,13 +10,18 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public abstract class JobDriver_TalkWithAtOnce : JobDriver
 {
+    /// <summary>
+    /// 对话对象（<see cref="Pawn"/>）。
+    /// </summary>
     protected Pawn TalkWith => TargetPawnA;
 
+    /// <inheritdoc/>
     public override bool TryMakePreToilReservations(bool errorOnFailed)
     {
         return pawn.Reserve(TalkWith, job, 1, -1, null, errorOnFailed);
     }
 
+    /// <inheritdoc/>
     protected override IEnumerable<Toil> MakeNewToils()
     {
         this.FailOnDespawnedOrNull(TargetIndex.A);
@@ -33,6 +38,11 @@ public abstract class JobDriver_TalkWithAtOnce : JobDriver
         yield return talk;
     }
 
+    /// <summary>
+    /// 执行对话操作。
+    /// </summary>
+    /// <param name="talker">发起对话的<see cref="Pawn"/>。</param>
+    /// <param name="talkWith">对话对象（<see cref="Pawn"/>）。</param>
     protected abstract void TalkAction(Pawn talker, Pawn talkWith);
 
     /// <summary>

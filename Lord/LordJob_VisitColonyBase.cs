@@ -12,15 +12,34 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
 {
+    /// <summary>
+    /// 访问殖民地的派系。
+    /// </summary>
     protected Faction faction;
+    /// <summary>
+    /// 访问期间的停留位置。
+    /// </summary>
     protected IntVec3 chillSpot;
+    /// <summary>
+    /// 访问持续的世界刻度数。
+    /// </summary>
     protected int? durationTicks;
+    /// <summary>
+    /// 访问期间馈赠的礼物列表。
+    /// </summary>
     public List<Thing> gifts;
 
+    /// <summary>
+    /// 是否已被遣散。
+    /// </summary>
     protected bool dismissed;
 
+    /// <inheritdoc/>
     public override bool ShouldExistWithoutPawns => true;
 
+    /// <summary>
+    /// 初始化访问殖民地的基础职责。
+    /// </summary>
     public LordJob_VisitColonyBase() { }
 
     /// <summary>
@@ -41,6 +60,7 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
         return Enumerable.Empty<FloatMenuOption>();
     }
 
+    /// <inheritdoc/>
     public override StateGraph CreateGraph()
     {
         StateGraph stateGraph = new();
@@ -143,6 +163,7 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
         return stateGraph;
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         Scribe_References.Look(ref faction, nameof(faction));
@@ -155,115 +176,4 @@ public class LordJob_VisitColonyBase : LordJob, ILordFloatMenuProvider
             gifts?.RemoveAll(t => t is null);
         }
     }
-
-    /*
-    private StateGraph CreateGraphOld()
-    {
-        StateGraph stateGraph = new();
-        LordToil_TravelWithInteraction lordToil_Travel = new(chillSpot);
-        stateGraph.StartingToil = lordToil_Travel;
-        LordToil_DefendPoint lordToil_DefendOnTheSpot = new(canSatisfyLongNeeds: false);
-        stateGraph.AddToil(lordToil_DefendOnTheSpot);
-
-        Transition transition1 = new(lordToil_Travel, lordToil_DefendOnTheSpot);
-        transition1.AddTrigger(new Trigger_PawnHarmed());
-        transition1.AddPreAction(new TransitionAction_SetDefendLocalGroup());
-        transition1.AddPostAction(new TransitionAction_EndAllJobs());
-        stateGraph.AddTransition(transition1);
-
-        Transition transition2 = new(lordToil_DefendOnTheSpot, lordToil_Travel);
-        transition2.AddTrigger(new Trigger_TicksPassedWithoutHarm(1200));
-        transition2.AddPreAction(new TransitionAction_EnsureHaveExitDestination());
-        stateGraph.AddTransition(transition2);
-
-        LordToil_DefendPointWithInteraction lordToil_DefendTargetPoint = new(chillSpot);
-        stateGraph.AddToil(lordToil_DefendTargetPoint);
-        LordToil_TakeWoundedGuest lordToil_TakeWoundedGuest = new();
-        stateGraph.AddToil(lordToil_TakeWoundedGuest);
-
-        LordToil_ExitMap lordToil_ExitMap = new(LocomotionUrgency.Sprint, canDig: true);
-        stateGraph.AddToil(lordToil_ExitMap);
-
-        Transition transition3 = new(lordToil_Travel, lordToil_ExitMap);
-        transition3.AddSources(lordToil_DefendTargetPoint);
-        transition3.AddTrigger(new Trigger_PawnExperiencingDangerousTemperatures());
-        if (faction is not null)
-        {
-            transition3.AddPreAction(new TransitionAction_Message("MessageVisitorsDangerousTemperature".Translate(faction.def.pawnsPlural.CapitalizeFirst(), faction.Name)));
-        }
-        transition3.AddPreAction(new TransitionAction_EnsureHaveExitDestination());
-        transition3.AddPostAction(new TransitionAction_EndAllJobs());
-        stateGraph.AddTransition(transition3);
-
-        Transition transition4 = new(lordToil_Travel, lordToil_ExitMap);
-        transition4.AddSources(lordToil_DefendTargetPoint);
-        transition4.AddTrigger(new Trigger_PawnExperiencingAnomalousWeather());
-        if (faction is not null)
-        {
-            transition4.AddPreAction(new TransitionAction_Message("MessageVisitorsAnomalousWeather".Translate(faction.def.pawnsPlural.CapitalizeFirst(), faction.Name)));
-        }
-        transition4.AddPreAction(new TransitionAction_EnsureHaveExitDestination());
-        transition4.AddPostAction(new TransitionAction_EndAllJobs());
-        stateGraph.AddTransition(transition4);
-
-        Transition transition5 = new(lordToil_Travel, lordToil_ExitMap);
-        transition5.AddSources(lordToil_DefendTargetPoint, lordToil_TakeWoundedGuest);
-        transition5.AddTrigger(new Trigger_PawnCannotReachMapEdge());
-        if (faction is not null)
-        {
-            transition5.AddPreAction(new TransitionAction_Message("MessageVisitorsTrappedLeaving".Translate(faction.def.pawnsPlural.CapitalizeFirst(), faction.Name)));
-        }
-        stateGraph.AddTransition(transition5);
-
-        Transition transition6 = new(lordToil_Travel, lordToil_DefendTargetPoint);
-        transition6.AddTrigger(new Trigger_Memo("TravelArrived"));
-        stateGraph.AddTransition(transition6);
-        if (faction is not null)
-        {
-            Transition transition7 = new(lordToil_DefendTargetPoint, lordToil_TakeWoundedGuest);
-            transition7.AddTrigger(new Trigger_WoundedGuestPresent());
-            transition7.AddPreAction(new TransitionAction_Message("MessageVisitorsTakingWounded".Translate(faction.def.pawnsPlural.CapitalizeFirst(), faction.Name)));
-            stateGraph.AddTransition(transition7);
-        }
-
-        Transition transition8 = new(lordToil_DefendTargetPoint, lordToil_ExitMap);
-        transition8.AddSources(lordToil_TakeWoundedGuest, lordToil_Travel);
-        transition8.AddTrigger(new Trigger_BecamePlayerEnemy());
-        transition8.AddPreAction(new TransitionAction_SetDefendLocalGroup());
-        transition8.AddPostAction(new TransitionAction_WakeAll());
-        transition8.AddPostAction(new TransitionAction_EndAllJobs());
-        stateGraph.AddTransition(transition8);
-
-        Transition transition9 = new(lordToil_DefendTargetPoint, lordToil_ExitMap);
-        transition9.AddSources(lordToil_TakeWoundedGuest, lordToil_Travel);
-        transition9.AddTrigger(new Trigger_Custom(s => s.type == TriggerSignalType.Tick && dismissed));
-        transition9.AddPostAction(new TransitionAction_WakeAll());
-        transition9.AddPostAction(new TransitionAction_EndAllJobs());
-        stateGraph.AddTransition(transition9);
-
-        Transition transition10 = new(lordToil_DefendTargetPoint, lordToil_ExitMap);
-        int tickLimit = (!DebugSettings.instantVisitorsGift || faction is null) ? (durationTicks ?? Rand.Range(8000, 22000)) : 0;
-        transition10.AddTrigger(new Trigger_TicksPassed(tickLimit));
-        if (faction is not null)
-        {
-            transition10.AddPreAction(new TransitionAction_Message("VisitorsLeaving".Translate(faction.Name)));
-        }
-        if (gifts is not null)
-        {
-            transition10.AddPreAction(new TransitionAction_GiveGift
-            {
-                gifts = gifts
-            });
-        }
-        else
-        {
-            transition10.AddPreAction(new TransitionAction_CheckGiveGift());
-        }
-        transition10.AddPostAction(new TransitionAction_WakeAll());
-        transition10.AddPreAction(new TransitionAction_EnsureHaveExitDestination());
-        stateGraph.AddTransition(transition10);
-
-        return stateGraph;
-    }
-    */
 }

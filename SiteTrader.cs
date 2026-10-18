@@ -1,6 +1,5 @@
 using RimWorld;
 using RimWorld.Planet;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Verse;
@@ -12,32 +11,75 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolder
 {
+    /// <summary>
+    /// 现有的名称临时列表，用于生成唯一商人名称。
+    /// </summary>
     protected static readonly List<string> TempExtantNames = [];
 
+    /// <summary>
+    /// 商人所属派系。
+    /// </summary>
     protected Faction faction;
+    /// <summary>
+    /// 商人名称。
+    /// </summary>
     public string traderName = "Nameless";
+    /// <summary>
+    /// 商人加载标识号。
+    /// </summary>
     protected int loadID = -1;
+    /// <summary>
+    /// 商人类型定义。
+    /// </summary>
     public TraderKindDef traderKind;
+    /// <summary>
+    /// 商人持有的物品所有者。
+    /// </summary>
     protected ThingOwner things;
+    /// <summary>
+    /// 保存的临时小人列表。
+    /// </summary>
     protected List<Pawn> tmpSavedPawns = [];
+    /// <summary>
+    /// 关联的世界对象。
+    /// </summary>
     protected WorldObject associateWorldObject;
+    /// <summary>
+    /// 物品刷新间隔（游戏刻）。
+    /// </summary>
     protected int refreshInterval = -1;
+    /// <summary>
+    /// 上次刷新物品的游戏时刻。
+    /// </summary>
     protected int lastRefreshTick = -1;
+    /// <summary>
+    /// 随机价格因子种子。
+    /// </summary>
     protected int randomPriceFactorSeed = -1;
 
+    /// <inheritdoc/>
     public Faction Faction => faction;
+    /// <inheritdoc/>
     public virtual string FullTitle => traderName + " (" + traderKind.label + ")";
+    /// <inheritdoc/>
     public TraderKindDef TraderKind => traderKind;
+    /// <inheritdoc/>
     public int Silver => CountHeldOf(ThingDefOf.Silver);
+    /// <inheritdoc/>
     public int RandomPriceFactorSeed => randomPriceFactorSeed;
+    /// <inheritdoc/>
     public string TraderName
     {
         get => traderName;
         set => traderName = value;
     }
+    /// <inheritdoc/>
     public bool CanTradeNow => associateWorldObject is not null;
+    /// <inheritdoc/>
     public float TradePriceImprovementOffsetForPlayer => 0f;
+    /// <inheritdoc/>
     public TradeCurrency TradeCurrency => traderKind.tradeCurrency;
+    /// <inheritdoc/>
     public IThingHolder ParentHolder
     {
         get
@@ -56,6 +98,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
     {
         return FullTitle;
     }
+    /// <inheritdoc/>
     public IEnumerable<Thing> Goods
     {
         get
@@ -67,11 +110,19 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         }
     }
 
+    /// <summary>
+    /// 默认构造函数。
+    /// </summary>
     public SiteTrader() { }
 
     /// <summary>
     /// 使用商人类型（<see cref="TraderKindDef"/>）、关联世界对象（<see cref="WorldObject"/>）和派系（<see cref="RimWorld.Faction"/>）初始化商店。
     /// </summary>
+    /// <param name="traderKind">商人类型定义。</param>
+    /// <param name="worldObject">关联的世界对象。</param>
+    /// <param name="faction">商人所属派系，可为空。</param>
+    /// <param name="rulePack">商人名称生成规则，可为空。</param>
+    /// <param name="refreshInterval">物品刷新间隔（游戏刻），为 -1 时不自动刷新。</param>
     public SiteTrader(TraderKindDef traderKind, WorldObject worldObject, Faction faction = null, RulePackDef rulePack = null, int refreshInterval = -1)
     {
         this.traderKind = traderKind;
@@ -99,6 +150,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
     /// <summary>
     /// 获取商人愿意购买的殖民地物品。
     /// </summary>
+    /// <param name="playerNegotiator">用于交易谈判的玩家小人。</param>
     public IEnumerable<Thing> ColonyThingsWillingToBuy(Pawn playerNegotiator)
     {
         Caravan caravan = playerNegotiator.GetCaravan();
@@ -119,6 +171,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
     /// <summary>
     /// 每隔指定时间间隔执行刷新检查。
     /// </summary>
+    /// <param name="delta">距上次调用的时间间隔。</param>
     public void TickInterval(int delta)
     {
         if (refreshInterval > 0 && Find.TickManager.TicksGame > lastRefreshTick)
@@ -135,6 +188,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
     /// <summary>
     /// 在指定地块生成商店物品。
     /// </summary>
+    /// <param name="tile">生成物品的地块。</param>
     public void GenerateThings(PlanetTile tile)
     {
         ThingSetMakerParams parms = default;
@@ -159,6 +213,7 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
     /// <summary>
     /// 在指定地块刷新商店物品。
     /// </summary>
+    /// <param name="tile">刷新物品的地块。</param>
     public void RefreshThings(PlanetTile tile)
     {
         lastRefreshTick = Find.TickManager.TicksGame;
@@ -166,9 +221,6 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         tmpSavedPawns.Clear();
         GenerateThings(tile);
     }
-
-    [Obsolete("曾经错误的命名，应使用 Destroy()")]
-    public void Destory() => Destroy();
 
     /// <summary>
     /// 销毁商店并清理物品。
@@ -184,16 +236,22 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
     /// </summary>
     public string GetCallLabel() => traderName + " (" + traderKind.label + ")";
 
+    /// <inheritdoc/>
     protected AcceptanceReport CanCommunicateWith(Pawn negotiator) => negotiator.CanTradeWith(faction, TraderKind).Accepted;
 
     /// <summary>
     /// 计算持有指定物品的数量。
     /// </summary>
+    /// <param name="thingDef">要计数的物品定义。</param>
+    /// <param name="stuffDef">要计数的材料定义，可为空。</param>
     public int CountHeldOf(ThingDef thingDef, ThingDef stuffDef = null) => HeldThingMatching(thingDef, stuffDef)?.stackCount ?? 0;
 
     /// <summary>
     /// 将物品出售给商人。
     /// </summary>
+    /// <param name="toGive">要出售的物品。</param>
+    /// <param name="countToGive">要出售的数量。</param>
+    /// <param name="playerNegotiator">用于交易谈判的玩家小人。</param>
     public void GiveSoldThingToTrader(Thing toGive, int countToGive, Pawn playerNegotiator)
     {
         Caravan caravan = playerNegotiator.GetCaravan();
@@ -213,6 +271,9 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
     /// <summary>
     /// 将物品出售给玩家。
     /// </summary>
+    /// <param name="toGive">要出售的物品。</param>
+    /// <param name="countToGive">要出售的数量。</param>
+    /// <param name="playerNegotiator">用于交易谈判的玩家小人。</param>
     public void GiveSoldThingToPlayer(Thing toGive, int countToGive, Pawn playerNegotiator)
     {
         Caravan caravan = playerNegotiator.GetCaravan();
@@ -236,6 +297,12 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         }
     }
 
+    /// <summary>
+    /// 查找持有中与指定物品定义和材料匹配的物品。
+    /// </summary>
+    /// <param name="thingDef">要匹配的物品定义。</param>
+    /// <param name="stuffDef">要匹配的材料定义。</param>
+    /// <returns>匹配的物品，未找到时返回空。</returns>
     protected Thing HeldThingMatching(ThingDef thingDef, ThingDef stuffDef)
     {
         for (int i = 0; i < things.Count; i++)
@@ -251,6 +318,9 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
     /// <summary>
     /// 修改持有物品的数量。
     /// </summary>
+    /// <param name="thingDef">要修改数量的物品定义。</param>
+    /// <param name="stuffDef">要修改数量的材料定义。</param>
+    /// <param name="count">要增加到数量的增量值。</param>
     public void ChangeCountHeldOf(ThingDef thingDef, ThingDef stuffDef, int count)
     {
         Thing thing = HeldThingMatching(thingDef, stuffDef);
@@ -261,12 +331,18 @@ public class SiteTrader : ITrader, IThingHolder, IExposable, IPawnRetentionHolde
         thing.stackCount += count;
     }
 
+    /// <inheritdoc/>
     public override string ToString() => FullTitle;
 
+    /// <inheritdoc/>
     public ThingOwner GetDirectlyHeldThings() => things;
 
+    /// <inheritdoc/>
     public void GetChildHolders(List<IThingHolder> outChildren) => ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 
+    /// <summary>
+    /// 序列化/反序列化此对象需持久保存的字段。
+    /// </summary>
     public void ExposeData()
     {
         if (Scribe.mode == LoadSaveMode.Saving)

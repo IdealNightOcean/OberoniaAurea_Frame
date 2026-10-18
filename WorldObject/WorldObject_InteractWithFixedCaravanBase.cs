@@ -10,28 +10,45 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_InteractiveBase, IFixedCaravanAssociate
 {
+    /// <summary>
+    /// 创建固定远行队时使用的世界对象定义。
+    /// </summary>
     protected virtual WorldObjectDef FixedCaravanDef => OAFrameDefOf.OAFrame_FixedCaravan;
+    /// <inheritdoc/>
     public virtual string FixedCaravanName => null;
 
+    /// <summary>
+    /// 是否正在进行交互工作。
+    /// </summary>
     protected bool isWorking;
     /// <summary>
     /// 是否正在进行交互工作。
     /// </summary>
     public bool IsWorking => isWorking;
 
+    /// <summary>
+    /// 剩余的工作 tick 数。
+    /// </summary>
     protected int ticksRemaining;
+    /// <summary>
+    /// 是否请求中断当前工作。
+    /// </summary>
     [Unsaved] protected bool interrupt;
 
+    /// <summary>
+    /// 关联的固定远行队（<see cref="FixedCaravan"/>）。
+    /// </summary>
     protected FixedCaravan associatedFixedCaravan;
     /// <summary>
     /// 获取关联的固定远行队（<see cref="FixedCaravan"/>）。
     /// </summary>
     public FixedCaravan AssociatedFixedCaravan => associatedFixedCaravan;
     /// <summary>
-    /// 获取所需时间。
+    /// 获取完成交互工作所需的时间（tick）。
     /// </summary>
     public virtual int TicksNeeded => 30000;
 
+    /// <inheritdoc/>
     public override void Notify_CaravanArrived(Caravan caravan)
     {
         if (isWorking)
@@ -55,6 +72,10 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         }
     }
 
+    /// <summary>
+    /// 工作间隔的 tick 处理。
+    /// </summary>
+    /// <param name="delta">间隔 tick 数</param>
     protected virtual void WorkTickInterval(int delta)
     {
         if ((ticksRemaining -= delta) <= 0)
@@ -112,8 +133,17 @@ public abstract class WorldObject_InteractWithFixedCaravanBase : WorldObject_Int
         Reset();
     }
 
+    /// <summary>
+    /// 完成工作时的处理（由子类实现）。
+    /// </summary>
     protected abstract void FinishWork();
+    /// <summary>
+    /// 工作中断时的处理（由子类实现）。
+    /// </summary>
     protected abstract void InterruptWork();
+    /// <summary>
+    /// 重置工作状态。
+    /// </summary>
     protected virtual void Reset()
     {
         isWorking = false;

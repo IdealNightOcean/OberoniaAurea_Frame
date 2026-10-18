@@ -12,7 +12,11 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class MapParent_Enterable : MapParent, IQuestAssociate
 {
+    /// <summary>
+    /// 关联的任务。
+    /// </summary>
     protected Quest quest;
+
     /// <summary>
     /// 获取关联任务。
     /// </summary>
@@ -21,6 +25,7 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
     /// <summary>
     /// 设置关联任务。
     /// </summary>
+    /// <param name="quest">要关联的任务。</param>
     public void SetAssociatedQuest(Quest quest)
     {
         this.quest = quest;
@@ -29,6 +34,7 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
     /// <summary>
     /// 检查是否可以进入地图。
     /// </summary>
+    /// <param name="pods">请求进入的载具持有者集合。</param>
     public virtual FloatMenuAcceptanceReport CanEnterMap(IEnumerable<IThingHolder> pods)
     {
         if (this.EnterCooldownBlocksEntering())
@@ -41,6 +47,7 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
     /// <summary>
     /// 检查远行队是否可以进入地图。
     /// </summary>
+    /// <param name="caravan">请求进入的远行队。</param>
     public virtual FloatMenuAcceptanceReport CanEnterMap(Caravan caravan)
     {
         if (this.EnterCooldownBlocksEntering())
@@ -50,6 +57,7 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         return true;
     }
 
+    /// <inheritdoc/>
     public override bool ShouldRemoveMapNow(out bool alsoRemoveWorldObject)
     {
         alsoRemoveWorldObject = false;
@@ -75,6 +83,7 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         return true;
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Gizmo> GetGizmos()
     {
         foreach (Gizmo gizmo in base.GetGizmos())
@@ -87,6 +96,7 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<FloatMenuOption> GetFloatMenuOptions(Caravan caravan)
     {
         foreach (FloatMenuOption floatMenuOption in base.GetFloatMenuOptions(caravan))
@@ -100,6 +110,7 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<FloatMenuOption> GetTransportersFloatMenuOptions(IEnumerable<IThingHolder> pods, Action<PlanetTile, TransportersArrivalAction> launchAction)
     {
         foreach (FloatMenuOption transportersFloatMenuOption in base.GetTransportersFloatMenuOptions(pods, launchAction))
@@ -112,6 +123,7 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<FloatMenuOption> GetShuttleFloatMenuOptions(IEnumerable<IThingHolder> pods, Action<PlanetTile, TransportersArrivalAction> launchAction)
     {
         foreach (FloatMenuOption shuttleFloatMenuOption in base.GetShuttleFloatMenuOptions(pods, launchAction))
@@ -124,6 +136,9 @@ public class MapParent_Enterable : MapParent, IQuestAssociate
         }
     }
 
+    /// <summary>
+    /// 序列化/反序列化此对象需持久保存的字段。
+    /// </summary>
     public override void ExposeData()
     {
         base.ExposeData();

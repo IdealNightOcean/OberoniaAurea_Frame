@@ -9,13 +9,29 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_GetDropSpot : QuestNode
 {
+    /// <summary>
+    /// 存储标签：找到的空投落点。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> storeAs;
+    /// <summary>
+    /// 是否优先使用交易点作为空投落点。
+    /// </summary>
     public SlateRef<bool> useTradeSpot;
+    /// <summary>
+    /// 是否优先靠近地图中心。
+    /// </summary>
     public SlateRef<bool> preferCenterClose;
+    /// <summary>
+    /// 是否优先靠近殖民地。
+    /// </summary>
     public SlateRef<bool> preferCloseColony;
+    /// <summary>
+    /// 落点距地图边缘的最小距离。
+    /// </summary>
     public SlateRef<float> minDistanceFromEdge;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         if (slate.Exists(storeAs.GetValue(slate)))
@@ -30,6 +46,7 @@ public class QuestNode_GetDropSpot : QuestNode
         return false;
     }
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;

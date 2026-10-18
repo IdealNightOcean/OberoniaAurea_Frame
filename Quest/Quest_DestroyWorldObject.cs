@@ -11,16 +11,30 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_DestroyWorldObject : QuestNode
 {
+    /// <summary>
+    /// 输入信号。 
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> inSignal;
 
+    /// <summary>
+    /// 需要销毁的世界对象（<see cref="WorldObject"/>）集合。 
+    /// </summary>
     public SlateRef<IEnumerable<WorldObject>> worldObjects;
 
+    /// <summary>
+    /// 是否在清理时销毁。 
+    /// </summary>
     public SlateRef<bool> destroyOnCleanup = true;
+    /// <summary>
+    /// 是否仅在清理时销毁。 
+    /// </summary>
     public SlateRef<bool> onlyDestroyOnCleanup = false;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate) => true;
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -40,13 +54,26 @@ public class QuestNode_DestroyWorldObject : QuestNode
 /// </summary>
 public class QuestPart_DestroyWorldObject : QuestPart
 {
+    /// <summary>
+    /// 是否在清理时销毁。 
+    /// </summary>
     public bool DestroyOnCleanup = true;
+    /// <summary>
+    /// 是否仅在清理时销毁。 
+    /// </summary>
     public bool OnlyDestroyOnCleanup = false;
 
+    /// <summary>
+    /// 输入信号。 
+    /// </summary>
     public string InSignal;
 
+    /// <summary>
+    /// 需要销毁的世界对象（<see cref="WorldObject"/>）列表。 
+    /// </summary>
     public List<WorldObject> worldObjects;
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();
@@ -62,6 +89,7 @@ public class QuestPart_DestroyWorldObject : QuestPart
     }
 
 
+    /// <inheritdoc/>
     public override void Cleanup()
     {
         base.Cleanup();
@@ -77,6 +105,7 @@ public class QuestPart_DestroyWorldObject : QuestPart
         worldObjects = null;
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<GlobalTargetInfo> QuestLookTargets
     {
         get
@@ -97,8 +126,9 @@ public class QuestPart_DestroyWorldObject : QuestPart
     }
 
     /// <summary>
-    /// 初始化世界对象（<see cref="WorldObject"/>）列表
+    /// 初始化世界对象（<see cref="WorldObject"/>）列表。
     /// </summary>
+    /// <param name="worldObjects">需要初始化的世界对象集合。</param>
     public void InitWorldObjects(IEnumerable<WorldObject> worldObjects)
     {
         if (worldObjects is null)
@@ -113,6 +143,7 @@ public class QuestPart_DestroyWorldObject : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         base.Notify_QuestSignalReceived(signal);
@@ -129,6 +160,7 @@ public class QuestPart_DestroyWorldObject : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void AssignDebugData()
     {
         base.AssignDebugData();
@@ -144,8 +176,9 @@ public class QuestPart_DestroyWorldObject : QuestPart
     }
 
     /// <summary>
-    /// 尝试移除世界对象（<see cref="WorldObject"/>）
+    /// 尝试移除世界对象（<see cref="WorldObject"/>）。
     /// </summary>
+    /// <param name="worldObject">需要移除的世界对象。</param>
     public static void TryRemove(WorldObject worldObject)
     {
         if (worldObject is not null && worldObject.Spawned)

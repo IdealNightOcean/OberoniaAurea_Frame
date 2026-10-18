@@ -13,6 +13,7 @@ namespace OberoniaAurea_Frame;
 public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
 {
     private Material cachedMat;
+    /// <inheritdoc/>
     public override Material Material
     {
         get
@@ -21,21 +22,33 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
             return cachedMat;
         }
     }
+    /// <inheritdoc/>
     public override Color ExpandingIconColor => Faction.Color;
 
+    /// <summary>
+    /// 远行队自定义名称。
+    /// </summary>
     public string curName = null;
+    /// <inheritdoc/>
     public override string Label => curName ?? base.Label;
+    /// <inheritdoc/>
     public override bool HasName => !curName.NullOrEmpty();
 
+    /// <summary>
+    /// 远行队持有的<see cref="Pawn"/>容器。
+    /// </summary>
     protected ThingOwner<Pawn> pawns;
+
     /// <summary>
     /// 获取<see cref="Pawn"/>列表。
     /// </summary>
     public List<Pawn> PawnsListForReading => pawns.InnerListForReading;
+
     /// <summary>
     /// 获取<see cref="Pawn"/>数量。
     /// </summary>
     public int PawnsCount => pawns.Count;
+
     /// <summary>
     /// 获取智力水平为Humanlike的<see cref="Pawn"/>枚举
     /// </summary>
@@ -50,6 +63,7 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
             }
         }
     }
+
     /// <summary>
     /// 获取智力水平为Humanlike的<see cref="Pawn"/>数量
     /// </summary>
@@ -68,14 +82,32 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
     }
 
 
+    /// <summary>
+    /// 获取远行队持有的全部物品。
+    /// </summary>
     protected IEnumerable<Thing> AllItems => Utility.OAFrame_FixedCaravanUtility.AllInventoryItems(this);
 
+    /// <summary>
+    /// 技能总值是否已失效，需要重新计算。
+    /// </summary>
     protected bool skillsDirty = true;
+    /// <summary>
+    /// 缓存各类技能的总值。
+    /// </summary>
     protected readonly Dictionary<SkillDef, int> totalSkills = [];
 
+    /// <summary>
+    /// 关联的世界对象。
+    /// </summary>
     protected WorldObject associatedWorldObject;
+    /// <summary>
+    /// 关联的世界对象转换后的接口代理。
+    /// </summary>
     [Unsaved] protected IFixedCaravanAssociate associatedInterface;
 
+    /// <summary>
+    /// 创建固定远行队。
+    /// </summary>
     public FixedCaravan()
     {
         pawns = new ThingOwner<Pawn>(this, oneStackOnly: false, LookMode.Reference);
@@ -185,6 +217,9 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         }
     }
 
+    /// <summary>
+    /// 尝试根据关联的世界对象设置关联接口。
+    /// </summary>
     protected virtual void TrySetAssociatedInterface()
     {
         if (associatedWorldObject is IFixedCaravanAssociate caravanAssociate)
@@ -193,6 +228,9 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         }
     }
 
+    /// <summary>
+    /// 玩家主动将固定远行队转换为远行队的预处理。
+    /// </summary>
     protected virtual void PreConvertToCaravanByPlayer()
     {
         associatedInterface?.PreConvertToCaravanByPlayer();
@@ -206,6 +244,7 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         associatedInterface?.PostConvertToCaravan(caravan);
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Gizmo> GetGizmos()
     {
         foreach (Gizmo gizmo in base.GetGizmos())
@@ -228,6 +267,7 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
 
     }
 
+    /// <inheritdoc/>
     public override string GetInspectString()
     {
         if (associatedInterface is null)
@@ -242,10 +282,15 @@ public class FixedCaravan : WorldObject, IThingHolder, IPawnRetentionHolder
         }
     }
 
+    /// <inheritdoc/>
     public ThingOwner GetDirectlyHeldThings() => pawns;
 
+    /// <inheritdoc/>
     public virtual void GetChildHolders(List<IThingHolder> outChildren) => ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
 
+    /// <summary>
+    /// 序列化/反序列化此对象需持久保存的字段。
+    /// </summary>
     public override void ExposeData()
     {
         base.ExposeData();

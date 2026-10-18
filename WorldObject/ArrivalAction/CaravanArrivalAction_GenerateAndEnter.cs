@@ -5,13 +5,20 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-/// <summary> 远行队到达并生成可进入地图的动作。 </summary>
+/// <summary>
+/// 远行队到达并生成可进入地图的动作。
+/// </summary>
 public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
 {
     private MapParent_Enterable mapParent;
+    /// <inheritdoc/>
     public override string Label => "EnterMap".Translate(mapParent.Label);
+    /// <inheritdoc/>
     public override string ReportString => "CaravanEntering".Translate(mapParent.Label);
 
+    /// <summary>
+    /// 创建远行队到达并生成可进入地图的动作。
+    /// </summary>
     public CaravanArrivalAction_GenerateAndEnter() { }
 
     /// <summary>
@@ -22,6 +29,7 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
         this.mapParent = mapParent;
     }
 
+    /// <inheritdoc/>
     public override FloatMenuAcceptanceReport StillValid(Caravan caravan, PlanetTile destinationTile)
     {
         if (mapParent is not null && mapParent.Tile != destinationTile)
@@ -32,6 +40,7 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
         return CanVisit(caravan, mapParent);
     }
 
+    /// <inheritdoc/>
     public override void Arrived(Caravan caravan)
     {
         Map map = mapParent.Map;
@@ -65,6 +74,7 @@ public class CaravanArrivalAction_GenerateAndEnter : CaravanArrivalAction
         CaravanEnterMapUtility.Enter(caravan, map, CaravanEnterMode.Edge, dropInventoryMode, draftColonists);
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();

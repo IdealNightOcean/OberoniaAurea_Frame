@@ -8,6 +8,9 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class FactionTagsExtension : DefModExtension
 {
+    /// <summary>
+    /// 派系标签列表。
+    /// </summary>
     public List<string> factionTags = [];
 
     /// <summary>

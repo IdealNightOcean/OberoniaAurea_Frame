@@ -8,11 +8,17 @@ namespace OberoniaAurea_Frame.UI;
 /// </summary>
 public struct TextStyle
 {
-    /// <summary> 极小字体样式。 </summary>
+    /// <summary>
+    /// 极小字体样式。
+    /// </summary>
     public static readonly GUIStyle TinyFontStyle;
-    /// <summary> 小字体样式。 </summary>
+    /// <summary>
+    /// 小字体样式。
+    /// </summary>
     public static readonly GUIStyle SmallFontStyle;
-    /// <summary> 中等字体样式。 </summary>
+    /// <summary>
+    /// 中等字体样式。
+    /// </summary>
     public static readonly GUIStyle MediumFontStyle;
 
     static TextStyle()
@@ -59,7 +65,9 @@ public struct TextStyle
     /// </summary>
     public readonly int FontSize => fontSize;
 
-    /// <summary> 获取应用了当前样式设置的 <see cref="GUIStyle"/>。 </summary>
+    /// <summary>
+    /// 获取应用了当前样式设置的 <see cref="GUIStyle"/>。
+    /// </summary>
     public readonly GUIStyle FontStyle
     {
         get
@@ -174,7 +182,9 @@ public struct TextStyle
             fontSize = 0;
     }
 
-    /// <summary> 恢复字体样式。 </summary>
+    /// <summary>
+    /// 恢复字体样式。
+    /// </summary>
     public readonly void RestoreTextStyle()
     {
         if (fontSize > 0)

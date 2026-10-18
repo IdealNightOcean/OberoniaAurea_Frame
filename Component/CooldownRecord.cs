@@ -7,12 +7,18 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public struct CooldownRecord : IExposable
 {
-    /// <summary> 上次激活的游戏时刻。 </summary>
+    /// <summary>
+    /// 上次激活的游戏时刻。
+    /// </summary>
     public int lastActiveTick;
-    /// <summary> 下次可使用的游戏时刻。 </summary>
+    /// <summary>
+    /// 下次可使用的游戏时刻。
+    /// </summary>
     public int nextAvailableTick;
     private bool removeWhenExpired;
-    /// <summary> 是否应当移除此冷却记录。 </summary>
+    /// <summary>
+    /// 是否应当移除此冷却记录。
+    /// </summary>
     public readonly bool ShouldRemove
     {
         get
@@ -29,6 +35,9 @@ public struct CooldownRecord : IExposable
         }
     }
 
+    /// <summary>
+    /// 创建一个空的冷却记录。
+    /// </summary>
     public CooldownRecord()
     {
         lastActiveTick = -1;
@@ -56,15 +65,22 @@ public struct CooldownRecord : IExposable
         Scribe_Values.Look(ref removeWhenExpired, nameof(removeWhenExpired), defaultValue: false);
     }
 
-    /// <summary> 剩余冷却时刻数。 </summary>
+    /// <summary>
+    /// 剩余冷却时刻数。
+    /// </summary>
     public readonly int CooldownTicksLeft => lastActiveTick < 0 ? -1 : nextAvailableTick - Find.TickManager.TicksGame;
 
-    /// <summary> 距上次激活的时刻数。 </summary>
+    /// <summary>
+    /// 距上次激活的时刻数。
+    /// </summary>
     public readonly int TicksSinceLastActive => lastActiveTick < 0 ? -1 : Find.TickManager.TicksGame - lastActiveTick;
 
-    /// <summary> 是否处于冷却中。 </summary>
+    /// <summary>
+    /// 是否处于冷却中。
+    /// </summary>
     public readonly bool IsInCooldown => nextAvailableTick > 0 && nextAvailableTick > Find.TickManager.TicksGame;
 
+    /// <inheritdoc />
     public override readonly string ToString() => $"LastActiveTick: {lastActiveTick}, NextAvailableTick: {nextAvailableTick}";
 
 }

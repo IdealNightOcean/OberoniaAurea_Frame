@@ -10,6 +10,7 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public abstract class RaidStrategyWorker_ImmediateAttack_NeverFlee : RaidStrategyWorker
 {
+    /// <inheritdoc/>
     protected override LordJob MakeLordJob(IncidentParms parms, Map map, List<Pawn> pawns, int raidSeed)
     {
         IntVec3 originCell = parms.spawnCenter.IsValid ? parms.spawnCenter : pawns[0].PositionHeld;

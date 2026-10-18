@@ -8,16 +8,38 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class PatchOperationCheckDLC : PatchOperation
 {
+    /// <summary>
+    /// 是否要求启用皇权（Royalty）DLC。
+    /// </summary>
     public bool Royalty;
+    /// <summary>
+    /// 是否要求启用文化（Ideology）DLC。
+    /// </summary>
     public bool Ideology;
+    /// <summary>
+    /// 是否要求启用生物科技（Biotech）DLC。
+    /// </summary>
     public bool Biotech;
+    /// <summary>
+    /// 是否要求启用异象（Anomaly）DLC。
+    /// </summary>
     public bool Anomaly;
+    /// <summary>
+    /// 是否要求启用远行（Odyssey）DLC。
+    /// </summary>
     public bool Odyssey;
 
+    /// <summary>
+    /// DLC 条件满足时应用的补丁操作。
+    /// </summary>
     public PatchOperation match;
 
+    /// <summary>
+    /// DLC 条件不满足时应用的补丁操作。
+    /// </summary>
     public PatchOperation nomatch;
 
+    /// <inheritdoc/>
     protected override bool ApplyWorker(XmlDocument xml)
     {
         if (CheckDLC())
@@ -36,6 +58,10 @@ public class PatchOperationCheckDLC : PatchOperation
         }
         return true;
     }
+
+    /// <summary>
+    /// 检查所要求的 DLC 是否均已启用。
+    /// </summary>
     protected bool CheckDLC()
     {
         if (Royalty && !ModsConfig.RoyaltyActive)

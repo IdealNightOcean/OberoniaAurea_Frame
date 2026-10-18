@@ -8,12 +8,24 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class MoteAttached_Text : MoteAttached
 {
+    /// <summary>
+    /// 要显示的文字内容。
+    /// </summary>
     public string text;
 
+    /// <summary>
+    /// 文字显示颜色。
+    /// </summary>
     public Color textColor = Color.white;
 
+    /// <summary>
+    /// 覆盖开始淡出前的生存时间，负值表示不覆盖。
+    /// </summary>
     public float overrideTimeBeforeStartFadeout = -1f;
 
+    /// <summary>
+    /// 获取开始淡出前的生存时间。
+    /// </summary>
     protected float TimeBeforeStartFadeout
     {
         get
@@ -26,10 +38,13 @@ public class MoteAttached_Text : MoteAttached
         }
     }
 
+    /// <inheritdoc/>
     protected override bool EndOfLife => AgeSecs >= TimeBeforeStartFadeout + def.mote.fadeOutTime;
 
+    /// <inheritdoc/>
     protected override void DrawAt(Vector3 drawLoc, bool flip = false) { }
 
+    /// <inheritdoc/>
     public override void DrawGUIOverlay()
     {
         float a = 1f - (AgeSecs - TimeBeforeStartFadeout) / def.mote.fadeOutTime;

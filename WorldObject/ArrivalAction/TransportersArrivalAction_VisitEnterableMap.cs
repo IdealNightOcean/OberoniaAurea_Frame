@@ -6,26 +6,35 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
-/// <summary> 运输舱到达可进入地图的动作。 </summary>
+/// <summary>
+/// 运输舱到达可进入地图的动作。
+/// </summary>
 public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAction
 {
     private MapParent_Enterable mapParent;
 
     private PawnsArrivalModeDef arrivalMode;
 
+    /// <inheritdoc/>
     public override bool GeneratesMap => true;
 
+    /// <summary>
+    /// 创建运输舱访问可进入地图的动作。
+    /// </summary>
     public TransportersArrivalAction_VisitEnterableMap() { }
 
     /// <summary>
     /// 使用可直接进入的<see cref="MapParent"/>和到达模式初始化载具到达动作。
     /// </summary>
+    /// <param name="mapParent">目标可进入地图父对象。</param>
+    /// <param name="arrivalMode">载具到达模式。</param>
     public TransportersArrivalAction_VisitEnterableMap(MapParent_Enterable mapParent, PawnsArrivalModeDef arrivalMode)
     {
         this.mapParent = mapParent;
         this.arrivalMode = arrivalMode;
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();
@@ -33,6 +42,7 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
         Scribe_Defs.Look(ref arrivalMode, nameof(arrivalMode));
     }
 
+    /// <inheritdoc/>
     public override FloatMenuAcceptanceReport StillValid(IEnumerable<IThingHolder> pods, PlanetTile destinationTile)
     {
         if (mapParent is not null && mapParent.Tile != destinationTile)
@@ -43,9 +53,11 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
         return CanVisit(pods, mapParent);
     }
 
+    /// <inheritdoc/>
     public override bool ShouldUseLongEvent(List<ActiveTransporterInfo> pods, PlanetTile tile) => !mapParent.HasMap;
 
 
+    /// <inheritdoc/>
     public override void Arrived(List<ActiveTransporterInfo> transporters, PlanetTile tile)
     {
         Thing lookTarget = TransportersArrivalActionUtility.GetLookTarget(transporters);
@@ -70,6 +82,8 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
     /// <summary>
     /// 检查是否可以访问可进入地图父对象。
     /// </summary>
+    /// <param name="pods">请求进入的载具持有者集合。</param>
+    /// <param name="mapParent">目标可进入地图父对象。</param>
     public static FloatMenuAcceptanceReport CanVisit(IEnumerable<IThingHolder> pods, MapParent_Enterable mapParent)
     {
         if (mapParent is null || !mapParent.Spawned)
@@ -91,6 +105,9 @@ public class TransportersArrivalAction_VisitEnterableMap : TransportersArrivalAc
     /// <summary>
     /// 获取浮动菜单选项。
     /// </summary>
+    /// <param name="launchAction">发射动作回调。</param>
+    /// <param name="pods">请求进入的载具持有者集合。</param>
+    /// <param name="mapParent">目标可进入地图父对象。</param>
     public static IEnumerable<FloatMenuOption> GetFloatMenuOptions(Action<PlanetTile, TransportersArrivalAction> launchAction, IEnumerable<IThingHolder> pods, MapParent_Enterable mapParent)
     {
         foreach (FloatMenuOption edgeMenuOption in TransportersArrivalActionUtility.GetFloatMenuOptions(acceptanceReportGetter: () => CanVisit(pods, mapParent),

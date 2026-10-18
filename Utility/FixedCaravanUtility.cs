@@ -223,6 +223,9 @@ public static class OAFrame_FixedCaravanUtility
         return totalCount;
     }
 
+    /// <summary>
+    /// 检查固定远行队是否有足够数量的指定def物品。
+    /// </summary>
     public static bool HasThingsOfDef(this FixedCaravan fixedCaravan, ThingDef thingDef, int count, Predicate<Thing> validator = null)
     {
         if (count <= 0)

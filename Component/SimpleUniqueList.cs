@@ -13,9 +13,13 @@ public class SimpleUniqueList<T> : IList<T>, IExposable
     private LookMode innerListLookMode;
     private List<T> innerList;
 
-    /// <summary> 获取列表元素数量。 </summary>
+    /// <summary>
+    /// 获取列表元素数量。
+    /// </summary>
     public int Count => innerList.Count;
-    /// <summary> 获取列表是否为只读。 </summary>
+    /// <summary>
+    /// 获取列表是否为只读。
+    /// </summary>
     public bool IsReadOnly => false;
 
     /// <summary>
@@ -86,6 +90,7 @@ public class SimpleUniqueList<T> : IList<T>, IExposable
         return innerList.GetEnumerator();
     }
 
+    /// <inheritdoc />
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     /// <inheritdoc />

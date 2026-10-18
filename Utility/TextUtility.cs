@@ -156,7 +156,9 @@ public static class OAFrame_TextUtility
     public static NamedArgument ColoredPercentNamedArgument(float value, string name, string format = "0.##", bool includeSign = false, float originPoint = 0f, bool reverse = false) => ColoredPercentString(value, format, includeSign, originPoint, reverse).Named(name);
 
 
-    /// <summary>计算文本在指定宽度下的高度。</summary>
+    /// <summary>
+    /// 计算文本在指定宽度下的高度。
+    /// </summary>
     /// <param name="text">文本内容</param>
     /// <param name="textStyle">文本样式</param>
     /// <param name="width">可用宽度</param>
@@ -170,7 +172,9 @@ public static class OAFrame_TextUtility
         return height;
     }
 
-    /// <summary> 计算文本尺寸。</summary>
+    /// <summary>
+    /// 计算文本尺寸。
+    /// </summary>
     /// <param name="text">文本内容</param>
     /// <param name="textStyle">文本样式</param>
     /// <returns>文本尺寸</returns>
@@ -183,7 +187,9 @@ public static class OAFrame_TextUtility
         return size;
     }
 
-    /// <summary>使用省略号截断文本以适应矩形区域。</summary>
+    /// <summary>
+    /// 使用省略号截断文本以适应矩形区域。
+    /// </summary>
     /// <param name="rect">矩形区域</param>
     /// <param name="sourceText">源文本</param>
     /// <param name="textStyle">文本样式</param>

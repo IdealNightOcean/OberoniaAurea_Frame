@@ -13,6 +13,14 @@ namespace OberoniaAurea_Frame;
 [HarmonyPatch(typeof(MapParent), "GetShuttleFloatMenuOptions")]
 public class MapParent_GetShuttleFloatMenuOptions_Patch
 {
+    /// <summary>
+    /// 在原有浮动菜单选项基础上附加组建商队的选项。
+    /// </summary>
+    /// <param name="origin">原有浮动菜单选项集合。</param>
+    /// <param name="___tile">当前地图所在星球地块。</param>
+    /// <param name="pods">包含的物体持有者集合。</param>
+    /// <param name="launchAction">用于发射穿梭机的动作。</param>
+    /// <returns>最终的浮动菜单选项集合。</returns>
     [HarmonyPostfix]
     public static IEnumerable<FloatMenuOption> Postfix(IEnumerable<FloatMenuOption> origin, PlanetTile ___tile, IEnumerable<IThingHolder> pods, Action<PlanetTile, TransportersArrivalAction> launchAction)
     {

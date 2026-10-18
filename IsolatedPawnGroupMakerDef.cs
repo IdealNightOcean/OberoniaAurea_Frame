@@ -12,7 +12,13 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class IsolatedPawnGroupMakerDef : Def
 {
+    /// <summary>
+    /// 小人组生成器列表。
+    /// </summary>
     public List<PawnGroupMaker> groupMakers;
+    /// <summary>
+    /// 商人类型定义。
+    /// </summary>
     public TraderKindDef traderKind;
 
     /// <summary>
@@ -56,6 +62,9 @@ public class IsolatedPawnGroupMakerDef : Def
 /// </summary>
 public class PawnGroupWithTagMakerDef : Def
 {
+    /// <summary>
+    /// 小人组选项列表。
+    /// </summary>
     public List<PawnGroupOption> groupOptions;
 
     /// <summary>
@@ -77,10 +86,19 @@ public class PawnGroupWithTagMakerDef : Def
 /// </summary>
 public class PawnGroupOption
 {
+    /// <summary>
+    /// 小人组类别定义。
+    /// </summary>
     public PawnGroupKindDef kindDef;
 
+    /// <summary>
+    /// 生成权重。
+    /// </summary>
     public float commonality = 100f;
 
+    /// <summary>
+    /// 带标签的小人生成组列表。
+    /// </summary>
     public List<PawnGenGroupWithTag> groups;
 
     /// <summary>
@@ -127,9 +145,18 @@ public class PawnGroupOption
 /// </summary>
 public class PawnGenGroupWithTag
 {
+    /// <summary>
+    /// 标签。
+    /// </summary>
     public string tag;
+    /// <summary>
+    /// 小人生成选项列表。
+    /// </summary>
     public List<PawnGenOption> options;
 
+    /// <summary>
+    /// 从 XML 节点加载数据。
+    /// </summary>
     public void LoadDataFromXmlCustom(XmlNode xmlRoot)
     {
         tag = ParseHelper.FromString<string>(xmlRoot.Name);

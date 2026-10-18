@@ -4,21 +4,38 @@ using Verse;
 
 namespace OberoniaAurea_Frame;
 
+/// <summary>
+/// 任务节点：多重信号计数。 
+/// </summary>
 public class QuestNode_MultiSignalCount : QuestNode
 {
+    /// <summary>
+    /// 输入信号。 
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> inSignal;
+    /// <summary>
+    /// 达成目标计数后输出的信号。 
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> outSignalAchieved;
 
+    /// <summary>
+    /// 目标计数。 
+    /// </summary>
     public SlateRef<int> targetCount = 1;
+    /// <summary>
+    /// 是否仅触发一次信号。 
+    /// </summary>
     public SlateRef<bool> oneTimeSignal = true;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         return targetCount.GetValue(slate) > 0;
     }
 
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -37,14 +54,27 @@ public class QuestNode_MultiSignalCount : QuestNode
 /// </summary>
 public class QuestPart_MultiSignalCount : QuestPart
 {
+    /// <summary>
+    /// 输入信号。 
+    /// </summary>
     public string inSignal;
+    /// <summary>
+    /// 达成目标计数后输出的信号。 
+    /// </summary>
     public string outSignalAchieved;
+    /// <summary>
+    /// 目标计数。 
+    /// </summary>
     public int targetCount = 1;
+    /// <summary>
+    /// 是否仅触发一次信号。 
+    /// </summary>
     public bool oneTimeSignal;
 
     private int receivedCount;
     private bool sentOnce;
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();
@@ -57,6 +87,7 @@ public class QuestPart_MultiSignalCount : QuestPart
         Scribe_Values.Look(ref sentOnce, nameof(sentOnce), defaultValue: false);
     }
 
+    /// <inheritdoc/>
     public override void Cleanup()
     {
         base.Cleanup();
@@ -64,6 +95,7 @@ public class QuestPart_MultiSignalCount : QuestPart
         outSignalAchieved = null;
     }
 
+    /// <inheritdoc/>
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         if (oneTimeSignal && sentOnce)

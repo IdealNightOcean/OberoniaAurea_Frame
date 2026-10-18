@@ -11,18 +11,39 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public class QuestNode_InitiateSaleRequest : QuestNode
 {
+    /// <summary>
+    /// 触发信号。
+    /// </summary>
     [NoTranslate]
     public SlateRef<string> inSignal;
 
+    /// <summary>
+    /// 请求的物品定义。
+    /// </summary>
     public SlateRef<ThingDef> requestedThingDef;
+
+    /// <summary>
+    /// 请求的物品数量。
+    /// </summary>
     public SlateRef<int> requestedCount;
+
+    /// <summary>
+    /// 目标世界对象。
+    /// </summary>
     public SlateRef<WorldObject> worldObject;
+
+    /// <summary>
+    /// 请求持续时间。
+    /// </summary>
     public SlateRef<int> duration;
 
+    /// <inheritdoc/>
     protected override bool TestRunInt(Slate slate)
     {
         return requestedCount.GetValue(slate) > 0 && requestedThingDef.GetValue(slate) is not null && duration.GetValue(slate) > 0;
     }
+
+    /// <inheritdoc/>
     protected override void RunInt()
     {
         Slate slate = QuestGen.slate;
@@ -44,12 +65,32 @@ public class QuestNode_InitiateSaleRequest : QuestNode
 /// </summary>
 public class QuestPart_InitiateSaleRequest : QuestPart
 {
+    /// <summary>
+    /// 触发信号。
+    /// </summary>
     public string inSignal;
+
+    /// <summary>
+    /// 目标世界对象。
+    /// </summary>
     public WorldObject worldObject;
+
+    /// <summary>
+    /// 请求的物品定义。
+    /// </summary>
     public ThingDef requestedThingDef;
+
+    /// <summary>
+    /// 请求的物品数量。
+    /// </summary>
     public int requestedCount;
+
+    /// <summary>
+    /// 请求持续时间。
+    /// </summary>
     public int requestedDuration;
 
+    /// <inheritdoc/>
     public override IEnumerable<GlobalTargetInfo> QuestLookTargets
     {
         get
@@ -65,6 +106,7 @@ public class QuestPart_InitiateSaleRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Faction> InvolvedFactions
     {
         get
@@ -80,6 +122,7 @@ public class QuestPart_InitiateSaleRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override IEnumerable<Dialog_InfoCard.Hyperlink> Hyperlinks
     {
         get
@@ -92,6 +135,7 @@ public class QuestPart_InitiateSaleRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void Notify_QuestSignalReceived(Signal signal)
     {
         base.Notify_QuestSignalReceived(signal);
@@ -110,6 +154,7 @@ public class QuestPart_InitiateSaleRequest : QuestPart
         }
     }
 
+    /// <inheritdoc/>
     public override void Cleanup()
     {
         base.Cleanup();
@@ -121,6 +166,7 @@ public class QuestPart_InitiateSaleRequest : QuestPart
         requestedDuration = 0;
     }
 
+    /// <inheritdoc/>
     public override void ExposeData()
     {
         base.ExposeData();

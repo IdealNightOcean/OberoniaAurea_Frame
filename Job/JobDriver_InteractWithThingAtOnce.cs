@@ -9,13 +9,18 @@ namespace OberoniaAurea_Frame;
 /// </summary>
 public abstract class JobDriver_InteractWithThingAtOnce : JobDriver
 {
+    /// <summary>
+    /// 交互目标。
+    /// </summary>
     protected Thing InteractTarget => TargetThingA;
 
+    /// <inheritdoc/>
     public override bool TryMakePreToilReservations(bool errorOnFailed)
     {
         return pawn.Reserve(job.targetA, job, 1, -1, null, errorOnFailed);
     }
 
+    /// <inheritdoc/>
     protected override IEnumerable<Toil> MakeNewToils()
     {
         this.FailOnDespawnedOrNull(TargetIndex.A);
@@ -28,5 +33,9 @@ public abstract class JobDriver_InteractWithThingAtOnce : JobDriver
         yield return interact;
     }
 
+    /// <summary>
+    /// 执行交互操作。
+    /// </summary>
+    /// <param name="pawn">执行交互的<see cref="Pawn"/>。</param>
     protected abstract void InteractAction(Pawn pawn);
 }
